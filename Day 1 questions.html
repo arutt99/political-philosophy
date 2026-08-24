@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Political Philosophy: Questions Worth Fighting About</title>
+<style>
+  :root{
+    --bg-1:#0b0e14;
+    --bg-2:#12172a;
+    --text:#f5f6fa;
+    --accent:#ffb454;
+    --accent-2:#5ec8f2;
+    --muted:#9aa3b8;
+    --rule:rgba(245,246,250,0.14);
+  }
+
+  *{box-sizing:border-box;}
+
+  html,body{
+    margin:0;
+    padding:0;
+    height:100%;
+    background:var(--bg-1);
+    color:var(--text);
+    font-family:"Segoe UI","Helvetica Neue",Arial,sans-serif;
+    overflow:hidden;
+  }
+
+  .deck{
+    position:relative;
+    width:100vw;
+    height:100vh;
+  }
+
+  .slide{
+    position:absolute;
+    inset:0;
+    display:none;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:6vw 8vw;
+    background:
+      radial-gradient(circle at 15% 15%, var(--bg-2) 0%, transparent 55%),
+      radial-gradient(circle at 85% 85%, rgba(94,200,242,0.06) 0%, transparent 50%),
+      var(--bg-1);
+  }
+
+  .slide.active{
+    display:flex;
+  }
+
+  /* --- Title slide --- */
+  .slide.title .kicker{
+    letter-spacing:0.35em;
+    text-transform:uppercase;
+    font-size:clamp(14px,1.6vw,20px);
+    color:var(--accent-2);
+    margin-bottom:1.5rem;
+  }
+
+  .slide.title h1{
+    font-size:clamp(44px,6.4vw,80px);
+    line-height:1.15;
+    margin:0 0 1.5rem 0;
+    font-weight:800;
+  }
+
+  .slide.title p.sub{
+    font-size:clamp(20px,2.2vw,30px);
+    color:var(--muted);
+    max-width:44ch;
+    line-height:1.5;
+    margin:0;
+  }
+
+  /* --- Question slides --- */
+  .tag{
+    display:inline-block;
+    letter-spacing:0.25em;
+    text-transform:uppercase;
+    font-size:clamp(13px,1.4vw,18px);
+    font-weight:700;
+    color:var(--accent);
+    border:1px solid rgba(255,180,84,0.4);
+    border-radius:999px;
+    padding:0.5em 1.4em;
+    margin-bottom:2.4rem;
+  }
+
+  .qnum{
+    font-size:clamp(16px,1.6vw,20px);
+    color:var(--muted);
+    margin-bottom:0.6rem;
+    font-variant-numeric:tabular-nums;
+  }
+
+  .question{
+    font-size:clamp(40px,5.2vw,64px);
+    line-height:1.28;
+    font-weight:700;
+    max-width:22ch;
+    margin:0;
+  }
+
+  .question .mark{
+    color:var(--accent-2);
+  }
+
+  /* --- Controls --- */
+  .controls{
+    position:fixed;
+    top:24px;
+    right:28px;
+    display:flex;
+    gap:12px;
+    z-index:50;
+  }
+
+  .btn{
+    background:rgba(245,246,250,0.08);
+    border:1px solid var(--rule);
+    color:var(--text);
+    font-size:16px;
+    padding:10px 18px;
+    border-radius:8px;
+    cursor:pointer;
+    font-family:inherit;
+    transition:background 0.15s ease;
+  }
+
+  .btn:hover{
+    background:rgba(245,246,250,0.18);
+  }
+
+  .nav-arrow{
+    position:fixed;
+    top:50%;
+    transform:translateY(-50%);
+    background:rgba(245,246,250,0.06);
+    border:1px solid var(--rule);
+    color:var(--text);
+    width:52px;
+    height:52px;
+    border-radius:50%;
+    font-size:22px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:50;
+    opacity:0.55;
+    transition:opacity 0.15s ease, background 0.15s ease;
+  }
+
+  .nav-arrow:hover{
+    opacity:1;
+    background:rgba(245,246,250,0.16);
+  }
+
+  .nav-arrow.prev{left:24px;}
+  .nav-arrow.next{right:24px;}
+
+  .indicator{
+    position:fixed;
+    bottom:22px;
+    left:50%;
+    transform:translateX(-50%);
+    font-size:15px;
+    color:var(--muted);
+    letter-spacing:0.05em;
+    font-variant-numeric:tabular-nums;
+    z-index:50;
+    background:rgba(11,14,20,0.5);
+    padding:6px 14px;
+    border-radius:999px;
+  }
+
+  .progress{
+    position:fixed;
+    top:0;
+    left:0;
+    height:4px;
+    background:var(--accent-2);
+    z-index:50;
+    transition:width 0.2s ease;
+  }
+
+  @media (max-width: 700px){
+    .nav-arrow{width:40px;height:40px;font-size:18px;}
+    .controls{top:14px;right:14px;}
+  }
+</style>
+<link rel="stylesheet" href="Presentations/presentation-polish.css">
+</head>
+<body class="day1-classic">
+
+<div class="progress" id="progress"></div>
+
+<div class="controls">
+  <button class="btn" id="fullscreenBtn">⛶ Fullscreen</button>
+</div>
+
+<button class="nav-arrow prev" id="prevBtn" aria-label="Previous slide">‹</button>
+<button class="nav-arrow next" id="nextBtn" aria-label="Next slide">›</button>
+
+<div class="deck" id="deck">
+
+  <div class="slide title active">
+    <div class="kicker">Political Philosophy</div>
+    <h1>Questions Worth&nbsp;Fighting&nbsp;About</h1>
+    <p class="sub">Sixteen questions. No easy answers. Use the arrow keys or spacebar to move through them.</p>
+  </div>
+
+  <!-- 1 -->
+  <div class="slide">
+    <div class="tag">Foundations</div>
+    <div class="qnum">Question 1 of 16</div>
+    <p class="question">Why do we need governments at&nbsp;all<span class="mark">?</span></p>
+  </div>
+
+  <!-- 2 -->
+  <div class="slide">
+    <div class="tag">Law &amp; Authority</div>
+    <div class="qnum">Question 2 of 16</div>
+    <p class="question">When should people follow the law? When, if ever, is it okay to break&nbsp;it<span class="mark">?</span></p>
+  </div>
+
+  <!-- 3 -->
+  <div class="slide">
+    <div class="tag">Government's Purpose</div>
+    <div class="qnum">Question 3 of 16</div>
+    <p class="question">What should a government care about most: safety, freedom, reducing inequality — or something&nbsp;else<span class="mark">?</span></p>
+  </div>
+
+  <!-- 4 -->
+  <div class="slide">
+    <div class="tag">Freedom</div>
+    <div class="qnum">Question 4 of 16</div>
+    <p class="question">What does it mean to be&nbsp;free<span class="mark">?</span></p>
+  </div>
+
+  <!-- 5 -->
+  <div class="slide">
+    <div class="tag">Equality</div>
+    <div class="qnum">Question 5 of 16</div>
+    <p class="question">Should everyone have the same chances in life? What would that actually&nbsp;require<span class="mark">?</span></p>
+  </div>
+
+  <!-- 6 -->
+  <div class="slide">
+    <div class="tag">Equality</div>
+    <div class="qnum">Question 6 of 16</div>
+    <p class="question">Is it fair for some people to have much more money, power, or influence than&nbsp;others<span class="mark">?</span></p>
+  </div>
+
+  <!-- 7 -->
+  <div class="slide">
+    <div class="tag">Justice</div>
+    <div class="qnum">Question 7 of 16</div>
+    <p class="question">What makes a society&nbsp;fair<span class="mark">?</span></p>
+  </div>
+
+  <!-- 8 -->
+  <div class="slide">
+    <div class="tag">Democracy</div>
+    <div class="qnum">Question 8 of 16</div>
+    <p class="question">Does voting make a government fair? Why or why&nbsp;not<span class="mark">?</span></p>
+  </div>
+
+  <!-- 9 -->
+  <div class="slide">
+    <div class="tag">Democracy</div>
+    <div class="qnum">Question 9 of 16</div>
+    <p class="question">Should the majority always get its&nbsp;way<span class="mark">?</span></p>
+  </div>
+
+  <!-- 10 -->
+  <div class="slide">
+    <div class="tag">Rights &amp; Speech</div>
+    <div class="qnum">Question 10 of 16</div>
+    <p class="question">Should there be limits on what people can say in&nbsp;public<span class="mark">?</span></p>
+  </div>
+
+  <!-- 11 -->
+  <div class="slide">
+    <div class="tag">Justice &amp; Obligation</div>
+    <div class="qnum">Question 11 of 16</div>
+    <p class="question">What do we owe people who are poor, struggling, or&nbsp;excluded<span class="mark">?</span></p>
+  </div>
+
+  <!-- 12 -->
+  <div class="slide">
+    <div class="tag">Obligation</div>
+    <div class="qnum">Question 12 of 16</div>
+    <p class="question">Do we have stronger responsibilities to people in our own country than to people&nbsp;elsewhere<span class="mark">?</span></p>
+  </div>
+
+  <!-- 13 -->
+  <div class="slide">
+    <div class="tag">Citizenship</div>
+    <div class="qnum">Question 13 of 16</div>
+    <p class="question">What makes someone a good&nbsp;citizen<span class="mark">?</span></p>
+  </div>
+
+  <!-- 14 -->
+  <div class="slide">
+    <div class="tag">Authority &amp; Freedom</div>
+    <div class="qnum">Question 14 of 16</div>
+    <p class="question">Can a government use force and still respect people's&nbsp;freedom<span class="mark">?</span></p>
+  </div>
+
+  <!-- 15 -->
+  <div class="slide">
+    <div class="tag">Resistance</div>
+    <div class="qnum">Question 15 of 16</div>
+    <p class="question">When is it right to protest, resist, or try to change a&nbsp;government<span class="mark">?</span></p>
+  </div>
+
+  <!-- 16 -->
+  <div class="slide">
+    <div class="tag">Pluralism</div>
+    <div class="qnum">Question 16 of 16</div>
+    <p class="question">Can people with very different beliefs and values live together&nbsp;fairly<span class="mark">?</span></p>
+  </div>
+
+</div>
+
+<div class="indicator" id="indicator">1 / 17</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  const indicator = document.getElementById('indicator');
+  const progress = document.getElementById('progress');
+
+  function showSlide(i){
+    slides[current].classList.remove('active');
+    current = (i + total) % total;
+    slides[current].classList.add('active');
+    indicator.textContent = (current + 1) + ' / ' + total;
+    progress.style.width = ((current + 1) / total * 100) + '%';
+  }
+
+  function next(){ showSlide(current + 1); }
+  function prev(){ showSlide(current - 1); }
+
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Spacebar'){
+      e.preventDefault();
+      next();
+    } else if(e.key === 'ArrowLeft'){
+      e.preventDefault();
+      prev();
+    } else if(e.key === 'f' || e.key === 'F'){
+      toggleFullscreen();
+    }
+  });
+
+  document.getElementById('nextBtn').addEventListener('click', next);
+  document.getElementById('prevBtn').addEventListener('click', prev);
+
+  function toggleFullscreen(){
+    if(!document.fullscreenElement){
+      document.documentElement.requestFullscreen().catch(() => {});
+    } else {
+      document.exitFullscreen();
+    }
+  }
+
+  document.getElementById('fullscreenBtn').addEventListener('click', toggleFullscreen);
+
+  // Initialize
+  showSlide(0);
+</script>
+
+</body>
+</html>

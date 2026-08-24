@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>John Stuart Mill - Justifying Liberty</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{--paper:#f7f0e5;--paper-deep:#e9dece;--ink:#2d2331;--muted:#786b70;--accent:#a93652;--accent-quiet:#bd7181;--support:#4f746f;--rule:rgba(45,35,49,.18);--fit:1}
+    *{box-sizing:border-box}html,body{width:100%;height:100%;margin:0;overflow:hidden;background:var(--paper);color:var(--ink)}body{font-family:Inter,system-ui,sans-serif}button{font:inherit}
+    #deck{position:relative;width:100vw;height:100vh;overflow:hidden;background:radial-gradient(ellipse 48% 68% at 106% -8%,rgba(169,54,82,.13),transparent 66%),radial-gradient(ellipse 58% 54% at -8% 110%,rgba(79,116,111,.13),transparent 65%),linear-gradient(124deg,#fbf5eb 0%,var(--paper) 52%,#eee4d8 100%)}
+    #deck::before,#deck::after{content:"";position:absolute;pointer-events:none}#deck::before{inset:0;opacity:.7;background:linear-gradient(90deg,transparent 0 8.1vw,rgba(169,54,82,.32) 8.1vw calc(8.1vw + 1px),transparent calc(8.1vw + 1px)),linear-gradient(90deg,transparent 0 8.55vw,rgba(79,116,111,.18) 8.55vw calc(8.55vw + 1px),transparent calc(8.55vw + 1px)),repeating-linear-gradient(0deg,transparent 0 8vh,rgba(45,35,49,.035) 8vh calc(8vh + 1px))}#deck::after{right:7.2vw;top:8vh;width:24vw;height:15vh;border:1px solid rgba(169,54,82,.23);border-left:0;box-shadow:-1.4vw 1.2vh 0 -1px rgba(79,116,111,.19)}
+    .slide{position:absolute;inset:0;display:none;align-items:center;justify-content:center;padding:7.5vh 8vw 9vh;text-align:center;overflow:hidden}.slide.active,.slide.measuring{display:flex}.slide.measuring{visibility:hidden;pointer-events:none}.slide.top{align-items:flex-start;padding-top:8vh}.slide-inner{width:min(980px,86vw);max-height:82vh;margin:auto;transform:scale(var(--fit));transform-origin:top center}.slide.top .slide-inner{margin:0 auto}.slide.duo .slide-inner{width:min(1140px,90vw)}
+    .eyebrow{margin:0 0 1.1rem;color:var(--accent);font:600 clamp(11px,1.08vw,16px)/1.3 "IBM Plex Mono",monospace;letter-spacing:.16em;text-transform:uppercase}.title{margin:0;font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;letter-spacing:-.018em}
+    .cover .slide-inner{padding:3.1rem 4.3rem 3rem;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);background:linear-gradient(90deg,rgba(247,240,229,.1),rgba(247,240,229,.76),rgba(247,240,229,.1))}.cover .title{font-size:calc(clamp(60px,7.5vw,104px)*var(--fit));line-height:.94;max-width:10.8ch;margin-inline:auto}.cover .work{font:500 calc(clamp(21px,2.1vw,31px)*var(--fit))/1.36 "Cormorant Garamond",Georgia,serif;color:var(--muted);margin:1.45rem auto 0;max-width:38ch}.cover .course{margin-top:2.3rem;color:var(--accent);font:500 calc(clamp(11px,1vw,15px)*var(--fit))/1.4 "IBM Plex Mono",monospace;letter-spacing:.14em;text-transform:uppercase}
+    .section .slide-inner{width:min(900px,86vw);padding:2.25rem 2.75rem 2.35rem;text-align:left;border-left:4px solid var(--accent);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);background:linear-gradient(90deg,rgba(169,54,82,.095),rgba(247,240,229,.26) 77%,transparent)}.section .title{font-size:calc(clamp(48px,6vw,82px)*var(--fit));line-height:1.01}.section .rule{width:8rem;height:2px;background:linear-gradient(90deg,var(--accent),var(--support),transparent);margin:1.7rem 0 0}
+    .content .slide-inner,.head .slide-inner{padding:0 .2rem}.content .title,.head .title,.duo .title{font-size:calc(clamp(38px,4.5vw,62px)*var(--fit));line-height:1.05;margin-bottom:1.55rem}.content .body{font-family:"Cormorant Garamond",Georgia,serif;font-size:calc(clamp(25px,2.32vw,35px)*var(--fit));line-height:1.34;text-align:left}.content .body p{margin:0 0 1.02em -1.25rem;padding:.08em .72em .08em 1rem;border-left:3px solid rgba(169,54,82,.24);color:rgba(120,107,112,.9);font-weight:600;background:linear-gradient(90deg,rgba(169,54,82,.022),rgba(169,54,82,0))}.content .body p:last-child{margin-bottom:0}.content .body p.fresh{color:var(--ink);border-left-color:var(--accent);background:linear-gradient(90deg,rgba(169,54,82,.15),rgba(169,54,82,.035) 48%,transparent 80%);text-shadow:0 0 18px rgba(45,35,49,.03)}
+    .question .slide-inner,.diagnostic .slide-inner{width:min(900px,86vw);padding:2.6rem 3.35rem;border:1px solid rgba(169,54,82,.38);box-shadow:inset 0 0 0 9px rgba(169,54,82,.025),10px 11px 0 rgba(79,116,111,.08);background:rgba(251,246,237,.76)}.question .prompt,.diagnostic .prompt{margin:0;font-family:"Cormorant Garamond",Georgia,serif;font-size:calc(clamp(42px,5.15vw,71px)*var(--fit));line-height:1.08;font-weight:600;letter-spacing:-.015em}.question .prompt::after,.diagnostic .prompt::after{content:"";display:block;width:7.2rem;height:2px;background:linear-gradient(90deg,var(--accent),var(--support));margin:1.7rem auto 0}.question .context{max-width:48ch;margin:1.35rem auto 0;color:var(--muted);font:500 calc(clamp(18px,1.68vw,25px)*var(--fit))/1.4 "Cormorant Garamond",Georgia,serif}
+    .quote .slide-inner{max-width:min(900px,84vw);padding:2.4rem 3.2rem;border-left:4px solid var(--support);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);background:linear-gradient(90deg,rgba(79,116,111,.085),rgba(247,240,229,.22) 62%,transparent)}.quote blockquote{margin:0 auto;max-width:29ch;font-family:"Cormorant Garamond",Georgia,serif;font-size:calc(clamp(35px,3.7vw,54px)*var(--fit));line-height:1.12;font-weight:500;font-style:italic}.quote blockquote::before{content:"“";color:var(--accent);margin-right:.08em}.quote blockquote::after{content:"”";color:var(--accent);margin-left:.08em}.quote cite{display:block;margin-top:1.55rem;color:var(--muted);font:500 calc(clamp(12px,1.13vw,17px)*var(--fit))/1.45 "IBM Plex Mono",monospace;font-style:normal}
+    .duo-grid{display:grid;grid-template-columns:1fr 1fr;gap:2.4rem;text-align:left;margin-top:1.45rem}.duo-col{min-height:15rem;padding:1.45rem 1.6rem;border:1px solid var(--rule);border-top:4px solid var(--accent);background:linear-gradient(145deg,rgba(252,247,239,.92),rgba(235,225,214,.48))}.duo-col:last-child{border-top-color:var(--support)}.duo-col h3{margin:0 0 .85rem;color:var(--accent);font:600 calc(clamp(13px,1.24vw,18px)*var(--fit))/1.3 "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase}.duo-col:last-child h3{color:var(--support)}.duo-col p{margin:0;color:var(--ink);font:500 calc(clamp(24px,2.1vw,32px)*var(--fit))/1.34 "Cormorant Garamond",Georgia,serif}
+    .head-list{display:grid;gap:1.05rem;text-align:left;margin-top:1.75rem}.head-item{display:grid;grid-template-columns:10rem 1fr;gap:1.5rem;align-items:baseline;padding:1rem 1rem 0;border-top:1px solid var(--rule);border-left:3px solid rgba(169,54,82,.5);background:linear-gradient(90deg,rgba(169,54,82,.04),transparent 54%)}.head-item:nth-child(even){border-left-color:rgba(79,116,111,.56);background:linear-gradient(90deg,rgba(79,116,111,.04),transparent 54%)}.head-item b{color:var(--accent);font:600 calc(clamp(12px,1.08vw,16px)*var(--fit))/1.3 "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase}.head-item:nth-child(even) b{color:var(--support)}.head-item span{font:500 calc(clamp(23px,2.03vw,31px)*var(--fit))/1.3 "Cormorant Garamond",Georgia,serif}.diagnostic .eyebrow{color:var(--support)}.diagnostic .prompt{font-size:calc(clamp(51px,6.5vw,88px)*var(--fit))}
+    .refs .slide-inner{width:min(980px,86vw);text-align:left}.refs .title{font-size:calc(clamp(40px,4.5vw,63px)*var(--fit));margin-bottom:1.6rem}.refs-list{display:grid;gap:1rem}.ref{padding-top:.95rem;border-top:1px solid var(--rule);font:500 calc(clamp(18px,1.62vw,24px)*var(--fit))/1.38 "Cormorant Garamond",Georgia,serif;color:var(--muted)}.ref strong{color:var(--ink);font-weight:600}
+    #progress{position:fixed;z-index:20;left:0;top:0;width:0;height:4px;background:linear-gradient(90deg,var(--support),var(--accent));transition:width .22s ease}#nav-hint,#counter{position:fixed;bottom:18px;z-index:20;color:var(--muted);font:500 12px/1.3 "IBM Plex Mono",monospace;letter-spacing:.08em}#nav-hint{left:24px}#counter{right:24px}#fullscreen{position:fixed;z-index:20;right:3vw;top:2.35vh;color:var(--ink);background:rgba(247,240,229,.64);border:1px solid rgba(169,54,82,.48);padding:.55rem .75rem;cursor:pointer;font:500 clamp(10px,.86vw,13px)/1.2 "IBM Plex Mono",monospace;letter-spacing:.06em;text-transform:uppercase}#fullscreen:hover{border-color:var(--support);color:var(--support)}
+    .panel{position:fixed;z-index:40;inset:0;display:none;overflow:auto;padding:5vh 7vw 8vh;background:rgba(247,240,229,.987)}.panel.open{display:block}.panel-head{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;padding:0 0 1.3rem;background:var(--paper);border-bottom:1px solid var(--rule);z-index:2}.panel-head h2{margin:0;font:600 clamp(28px,3vw,46px)/1 "Cormorant Garamond",Georgia,serif}.close{border:1px solid var(--rule);background:transparent;color:var(--ink);padding:.55rem .8rem;cursor:pointer;font:500 12px/1 "IBM Plex Mono",monospace}#overview-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;padding-top:1.35rem}.overview-card{min-height:100px;text-align:left;padding:1rem;background:linear-gradient(145deg,#fcf6ed,#ece0d4);border:1px solid var(--rule);border-left:3px solid transparent;color:var(--ink);cursor:pointer}.overview-card:hover,.overview-card.current{border-left-color:var(--accent);border-color:rgba(169,54,82,.48)}.overview-card .num{display:block;color:var(--accent);font:500 11px/1 "IBM Plex Mono",monospace;letter-spacing:.1em}.overview-card .label{display:block;margin-top:.7rem;font:600 21px/1.12 "Cormorant Garamond",Georgia,serif}#notes-body{max-width:900px;padding:2.4rem 0;white-space:pre-wrap;color:var(--ink);font:400 18px/1.62 Inter,sans-serif}
+    @media (max-width:760px){.slide{padding:9vh 8vw 10vh}.slide.top{padding-top:9.5vh}.slide-inner,.slide.duo .slide-inner{width:84vw}.cover .slide-inner,.section .slide-inner,.question .slide-inner,.diagnostic .slide-inner,.quote .slide-inner{padding:1.7rem 1.5rem}.duo-grid{grid-template-columns:1fr;gap:1.35rem}.head-item{grid-template-columns:1fr;gap:.45rem}.content .body{font-size:calc(clamp(22px,5.5vw,30px)*var(--fit))}.duo-col p{font-size:calc(clamp(22px,5.25vw,29px)*var(--fit))}#nav-hint{display:none}#fullscreen{top:12px;right:12px}}
+</style>
+<link rel="stylesheet" href="presentation-polish.css">
+<script src="presentation-polish.js" defer></script>
+</head>
+<body>
+  <main id="deck" aria-live="polite"></main>
+  <div id="progress"></div>
+  <div id="nav-hint">ARROWS / SPACE · O OVERVIEW · N NOTES · F FULLSCREEN</div>
+  <div id="counter">1 / 1</div>
+  <button id="fullscreen" aria-label="Toggle fullscreen">Fullscreen</button>
+  <section id="overview" class="panel" aria-label="Slide overview"><div class="panel-head"><h2>Overview</h2><button class="close" data-close="overview">Close</button></div><div id="overview-grid"></div></section>
+  <aside id="notes" class="panel" aria-label="Notes"><div class="panel-head"><h2>Notes</h2><button class="close" data-close="notes">Close</button></div><div id="notes-body"></div></aside>
+
+  <script>
+    const slides=[];
+    const add=slide=>slides.push(slide);
+    const source=(section,extra='')=>`[Sources]\nSource material: “The Place of Liberty - Justufying the Liberty Principle.pdf,” ${section}.${extra?`\n${extra}`:''}\n[/Sources]`;
+    const note=(text,section,extra='')=>`${text}\n\n${source(section,extra)}`;
+    const cover=(title,work,course,notes)=>add({type:'cover',title,work,course,notes});
+    const section=(roman,title,notes)=>add({type:'section',eyebrow:`${roman}. ${title.toUpperCase()}`,title,notes});
+    const question=(eyebrow,prompt,context,notes)=>add({type:'question',eyebrow,prompt,context,notes});
+    const quote=(text,cite,notes)=>add({type:'quote',text,cite,notes});
+    const duo=(title,left,right,notes)=>add({type:'duo',title,left,right,notes});
+    const head=(title,items,notes)=>add({type:'head',title,items,notes});
+    const diagnostic=(prompt,notes)=>add({type:'diagnostic',eyebrow:'The Mill test',prompt,notes});
+    const refs=(items,notes)=>add({type:'refs',title:'References',items,notes});
+    function build(id,title,paragraphs,sectionName,notes=''){paragraphs.forEach((_,i)=>add({type:'content',title,paragraphs:paragraphs.slice(0,i+1),buildGroup:id,notes:note(`${notes}${i<paragraphs.length-1?'\n\nPause before revealing the next step.':''}`,sectionName)}));}
+
+    cover('Justifying Liberty','John Stuart Mill, rights, utility, and the case for individuality','Political Philosophy',note('Open with the account’s central problem: Mill needs to protect liberty without treating liberty as a mysterious natural entitlement.','Whole argument'));
+
+    section('I','A right needs more than an injured interest',note('The account begins by asking how Mill can speak of rights while rejecting natural rights as the foundation of political morality.','Liberty, rights, and utility'));
+    build('rights-puzzle','Mill invokes rights just where his argument seems to reject them',[
+      'Mill says that people should not injure certain interests that ought to be treated as rights. This sounds like a promising way to explain the private sphere protected by the Liberty Principle.',
+      'But not every setback creates a right. Property may be protected against force, while a business is not protected against fair competition. A person may be hurt by being removed from a rich aunt’s will without having any right against the aunt.',
+      'So Mill needs an account of which interests count as rights-based interests. He must also explain why rights can matter if he has ruled out abstract rights independent of utility.'
+    ],'Liberty, rights, and utility','Keep both questions in view: how to identify a right, and how rights can be defended without simply assuming them.');
+    duo('A disappointment is not automatically a rights violation',
+      {label:'Protected interest',text:'A person has a claim against theft or assault because society should defend security and property against coercive injury.'},
+      {label:'Unprotected interest',text:'A person may lose a customer, a job, or an inheritance, yet that loss alone does not show that someone else has violated a right.'},
+      note('The contrast establishes the problem Mill must solve. It does not yet supply the standard for deciding hard cases.','Liberty, rights, and utility'));
+    question('The missing test','Which interests should society protect as rights?','Mill cannot answer simply by pointing to the interests that current law already protects, because his theory is meant to criticize and reform existing law.',note('The next section explains why neither natural rights nor ordinary legal convention gives Mill the foundation he wants.','Liberty, rights, and utility'));
+
+    section('II','Natural rights promise certainty but leave no argument',note('This section distinguishes Mill’s utilitarian approach from the natural-rights tradition he inherited and distrusted.','Liberty, rights, and utility'));
+    build('natural-rights','Natural rights look fundamental—and that is their difficulty',[
+      'Liberal theories often begin with basic rights: life, free speech, thought, assembly, movement, and political participation. These are now commonly called human or universal rights.',
+      'Natural-rights theory treats such rights as basic or axiomatic. That can sound principled because rights appear to set a firm limit on what governments may do.',
+      'Yet if a skeptic asks why these rights exist, a theory that treats them as ultimate has nowhere deeper to turn. It can repeat that the rights are fundamental, but it cannot give the skeptic a further reason.',
+      'The same problem arises when theorists list different natural rights. If the list is self-evident, why do reasonable people disagree so sharply about what belongs on it?'
+    ],'Liberty, rights, and utility','The account’s concern is not that rights are politically unimportant. It is that a theory needs a way to defend and specify them.');
+    quote('Right is with me the child of law … A natural right is a son that never had a father.','Jeremy Bentham, Supply Without Burthen (1795), p. 73.',note('Bentham’s line expresses the legal-positivist thought that rights are created by laws rather than existing before them.','Liberty, rights, and utility','Primary work quoted: Jeremy Bentham, Supply Without Burthen (1795), p. 73.'));
+    build('bentham','Bentham leaves Mill with a second problem',[
+      'Bentham argues that rights and duties are legal ideas: laws distribute rights to vote, claim benefits, and receive protection. If that is all a right is, a natural right is impossible.',
+      'Mill shared Bentham’s suspicion of natural rights, which explains why he says that he will not rely on an abstract right independent of utility.',
+      'But Mill also cannot simply identify rights with the law as it already stands. That would make every inherited rule authoritative and would abandon his ambition to challenge custom and prejudice.',
+      'Mill therefore needs rights that are neither timeless facts nor echoes of present law. His answer is to derive rights from utility.'
+    ],'Liberty, rights, and utility','The transition is crucial: Mill’s rights are proposed standards for law, not a report of whatever law currently says.');
+
+    section('III','Utility turns rights into a long-term social practice',note('Mill’s utilitarianism is the proposed foundation for a reforming theory of rights.','Liberty, rights, and utility'));
+    quote('I regard utility as the ultimate appeal on all ethical questions; but it must be utility in the largest sense, grounded on the permanent interests of a man as a progressive being.','John Stuart Mill, On Liberty, p. 95.',note('This is Mill’s declaration of method. The later sections unpack what “permanent interests” and “progressive being” add to a simple happiness calculation.','Liberty, rights, and utility','Primary work quoted: John Stuart Mill, On Liberty (1859), p. 95.'));
+    build('utility','For Mill, a right is defended by general utility',[
+      'Mill’s utilitarianism holds that actions are right insofar as they promote happiness and wrong insofar as they produce the reverse. Happiness means pleasure and the absence of pain.',
+      'This does not mean that every person should make a fresh happiness calculation before every act. Mill asks instead what institutions and rules will best promote happiness over time.',
+      'Mill says that to have a right is to have something society ought to defend a person in possessing. When asked why society ought to defend it, his answer is general utility.'
+    ],'Liberty, rights, and utility','Use “general utility” here as a standard for social rules, not as permission for impulsive calculation in every case.');
+    question('One law or a system of rights?','If happiness is the goal, why not make a single law: “maximize happiness”?','The account argues that this direct instruction may make society less secure and less happy than a stable system of rights and rules.',note('The direct–indirect distinction explains how a utilitarian can defend a rule even when breaking it might seem useful in one isolated case.','Liberty, rights, and utility'));
+    build('direct-utility','Direct calculation can make everyone vulnerable',[
+      'A direct utilitarian tells an individual to choose whichever available act will produce the most happiness in that situation.',
+      'In an emergency, this might appear to permit punishing an innocent person if doing so would placate an angry mob and prevent a greater disaster.',
+      'The calculation would have to weigh the victim’s suffering, the chance that the deception is discovered, and every likely consequence. If the balance favored scapegoating, direct utilitarianism would seem to allow it.'
+    ],'Liberty, rights, and utility','The example is a test of the direct approach. It is not Mill’s recommendation.');
+    build('indirect-utility','A rule against scapegoating may serve utility better',[
+      'Indirect or rule utilitarianism keeps happiness as the ultimate goal but asks which standing rules will best achieve it in the long run.',
+      'Even if scapegoating occasionally helps, a society that permits it gives everyone reason to fear becoming a victim. The resulting anxiety and distrust can damage general happiness.',
+      'A rule that no one may be punished without proof of guilt gives everyone secure immunity against victimization. That immunity is a right justified by its long-term consequences.',
+      'On this approach, rights are not exceptions to utility. They are protections that utility itself recommends because predictable security can be better than case-by-case expediency.'
+    ],'Liberty, rights, and utility','Let the distinction land: the point of a right is partly to remove some vulnerable interests from ad hoc social calculation.');
+    head('The utilitarian legislator’s task is not simple arithmetic',[
+      {label:'Goal',text:'Maximize general happiness over time, not merely in the next isolated moment.'},
+      {label:'Method',text:'Choose a body of laws and rules that people can rely on.'},
+      {label:'Result',text:'Protect some interests as rights because a secure system produces better social consequences.'}
+    ],note('This compactly summarizes the indirect-utilitarian route from utility to rights.','Liberty, rights, and utility'));
+
+    section('IV','Liberty needs a protected private sphere',note('The theory of utilitarian rights now supplies a way to describe the boundary in Mill’s Liberty Principle.','Liberty, rights, and utility'));
+    build('private-sphere','Rights divide private choice from public intervention',[
+      'Mill’s idea is that greatest happiness requires a private sphere of rights-based interests in which others may not interfere.',
+      'Outside that private sphere lies a public sphere in which intervention may be possible, but only when it can be justified on utilitarian grounds rather than by custom, dislike, or moral disapproval.',
+      'The hard boundary question is therefore recast. An action belongs to the private sphere when utility supports protecting the relevant interest as a right; it belongs to the public sphere when no such protection is justified.'
+    ],'Liberty, rights, and utility','This is a reconstruction of how the account connects rights-based interests to Mill’s earlier self-regarding/other-regarding distinction.');
+    duo('Utility may protect one freedom while refusing another claim',
+      {label:'Freedom of thought',text:'Mill treats free thought as a protected interest because open inquiry is most likely to advance truth, and truth contributes to human happiness.'},
+      {label:'Freedom to compete',text:'Mill protects the right to compete in trade, but not a business owner’s interest in being shielded from fair competition, because free trade has greater utilitarian advantages.'},
+      note('The comparison shows why Mill protects property against theft and fraud while rejecting a right against economic rivalry.','Liberty, rights, and utility'));
+    quote('To have a right, then, is, I conceive, to have something which society ought to defend me in the possession of. If the objector goes on to ask, why it ought? I can give him no other reason than general utility.','John Stuart Mill, Utilitarianism, p. 226.',note('This quotation states the link between rights and general utility with unusual directness.','Liberty, rights, and utility','Primary work quoted: John Stuart Mill, Utilitarianism (1861), p. 226.'));
+    build('applications','The same method distinguishes protection from privilege',[
+      'A person’s interest in walking safely down the street is a strong candidate for a right because a law against attack serves general happiness.',
+      'A person’s interest in free thought is also protected because suppressing inquiry makes truth and knowledge harder to achieve.',
+      'By contrast, a rule preventing an aunt from changing a will, or a rule shielding a business from competitors, would not advance happiness in the same way. The utilitarian account therefore withholds those rights claims.'
+    ],'Liberty, rights, and utility','The examples explain the structure of the argument; they are not a complete algorithm for every disputed right.');
+    question('The paternalism challenge','What if coercing someone for that person’s own good really would increase happiness?','The next objection says that a utilitarian may have reason to intervene paternalistically even when Mill’s Liberty Principle forbids it.',note('The tension is now internal to Mill’s theory: utility might generate rights, but will it generate distinctly liberal rights?','Liberty, rights, and utility'));
+
+    section('V','Utility can seem to recommend the intervention Mill forbids',note('A utilitarian criticism puts justification by welfare and anti-paternalism into direct conflict.','Liberty, rights, and utility'));
+    quote('A drug addict who has successfully kicked the habit is thoroughly justified on utilitarian grounds in stopping some incautious young experimenter from taking the first steps down a road which may prove to have no turning.','The Poverty of Liberalism (1968), p. 29.',note('The account uses this example to show how a welfare-based calculation might favor stopping a harmful personal experiment.','Liberty, rights, and utility','Primary work quoted: The Poverty of Liberalism (1968), p. 29.'));
+    build('paternalism','A utilitarian theory of rights is not automatically a liberal one',[
+      'The critic’s recovered addict may have good utilitarian reasons to stop a young person from beginning a destructive habit. The intervention aims at the young person’s own welfare.',
+      'But Mill’s Liberty Principle expressly rejects this kind of paternalism: another person’s own good is not enough to justify coercing a competent adult.',
+      'So the fact that rights can be derived from utility does not yet show that the resulting rights will protect liberty. Utilitarianism might instead favor enlightened, experienced people directing the choices of others.'
+    ],'Liberty, rights, and utility','Do not resolve the objection too quickly. Mill must show why a broad liberty of non-interference serves utility better than benevolent control.');
+    question('Why choose liberty over wise control?','Why should a society leave people free when some outsiders may judge their choices more shrewdly?','Mill’s answer depends on a richer idea of utility: human happiness must include the long-term value of individuality, experimentation, and progress.',note('The next section turns to Chapter 3 of On Liberty, where Mill develops the case for individuality as an element of well-being.','Individuality and progress'));
+
+    section('VI','Individuality is not a luxury—it is part of well-being',note('Mill’s defense of liberty now rests on the connection between freedom, character, and human progress.','Individuality and progress'));
+    quote('The free development of individuality is one of the leading essentials of well-being.','John Stuart Mill, On Liberty, p. 132.',note('This line marks the shift from utility in the abstract to the kind of human well-being Mill thinks liberty makes possible.','Individuality and progress','Primary work quoted: John Stuart Mill, On Liberty (1859), p. 132.'));
+    build('stephen','Liberty is useful only if it has the right effects',[
+      'James Fitzjames Stephen objects that liberty is not always good in itself. He compares it to fire: controlled fire can be extraordinarily useful, while uncontrolled fire can be destructive.',
+      'Mill accepts that liberty does not always lead to improvement. Freedom can be used badly, and a person can make serious mistakes.',
+      'Yet Mill argues that liberty is the only unfailing and permanent source of improvement. His claim is comparative: over time, greater liberty contributes more to human happiness than the available alternatives.'
+    ],'Individuality and progress','Stephen’s fire analogy is an objection, not Mill’s own comparison. Mill’s response is a long-run claim, not a guarantee that every choice will be wise.');
+    build('personal-judgment','People are usually better judges of their own happiness',[
+      'Mill’s first reason is that individuals usually give more attention to their own lives than outsiders can. Even when people make mistakes, they are more likely to know what would make them happy.',
+      'Mill also criticizes the habit of asking what is suitable to one’s station or what people of a higher station usually do. That deference to custom weakens independent judgment.',
+      'Others may still offer reasons, warnings, and encouragement. Mill does not say that each person must be left alone without conversation or criticism.',
+      'The line is coercion: the person whose life is at stake remains the final judge. The danger of letting others force their preferred good outweighs the likely errors made against advice.'
+    ],'Individuality and progress','Emphasize the distinction between persuasion, which Mill permits, and force, which he rejects in self-regarding matters.');
+    quote('Considerations to aid [another’s] judgment, exhortations to strengthen his will, may be offered to him, even obtruded on him, by others: but he himself is the final judge.','John Stuart Mill, On Liberty, p. 148.',note('The quotation captures Mill’s alternative to paternalism: active moral influence without coercive control.','Individuality and progress','Primary work quoted: John Stuart Mill, On Liberty (1859), p. 148.'));
+    build('choice','Choosing is itself part of developing a human life',[
+      'Mill’s second reason goes beyond better outcomes. Exercising choice is itself vital to the full development of human nature.',
+      'A person who simply follows custom may avoid some mistakes, but that person does not develop the distinctively human capacity to choose a direction and make a life one’s own.',
+      'For Mill, well-being includes individuality of character. Liberty matters not only because it may produce happier results later, but because active self-direction is part of a flourishing life now.'
+    ],'Individuality and progress','This is still a utilitarian argument for Mill: individuality belongs within the content of happiness, rather than standing as an independent value outside it.');
+    build('experiments','Experiments of living make progress social',[
+      'Mill’s third and most important reason is that liberty permits different experiments of living: people can try varied ways of organizing their beliefs, character, work, and relationships, so long as they do not injure others.',
+      'Some experiments will fail, but others may reveal better ways of living. Their value is not limited to the people who conduct them.',
+      'People who are less adventurous can observe these experiments and learn from them. Successful lives can become examples that widen everyone’s practical sense of what human flourishing can be.',
+      'Liberty therefore supports social progress through a public process of trial, observation, and learning. This is why Mill calls human beings progressive creatures with permanent interests.'
+    ],'Individuality and progress','The account presents experiments of living as Mill’s central answer to the paternalism objection.');
+    head('Progress requires more than private freedom',[
+      {label:'Experiment',text:'Individuals must be free to try different ways of living.'},
+      {label:'Visibility',text:'Others must be able to encounter those alternatives rather than being confined to custom.'},
+      {label:'Learning',text:'Human beings must be capable of recognizing and adopting what experience teaches.'}
+    ],note('The final condition will become the pressure point in Mill’s whole justification.','Individuality and progress'));
+
+    section('VII','Mill has placed liberty on a wager about progress',note('The strongest criticism challenges not liberty’s usefulness in a particular case, but Mill’s faith in humanity’s ability to learn.','Individuality and progress'));
+    build('progress-risk','What if free people do not learn from experience?',[
+      'Stephen first objects that freedom may produce idleness and indifference rather than vigorous experimentation. Non-interference does not guarantee originality.',
+      'The deeper challenge is that Mill’s argument depends on people learning from their own experience and from the experience of others. Without that capacity, experiments of living lose their wider social value.',
+      'Human history can seem to support the worry: people and societies repeat mistakes, ignore available examples, and often fail to improve simply because better possibilities have been displayed.',
+      'If human beings are less progressive than Mill assumes, the utilitarian case for liberty weakens by the same degree. Progress is the cornerstone of his doctrine.'
+    ],'Individuality and progress','Keep the criticism conditional. The account does not claim that human progress is impossible; it asks how much confidence Mill is entitled to place in it.');
+    question('How much learning must liberty produce?','If people learn only unevenly from experience, does Mill’s case for a large private sphere still hold?','The question tests the empirical assumption beneath Mill’s theory: liberty is justified because societies can turn individual variety into durable improvement.',note('The final section considers a different way to defend liberty—by treating it as valuable in itself rather than as an instrument of happiness.','Liberty as an intrinsic good'));
+
+    section('VIII','An intrinsic liberty would avoid Mill’s gamble',note('The account now contrasts Mill’s instrumental defense with a non-utilitarian alternative.','Liberty as an intrinsic good'));
+    build('intrinsic-liberty','Perhaps liberty is good whatever it produces',[
+      'Mill treats liberty as instrumentally valuable: it is valuable because it tends to promote the greatest happiness through individuality and progress.',
+      'A different liberal view treats liberty as intrinsically good, meaning good in itself rather than merely as a means to some further result.',
+      'If liberty is an independent value, a society could not set it aside simply because a particular paternalistic or authoritarian policy promised more happiness. This would avoid the fear that utility might justify a non-liberal order.'
+    ],'Liberty as an intrinsic good','The intrinsic-value position is an alternative considered by the account, not Mill’s stated view.');
+    duo('Two ways of saying liberty matters',
+      {label:'Mill’s instrumental view',text:'Liberty is justified because it develops individuality, enables experiments of living, and serves long-term happiness and progress.'},
+      {label:'Intrinsic-value view',text:'Liberty is valuable in itself and may constrain the pursuit of happiness even when restricting freedom would produce better consequences.'},
+      note('The comparison clarifies the philosophical choice. Both views can limit power, but they ground those limits differently.','Liberty as an intrinsic good'));
+    build('mills-limit','Mill keeps liberty inside a utilitarian framework',[
+      'Mill would reject the claim that liberty is a separate intrinsic good alongside happiness. For him, liberty is valuable insofar as it contributes to happiness and is part of what happiness includes.',
+      'This explains why he withholds the case for liberty where he thinks freedom cannot promote improvement, as in his objectionable exclusions of children and people he called “barbarians.”',
+      'Mill also insists that liberty cannot be unlimited. People may be free to compete, but not free to use another person’s property without consent; unconstrained liberty would collapse into anarchy.',
+      'Utilitarianism therefore gives Mill both an ambitious defense of liberty and a way to specify its limits. The cost is that liberty remains vulnerable when its contribution to progress is doubted.'
+    ],'Liberty as an intrinsic good','The exclusions are reported as features of Mill’s view; they should not be presented as defensible applications of liberty.');
+    head('Mill’s is one defense of liberalism, not the only one',[
+      {label:'Utility',text:'Mill grounds rights and liberty in long-term happiness and progress.'},
+      {label:'Other liberties',text:'A different theory may limit one liberty to protect another liberty.'},
+      {label:'Fairness',text:'A non-utilitarian approach may defend liberty through fairness or justice, as later theories such as Rawls’s attempt to do.'}
+    ],note('Close by preserving the account’s measured conclusion: Mill offers a powerful but contestable route to liberalism.','Liberty as an intrinsic good'));
+
+    diagnostic('Can liberty remain secure if its strongest defense depends on human progress?',note('Leave the question open. It draws together rights, utility, paternalism, individuality, and the fragile assumption that people can learn from free experiments.','Whole argument'));
+    refs([
+      '<strong>Source material:</strong> “The Place of Liberty - Justufying the Liberty Principle.”',
+      '<strong>Mill, John Stuart.</strong> <em>On Liberty</em> (1859). Passages quoted in the source material.',
+      '<strong>Mill, John Stuart.</strong> <em>Utilitarianism</em> (1861). Passage quoted in the source material.',
+      '<strong>Bentham, Jeremy.</strong> <em>Supply Without Burthen</em> (1795). Passage quoted in the source material.',
+      '<strong>The Poverty of Liberalism</strong> (1968). Passage quoted in the source material.',
+      '<strong>Stephen, James Fitzjames.</strong> <em>Liberty, Equality, Fraternity</em> (1873). Discussed in the source material.'
+    ],note('References include the source material plus primary and secondary works quoted or discussed in the deck.','Whole argument'));
+
+    const deck=document.getElementById('deck');
+    const escapeHTML=value=>String(value).replace(/[&<>"']/g,char=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[char]));
+    function renderSlide(slide,index){
+      const node=document.createElement('article');node.className=`slide ${slide.type}${slide.type==='content'?' top':''}`;node.dataset.index=index;node.dataset.group=slide.buildGroup||'';let content='';
+      if(slide.type==='cover')content=`<div class="slide-inner"><p class="eyebrow">John Stuart Mill</p><h1 class="title">${escapeHTML(slide.title)}</h1><p class="work">${escapeHTML(slide.work)}</p><p class="course">${escapeHTML(slide.course)}</p></div>`;
+      if(slide.type==='section')content=`<div class="slide-inner"><p class="eyebrow">${escapeHTML(slide.eyebrow)}</p><h2 class="title">${escapeHTML(slide.title)}</h2><div class="rule"></div></div>`;
+      if(slide.type==='content')content=`<div class="slide-inner"><h2 class="title">${escapeHTML(slide.title)}</h2><div class="body">${slide.paragraphs.map((p,i)=>`<p class="${i===slide.paragraphs.length-1?'fresh':''}">${escapeHTML(p)}</p>`).join('')}</div></div>`;
+      if(slide.type==='question'||slide.type==='diagnostic')content=`<div class="slide-inner"><p class="eyebrow">${escapeHTML(slide.eyebrow)}</p><h2 class="prompt">${escapeHTML(slide.prompt)}</h2>${slide.context?`<p class="context">${escapeHTML(slide.context)}</p>`:''}</div>`;
+      if(slide.type==='quote')content=`<div class="slide-inner"><blockquote>${escapeHTML(slide.text)}</blockquote><cite>${escapeHTML(slide.cite)}</cite></div>`;
+      if(slide.type==='duo')content=`<div class="slide-inner"><h2 class="title">${escapeHTML(slide.title)}</h2><div class="duo-grid"><section class="duo-col"><h3>${escapeHTML(slide.left.label)}</h3><p>${escapeHTML(slide.left.text)}</p></section><section class="duo-col"><h3>${escapeHTML(slide.right.label)}</h3><p>${escapeHTML(slide.right.text)}</p></section></div></div>`;
+      if(slide.type==='head')content=`<div class="slide-inner"><h2 class="title">${escapeHTML(slide.title)}</h2><div class="head-list">${slide.items.map(item=>`<div class="head-item"><b>${escapeHTML(item.label)}</b><span>${escapeHTML(item.text)}</span></div>`).join('')}</div></div>`;
+      if(slide.type==='refs')content=`<div class="slide-inner"><p class="eyebrow">Sources used in this presentation</p><h2 class="title">${escapeHTML(slide.title)}</h2><div class="refs-list">${slide.items.map(item=>`<div class="ref">${item}</div>`).join('')}</div></div>`;
+      node.innerHTML=content;return node;
+    }
+    slides.forEach((slide,index)=>deck.appendChild(renderSlide(slide,index)));
+    const rendered=[...document.querySelectorAll('.slide')];const progress=document.getElementById('progress');const counter=document.getElementById('counter');const notesBody=document.getElementById('notes-body');const overview=document.getElementById('overview');const notesPanel=document.getElementById('notes');let current=0;
+    function fitBuildGroups(){const groups=new Map();rendered.forEach(slide=>{const key=slide.dataset.group;if(key)groups.set(key,slide);});rendered.forEach(slide=>slide.style.setProperty('--fit','1'));groups.forEach(last=>{last.classList.add('measuring');const inner=last.querySelector('.slide-inner');const natural=inner.scrollHeight;const available=window.innerHeight*.765;const fit=Math.min(1,Math.max(.72,available/natural));rendered.filter(slide=>slide.dataset.group===last.dataset.group).forEach(slide=>slide.style.setProperty('--fit',fit.toFixed(3)));last.classList.remove('measuring');});}
+    function updateOverview(){document.querySelectorAll('.overview-card').forEach(card=>card.classList.toggle('current',Number(card.dataset.target)===current));}
+    function show(index){current=Math.max(0,Math.min(slides.length-1,index));rendered.forEach((slide,i)=>slide.classList.toggle('active',i===current));progress.style.width=`${((current+1)/slides.length)*100}%`;counter.textContent=`${current+1} / ${slides.length}`;notesBody.textContent=slides[current].notes||'No notes for this slide.';updateOverview();}
+    function togglePanel(panel){const willOpen=!panel.classList.contains('open');document.querySelectorAll('.panel').forEach(item=>item.classList.remove('open'));if(willOpen)panel.classList.add('open');}
+    slides.forEach((slide,index)=>{const card=document.createElement('button');card.className='overview-card';card.dataset.target=index;card.innerHTML=`<span class="num">${String(index+1).padStart(2,'0')}</span><span class="label">${escapeHTML(slide.title||slide.prompt||slide.eyebrow||'Untitled slide')}</span>`;card.addEventListener('click',()=>{overview.classList.remove('open');show(index);});document.getElementById('overview-grid').appendChild(card);});
+    document.addEventListener('keydown',event=>{if(event.key==='Escape'){document.querySelectorAll('.panel').forEach(panel=>panel.classList.remove('open'));return;}if(event.key==='o'||event.key==='O'){togglePanel(overview);return;}if(event.key==='n'||event.key==='N'){togglePanel(notesPanel);return;}if(event.key==='f'||event.key==='F'){toggleFullscreen();return;}if(['ArrowRight','ArrowDown','PageDown',' '].includes(event.key)){event.preventDefault();show(current+1);}if(['ArrowLeft','ArrowUp','PageUp'].includes(event.key)){event.preventDefault();show(current-1);}});
+    document.querySelectorAll('[data-close]').forEach(button=>button.addEventListener('click',()=>document.getElementById(button.dataset.close).classList.remove('open')));
+    function toggleFullscreen(){if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();else document.exitFullscreen?.();}document.getElementById('fullscreen').addEventListener('click',toggleFullscreen);
+    let touchStart=null;deck.addEventListener('touchstart',event=>{touchStart=event.changedTouches[0].clientX;},{passive:true});deck.addEventListener('touchend',event=>{if(touchStart===null)return;const dx=event.changedTouches[0].clientX-touchStart;if(Math.abs(dx)>55)show(current+(dx<0?1:-1));touchStart=null;},{passive:true});window.addEventListener('resize',()=>{fitBuildGroups();show(current);});fitBuildGroups();show(0);
+  </script>
+</body>
+</html>

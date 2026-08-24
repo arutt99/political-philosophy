@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>John Stuart Mill - Representative Democracy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#201a24;
+    --bg-2:#2c2330;
+    --text:#f5efe8;
+    --vellum:#cbbfc8;
+    --rose:#e48b88;
+    --rose-dim:#91515d;
+    --blue:#8fb5cc;
+    --border:rgba(245,239,232,.16);
+    --fit:1;
+  }
+  *{box-sizing:border-box}
+  html,body{width:100%;height:100%;margin:0;overflow:hidden;background:var(--bg);color:var(--text)}
+  body{font-family:Inter,system-ui,sans-serif}
+  button{font:inherit}
+  #deck{position:relative;width:100vw;height:100vh;background:
+    radial-gradient(circle at 14% 7%,rgba(228,139,136,.16),transparent 29%),
+    radial-gradient(circle at 84% 88%,rgba(143,181,204,.12),transparent 31%),
+    linear-gradient(135deg,#241b29 0%,#201a24 55%,#18252d 100%)}
+  #deck::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.44;background:
+    repeating-linear-gradient(90deg,transparent 0 8vw,rgba(245,239,232,.035) 8vw 8.08vw),
+    linear-gradient(112deg,transparent 0 47%,rgba(228,139,136,.07) 47.1% 47.2%,transparent 47.3%)}
+  #deck::after{content:"";position:absolute;right:-12vw;bottom:-27vh;width:52vw;height:52vw;border:1px solid rgba(143,181,204,.18);border-radius:50%;box-shadow:0 0 0 8vw rgba(143,181,204,.025),0 0 0 16vw rgba(143,181,204,.014);pointer-events:none}
+  .slide{position:absolute;inset:0;display:none;align-items:center;justify-content:center;padding:7.2vh 7vw 8vh;text-align:center;overflow:hidden}
+  .slide.active,.slide.measuring{display:flex}
+  .slide.measuring{visibility:hidden;pointer-events:none}
+  .slide.top{align-items:flex-start;padding-top:8.5vh}
+  .slide-inner{width:min(980px,86vw);max-height:82vh;margin:auto;transform-origin:top center}
+  .slide.top .slide-inner{margin:0 auto}
+  .slide.duo .slide-inner{width:min(1140px,90vw)}
+  .eyebrow{margin:0 0 1.2rem;color:var(--rose);font:600 clamp(12px,1.12vw,17px)/1.3 "IBM Plex Mono",monospace;letter-spacing:.18em;text-transform:uppercase}
+  .title{margin:0;font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;letter-spacing:-.018em}
+  .cover .title{font-size:calc(clamp(58px,7.6vw,104px)*var(--fit));line-height:.96;max-width:11.5ch;margin-inline:auto}
+  .cover .work{font:500 calc(clamp(20px,2.15vw,31px)*var(--fit))/1.4 "Cormorant Garamond",Georgia,serif;color:var(--vellum);margin:1.5rem auto 0;max-width:37ch}
+  .cover .course{margin-top:2.4rem;color:var(--rose);font:500 calc(clamp(11px,1vw,15px)*var(--fit))/1.4 "IBM Plex Mono",monospace;letter-spacing:.14em;text-transform:uppercase}
+  .section .slide-inner{width:min(900px,86vw)}
+  .section .title{font-size:calc(clamp(48px,6.2vw,84px)*var(--fit));line-height:1.02}
+  .section .rule{width:52px;height:1px;background:var(--rose-dim);margin:1.8rem auto 0}
+  .content .title,.head .title,.duo .title{font-size:calc(clamp(38px,4.5vw,62px)*var(--fit));line-height:1.05;margin-bottom:1.6rem}
+  .content .body{font-family:"Cormorant Garamond",Georgia,serif;font-size:calc(clamp(25px,2.35vw,35px)*var(--fit));line-height:1.34;text-align:left}
+  .content .body p{margin:0 0 1.05em -1.25rem;padding:.08em .7em .08em 1rem;border-left:3px solid transparent;color:rgba(203,191,200,.53);font-weight:600;background:linear-gradient(90deg,rgba(228,139,136,0),rgba(228,139,136,0))}
+  .content .body p:last-child{margin-bottom:0}
+  .content .body p.fresh{color:var(--text);border-left-color:var(--rose);background:linear-gradient(90deg,rgba(228,139,136,.16),rgba(228,139,136,0) 78%);text-shadow:0 0 18px rgba(245,239,232,.08)}
+  .question .slide-inner,.diagnostic .slide-inner{width:min(900px,86vw)}
+  .question .prompt,.diagnostic .prompt{margin:0;font-family:"Cormorant Garamond",Georgia,serif;font-size:calc(clamp(42px,5.2vw,72px)*var(--fit));line-height:1.08;font-weight:600;letter-spacing:-.015em}
+  .question .prompt::after,.diagnostic .prompt::after{content:"";display:block;width:42px;height:2px;background:var(--rose);margin:1.8rem auto 0}
+  .question .context{max-width:48ch;margin:1.35rem auto 0;color:var(--vellum);font:500 calc(clamp(18px,1.7vw,25px)*var(--fit))/1.4 "Cormorant Garamond",Georgia,serif}
+  .quote blockquote{margin:0 auto;max-width:26ch;font-family:"Cormorant Garamond",Georgia,serif;font-size:calc(clamp(39px,4.45vw,63px)*var(--fit));line-height:1.12;font-weight:500}
+  .quote blockquote::before{content:"“";color:var(--rose);margin-right:.08em}
+  .quote blockquote::after{content:"”";color:var(--rose);margin-left:.08em}
+  .quote cite{display:block;margin-top:1.6rem;color:var(--vellum);font:500 calc(clamp(12px,1.15vw,17px)*var(--fit))/1.45 "IBM Plex Mono",monospace;font-style:normal}
+  .duo-grid{display:grid;grid-template-columns:1fr 1fr;gap:2.4rem;text-align:left;margin-top:1.5rem}
+  .duo-col{min-height:15rem;padding:1.5rem 1.6rem;border:1px solid var(--border);border-top:4px solid var(--rose);background:linear-gradient(145deg,rgba(44,35,48,.93),rgba(24,32,40,.68))}
+  .duo-col h3{margin:0 0 .85rem;color:var(--rose);font:600 calc(clamp(13px,1.25vw,18px)*var(--fit))/1.3 "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase}
+  .duo-col p{margin:0;color:var(--text);font:500 calc(clamp(24px,2.15vw,33px)*var(--fit))/1.34 "Cormorant Garamond",Georgia,serif}
+  .head-list{display:grid;gap:1.15rem;text-align:left;margin-top:1.8rem}
+  .head-item{display:grid;grid-template-columns:10rem 1fr;gap:1.5rem;align-items:baseline;padding-top:1rem;border-top:1px solid var(--border);border-left:2px solid transparent;padding-left:1rem}
+  .head-item:nth-child(odd){border-left-color:rgba(228,139,136,.58)}
+  .head-item b{color:var(--rose);font:600 calc(clamp(12px,1.1vw,16px)*var(--fit))/1.3 "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase}
+  .head-item span{font:500 calc(clamp(23px,2.05vw,31px)*var(--fit))/1.3 "Cormorant Garamond",Georgia,serif}
+  .diagnostic .eyebrow{color:var(--vellum)}
+  .diagnostic .prompt{font-size:calc(clamp(52px,6.6vw,90px)*var(--fit))}
+  .refs .slide-inner{width:min(980px,86vw);text-align:left}
+  .refs .title{font-size:calc(clamp(40px,4.6vw,64px)*var(--fit));margin-bottom:1.7rem}
+  .refs-list{display:grid;gap:1.05rem}
+  .ref{padding-top:.95rem;border-top:1px solid var(--border);font:500 calc(clamp(18px,1.65vw,24px)*var(--fit))/1.38 "Cormorant Garamond",Georgia,serif;color:var(--vellum)}
+  .ref strong{color:var(--text);font-weight:600}
+  #progress{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,var(--blue),var(--rose));z-index:30}
+  #nav-hint,#counter{position:fixed;bottom:18px;z-index:30;color:var(--vellum);font:500 12px/1.3 "IBM Plex Mono",monospace;letter-spacing:.08em}
+  #nav-hint{left:24px} #counter{right:24px}
+  #fullscreen{position:fixed;top:20px;right:22px;z-index:30;color:var(--vellum);background:transparent;border:1px solid rgba(228,139,136,.45);border-radius:0;padding:8px 11px;cursor:pointer;font:500 11px/1 "IBM Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase}
+  #fullscreen:hover{color:var(--rose);border-color:var(--rose)}
+  .panel{position:fixed;inset:4vh 4vw;z-index:60;display:none;background:rgba(30,26,36,.985);border:1px solid var(--border);overflow:auto}
+  .panel.open{display:block}
+  .panel-head{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;padding:18px 22px;background:var(--bg-2);border-bottom:1px solid var(--border);z-index:2}
+  .panel-head h2{margin:0;font:600 14px/1 "IBM Plex Mono",monospace;letter-spacing:.15em;text-transform:uppercase;color:var(--rose)}
+  .close{color:var(--text);background:transparent;border:1px solid var(--border);padding:7px 10px;cursor:pointer}
+  #overview-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;padding:20px}
+  .overview-card{min-height:126px;padding:16px;text-align:left;background:linear-gradient(145deg,#2c2330,#1c232a);border:1px solid var(--border);border-left:3px solid transparent;color:var(--text);cursor:pointer}
+  .overview-card:hover,.overview-card.current{border-left-color:var(--rose);border-color:rgba(228,139,136,.48)}
+  .overview-card .num{display:block;color:var(--rose);font:500 11px/1.3 "IBM Plex Mono",monospace;margin-bottom:12px}
+  .overview-card .label{font:600 22px/1.1 "Cormorant Garamond",Georgia,serif}
+  #notes-body{padding:28px 34px;white-space:pre-wrap;color:var(--text);font:400 18px/1.62 Inter,sans-serif;max-width:900px}
+  @media (max-width:760px){
+    .slide{padding:9vh 8vw 10vh}.slide.top{padding-top:9.5vh}.slide-inner,.slide.duo .slide-inner{width:84vw}
+    .duo-grid{grid-template-columns:1fr;gap:1.5rem}.head-item{grid-template-columns:1fr;gap:.45rem}
+    #nav-hint{display:none}#fullscreen{top:12px;right:12px}.content .body{font-size:calc(clamp(22px,5.6vw,30px)*var(--fit))}
+    .duo-col p{font-size:calc(clamp(22px,5.3vw,29px)*var(--fit))}
+    .cover .slide-inner,.section .slide-inner,.question .slide-inner,.diagnostic .slide-inner{padding:1.7rem 1.5rem}
+  }
+</style>
+<link rel="stylesheet" href="presentation-polish.css">
+<script src="presentation-polish.js" defer></script>
+</head>
+<body>
+<div id="deck" aria-live="polite"></div>
+<div id="progress"></div>
+<div id="nav-hint">ARROWS / SPACE · O OVERVIEW · N NOTES · F FULLSCREEN</div>
+<div id="counter">1 / 1</div>
+<button id="fullscreen" aria-label="Toggle fullscreen">Fullscreen</button>
+
+<section id="overview" class="panel" aria-label="Slide overview">
+  <div class="panel-head"><h2>Overview</h2><button class="close" data-close="overview">Close</button></div>
+  <div id="overview-grid"></div>
+</section>
+<aside id="notes" class="panel" aria-label="Speaker notes">
+  <div class="panel-head"><h2>Speaker notes</h2><button class="close" data-close="notes">Close</button></div>
+  <div id="notes-body"></div>
+</aside>
+
+<script>
+const slides=[];
+const source=(section,extra='')=>`[Sources]\nSource material: “Who Should Rule - Representative Democracy,” section “${section}.”${extra?`\n${extra}`:''}\n[/Sources]`;
+const add=s=>slides.push(s);
+const cover=(title,work,course,notes)=>add({type:'cover',title,work,course,notes});
+const section=(roman,title,notes)=>add({type:'section',eyebrow:`${roman}. ${title.toUpperCase()}`,title,notes});
+const question=(eyebrow,prompt,context,notes)=>add({type:'question',eyebrow,prompt,context,notes});
+const quote=(text,cite,notes)=>add({type:'quote',text,cite,notes});
+const duo=(title,left,right,notes)=>add({type:'duo',title,left,right,notes});
+const head=(title,items,notes)=>add({type:'head',title,items,notes});
+const diagnostic=(prompt,notes)=>add({type:'diagnostic',eyebrow:'The Mill test',prompt,notes});
+const refs=(items,notes)=>add({type:'refs',title:'References',items,notes});
+function build(id,title,paragraphs,notes,sectionName){
+  paragraphs.forEach((_,i)=>add({type:'content',title,paragraphs:paragraphs.slice(0,i+1),buildGroup:id,notes:`${notes}${i<paragraphs.length-1?'\n\nPause before revealing the next step.':''}\n\n${source(sectionName)}`}));
+}
+
+cover('Representative Democracy','John Stuart Mill on participation, expertise, and equal respect','Political Philosophy',`Begin with the argument’s central problem: democracy needs administration, but administration can pull power away from the people.\n\n${source('Opening frame: why a modern democracy must be representative','John Stuart Mill, “Considerations on Representative Government” (1861), quotation reproduced in the source material.')}`);
+
+section('I','Why do people need representatives?',`Start with the institutional problem before presenting Mill’s defense. Representation is a response to scale, but it also creates a new question about control.\n\n${source('Opening frame: why a modern democracy must be representative')}`);
+
+build('representatives','Every democracy must decide what administrators can do',[
+  'Any system of government needs administrators to carry out policy. The people as a whole cannot execute every public decision themselves, so the first design question is how much authority administrators should receive.',
+  'Plato gives administrators—the guardians—complete power. Rousseau gives the people the lawmaking power and administrators the task of carrying laws out. Representative democracy lets elected representatives make laws and put them into practice, with help from a civil service.'
+],'Keep the three models distinct. The argument presents representative democracy as one way of solving the administrator problem, not as the only imaginable arrangement.','Opening frame: why a modern democracy must be representative');
+
+duo('Representation changes who makes public decisions',
+  {label:'Rousseau’s division',text:'The people make the laws; administrators execute them. Popular sovereignty stays close to direct lawmaking.'},
+  {label:'Representative democracy',text:'The people elect representatives who make laws and administer them. Popular rule is mediated through officeholders.'},
+  `The comparison prepares the main tension: mediation makes large-scale government possible, but it also creates distance between rulers and ruled.\n\n${source('Opening frame: why a modern democracy must be representative')}`);
+
+question('The scale problem','If large societies need representation, what makes representative rule democratic?','Mill’s answer begins by asking what government is for and what kind of people its institutions produce.',`The next section turns from the structure of representation to the purposes of government.\n\n${source('Opening frame: why a modern democracy must be representative')}`);
+
+section('II','What should government do?',`Mill’s argument has two standards: public management and the improvement of citizens. The second standard drives his preference for democracy over despotism.\n\n${source('Government’s two functions')}`);
+
+build('functions','Mill judges government by what it does to people, not only by what it gets done',[
+  'For Mill, government has two proper functions: it must manage public affairs, and it must improve the citizens who live under it.',
+  'Managing public affairs means handling matters such as law, legislation, finance, and commerce effectively. A government must be judged by how well it performs this work.',
+  'Improving citizens means affecting them morally and intellectually. Mill treats public institutions as schools of political character, not only as machines for producing decisions.'
+],'The argument notes that Mill ultimately connects the branches of government to general happiness, but that further claim is not needed for this step.','Government’s two functions');
+
+question('The despotism challenge','If a capable despot can manage public affairs, why prefer democracy?','Mill grants that absolute rule might perform the management function. His strongest objection concerns the kind of people despotism creates.',`The next build follows Mill’s argument against “good despotism.”\n\n${source('Mill against good despotism')}`);
+
+build('despotism','Despotism can manage people while making them passive',[
+  'Mill concedes that a despot might manage public business. But subjects under despotism have little need to learn about the state, inform themselves, or take responsibility for public affairs.',
+  'That passivity damages both the individuals and the state. People who are given nothing to do for their country have less reason to care about it; if they do become informed and active, Mill argues, they will not remain content with permanent subjection.'
+],'Separate the management test from the improvement test. Mill’s objection is not simply that every despot is incompetent.','Mill against good despotism');
+
+quote('Let a person have nothing to do for his country and he will not care for it.','John Stuart Mill, Representative Government, p. 204, quoted on p. 2 of the source material.',`Let the sentence clarify why political participation matters for character, not just for selecting officials.\n\n${source('Mill against good despotism','Primary work quoted: John Stuart Mill, Representative Government.')}`);
+
+build('independence','Democracy matters because people flourish through independence',[
+  'Mill’s key assumption is that human beings flourish only under conditions of independence. They need to be self-protecting and self-dependent if they are to avoid oppression.',
+  'Participation in sovereignty gives citizens practice in judging public matters and in seeing themselves as responsible for the conditions under which they live.',
+  'Mill compares free states with monarchical or oligarchical despotisms. He takes their greater prosperity and better social relations as evidence that active citizenship benefits the whole state.'
+],'The comparison between free and despotic states is Mill’s evidence for the civic effects of freedom.','Independence, active citizenship, and free states');
+
+question('The direct-democracy question','If participation improves citizens, why not let everyone decide everything directly?','Mill’s next move is to distinguish the moral value of participation from the practical work of governing a large society.',`The next section explains why Mill defends representation rather than direct democracy.\n\n${source('Why Mill rejects direct democracy')}`);
+
+section('III','Why not let everyone decide everything?',`Mill’s defense of representation is partly a defense of administrative competence. The argument then turns the same concern into an objection about elite capture.\n\n${source('Why Mill rejects direct democracy')}`);
+
+build('direct','Direct democracy can educate citizens and still govern badly',[
+  'Mill might concede that direct democracy would be the best form of government for improving citizens morally and intellectually, because it gives them the most direct practice in public judgment.',
+  'But modern communities are too large for everyone to participate personally in more than minor portions of public business. More importantly, Mill fears that popular influence over expert administrators would put inexperience in judgment over experience and ignorance over knowledge.'
+],'The argument is not “experts are always right.” It is that a government needs a workable division between public participation and administrative expertise.','Why Mill rejects direct democracy');
+
+quote('Inexperience sitting in judgment on experience, ignorance on knowledge.','John Stuart Mill, Representative Government, p. 232, quoted on p. 3 of the source material.',`The quotation states Mill’s fear in its sharpest form. The following slides ask whether representation solves the problem or merely hides it.\n\n${source('Why Mill rejects direct democracy','Primary work quoted: John Stuart Mill, Representative Government.')}`);
+
+question('The elite-capture objection','Does representation make popular rule possible—or make elective dictatorship look democratic?','Critics argue that representatives can become a wealthy, educated, professional elite with interests of their own.',`The next build states the strongest objection before returning to Mill’s proposed safeguards.\n\n${source('Criticism: representation and elite capture')}`);
+
+build('capture','Representation can move power away from the people it claims to serve',[
+  'Critics say representative democracy is not simply a realistic version of direct democracy. Behind elections may lurk an elective dictatorship that leaves ordinary people with little effective power.',
+  'Elite capture occurs when a wealthy, educated, professional group manipulates the system to gain offices, privileges, and advantages for itself and its allies.',
+  'If elite capture is a permanent feature of representation, the system cannot easily be described as equal power or as a structure that develops the moral and intellectual capacities of its citizens.'
+],'Label elite capture as the critics’ objection. Mill accepts that representative democracy can fail, which is why the next part of the argument is institutional repair.','Criticism: representation and elite capture');
+
+question('The repair question','If representation can fail, what would make it educate citizens rather than merely select rulers?','Mill’s answer begins with participation that is local, concrete, and repeated—even when national government cannot include everyone directly.',`The next section develops Mill’s positive design proposals.\n\n${source('Educating citizens for citizenship')}`);
+
+section('IV','How can representative power stay public?',`Mill’s proposed system must do two things at once: train citizens through participation and restrain officeholders who might exploit power.\n\n${source('Educating citizens for citizenship; Protecting representative government')}`);
+
+build('educate','Participation is not an ornament; it is part of the education of citizens',[
+  'Mill accepts that representative democracy can fail, but he wants institutions that educate citizens for citizenship rather than leaving public business to specialists alone.',
+  'The most important means of civic education is participation in public business. Because national government cannot include everyone personally, Mill emphasizes jury service and local government as practical forms of exercising judgment, responsibility, and cooperation.'
+],'Keep the mechanism visible: participation changes citizens by giving them public work to do.','Educating citizens for citizenship');
+
+head('Participation trains political judgment',[
+  ['Jury service','Citizens weigh evidence, deliberate with others, and accept responsibility for a public decision.'],
+  ['Local government','Citizens practice administration and learn skills that ordinary private work may not provide.'],
+  ['National representation','Citizens connect local judgment to the larger task of choosing people who will govern in the general interest.']
+],`The three forms of participation are presented as related but not interchangeable.\n\n${source('Educating citizens for citizenship')}`);
+
+question('The officeholder problem','The citizens can be educated by participation. But who will seek office—and what qualities will win?','Mill worries that the political qualities rewarded by elections may be precisely the qualities a government should distrust.',`The next build turns from the education of citizens to the selection and restraint of representatives.\n\n${source('The danger of unworthy representatives')}`);
+
+build('unworthy','The skills that win elections may be bad skills for ruling',[
+  'One threat is that unworthy or unfit people will stand for election. Mill agrees with Plato that the people best equipped to rule may be the least likely to want power.',
+  'The qualities most likely to produce political success—flattery, duplicity, and manipulation—are not the qualities citizens should want in rulers. When they succeed, elections can become a path to elite capture rather than a safeguard against it.'
+],'The comparison to Plato is part of the argument’s argument, but Mill does not abandon representation. He proposes institutional checks.','The danger of unworthy representatives');
+
+head('Three safeguards against elected tyranny',[
+  ['Separate powers','Legislative, executive, and judicial functions can check one another.'],
+  ['Limit campaign money','Spending limits make it harder to buy office and seek a return on political investment.'],
+  ['Avoid offices as prizes','Mill surprisingly argues that government members should not be paid, so office is less attractive to adventurers.']
+],`These are safeguards against abuse, not guarantees that every representative will be wise.\n\n${source('Protecting representative government')}`);
+
+build('checks','A representative system needs power dispersed before anyone misuses it',[
+  'The Federalists’ response to elected tyranny was separation of powers: independent branches would check one another and protect the people from the corruption of rulers.',
+  'Mill accepts this logic of dispersed power. He adds limits on campaign spending because someone who pays heavily to win office may seek repayment through office.',
+  'He also proposes unpaid government positions, while allowing private support for suitable candidates without independent means. The aim is to reduce the attraction of office to people seeking personal gain.'
+],'The proposals are Mill’s safeguards. The next problem is harder: even restrained representatives can be badly chosen by voters.','Protecting representative government');
+
+question('The voter problem','What if the people use their votes for private or class interest instead of the general interest?','Mill’s design now turns from the structure of government to the moral and intellectual quality of individual votes.',`The next section reconstructs Mill’s account of what a vote is for and why he distrusts some voters.\n\n${source('The duty and danger of voting')}`);
+
+section('V','What should a vote be for?',`Mill treats the vote as a public responsibility, not a private preference. His proposed safeguards against bad voting threaten the equality that democracy seems to promise.\n\n${source('The duty and danger of voting')}`);
+
+build('voter','A vote is a judgment about the public good, not a personal wish',[
+  'Mill says voters should choose the candidates most likely to improve citizens and manage the country efficiently in the interests of all.',
+  'A voter’s task is therefore not simply to express what benefits them personally. Mill compares voting to jury service: both are public duties that require a person to deliberate about the general interest and give their best conscientious judgment.'
+],'Make the distinction between a private preference and a public judgment explicit before introducing Mill’s analogy.','The duty and danger of voting');
+
+quote('It has no more to do with my personal wishes than the verdict of a juryman.','John Stuart Mill, Representative Government, p. 299, quoted on p. 6 of the source material.',`The analogy raises the standard Mill applies to voters: they are accountable for a public judgment, not only for their own interests.\n\n${source('The duty and danger of voting','Primary work quoted: John Stuart Mill, Representative Government.')}`);
+
+question('The distortion question','If voters are duty-bound, what distorts their judgment?','Mill names two dangers: a vote can be self-interested or class-interested, and a voter can be too ignorant to recognize the public good.',`The next build follows Mill’s proposed remedies and the argument’s objections to them.\n\n${source('The dangers of self-interest, coercion, and ignorance')}`);
+
+build('ballot','Mill’s remedies for bad voting threaten other democratic values',[
+  'Mill proposes an open vote so that voters can be held publicly accountable for acting from personal or class interest rather than from their best judgment about the public good.',
+  'The danger is coercion: secret ballots were introduced because powerful local people, especially employers, could pressure others to vote as instructed. Mill believes self-interested voting may be the greater danger, but the argument presents that judgment as highly questionable.'
+],'Name the tension clearly: accountability can expose voters to pressure. The argument does not resolve Mill’s preference for open voting.','The dangers of self-interest, coercion, and ignorance');
+
+build('class','Mill tries to prevent the ballot from being dominated by ignorance and class interest',[
+  'Mill proposes temporarily excluding people unable to read, write, and perform common arithmetic, and treats receipt of parish relief as a disqualification because he thinks dependence undermines equal political standing. He also separates having a voice from having an equal voice, giving especially qualified people more than one vote.',
+  'His central fear is that an uneducated poor majority will pursue policies it sees as serving laborers but that Mill thinks would depress industry, investment, and everyone’s long-term welfare.'
+],'The exclusions and plural voting are Mill’s proposals. The argument marks the welfare restriction as scandalous by contemporary standards; preserve that evaluative distance.','Partial disfranchisement and plural voting');
+
+quote('That every one should have an equal voice, is a totally different proposition.','John Stuart Mill, Representative Government, p. 283, quoted on p. 7 of the source material.',`The quotation crystallizes the point at which Mill’s instrumental defense of democracy begins to sacrifice political equality.\n\n${source('Partial disfranchisement and plural voting','Primary work quoted: John Stuart Mill, Representative Government.')}`);
+
+question('The expertise question','Is giving some citizens extra political weight a defense of democracy—or a retreat from it?','Mill wants competent government, but the more he protects the ballot from error, the more he risks turning popular rule into rule by the qualified.',`The next build gives the strongest case for and against plural voting.\n\n${source('The case for and criticism of plural voting')}`);
+
+build('plural','Plural voting is either unnecessary or unjustified',[
+  'Mill prefers to bias the ballot toward the educated rather than the rich because he thinks voters with one vote should be able to recognize that better-qualified judgment deserves greater weight.',
+  'But if less-educated voters really trust the educated to choose wisely, they can ask those people how to vote and follow their advice without a constitutional system of extra votes.',
+  'If they do not trust the educated, they will not accept plural voting either. The argument concludes that plural voting is therefore either unnecessary or unjustified.'
+],'This criticism comes from the argument’s reconstruction of Mill’s critics. Keep Mill’s proposal and the objection visibly separate.','The case for and criticism of plural voting');
+
+section('VI','When does majority rule become oppression?',`The plural-voting dispute leads to Mill’s deeper worry: a majority can be represented and still use political power to dominate a minority.\n\n${source('Protecting the minority')}`);
+
+build('minority','A minority can be represented and still be permanently outvoted',[
+  'Mill’s main democratic fear is the tyranny of the majority: an entrenched majority can win vote after vote while a minority is ignored.',
+  'He therefore supports proportional representation, including systems that allow a vote to move to another candidate when a first choice fails. But representation and protection are different: a minority can have seats in parliament and still be outvoted on every decision that matters.'
+],'Do not treat representation as the same thing as justice. That distinction drives Mill toward limits on government itself.','Protecting the minority');
+
+duo('Representation is not the same as protection',
+  {label:'Representation',text:'A minority’s views appear in the legislature. Its members are visible in the process and may speak for their interests.'},
+  {label:'Protection',text:'A minority cannot be lawfully oppressed simply because a majority can defeat it in a vote.'},
+  `The argument names class, race, religion, disability, and other forms of oppression as possible even when minorities are represented.\n\n${source('Protecting the minority')}`);
+
+build('liberties','Mill protects minorities by limiting what government may do',[
+  'The best way to prevent oppression within a voting system might seem to be giving morally enlightened people many votes. But that solution brings democracy close to Plato’s rule by guardians, so Mill instead restricts the legitimate sphere of government activity.',
+  'Some parts of people’s lives are not the business of government or of the majority. Rights and liberties therefore protect a space in which majority rule is not allowed to decide everything.'
+],'This is the bridge to Mill’s later liberty argument, which the source material says will be developed in a later discussion.','Protecting the minority');
+
+question('The tradeoff question','Can democracy be instrumentally justified without sacrificing either freedom or equality?','Mill’s proposals protect freedom by limiting government, but they protect good outcomes by limiting equal political power.',`The next build states the argument’s comparison with Rousseau and Plato.\n\n${source('The tension between freedom, equality, and instrumental democracy')}`);
+
+build('tension','Mill’s system solves one democratic tension by creating another',[
+  'Rousseau’s problem was that democracy could be trusted to produce the general will only by severely restricting the freedom of citizens. Mill preserves a protected sphere of freedom, but excludes some citizens and gives others more than one vote.',
+  'The argument therefore says Mill’s system leans toward Plato more closely than Mill is prepared to admit. It leaves open whether any democratic system can avoid compromise.'
+],'Keep the comparison precise: the argument says Rousseau sacrifices freedom, while Mill sacrifices equality.','The tension between freedom, equality, and instrumental democracy');
+
+question('The preservation question','If democracy’s decisions can be bad and its institutions compromised, why preserve democracy at all?','The final sections widen the lens: perhaps democracy matters for reasons that are not reducible to decision quality.',`The next section introduces new democratic models before the conclusion returns to the value of inclusion itself.\n\n${source('New models of democracy')}`);
+
+section('VII','Can democracy be rebuilt?',`The argument moves from Mill’s model to a contemporary dilemma: people still value self-rule, but ordinary representative institutions often disappoint.\n\n${source('New models of democracy')}`);
+
+build('modern','The familiar model of democracy is powerful—and disappointing',[
+  'The theoretical argument for democracy is strong: the people should rule themselves. Yet representative democracy often leaves politics to specialists who are distant from the people they rule.',
+  'Elite capture, populist rule, corruption, and democratic backsliding make the gap between popular power and formal elections hard to ignore.'
+],'These are the argument’s contemporary diagnoses. Do not add current cases or outside evidence.','New models of democracy');
+
+head('Four possible responses',[
+  ['Disaffection','Withdraw from politics and let professional politicians continue.'],
+  ['Mass participation','Bring direct participation back into representative systems.'],
+  ['Open democracy','Reduce the power of professional politicians and give ordinary citizens central roles.'],
+  ['Deliberative polling','Use structured discussion to make representation more informed and detailed.']
+],`The list names options raised in the argument; it does not recommend political withdrawal.\n\n${source('New models of democracy')}`);
+
+question('The election question','Are elections the essence of representation?','The argument challenges the assumption that democracy and elections are almost the same thing.',`The next build introduces lottery, rotation, volunteering, and citizens’ councils as possible supplements or alternatives to elections.\n\n${source('Open democracy and representation without elections')}`);
+
+build('open','Representation can put ordinary citizens at the center without relying only on elections',[
+  'Ancient political systems sometimes selected leaders by lottery, just as jurors are selected by lottery today. Hélène Landemore’s “open democracy” uses that possibility to seek less power for professional politicians and more room for ordinary citizens through lottery, volunteering, and rotation.',
+  'Citizens’ councils selected by lottery and filtered to be representative could deliberate and draft policy, as experiments in Iceland, Ireland, and France have done on major public questions.'
+],'The argument presents open democracy as a possibility, not as a settled replacement for elections.','Open democracy and representation without elections');
+
+duo('Two ways to make a public body representative',
+  {label:'Election',text:'Citizens choose among candidates. Representation depends on selection, competition, and the accountability of officeholders.'},
+  {label:'Lottery and deliberation',text:'A wider cross-section of ordinary citizens can rotate through public roles, discuss evidence, and draft policy on behalf of the whole.'},
+  `The argument’s broader point is institutional: democracy may retain rule by, for, and of the people while changing the mechanisms that make people power real.\n\n${source('Open democracy and representation without elections')}`);
+
+section('VIII','Why keep democracy at all?',`The conclusion distinguishes two defenses of democracy: an instrumental defense based on consequences, and an expressive defense based on equal respect and legitimate rule.\n\n${source('Conclusion')}`);
+
+build('instrumental','The instrumental defense of democracy is not enough by itself',[
+  'An instrumental defense judges democracy by what it produces: effective administration, improved citizens, better decisions, or protection from oppression.',
+  'The argument concludes that it is difficult to build freedom and equality into a feasible system that is also instrumentally reliable. Democracies are not guaranteed to make better decisions than wise administrators supported by extensive information.'
+],'The conclusion does not say democracy has no value. It asks what other value explains why people are not prepared to abandon it.','Conclusion');
+
+question('The value question','If democracy is not only a decision procedure, what does participation express?','The argument answers by treating inclusion in the franchise as a public statement about the status of citizens.',`The next build uses the South African election of 1994 as the conclusion’s case study.\n\n${source('The expressive value of the franchise')}`);
+
+build('expressive','A vote can matter because it records equal standing',[
+  'The South African election of 1994 was celebrated not only because Black South Africans might now receive more just treatment, but because voting itself recorded that they were worthy of respect as citizens.',
+  'Including people in the franchise has symbolic or expressive value: it can mark Black and white South Africans as political equals.',
+  'On this view, having a vote matters even apart from what a person does with it or what policy the vote helps produce.'
+],'Keep the expressive value distinct from the claim that voting always produces better policy.','The expressive value of the franchise');
+
+build('respect','Universal suffrage says that each citizen is owed equal respect',[
+  'The argument once used to deny women the vote said that women’s interests were already represented by husbands or fathers. The argument rejects this even before its decisive objection.',
+  'Shared interests would not erase each person’s claim to have those interests registered. More decisively, denying women the vote is insulting because universal suffrage expresses equal respect for citizens.'
+],'The argument presents the women’s suffrage argument as a case against treating representation of interests as a substitute for political inclusion.','Equal respect and the franchise');
+
+quote('To rule us out is to make us an exception, to brand us with the stigma of inferiority.','Frederick Douglass, “What The Black Man Wants” (1865), quotation reproduced on pp. 14–15 of the source material.',`The quotation makes exclusion expressive: being denied the franchise marks a person as outside the political “mass” that the government claims to represent.\n\n${source('The expressive value of the franchise','Primary work quoted: Frederick Douglass, “What The Black Man Wants” (1865).')}`);
+
+build('legitimacy','Democracy answers the question of why these people should rule',[
+  'Plural voting violates democracy’s expressive idea because it treats citizens as owed unequal political respect. The argument adds that coercive authority structures are unavoidable, so rulers must occupy offices that need legitimacy.',
+  'Democracy gives an answer many people can accept: rulers are appointed by the people and can be removed by the people without bloodshed. It makes the question “Why should these people rule?” answerable.'
+],'The final claim is attributed in the argument to an argument emphasized by Karl Popper. Keep it as a legitimacy argument, not a guarantee of wise government.','Legitimacy and the right to rule');
+
+diagnostic('If democracy expresses equal respect, can it ever justify giving some citizens more political power than others?',`Leave the tension open. The argument’s deepest question is not whether democratic institutions are perfect, but what democracy is for when decision quality, freedom, equality, and legitimacy pull in different directions.\n\n${source('Conclusion')}`);
+
+refs([
+  ['Source material','“Who Should Rule - Representative Democracy,” source PDF.'],
+  ['Primary work quoted and discussed','John Stuart Mill, Representative Government; John Stuart Mill, “Considerations on Representative Government” (1861).'],
+  ['Primary work quoted','Frederick Douglass, “What The Black Man Wants” (1865), quotation reproduced in the source material.'],
+  ['Works and arguments discussed in the argument','The Federalist Papers; Plato’s guardianship; Rousseau’s model of popular lawmaking; Karl Popper’s argument about democratic removal of rulers.']
+],`The deck uses only the source material and the primary works it quotes or explicitly discusses.\n\n${source('Conclusion','Primary works listed above are identified in the source material.')}`);
+
+const deck=document.getElementById('deck');
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+function renderSlide(s,i){
+  const article=document.createElement('article');
+  article.className=`slide ${s.type}${s.type==='content'||s.type==='head'?' top':''}`;
+  article.dataset.index=i;
+  if(s.buildGroup) article.dataset.buildGroup=s.buildGroup;
+  let html='<div class="slide-inner">';
+  if(s.type==='cover') html+=`<h1 class="title">${esc(s.title)}</h1><p class="work">${esc(s.work)}</p><div class="course">${esc(s.course)}</div>`;
+  if(s.type==='section') html+=`<div class="eyebrow">${esc(s.eyebrow)}</div><h2 class="title">${esc(s.title)}</h2><div class="rule"></div>`;
+  if(s.type==='content') html+=`<h2 class="title">${esc(s.title)}</h2><div class="body">${s.paragraphs.map((p,j)=>`<p class="${j===s.paragraphs.length-1?'fresh':''}">${esc(p)}</p>`).join('')}</div>`;
+  if(s.type==='question'||s.type==='diagnostic') html+=`<div class="eyebrow">${esc(s.eyebrow)}</div><p class="prompt">${esc(s.prompt)}</p>${s.context?`<p class="context">${esc(s.context)}</p>`:''}`;
+  if(s.type==='quote') html+=`<blockquote>${esc(s.text)}</blockquote><cite>${esc(s.cite)}</cite>`;
+  if(s.type==='duo') html+=`<h2 class="title">${esc(s.title)}</h2><div class="duo-grid">${[s.left,s.right].map(x=>`<div class="duo-col"><h3>${esc(x.label)}</h3><p>${esc(x.text)}</p></div>`).join('')}</div>`;
+  if(s.type==='head') html+=`<h2 class="title">${esc(s.title)}</h2><div class="head-list">${s.items.map(x=>`<div class="head-item"><b>${esc(x[0])}</b><span>${esc(x[1])}</span></div>`).join('')}</div>`;
+  if(s.type==='refs') html+=`<h2 class="title">${esc(s.title)}</h2><div class="refs-list">${s.items.map(x=>`<div class="ref"><strong>${esc(x[0])}.</strong> ${esc(x[1])}</div>`).join('')}</div>`;
+  article.innerHTML=html+'</div>';
+  deck.appendChild(article);
+  return article;
+}
+const nodes=slides.map(renderSlide);
+let current=0;
+const counter=document.getElementById('counter');
+const progress=document.getElementById('progress');
+const notes=document.getElementById('notes');
+const notesBody=document.getElementById('notes-body');
+const overview=document.getElementById('overview');
+const overviewGrid=document.getElementById('overview-grid');
+function labelFor(s){return s.title||s.prompt||s.text||'Slide'}
+slides.forEach((s,i)=>{const b=document.createElement('button');b.className='overview-card';b.innerHTML=`<span class="num">${String(i+1).padStart(2,'0')} / ${slides.length}</span><span class="label">${esc(labelFor(s))}</span>`;b.addEventListener('click',()=>{closePanels();show(i)});overviewGrid.appendChild(b)});
+const cards=[...overviewGrid.children];
+function show(i){
+  current=Math.max(0,Math.min(slides.length-1,i));
+  nodes.forEach((n,j)=>n.classList.toggle('active',j===current));
+  cards.forEach((n,j)=>n.classList.toggle('current',j===current));
+  counter.textContent=`${current+1} / ${slides.length}`;
+  progress.style.width=`${((current+1)/slides.length)*100}%`;
+  notesBody.textContent=slides[current].notes||'No notes for this slide.';
+  document.title=`${current+1}/${slides.length} · John Stuart Mill - Representative Democracy`;
+}
+function openPanel(panel){closePanels();panel.classList.add('open')}
+function closePanels(){overview.classList.remove('open');notes.classList.remove('open')}
+function togglePanel(panel){panel.classList.contains('open')?closePanels():openPanel(panel)}
+function toggleFullscreen(){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen().catch(()=>{})}
+document.getElementById('fullscreen').addEventListener('click',toggleFullscreen);
+document.querySelectorAll('.close').forEach(b=>b.addEventListener('click',closePanels));
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){closePanels();return}
+  if(overview.classList.contains('open')||notes.classList.contains('open')) return;
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();show(current+1)}
+  else if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();show(current-1)}
+  else if(e.key.toLowerCase()==='o') togglePanel(overview);
+  else if(e.key.toLowerCase()==='n') togglePanel(notes);
+  else if(e.key.toLowerCase()==='f') toggleFullscreen();
+});
+let touchX=0,touchY=0;
+document.addEventListener('touchstart',e=>{touchX=e.changedTouches[0].screenX;touchY=e.changedTouches[0].screenY},{passive:true});
+document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].screenX-touchX,dy=e.changedTouches[0].screenY-touchY;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy))show(current+(dx<0?1:-1))},{passive:true});
+function fits(node){const inner=node.querySelector('.slide-inner');return inner.scrollHeight<=node.clientHeight*.82&&inner.scrollWidth<=node.clientWidth*.92}
+function fitNode(node,start=1){let f=start;node.classList.add('measuring');node.style.setProperty('--fit',f);while(f>.72&&!fits(node)){f-=.02;node.style.setProperty('--fit',f)}node.classList.remove('measuring');return f}
+function fitAll(){
+  nodes.forEach(n=>n.style.setProperty('--fit',1));
+  const groups={};nodes.forEach(n=>{if(n.dataset.buildGroup)(groups[n.dataset.buildGroup]??=[]).push(n)});
+  const grouped=new Set(Object.values(groups).flat());
+  Object.values(groups).forEach(group=>{const final=group[group.length-1];const f=fitNode(final);group.forEach(n=>n.style.setProperty('--fit',f))});
+  nodes.filter(n=>!grouped.has(n)).forEach(n=>fitNode(n));
+  show(current);
+}
+let resizeTimer;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(fitAll,120)});
+if(document.fonts?.ready)document.fonts.ready.then(fitAll);else fitAll();
+show(0);
+</script>
+</body>
+</html>

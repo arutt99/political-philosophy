@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Day 1 — Questions Worth Fighting About</title>
+  <style>
+    :root { --ink:#eef3ff; --muted:#aab6d4; --bg:#080b13; --panel:#111827; --line:rgba(219,231,255,.15); --accent:#8ce1ff; --accent2:#a78bfa; --gold:#ffd47d; }
+    * { box-sizing:border-box; }
+    html,body { width:100%; height:100%; margin:0; overflow:hidden; background:var(--bg); color:var(--ink); font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    body:before { content:""; position:fixed; inset:0; pointer-events:none; background:radial-gradient(circle at 12% 8%, rgba(80,130,255,.18), transparent 33%), radial-gradient(circle at 92% 86%, rgba(167,139,250,.14), transparent 35%); }
+    .deck { height:100%; }
+    .slide { display:none; position:relative; min-height:100%; padding:clamp(2rem,5vw,5rem) clamp(2rem,8vw,9rem) 5.5rem; }
+    .slide.active { display:flex; flex-direction:column; justify-content:center; }
+    .slide:after { content:""; position:absolute; width:28rem; height:28rem; border:1px solid rgba(140,225,255,.12); border-radius:50%; right:-15rem; top:-13rem; pointer-events:none; }
+    h1,h2,p { margin:0; }
+    h1 { font-size:clamp(3.2rem,8vw,8rem); max-width:12ch; letter-spacing:-.065em; line-height:.94; }
+    h2 { font-size:clamp(2.2rem,5.2vw,5.5rem); max-width:18ch; letter-spacing:-.055em; line-height:1.01; }
+    .lead { color:var(--muted); max-width:43rem; font-size:clamp(1.05rem,1.8vw,1.5rem); line-height:1.55; margin-top:1.6rem; }
+    .case { max-width:60rem; padding:clamp(1.5rem,3vw,3rem); border:1px solid var(--line); border-radius:1.5rem; background:linear-gradient(135deg, rgba(17,24,39,.92), rgba(15,23,42,.7)); box-shadow:0 22px 70px rgba(0,0,0,.25); }
+    .case p { font-size:clamp(1.3rem,2.8vw,2.65rem); line-height:1.25; letter-spacing:-.035em; }
+    .choice-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1rem; margin-top:2rem; max-width:72rem; }
+    .choice { padding:1.25rem 1.35rem; min-height:8.8rem; border:1px solid var(--line); border-radius:1rem; background:rgba(17,24,39,.72); }
+    .choice b { display:block; color:var(--accent); font-size:.85rem; letter-spacing:.15em; margin-bottom:.7rem; }
+    .choice span { font-size:clamp(1rem,1.7vw,1.35rem); line-height:1.25; }
+    .prompt-stack { display:grid; gap:1rem; max-width:65rem; margin-top:2rem; }
+    .prompt { border-left:4px solid var(--accent2); padding:1.1rem 1.35rem; background:rgba(167,139,250,.09); border-radius:0 .8rem .8rem 0; font-size:clamp(1.2rem,2.4vw,2.2rem); line-height:1.2; }
+    .prompt.follow { border-color:var(--gold); background:rgba(255,212,125,.08); }
+    .takeaway { max-width:70rem; margin-top:1.8rem; border:1px solid rgba(140,225,255,.35); padding:clamp(1.8rem,4vw,4rem); border-radius:1.5rem; background:linear-gradient(120deg, rgba(29,47,77,.7), rgba(17,24,39,.92)); }
+    .takeaway h2 { max-width:20ch; }
+    .instruction { margin-top:1.8rem; color:var(--muted); font-size:clamp(1rem,1.6vw,1.25rem); }
+    .case-question { margin-top:1.8rem; max-width:24ch; color:var(--ink); font-size:clamp(2.2rem,5.2vw,5.5rem); letter-spacing:-.055em; line-height:1.01; }
+    .controls { position:fixed; z-index:10; left:0; right:0; bottom:0; display:flex; align-items:center; justify-content:space-between; padding:1rem 1.3rem; background:linear-gradient(transparent,rgba(8,11,19,.92) 40%); }
+    .controls button { appearance:none; color:var(--ink); background:rgba(17,24,39,.88); border:1px solid var(--line); border-radius:.7rem; padding:.55rem .8rem; font:700 .88rem/1 inherit; cursor:pointer; }
+    .controls button:hover { border-color:var(--accent); color:var(--accent); }
+    .counter { color:var(--muted); font-size:.85rem; }
+    .progress { position:fixed; z-index:11; bottom:0; left:0; height:4px; background:linear-gradient(90deg,var(--accent),var(--accent2)); transition:width .25s ease; }
+    .shortcuts { color:var(--muted); font-size:.8rem; }
+    @media (max-width:700px) { .slide { padding:2rem 1.5rem 5.2rem; } .choice-grid { grid-template-columns:1fr; } .choice { min-height:auto; } .shortcuts { display:none; } }
+  </style>
+  <link rel="stylesheet" href="Presentations/presentation-polish.css">
+</head>
+<body class="day1-case-first">
+  <main class="deck" id="deck" aria-live="polite"></main>
+  <div class="progress" id="progress"></div>
+  <nav class="controls" aria-label="Presentation controls">
+    <div><button id="prev" aria-label="Previous slide">← Back</button> <button id="next" aria-label="Next slide">Next →</button></div>
+    <div class="counter" id="counter"></div>
+    <div><span class="shortcuts">← → to navigate&nbsp;&nbsp;</span><button id="fullscreen">Fullscreen</button></div>
+  </nav>
+  <script>
+  const topics = [
+    {t:'Why do we need governments at all?', c:'Imagine your city has no government for one month: no police, courts, traffic laws, taxes, public schools, or garbage collection.', q:'What is the first thing that would go wrong? Is there anything that might actually improve?', a:'The first serious problem would be…', b:'Some things might improve because…', d:'It depends on which public service disappears first.'},
+    {t:'When should people follow the law?', c:'A law is legal, democratically passed, and clearly unjust in your view.', q:'Do you still have an obligation to obey it?', a:'Yes — obey it, then work to change it.', b:'No — breaking it can be justified.', d:'Depends on the harm caused by obeying or resisting.'},
+    {t:'What should government care about most?', c:'For the next five years, a government can put one goal first: reducing violent crime, increasing individual freedom, or reducing poverty.', q:'Which goal should come first?', a:'Reduce violent crime.', b:'Increase individual freedom.', d:'Reduce poverty — or balance them differently.'},
+    {t:'What does it mean to be free?', c:'One person is legally forbidden from attending college. Another is legally allowed to attend but cannot afford it.', q:'Who is less free?', a:'The person legally prohibited.', b:'The person unable to afford it.', d:'Both are less free in different ways.'},
+    {t:'Should everyone have the same chances?', c:'Two equally talented students apply to college. One has tutors and test prep; the other works after school and attends an underfunded school.', q:'What, if anything, should society do?', a:'Equalize opportunities more actively.', b:'Do not intervene beyond basic rules.', d:'Help, but only up to a limit.'},
+    {t:'Is inequality fair?', c:'One worker earns 100 times more than another.', q:'Is that automatically unfair?', a:'Yes — that gap itself is unfair.', b:'No — unequal pay can be fair.', d:'It depends on how the money was earned and what both can afford.'},
+    {t:'What makes society fair?', c:'Society A gives everyone roughly the same amount. Society B has large differences, but everyone has enough for a decent life.', q:'Which society seems fairer?', a:'Society A: equality matters most.', b:'Society B: a decent minimum matters most.', d:'Neither — something else decides it.'},
+    {t:'Does voting make government fair?', c:'In a free, fair election, 80% of citizens vote to ban a religion practiced by the other 20%.', q:'Is the result democratic? Is it legitimate?', a:'Democratic and legitimate.', b:'Democratic but not legitimate.', d:'It depends on what basic rights a vote may override.'},
+    {t:'Should the majority always get its way?', c:'Ninety percent of voters want to take something away from the other ten percent.', q:'What is one thing they should never be allowed to take?', a:'A basic liberty, such as worship or speech.', b:'Nothing is completely off-limits to a true majority.', d:'The limit depends on the cost to everyone else.'},
+    {t:'Limits on speech', c:'A speaker publicly says a particular group is dangerous and should be excluded from society. No direct threat is made.', q:'Should the government be allowed to stop the speech?', a:'Yes — it creates unacceptable harm.', b:'No — offensive speech must remain protected.', d:'Only if it crosses a clear line, such as incitement.'},
+    {t:'What do we owe struggling people?', c:'Slightly higher taxes would prevent a stranger from becoming homeless.', q:'May society require you to pay?', a:'Yes — preventing severe need is a shared duty.', b:'No — helping must remain voluntary.', d:'Only when the cost is small or need is extreme.'},
+    {t:'Duties to our own country', c:'Your government has $10 million to save lives: it could save 100 citizens at home or 1,000 people abroad.', q:'Where should it spend the money?', a:'At home — government has special duties to citizens.', b:'Abroad — each life counts equally.', d:'Split it or weigh other obligations.'},
+    {t:'What makes a good citizen?', c:'Person A obeys laws, votes, and pays taxes but rarely questions the government. Person B frequently protests and sometimes breaks minor laws while doing so.', q:'Who is the better citizen?', a:'Person A: stability and rule-following matter most.', b:'Person B: critical engagement matters most.', d:'Neither — good citizenship requires another balance.'},
+    {t:'Can government use force and respect freedom?', c:'Government makes people pay taxes, obey traffic laws, attend school to a certain age, and sometimes serve on juries.', q:'Can coercion still respect freedom?', a:'Yes — these uses can protect shared freedom.', b:'No — force is incompatible with real freedom.', d:'Some are legitimate; others are not.'},
+    {t:'When is resistance justified?', c:'Consider: voting against government, peaceful protest, blocking a highway, damaging government property, physically resisting police.', q:'Where does legitimate resistance end?', a:'Before lawbreaking or property damage.', b:'Sometimes beyond lawbreaking.', d:'It depends on injustice, risk, and alternatives.'},
+    {t:'Can people with different values live together?', c:'Two groups sincerely disagree about religion, family, education, and morality — and one group is much larger.', q:'What rules can govern both without simple majority imposition?', a:'Shared neutral rights and institutions.', b:'The majority may set common norms.', d:'Accommodation is needed, but it has limits.'}
+  ];
+  const deck = document.getElementById('deck');
+  const esc = s => s.replace(/[&<>\"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c]));
+  const slide = (html, cls='') => `<section class="slide ${cls}">${html}</section>`;
+  let html = slide(`<h1>Questions worth fighting about.</h1><p class="lead">Start with a case. Make a choice. Name what matters. Test your view. Then take up the larger question.</p><p class="instruction">There are no required answers today — only required reasons.</p>`, 'title');
+  topics.forEach(x => {
+    html += slide(`<div class="case"><p>${esc(x.c)}</p></div><h2 class="case-question">${esc(x.q)}</h2>`);
+    html += slide(`<h2>What is doing the work in your answer?</h2><div class="prompt-stack"><div class="prompt">What fact or principle matters most to your choice?</div></div>`);
+    html += slide(`<h2>Test the limits of your answer.</h2><div class="prompt-stack"><div class="prompt follow">What would have to change about the situation for your answer to change?</div></div>`);
+    html += slide(`<div class="takeaway"><h2>${esc(x.t)}</h2></div>`);
+  });
+  html += slide(`<h1>Make a choice. Give a reason. Revise when the facts change.</h1><p class="lead">That is where political philosophy begins.</p>`, 'title');
+  deck.innerHTML = html;
+  const slides = [...document.querySelectorAll('.slide')]; let current = 0;
+  const counter = document.getElementById('counter'), progress = document.getElementById('progress');
+  function show(i) { current = Math.max(0,Math.min(slides.length-1,i)); slides.forEach((s,j)=>s.classList.toggle('active',j===current)); counter.textContent = `${current+1} / ${slides.length}`; progress.style.width = `${((current+1)/slides.length)*100}%`; document.title = current ? `${topics[Math.floor((current-1)/4)]?.t || 'Day 1'} — Day 1` : 'Day 1 — Questions Worth Fighting About'; }
+  document.getElementById('prev').onclick=()=>show(current-1); document.getElementById('next').onclick=()=>show(current+1);
+  document.getElementById('fullscreen').onclick=()=>document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
+  window.addEventListener('keydown',e=>{ if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();show(current+1)} if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();show(current-1)} if(e.key==='Home')show(0); if(e.key==='End')show(slides.length-1); if(e.key.toLowerCase()==='f')document.getElementById('fullscreen').click(); });
+  let touchX=null; window.addEventListener('touchstart',e=>touchX=e.changedTouches[0].screenX,{passive:true}); window.addEventListener('touchend',e=>{if(touchX===null)return;const d=e.changedTouches[0].screenX-touchX;if(Math.abs(d)>50)show(current+(d<0?1:-1));touchX=null},{passive:true});
+  show(0);
+  </script>
+</body>
+</html>

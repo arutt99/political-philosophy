@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plato - Against Democracy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#081c22;
+    --bg-2:#0e2b33;
+    --text:#f2f8f6;
+    --vellum:#b6cdcc;
+    --accent:#57dcc4;
+    --accent-dim:#2a8f84;
+    --support:#f3b56b;
+    --border:rgba(218,241,237,.17);
+    --fit:1;
+  }
+  *{box-sizing:border-box}
+  html,body{width:100%;height:100%;margin:0;overflow:hidden;background:var(--bg);color:var(--text)}
+  body{font-family:Inter,system-ui,sans-serif}
+  button{font:inherit}
+  #deck{position:relative;width:100vw;height:100vh;background:
+    radial-gradient(circle at 84% 8%,rgba(87,220,196,.11),transparent 32%),
+    linear-gradient(120deg,rgba(243,181,107,.055),transparent 48%),var(--bg)}
+  #deck::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.28;background:
+    repeating-radial-gradient(circle at 108% 105%,transparent 0 34px,rgba(87,220,196,.11) 35px 36px,transparent 37px 69px)}
+  #deck::after{content:"";position:absolute;left:5vw;right:5vw;bottom:9vh;height:1px;pointer-events:none;background:linear-gradient(90deg,transparent,var(--accent-dim),transparent);opacity:.42}
+  .slide{position:absolute;inset:0;display:none;align-items:center;justify-content:center;padding:7.2vh 7vw 8vh;text-align:center;overflow:hidden}
+  .slide.active,.slide.measuring{display:flex}
+  .slide.measuring{visibility:hidden;pointer-events:none}
+  .slide.top{align-items:flex-start;padding-top:8.5vh}
+  .slide-inner{width:min(980px,86vw);max-height:82vh;margin:auto;transform-origin:top center}
+  .slide.top .slide-inner{margin:0 auto}
+  .slide.duo .slide-inner{width:min(1140px,90vw)}
+  .eyebrow{margin:0 0 1.2rem;color:var(--accent);font:600 clamp(12px,1.12vw,17px)/1.3 "IBM Plex Mono",monospace;letter-spacing:.18em;text-transform:uppercase}
+  .title{margin:0;font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;letter-spacing:-.018em}
+  .cover .title{font-size:calc(clamp(58px,7.6vw,104px)*var(--fit));line-height:.96;max-width:12ch;margin-inline:auto}
+  .cover .work{font:500 calc(clamp(20px,2.15vw,31px)*var(--fit))/1.4 "Cormorant Garamond",Georgia,serif;color:var(--vellum);margin:1.5rem auto 0;max-width:36ch}
+  .cover .course{margin-top:2.4rem;color:var(--support);font:500 calc(clamp(11px,1vw,15px)*var(--fit))/1.4 "IBM Plex Mono",monospace;letter-spacing:.14em;text-transform:uppercase}
+  .section .slide-inner{width:min(900px,86vw)}
+  .section .title{font-size:calc(clamp(48px,6.2vw,84px)*var(--fit));line-height:1.02}
+  .section .rule{width:52px;height:1px;background:var(--accent-dim);margin:1.8rem auto 0}
+  .content .title,.head .title,.duo .title{font-size:calc(clamp(38px,4.5vw,62px)*var(--fit));line-height:1.05;margin-bottom:1.6rem}
+  .content .body{font-family:"Cormorant Garamond",Georgia,serif;font-size:calc(clamp(25px,2.35vw,35px)*var(--fit));line-height:1.34;text-align:left}
+  .content .body p{margin:0 0 1.05em -1.25rem;padding:.08em .7em .08em 1rem;border-left:3px solid transparent;color:rgba(182,205,204,.48);font-weight:600;background:linear-gradient(90deg,rgba(87,220,196,0),rgba(87,220,196,0))}
+  .content .body p:last-child{margin-bottom:0}
+  .content .body p.fresh{color:var(--text);border-left-color:var(--accent);background:linear-gradient(90deg,rgba(87,220,196,.16),rgba(87,220,196,0) 78%);text-shadow:0 0 18px rgba(242,248,246,.08)}
+  .question .slide-inner,.diagnostic .slide-inner{width:min(900px,86vw)}
+  .question .prompt,.diagnostic .prompt{margin:0;font-family:"Cormorant Garamond",Georgia,serif;font-size:calc(clamp(42px,5.2vw,72px)*var(--fit));line-height:1.08;font-weight:600;letter-spacing:-.015em}
+  .question .prompt::after,.diagnostic .prompt::after{content:"";display:block;width:42px;height:2px;background:var(--support);margin:1.8rem auto 0}
+  .question .context{max-width:48ch;margin:1.35rem auto 0;color:var(--vellum);font:500 calc(clamp(18px,1.7vw,25px)*var(--fit))/1.4 "Cormorant Garamond",Georgia,serif}
+  .quote .slide-inner{width:min(930px,86vw);text-align:left}
+  .quote blockquote{margin:0;padding:.05em 0 .05em 1.35rem;border-left:3px solid var(--support);font:600 calc(clamp(31px,3.55vw,53px)*var(--fit))/1.16 "Cormorant Garamond",Georgia,serif;color:var(--text)}
+  .quote cite{display:block;margin:1.7rem 0 0 1.6rem;color:var(--vellum);font:500 calc(clamp(14px,1.25vw,18px)*var(--fit))/1.4 "IBM Plex Mono",monospace;letter-spacing:.04em}
+  .duo-grid{display:grid;grid-template-columns:1fr 1fr;gap:4.5rem;text-align:left;margin-top:1.5rem}
+  .duo-col{padding-top:1.1rem;border-top:1px solid var(--border)}
+  .duo-col h3{margin:0 0 .85rem;color:var(--accent);font:600 calc(clamp(13px,1.25vw,18px)*var(--fit))/1.3 "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase}
+  .duo-col p{margin:0;color:var(--text);font:500 calc(clamp(24px,2.15vw,33px)*var(--fit))/1.34 "Cormorant Garamond",Georgia,serif}
+  .head-list{display:grid;gap:1.15rem;text-align:left;margin-top:1.8rem}
+  .head-item{display:grid;grid-template-columns:9rem 1fr;gap:1.5rem;align-items:baseline;padding-top:1rem;border-top:1px solid var(--border)}
+  .head-item b{color:var(--accent);font:600 calc(clamp(12px,1.1vw,16px)*var(--fit))/1.3 "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase}
+  .head-item span{font:500 calc(clamp(23px,2.05vw,31px)*var(--fit))/1.3 "Cormorant Garamond",Georgia,serif}
+  .diagnostic .eyebrow{color:var(--vellum)}
+  .diagnostic .prompt{font-size:calc(clamp(52px,6.6vw,90px)*var(--fit))}
+  .refs .slide-inner{width:min(980px,86vw);text-align:left}
+  .refs .title{font-size:calc(clamp(40px,4.6vw,64px)*var(--fit));margin-bottom:1.7rem}
+  .refs-list{display:grid;gap:1.05rem}
+  .ref{padding-top:.95rem;border-top:1px solid var(--border);font:500 calc(clamp(18px,1.65vw,24px)*var(--fit))/1.38 "Cormorant Garamond",Georgia,serif;color:var(--vellum)}
+  .ref strong{color:var(--text);font-weight:600}
+  #progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--accent);z-index:30}
+  #nav-hint,#counter{position:fixed;bottom:18px;z-index:30;color:var(--vellum);font:500 12px/1.3 "IBM Plex Mono",monospace;letter-spacing:.08em}
+  #nav-hint{left:24px}#counter{right:24px}
+  #fullscreen{position:fixed;top:20px;right:22px;z-index:30;color:var(--vellum);background:transparent;border:1px solid var(--border);border-radius:3px;padding:8px 11px;cursor:pointer;font:500 11px/1 "IBM Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase}
+  #fullscreen:hover{color:var(--support);border-color:var(--accent-dim)}
+  .panel{position:fixed;inset:4vh 4vw;z-index:60;display:none;background:rgba(8,28,34,.985);border:1px solid var(--border);overflow:auto}
+  .panel.open{display:block}
+  .panel-head{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;padding:18px 22px;background:var(--bg-2);border-bottom:1px solid var(--border);z-index:2}
+  .panel-head h2{margin:0;font:600 14px/1 "IBM Plex Mono",monospace;letter-spacing:.15em;text-transform:uppercase;color:var(--accent)}
+  .close{color:var(--text);background:transparent;border:1px solid var(--border);padding:7px 10px;cursor:pointer}
+  #overview-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;padding:20px}
+  .overview-card{min-height:126px;padding:16px;text-align:left;background:var(--bg-2);border:1px solid var(--border);color:var(--text);cursor:pointer}
+  .overview-card:hover,.overview-card.current{border-color:var(--accent-dim)}
+  .overview-card .num{display:block;color:var(--accent);font:500 11px/1.3 "IBM Plex Mono",monospace;margin-bottom:12px}
+  .overview-card .label{font:600 22px/1.1 "Cormorant Garamond",Georgia,serif}
+  #notes-body{padding:28px 34px;white-space:pre-wrap;color:var(--text);font:400 18px/1.62 Inter,sans-serif;max-width:900px}
+  @media(max-width:760px){
+    .slide{padding:9vh 8vw 10vh}.slide.top{padding-top:9.5vh}.slide-inner,.slide.duo .slide-inner{width:84vw}
+    .duo-grid{grid-template-columns:1fr;gap:1.5rem}.head-item{grid-template-columns:1fr;gap:.45rem}
+    #nav-hint{display:none}#fullscreen{top:12px;right:12px}
+    .content .body{font-size:calc(clamp(22px,5.6vw,30px)*var(--fit))}.duo-col p{font-size:calc(clamp(22px,5.3vw,29px)*var(--fit))}
+  }
+</style>
+<link rel="stylesheet" href="presentation-polish.css">
+<script src="presentation-polish.js" defer></script>
+</head>
+<body>
+<div id="deck" aria-live="polite"></div>
+<div id="progress"></div>
+<div id="nav-hint">ARROWS / SPACE · O OVERVIEW · N NOTES · F FULLSCREEN</div>
+<div id="counter">1 / 1</div>
+<button id="fullscreen" aria-label="Toggle fullscreen">Fullscreen</button>
+<section id="overview" class="panel" aria-label="Slide overview"><div class="panel-head"><h2>Overview</h2><button class="close">Close</button></div><div id="overview-grid"></div></section>
+<aside id="notes" class="panel" aria-label="Speaker notes"><div class="panel-head"><h2>Speaker notes</h2><button class="close">Close</button></div><div id="notes-body"></div></aside>
+<script>
+const slides=[];
+const src=(pages,extra='')=>`[Sources]\nSource material: “Plato against democracy,” pp. ${pages}.${extra?`\n${extra}`:''}\n[/Sources]`;
+const add=s=>slides.push(s);
+const cover=(title,work,course,notes)=>add({type:'cover',title,work,course,notes});
+const section=(roman,title,notes)=>add({type:'section',eyebrow:`${roman}. ${title.toUpperCase()}`,title,notes});
+const question=(eyebrow,prompt,context,notes)=>add({type:'question',eyebrow,prompt,context,notes});
+const quote=(eyebrow,text,citation,notes)=>add({type:'quote',eyebrow,text,citation,notes});
+const duo=(title,left,right,notes)=>add({type:'duo',title,left,right,notes});
+const head=(title,items,notes)=>add({type:'head',title,items,notes});
+const diagnostic=(prompt,notes)=>add({type:'diagnostic',eyebrow:'The democracy test',prompt,notes});
+const refs=(items,notes)=>add({type:'refs',title:'References',items,notes});
+function build(id,title,paragraphs,notes,pages){
+  paragraphs.forEach((_,i)=>add({type:'content',title,paragraphs:paragraphs.slice(0,i+1),buildGroup:id,notes:`${notes}${i<paragraphs.length-1?'\n\nPause before revealing the next step.':''}\n\n${src(pages)}`}));
+}
+
+cover('Who Should Rule?','Plato’s case against democracy','Political Philosophy',`Open with the ship image as a conflict between political equality and political competence.\n\n${src('1-14')}`);
+
+section('I','If the ship belongs to everyone, who should steer it?',`Start with Plato’s concrete image before naming the abstract problem.\n\n${src('1-3','Primary quotation: Plato, Republic, 488a–d, as cited in the source material.')}`);
+quote('The ship of state','“Aren’t the sailors on any such ship bound to regard the true navigator as a word-spinner and a star-gazer, of no use to them at all?”','Plato, Republic, 488a–d; quotation reproduced in the source material, p. 2.',`Let the image sit before explaining the analogy.\n\n${src('1-2','Primary quotation: Plato, Republic, 488a–d.')}`);
+question('The opening tension','If a ship needs a trained navigator, why should a state be steered by whoever happens to win the vote?','The question matters because Plato treats political rule as a skill with consequences for everyone, not as a private preference.',`The next slides reconstruct the craft analogy rather than assuming its conclusion.\n\n${src('1-2')}`);
+build('craft','Plato starts with a familiar rule about expertise',[`When a person is ill, the sensible response is to seek a doctor who has been specially trained, not to assemble a crowd and vote on the remedy.`,`The health of a state matters no less than the health of an individual, because political decisions shape the conditions under which everyone lives.`,`Plato therefore treats ruling as a craft that requires judgment and skill. If the people decide without that ability, he says, confident speakers can sway them while true navigators are ignored.`],`Make the analogy explicit: the state is not literally a ship, but both activities involve steering something valuable toward a good outcome.\n\n${src('2-3')}`,'2-3');
+build('specialization','The craft analogy rests on specialization',[`Plato’s underlying principle is that each important task should be performed by people who are prepared and suited to perform it.`,`Medicine, navigation, farming, and ruling all aim at a result that affects other people, so mistakes are not merely private mistakes.`,`Special training is necessary because skill does not appear simply when someone wants the role, and Plato’s strongest claim is that not everyone is naturally capable of acquiring the skill of ruling.`],`The final paragraph is the controversial step. It moves from “ruling requires skill” to “only a few can acquire that skill.”\n\n${src('2-3')}`,'2-3');
+head('Plato’s challenge in one chain',[['FIRST','The state needs decisions that serve the common good.'],['NEXT','Tasks that serve the common good should be assigned to people qualified to perform them.'],['THEN','Ruling is one of those tasks because political decisions steer the whole state.'],['SO','The unqualified should not rule merely because they are numerous or legally entitled to vote.']],`Keep the inferential bridge visible: Plato is not only insulting the crowd; he is arguing from a theory of skilled activity.\n\n${src('2-3')}`);
+question('The first test','Is political judgment really like medicine or navigation?','Everything depends on whether ruling has an identifiable skill and whether ordinary political participation can be separated from that skill.',`The next section grants Plato’s analogy as far as possible, then asks whether expert rule is safe.\n\n${src('2-3')}`);
+
+section('II','Expertise does not settle who should hold power',`Move from the quality of a ruler’s judgment to the danger of giving that ruler unchecked authority.\n\n${src('4-5')}`);
+build('expert_power','A good expert is not automatically a legitimate ruler',[`Even if Plato could educate a class of expert rulers, it would not follow that they should receive the power to run everyone’s life.`,`People may follow a doctor’s advice or consult an architect without giving either professional the force of law; political rulers make decisions on behalf of others, so competence alone does not settle their authority.`,`An expert may also use public power to feather their own nest, especially when no one has the authority to check them.`],`Do not confuse the objection with a rejection of expertise. The argument accepts that expertise can matter while denying that expertise alone authorizes domination.\n\n${src('4')}`,'4');
+question('Who guards the guardians?','What stops philosopher-kings from using their superior position for themselves?','The question targets a risk that expertise can make corruption more dangerous, not less: the better the rulers’ tools, the greater the damage if their aims turn selfish.',`Plato’s reply tries to reduce the opportunity for corruption.\n\n${src('4-5')}`);
+build('plato_reply','Plato tries to make corruption difficult',[`Plato forbids the guardians from owning private property, so a ruling family or clique cannot easily enrich itself at the people’s expense.`,`That safeguard works only if the rules can be enforced and the rulers cannot simply change them through proper procedures; Plato also says the guardians accept office reluctantly because they would rather think about philosophy than be ruled by worse people.`,`The argument remains unconvinced that a ruler’s education is a more reliable protection than public scrutiny by an empowered electorate.`],`Present the property rule as Plato’s reply, then preserve the argument’s unresolved worry about enforcement and accountability.\n\n${src('4-5')}`,'4-5');
+build('selection','Expert rule faces a second problem: selection',[`Plato thinks potential guardians can be identified early and tested through demanding stages of education and service.`,`But most people would not share that education, so they might not be able to judge who deserves to rule. A system must therefore ask both whether the rulers are competent and whether the population will accept their claim to authority.`,`The argument concludes that these problems make Plato’s system uncomfortable and uncertain, but they do not yet amount to a defense of democracy.`],`The final sentence is important: objections to Plato’s guardianship may leave open the possibility of another non-democratic system.\n\n${src('5')}`,'5');
+duo('What the guardianship objections show',{label:'They show',text:'Even qualified rulers need limits, enforcement, accountability, and a defensible way of being selected.'},{label:'They do not yet show',text:'That equal political participation produces better decisions or that democracy is the only alternative to dictatorship.'},`Hold the distinction between criticizing Plato’s proposal and answering Plato’s argument against democracy.\n\n${src('4-5')}`);
+question('The second test','If Plato’s guardians are unsafe, does that make the untrained majority safe?','The argument now turns from the dangers of expert power to the possibility that political expertise may not exist at all.',`The next section asks whether Plato’s premise about expert knowledge can survive ordinary fallibility.\n\n${src('5-6')}`);
+
+section('III','Maybe there is no expert ruler',`Test the claim that ruling is a craft without pretending that good judgment requires certainty.\n\n${src('6-7')}`);
+build('fallibility','Fallible knowledge can still be better knowledge',[`One critic says that no one can be absolutely certain of anything in politics, science, or philosophy, so the idea of an expert ruler may be self-deception. But the absence of certainty does not imply that everyone is equally good or equally bad at judging a question.`,`A person may distrust doctors’ claims to infallibility and still rationally ask a doctor for help with a broken leg rather than consult people with no medical training.`,`Trying to defeat Plato by claiming that no real crafts exist therefore asks us to believe something too implausible.`],`Emphasize the comparative standard: Plato needs only better judgment, not perfect or infallible judgment.\n\n${src('6')}`,'6');
+build('ruling_craft','Ruling has the features of a craft',[`The more promising objection is that medicine may have experts while ruling does not.`,`Rulers need difficult knowledge of economics, psychology, human motivation, and complex institutions, along with intelligence, memory, stamina, and skill at handling people under pressure.`,`The argument therefore concludes that it is absurd to think no one could be a better ruler than anyone else; ruling is, at least in large part, a craft.`],`This is a partial concession to Plato. It keeps the craft analogy alive while preparing a different defense of democracy.\n\n${src('6-7')}`);
+question('The third test','If some people are better at ruling, why should their judgment not settle political decisions?','The answer may be that voting does more than report an opinion about what is best for the state.',`The next section changes the question from “Who is most skilled?” to “What information does a ruler need?”\n\n${src('7')}`);
+
+section('IV','The people know something rulers need',`Introduce the argument’s strongest instrumental defense: political power may reveal the interests of the governed.\n\n${src('7-8')}`);
+build('voting_info','Plato may misunderstand what voting is for',[`Plato treats voting as a way to express an opinion about what is best for the state as a whole, but a vote can also reveal what the governed want and how a decision will affect them.`,`Democratic government is supposed to rule for the people, not merely in the name of a benevolent ruler who claims to know what is best.`,`On this defense, rule for the people may require rule by the people because rulers need information that only the governed possess.`],`Make the distinction between decision quality and information about consequences. A ruler may know how to remedy a problem without knowing where the shoe pinches.\n\n${src('7-8')}`,'7-8');
+quote('A limit on philosophical expertise','“The man who wears the shoe knows best that it pinches and where it pinches, even if the expert shoemaker is the best judge of how the trouble is to be remedied.”','John Dewey, The Public and Its Problems, 223–224; quotation reproduced in the source material, p. 8.',`Pause on the two kinds of knowledge: the person affected knows the felt problem, while the expert may know how to address it.\n\n${src('8','Primary quotation: John Dewey, The Public and Its Problems, 223–224.')}`);
+build('interests','Political interests are plural, not philosophical abstractions',[`Philosophical knowledge may help a ruler reason about justice or the common good, but it does not automatically reveal what different people want. Imagine a major road under consideration: some people want it built, others depend on the existing route, and still others benefit from a different path.`,`The project affects people in different ways, so there is no single interest waiting for a philosopher to discover by reflection alone.`,`The ruler must therefore know the competing interests at stake before deciding what fairness or the common good requires.`],`The road is a constructed illustration from the argument. Keep the competing interests concrete so the epistemic problem is visible.\n\n${src('8')}`,'8');
+build('majority_problem','Information about interests does not finish the argument',[`The road example may make democracy look uncertain because there may be several routes and no option with majority support.`,`Even if one option wins, a majority may impose serious costs on a minority, so majority preference is not automatically fair. The strongest image is a ruler who knows all the relevant interests and makes a judicious decision, rather than simply counting hands.`,`At most, this line of thought gives us a reason to gather detailed information about preferences; it does not yet give us a reason to let the majority rule.`],`Let this become a genuine setback for the democratic reply. The argument does not pretend that information alone vindicates majority rule.\n\n${src('8-9')}`,'8-9');
+question('The fourth test','If votes reveal what people want, do they also reveal what is in their interests?','The next example shows that a vote can mix personal preference with moral judgment, making the meaning of a majority result unstable.',`The smoking example tests whether a ballot can be read as a simple window into individual interests.\n\n${src('9-10')}`);
+
+section('V','A vote is not a window into one mind',`Use the smoking dispute to show why the argument calls mixed-motivation voting a mess.\n\n${src('9-10')}`);
+build('smoking','One question can invite two different kinds of voting',[`Suppose people who share a public place must decide whether smoking should be permitted there.`,`Some smokers may vote against smoking because they think it is wrong to expose others to its harms.`,`Some non-smokers may vote against a ban because they think smoking should be an individual choice.`,`In both cases, a person may vote against the option that would give them the outcome they personally prefer.`],`The point is not which smoking policy is correct. The point is that the same vote can express a preference or a moral judgment.\n\n${src('9-10')}`,'9-10');
+build('mixed_motivation','Mixed motives make the meaning of a majority uncertain',[`If voters are motivated in different ways, a winning vote cannot automatically be read as the majority’s preferred outcome.`,`It also cannot automatically be read as the majority’s judgment about what serves the common good.`,`The result tells us only that more people voted for one option than another, while leaving their reasons partly hidden even from themselves.`,`The argument calls this mixed-motivation voting a mess, and says it seems normal under present-day conditions.`],`Keep the conclusion precise: voting still chooses an outcome, but it does not automatically reveal one shared motive behind that outcome.\n\n${src('10')}`);
+question('What exactly does a winning vote tell us?','Does a majority decision reveal a majority preference, a majority judgment about the common good, or neither?','The answer determines which democratic defense remains available after the preference-revelation argument weakens.',`The next slides separate two models of what voters might be doing.\n\n${src('10-11')}`);
+build('common_good_models','The democratic defense must choose a model of voting',[`On a preference model, people vote according to what they personally want; on a common-good model, they vote according to what they think is best for everyone. In the first case polling may be more sensitive, while in the second the vote reports a majority judgment rather than a majority preference.`,`Either way, the defender still needs a reason to think a majority judgment is more reliable than the judgment of specially trained experts.`,`The argument has therefore returned to Plato’s question: why should a vote among the general population do better than expert rule?`],`This transition keeps the argument’s dialectic visible: each reply solves one problem but creates the next.\n\n${src('11')}`,'11');
+
+section('VI','The majority can be wiser—but only conditionally',`Introduce Condorcet’s argument as a narrow, conditional answer to Plato.\n\n${src('11-12')}`);
+build('condorcet','Condorcet offers a mathematical reason to trust a majority',[`Condorcet argues that if each individual has, on average, a better-than-even chance of reaching the right answer, a large majority becomes very likely to reach it.`,`With an electorate of 10,000, even a small individual advantage over guessing can make a correct majority result virtually certain.`,`The argument does not say that every voter is an expert or that every question has an obvious answer.`,`It says that many fallible judgments can combine into a reliable collective judgment under the right conditions.`],`Present the theorem as a conditional structure, not as a blanket claim that large groups are wise.\n\n${src('11-12')}`,'11-12');
+duo('The theorem turns on two conditions',{label:'Condition one',text:'On average, each person must be more likely to be right than wrong about the common-good question.'},{label:'Condition two',text:'People must vote from their judgment about the common good rather than from particular interests or mixed motives.'},`Both conditions matter. If either fails, the mathematical defense loses its force.\n\n${src('12')}`);
+build('limits','Condorcet’s reply has a sharp limit',[`If voters do not share the common-good motivation, the confusion of mixed-motivation voting returns.`,`If voters are, on average, more likely to be wrong than right, a large majority becomes almost certain to choose the wrong result.`,`Democracy therefore answers Plato only if both the epistemic and motivational conditions can actually be met.`,`The argument points forward to Rousseau as a thinker who tries to explain the conditions under which democracy could outperform guardianship.`],`Do not treat the Rousseau reference as a solution supplied in this argument. It is the next question the account says should be examined.\n\n${src('12')}`,'12');
+question('The fifth test','Can a real electorate be both well-motivated and more likely right than wrong?','If not, Condorcet gives democracy only a beautiful theorem with no secure application.',`The argument now changes the standard of evaluation: perhaps democracy deserves support even when it is not the best instrument for producing the common good.\n\n${src('12-13')}`);
+
+section('VII','Democracy may be worth it even when it fails',`Shift from instrumental success to the possibility that democratic participation has value in itself.\n\n${src('13-14')}`);
+build('instrumental','So far, democracy has been judged by its results',[`The earlier arguments asked whether democracy is better than Plato’s guardianship at achieving the common good.`,`That is an instrumental justification: democracy is valuable as a means to something else we value.`,`But many people would support democracy even if it sometimes produced worse decisions than another system.`,`That reaction suggests a different question: could democracy be intrinsically valuable, meaning valuable in itself rather than only for its consequences?`],`Mark the conceptual shift clearly. The craft analogy evaluates navigation by arrival; the democratic reply may evaluate participation by what it expresses.\n\n${src('13')}`,'13');
+build('training_voyage','A voyage can have value beyond efficient arrival',[`Plato’s ship analogy assumes that navigation has a fixed destination and should be judged by how efficiently the ship reaches it.`,`But a training voyage may have a different purpose: people may take turns at the helm so they can exercise and develop their powers.`,`A hobby can be valuable even when a store sells the finished product more cheaply, because the activity builds skill, tests judgment, and supports self-worth.`,`The argument therefore asks whether the ship of state must always be judged only by the efficiency of its arrival.`],`The training voyage is the argument’s explanatory analogy. It does not deny that safe arrival matters; it questions whether safe arrival is the only political value.\n\n${src('13-14')}`,'13-14');
+quote('A different picture of the voyage','“Why shouldn’t a journey in the ship of state be a drunken pleasure-cruise? What is wrong with that, at least if everyone has a good time and we all get home safely?”','The source material, p. 14.',`This is not a defense of reckless government. It is a deliberately provocative way to ask whether shared participation can matter alongside the quality of the destination.\n\n${src('14')}`);
+build('freedom_equality','Democracy expresses freedom and equality',[`Defenders of democracy can say that political decisions involve values different from the value of achieving a pre-chosen objective.`,`Democracy is commonly understood to express freedom: people should have a say in decisions that affect them.`,`It also expresses equality: that freedom should be given to everyone who is included in the political community, rather than reserved for an educated few.`,`This defense does not prove that democratic decisions are always better, but it explains why equal participation may remain valuable even when Plato’s craft analogy survives.`],`End by holding both values together: democracy may matter because of what it produces and because of what participation means for freedom and equality.\n\n${src('14')}`,'14');
+diagnostic('When the ship belongs to everyone, is arriving safely the only value?',`Leave the final tension open. Plato asks who is qualified to steer; democracy asks whether everyone affected by the voyage must have a say in its direction.\n\n${src('1-14')}`);
+refs([
+  ['Source material','“Plato against democracy.” Who Should Rule? course reader, pp. 1–14.'],
+  ['Primary work quoted','Plato, Republic, 488a–d, the ship-of-state passage reproduced in the argument.'],
+  ['Work quoted in the argument','John Dewey, The Public and Its Problems, pp. 223–224, the “shoe” passage.'],
+  ['Work used for the next comparison','Jean-Jacques Rousseau, The Social Contract, referenced in the argument as a later defense of democracy.'],
+  ['Argument discussed','Condorcet’s majority argument, summarized in the source material, pp. 11–12.']
+],`The deck uses only the source material and the works it explicitly quotes or discusses.\n\n${src('1-14')}`);
+
+const deck=document.getElementById('deck');
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+function renderSlide(s,i){
+  const article=document.createElement('article');
+  article.className=`slide ${s.type}${s.type==='content'||s.type==='head'||s.type==='refs'?' top':''}`;
+  article.dataset.index=i;
+  if(s.buildGroup)article.dataset.buildGroup=s.buildGroup;
+  let html='<div class="slide-inner">';
+  if(s.type==='cover')html+=`<h1 class="title">${esc(s.title)}</h1><p class="work">${esc(s.work)}</p><div class="course">${esc(s.course)}</div>`;
+  if(s.type==='section')html+=`<div class="eyebrow">${esc(s.eyebrow)}</div><h2 class="title">${esc(s.title)}</h2><div class="rule"></div>`;
+  if(s.type==='content')html+=`<h2 class="title">${esc(s.title)}</h2><div class="body">${s.paragraphs.map((p,j)=>`<p class="${j===s.paragraphs.length-1?'fresh':''}">${esc(p)}</p>`).join('')}</div>`;
+  if(s.type==='question'||s.type==='diagnostic')html+=`<div class="eyebrow">${esc(s.eyebrow)}</div><p class="prompt">${esc(s.prompt)}</p>${s.context?`<p class="context">${esc(s.context)}</p>`:''}`;
+  if(s.type==='quote')html+=`<div class="eyebrow">${esc(s.eyebrow)}</div><blockquote>${esc(s.text)}</blockquote><cite>${esc(s.citation)}</cite>`;
+  if(s.type==='duo')html+=`<h2 class="title">${esc(s.title)}</h2><div class="duo-grid">${[s.left,s.right].map(x=>`<div class="duo-col"><h3>${esc(x.label)}</h3><p>${esc(x.text)}</p></div>`).join('')}</div>`;
+  if(s.type==='head')html+=`<h2 class="title">${esc(s.title)}</h2><div class="head-list">${s.items.map(x=>`<div class="head-item"><b>${esc(x[0])}</b><span>${esc(x[1])}</span></div>`).join('')}</div>`;
+  if(s.type==='refs')html+=`<h2 class="title">${esc(s.title)}</h2><div class="refs-list">${s.items.map(x=>`<div class="ref"><strong>${esc(x[0])}.</strong> ${esc(x[1])}</div>`).join('')}</div>`;
+  article.innerHTML=html+'</div>';
+  deck.appendChild(article);
+  return article;
+}
+const nodes=slides.map(renderSlide);
+let current=0;
+const counter=document.getElementById('counter'),progress=document.getElementById('progress'),notes=document.getElementById('notes'),notesBody=document.getElementById('notes-body'),overview=document.getElementById('overview'),overviewGrid=document.getElementById('overview-grid');
+function labelFor(s){return s.title||s.prompt||s.text||'Slide'}
+slides.forEach((s,i)=>{const b=document.createElement('button');b.className='overview-card';b.innerHTML=`<span class="num">${String(i+1).padStart(2,'0')} / ${slides.length}</span><span class="label">${esc(labelFor(s))}</span>`;b.addEventListener('click',()=>{closePanels();show(i)});overviewGrid.appendChild(b)});
+const cards=[...overviewGrid.children];
+function show(i){current=Math.max(0,Math.min(slides.length-1,i));nodes.forEach((n,j)=>n.classList.toggle('active',j===current));cards.forEach((n,j)=>n.classList.toggle('current',j===current));counter.textContent=`${current+1} / ${slides.length}`;progress.style.width=`${((current+1)/slides.length)*100}%`;notesBody.textContent=slides[current].notes||'No notes for this slide.';document.title=`${current+1}/${slides.length} · Plato - Against Democracy`}
+function openPanel(panel){closePanels();panel.classList.add('open')}
+function closePanels(){overview.classList.remove('open');notes.classList.remove('open')}
+function togglePanel(panel){panel.classList.contains('open')?closePanels():openPanel(panel)}
+function toggleFullscreen(){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen().catch(()=>{})}
+document.getElementById('fullscreen').addEventListener('click',toggleFullscreen);
+document.querySelectorAll('.close').forEach(b=>b.addEventListener('click',closePanels));
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closePanels();return}if(overview.classList.contains('open')||notes.classList.contains('open'))return;if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();show(current+1)}else if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();show(current-1)}else if(e.key.toLowerCase()==='o')togglePanel(overview);else if(e.key.toLowerCase()==='n')togglePanel(notes);else if(e.key.toLowerCase()==='f')toggleFullscreen()});
+let touchX=0,touchY=0;
+document.addEventListener('touchstart',e=>{touchX=e.changedTouches[0].screenX;touchY=e.changedTouches[0].screenY},{passive:true});
+document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].screenX-touchX,dy=e.changedTouches[0].screenY-touchY;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy))show(current+(dx<0?1:-1))},{passive:true});
+function fits(node){const inner=node.querySelector('.slide-inner');return inner.scrollHeight<=node.clientHeight*.82&&inner.scrollWidth<=node.clientWidth*.92}
+function fitNode(node,start=1){let f=start;node.classList.add('measuring');node.style.setProperty('--fit',f);while(f>.72&&!fits(node)){f-=.02;node.style.setProperty('--fit',f)}node.classList.remove('measuring');return f}
+function fitAll(){nodes.forEach(n=>n.style.setProperty('--fit',1));const groups={};nodes.forEach(n=>{if(n.dataset.buildGroup)(groups[n.dataset.buildGroup]??=[]).push(n)});const grouped=new Set(Object.values(groups).flat());Object.values(groups).forEach(group=>{const f=fitNode(group[group.length-1]);group.forEach(n=>n.style.setProperty('--fit',f))});nodes.filter(n=>!grouped.has(n)).forEach(n=>fitNode(n));show(current)}
+let resizeTimer;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(fitAll,120)});
+if(document.fonts?.ready)document.fonts.ready.then(fitAll);else fitAll();
+show(0);
+</script>
+</body>
+</html>

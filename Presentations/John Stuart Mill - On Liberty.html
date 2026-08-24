@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>John Stuart Mill - On Liberty</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --paper:#f5f1e8;
+      --paper-deep:#e9e3d6;
+      --ink:#132d38;
+      --muted:#667780;
+      --accent:#047a83;
+      --accent-quiet:#6fa8a4;
+      --alert:#bb5b45;
+      --rule:rgba(19,45,56,.18);
+      --fit:1;
+    }
+    *{box-sizing:border-box}
+    html,body{width:100%;height:100%;margin:0;overflow:hidden;background:var(--paper);color:var(--ink)}
+    body{font-family:Inter,system-ui,sans-serif}
+    button{font:inherit}
+    #deck{position:relative;width:100vw;height:100vh;overflow:hidden;background:
+      radial-gradient(ellipse at 96% 6%,rgba(4,122,131,.13),transparent 28%),
+      radial-gradient(ellipse at 5% 93%,rgba(187,91,69,.085),transparent 30%),
+      linear-gradient(135deg,#f7f3eb 0%,var(--paper) 54%,#e7eee9 100%)}
+    #deck::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.72;background:
+      linear-gradient(90deg,transparent 0 5.1vw,rgba(4,122,131,.24) 5.1vw calc(5.1vw + 1px),transparent calc(5.1vw + 1px)),
+      repeating-linear-gradient(0deg,transparent 0 6.25vh,rgba(19,45,56,.035) 6.25vh calc(6.25vh + 1px)),
+      linear-gradient(114deg,transparent 0 74%,rgba(4,122,131,.045) 74% 74.12%,transparent 74.12%)}
+    #deck::after{content:"";position:absolute;right:6vw;top:8vh;width:19vw;height:12vh;border:1px solid rgba(4,122,131,.22);border-left:0;transform:skewY(-7deg);pointer-events:none}
+    .slide{position:absolute;inset:0;display:none;align-items:center;justify-content:center;padding:7.5vh 8vw 9vh;text-align:center;overflow:hidden}
+    .slide.active,.slide.measuring{display:flex}
+    .slide.measuring{visibility:hidden;pointer-events:none}
+    .slide.top{align-items:flex-start;padding-top:8vh}
+    .slide-inner{width:min(980px,86vw);max-height:82vh;margin:auto;transform:scale(var(--fit));transform-origin:top center}
+    .slide.top .slide-inner{margin:0 auto}
+    .slide.duo .slide-inner{width:min(1140px,90vw)}
+    .eyebrow{margin:0 0 1.1rem;color:var(--accent);font:600 clamp(11px,1.08vw,16px)/1.3 "IBM Plex Mono",monospace;letter-spacing:.16em;text-transform:uppercase}
+    .title{margin:0;font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;letter-spacing:-.018em}
+    .cover .slide-inner{padding:3.1rem 4.3rem 3rem;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);background:linear-gradient(90deg,rgba(245,241,232,.25),rgba(245,241,232,.72),rgba(245,241,232,.25))}
+    .cover .title{font-size:calc(clamp(60px,7.5vw,104px)*var(--fit));line-height:.94;max-width:10.8ch;margin-inline:auto}
+    .cover .work{font:500 calc(clamp(21px,2.1vw,31px)*var(--fit))/1.36 "Cormorant Garamond",Georgia,serif;color:var(--muted);margin:1.45rem auto 0;max-width:38ch}
+    .cover .course{margin-top:2.3rem;color:var(--accent);font:500 calc(clamp(11px,1vw,15px)*var(--fit))/1.4 "IBM Plex Mono",monospace;letter-spacing:.14em;text-transform:uppercase}
+    .section .slide-inner{width:min(900px,86vw);padding:2.25rem 2.75rem 2.35rem;text-align:left;border-left:4px solid var(--accent);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);background:linear-gradient(90deg,rgba(4,122,131,.09),rgba(245,241,232,.22) 76%,transparent)}
+    .section .title{font-size:calc(clamp(48px,6vw,82px)*var(--fit));line-height:1.01}
+    .section .rule{width:8rem;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent-quiet),transparent);margin:1.7rem 0 0}
+    .content .slide-inner,.head .slide-inner{padding:0 .2rem}
+    .content .title,.head .title,.duo .title{font-size:calc(clamp(38px,4.5vw,62px)*var(--fit));line-height:1.05;margin-bottom:1.55rem}
+    .content .body{font-family:"Cormorant Garamond",Georgia,serif;font-size:calc(clamp(25px,2.32vw,35px)*var(--fit));line-height:1.34;text-align:left}
+    .content .body p{margin:0 0 1.02em -1.25rem;padding:.08em .72em .08em 1rem;border-left:3px solid rgba(4,122,131,.26);color:rgba(102,119,128,.86);font-weight:600;background:linear-gradient(90deg,rgba(4,122,131,.025),rgba(4,122,131,0))}
+    .content .body p:last-child{margin-bottom:0}
+    .content .body p.fresh{color:var(--ink);border-left-color:var(--accent);background:linear-gradient(90deg,rgba(4,122,131,.16),rgba(4,122,131,.035) 48%,transparent 80%);text-shadow:0 0 18px rgba(19,45,56,.035)}
+    .question .slide-inner,.diagnostic .slide-inner{width:min(900px,86vw);padding:2.6rem 3.35rem;border:1px solid rgba(4,122,131,.36);box-shadow:inset 0 0 0 9px rgba(4,122,131,.025),10px 11px 0 rgba(19,45,56,.045);background:rgba(249,247,240,.7)}
+    .question .prompt,.diagnostic .prompt{margin:0;font-family:"Cormorant Garamond",Georgia,serif;font-size:calc(clamp(42px,5.15vw,71px)*var(--fit));line-height:1.08;font-weight:600;letter-spacing:-.015em}
+    .question .prompt::after,.diagnostic .prompt::after{content:"";display:block;width:7.2rem;height:2px;background:linear-gradient(90deg,var(--accent),var(--alert));margin:1.7rem auto 0}
+    .question .context{max-width:48ch;margin:1.35rem auto 0;color:var(--muted);font:500 calc(clamp(18px,1.68vw,25px)*var(--fit))/1.4 "Cormorant Garamond",Georgia,serif}
+    .quote .slide-inner{max-width:min(900px,84vw);padding:2.4rem 3.2rem;border-left:4px solid var(--alert);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);background:linear-gradient(90deg,rgba(187,91,69,.075),rgba(245,241,232,.22) 62%,transparent)}
+    .quote blockquote{margin:0 auto;max-width:29ch;font-family:"Cormorant Garamond",Georgia,serif;font-size:calc(clamp(35px,3.7vw,54px)*var(--fit));line-height:1.12;font-weight:500;font-style:italic}
+    .quote blockquote::before{content:"“";color:var(--alert);margin-right:.08em}.quote blockquote::after{content:"”";color:var(--alert);margin-left:.08em}
+    .quote cite{display:block;margin-top:1.55rem;color:var(--muted);font:500 calc(clamp(12px,1.13vw,17px)*var(--fit))/1.45 "IBM Plex Mono",monospace;font-style:normal}
+    .duo-grid{display:grid;grid-template-columns:1fr 1fr;gap:2.4rem;text-align:left;margin-top:1.45rem}
+    .duo-col{min-height:15rem;padding:1.45rem 1.6rem;border:1px solid var(--rule);border-top:4px solid var(--accent);background:linear-gradient(145deg,rgba(248,246,239,.88),rgba(226,237,232,.45))}
+    .duo-col:last-child{border-top-color:var(--alert)}
+    .duo-col h3{margin:0 0 .85rem;color:var(--accent);font:600 calc(clamp(13px,1.24vw,18px)*var(--fit))/1.3 "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase}
+    .duo-col:last-child h3{color:var(--alert)}
+    .duo-col p{margin:0;color:var(--ink);font:500 calc(clamp(24px,2.1vw,32px)*var(--fit))/1.34 "Cormorant Garamond",Georgia,serif}
+    .head-list{display:grid;gap:1.05rem;text-align:left;margin-top:1.75rem}
+    .head-item{display:grid;grid-template-columns:10rem 1fr;gap:1.5rem;align-items:baseline;padding:1rem 1rem 0;border-top:1px solid var(--rule);border-left:3px solid rgba(4,122,131,.48);background:linear-gradient(90deg,rgba(4,122,131,.04),transparent 54%)}
+    .head-item:nth-child(even){border-left-color:rgba(187,91,69,.52);background:linear-gradient(90deg,rgba(187,91,69,.035),transparent 54%)}
+    .head-item b{color:var(--accent);font:600 calc(clamp(12px,1.08vw,16px)*var(--fit))/1.3 "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase}
+    .head-item:nth-child(even) b{color:var(--alert)}
+    .head-item span{font:500 calc(clamp(23px,2.03vw,31px)*var(--fit))/1.3 "Cormorant Garamond",Georgia,serif}
+    .diagnostic .eyebrow{color:var(--alert)}.diagnostic .prompt{font-size:calc(clamp(51px,6.5vw,88px)*var(--fit))}
+    .refs .slide-inner{width:min(980px,86vw);text-align:left}.refs .title{font-size:calc(clamp(40px,4.5vw,63px)*var(--fit));margin-bottom:1.6rem}
+    .refs-list{display:grid;gap:1rem}.ref{padding-top:.95rem;border-top:1px solid var(--rule);font:500 calc(clamp(18px,1.62vw,24px)*var(--fit))/1.38 "Cormorant Garamond",Georgia,serif;color:var(--muted)}.ref strong{color:var(--ink);font-weight:600}
+    #progress{position:fixed;z-index:20;left:0;top:0;width:0;height:4px;background:linear-gradient(90deg,var(--accent-quiet),var(--accent),var(--alert));transition:width .22s ease}
+    #nav-hint,#counter{position:fixed;bottom:18px;z-index:20;color:var(--muted);font:500 12px/1.3 "IBM Plex Mono",monospace;letter-spacing:.08em}#nav-hint{left:24px}#counter{right:24px}
+    #fullscreen{position:fixed;z-index:20;right:3vw;top:2.35vh;color:var(--ink);background:rgba(245,241,232,.6);border:1px solid rgba(4,122,131,.46);padding:.55rem .75rem;cursor:pointer;font:500 clamp(10px,.86vw,13px)/1.2 "IBM Plex Mono",monospace;letter-spacing:.06em;text-transform:uppercase}
+    #fullscreen:hover{border-color:var(--alert);color:var(--alert)}
+    .panel{position:fixed;z-index:40;inset:0;display:none;overflow:auto;padding:5vh 7vw 8vh;background:rgba(245,241,232,.985)}.panel.open{display:block}
+    .panel-head{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;padding:0 0 1.3rem;background:var(--paper);border-bottom:1px solid var(--rule);z-index:2}.panel-head h2{margin:0;font:600 clamp(28px,3vw,46px)/1 "Cormorant Garamond",Georgia,serif}.close{border:1px solid var(--rule);background:transparent;color:var(--ink);padding:.55rem .8rem;cursor:pointer;font:500 12px/1 "IBM Plex Mono",monospace}
+    #overview-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;padding-top:1.35rem}.overview-card{min-height:100px;text-align:left;padding:1rem;background:linear-gradient(145deg,#faf7ef,#e7eee9);border:1px solid var(--rule);border-left:3px solid transparent;color:var(--ink);cursor:pointer}.overview-card:hover,.overview-card.current{border-left-color:var(--accent);border-color:rgba(4,122,131,.46)}.overview-card .num{display:block;color:var(--accent);font:500 11px/1 "IBM Plex Mono",monospace;letter-spacing:.1em}.overview-card .label{display:block;margin-top:.7rem;font:600 21px/1.12 "Cormorant Garamond",Georgia,serif}
+    #notes-body{max-width:900px;padding:2.4rem 0;white-space:pre-wrap;color:var(--ink);font:400 18px/1.62 Inter,sans-serif}
+    @media (max-width:760px){.slide{padding:9vh 8vw 10vh}.slide.top{padding-top:9.5vh}.slide-inner,.slide.duo .slide-inner{width:84vw}.cover .slide-inner,.section .slide-inner,.question .slide-inner,.diagnostic .slide-inner,.quote .slide-inner{padding:1.7rem 1.5rem}.duo-grid{grid-template-columns:1fr;gap:1.35rem}.head-item{grid-template-columns:1fr;gap:.45rem}.content .body{font-size:calc(clamp(22px,5.5vw,30px)*var(--fit))}.duo-col p{font-size:calc(clamp(22px,5.25vw,29px)*var(--fit))}#nav-hint{display:none}#fullscreen{top:12px;right:12px}}
+</style>
+<link rel="stylesheet" href="presentation-polish.css">
+<script src="presentation-polish.js" defer></script>
+</head>
+<body>
+  <main id="deck" aria-live="polite"></main>
+  <div id="progress"></div>
+  <div id="nav-hint">ARROWS / SPACE · O OVERVIEW · N NOTES · F FULLSCREEN</div>
+  <div id="counter">1 / 1</div>
+  <button id="fullscreen" aria-label="Toggle fullscreen">Fullscreen</button>
+  <section id="overview" class="panel" aria-label="Slide overview"><div class="panel-head"><h2>Overview</h2><button class="close" data-close="overview">Close</button></div><div id="overview-grid"></div></section>
+  <aside id="notes" class="panel" aria-label="Speaker notes"><div class="panel-head"><h2>Speaker notes</h2><button class="close" data-close="notes">Close</button></div><div id="notes-body"></div></aside>
+
+  <script>
+    const slides=[];
+    const add=slide=>slides.push(slide);
+    const source=(section,extra='')=>`[Sources]\nSource material: “The Place of Liberty - Mill on Liberty,” ${section}.${extra?`\n${extra}`:''}\n[/Sources]`;
+    const note=(text,section,extra='')=>`${text}\n\n${source(section,extra)}`;
+    const cover=(title,work,course,notes)=>add({type:'cover',title,work,course,notes});
+    const section=(roman,title,notes)=>add({type:'section',eyebrow:`${roman}. ${title.toUpperCase()}`,title,notes});
+    const question=(eyebrow,prompt,context,notes)=>add({type:'question',eyebrow,prompt,context,notes});
+    const quote=(text,cite,notes)=>add({type:'quote',text,cite,notes});
+    const duo=(title,left,right,notes)=>add({type:'duo',title,left,right,notes});
+    const head=(title,items,notes)=>add({type:'head',title,items,notes});
+    const diagnostic=(prompt,notes)=>add({type:'diagnostic',eyebrow:'The Mill test',prompt,notes});
+    const refs=(items,notes)=>add({type:'refs',title:'References',items,notes});
+    function build(id,title,paragraphs,sectionName,notes=''){
+      paragraphs.forEach((_,i)=>add({type:'content',title,paragraphs:paragraphs.slice(0,i+1),buildGroup:id,notes:note(`${notes}${i<paragraphs.length-1?'\n\nPause before revealing the next step.':''}`,sectionName)}));
+    }
+
+    cover('The Place of Liberty','John Stuart Mill on the harm principle, free thought, and the limits of speech','Political Philosophy',note('Open with the tension that runs through the argument: democratic majorities can rule, but they can also oppress. Mill asks which uses of social and state power remain legitimate.','Opening quotation and “One simple principle,” pp. 1–2','Primary work quoted: John Stuart Mill, On Liberty (1859), pp. 94–95.'));
+
+    section('I','Democracy can still oppress',note('The opening problem is not whether democracy is better than tyranny. It is why democracy still needs limits on its own power.','“One simple principle,” pp. 1–2'));
+    build('majority','Majorities can make laws that wrong minorities',[
+      'Democracy does not automatically make every political decision just. Even when “the people” make the laws, a majority can pass rules that oppress or treat a minority unfairly.',
+      'Mill calls this danger the tyranny of the majority. The problem is not only formal law: public opinion can also pressure people to conform in their beliefs and behavior.',
+      'So democracy creates a new political question. How can a community govern itself while still protecting a sphere in which individuals may decide for themselves?'
+    ],'“One simple principle,” pp. 1–2','Keep the target in view: Mill is limiting the legitimate authority of both government and social opinion.');
+    duo('Mill rejects both poles of the freedom–authority spectrum',
+      {label:'No government',text:'Anarchism allows no state-imposed limits. Mill rejects it because freedom without enforceable restraints lets some people exploit or harm others.'},
+      {label:'No protected liberty',text:'Absolute government may impose any rule it wishes. Mill rejects it because subjects then have no secure sphere of individual choice.'},
+      note('The argument places Mill between anarchism and absolutism. He is not searching for zero authority, but for the right boundary between authority and liberty.','“One simple principle,” p. 2'));
+    question('The boundary problem','When may society rightfully interfere with someone’s choice?','Mill wants a principle that decides cases on their merits instead of simply repeating custom, popular morality, or majority preference.',note('The next section introduces Mill’s answer.','“One simple principle,” pp. 2–3'));
+
+    section('II','The harm principle draws a hard line',note('Mill proposes one simple principle to regulate coercive power over competent adults.','“One simple principle,” pp. 3–4'));
+    quote('The only purpose for which power can be rightfully exercised over any member of a civilized community, against his will, is to prevent harm to others.','John Stuart Mill, On Liberty, pp. 94–95.',note('Let the quotation stand before unpacking its two sides: protecting others can justify coercion; improving someone “for their own good” cannot.','Opening quotation, p. 1','Primary work quoted: John Stuart Mill, On Liberty (1859), pp. 94–95.'));
+    build('principle','A person’s own good is not enough to justify coercion',[
+      'Mill’s Liberty Principle says that power may be used against a person’s will only to prevent harm to other people.',
+      'A person’s physical or moral good is not a sufficient reason for coercion. In other words, society may advise, persuade, or warn, but it may not force a competent adult merely for that adult’s own benefit.',
+      'The principle is radical because it challenges familiar restrictions on religion, speech, sexual conduct, and other personal choices when those choices do not harm anyone else.'
+    ],'“One simple principle,” pp. 2–3','The argument treats the Liberty Principle as a decision rule, not as a slogan in favor of doing whatever one wants.');
+    question('The paternalism test','May you forcibly stop a friend from making a ruinous personal choice?','The question tests Mill’s rejection of paternalism: interference based only on someone’s own welfare.',note('Do not answer this question by appealing to whether the choice is wise. Mill’s issue is whether wisdom alone supplies a right to coerce.','“One simple principle,” p. 3'));
+    build('scope','Mill also gives liberty a troubling condition',[
+      'Mill says that the Liberty Principle applies to people “in the maturity of their faculties.” Children are not covered in the same way because they are still developing their capacities.',
+      'He also excluded people he called “barbarians,” claiming that liberty works only where people can improve through free and equal discussion. The argument identifies this as a colonial and deeply objectionable part of Mill’s view.',
+      'Mill’s larger thought is that liberty is valuable because it supports improvement and moral progress. But his attempt to decide who is ready for liberty gives others dangerous authority to deny it.'
+    ],'“One simple principle,” pp. 3–4','Mark the distinction carefully: this is a limitation built into Mill’s application of the principle, not a defense of it by the argument.');
+    question('A principle with a gatekeeper','Who gets to decide that another person is not ready for liberty?','Mill’s qualification exposes a tension: a theory meant to curb domination can itself authorize a powerful group to classify others as unfit for freedom.',note('This tension should remain open as the deck turns to Mill’s clearest illustration of liberty.','“One simple principle,” pp. 3–4'));
+
+    section('III','Thought needs opponents',note('Mill devotes much of On Liberty to freedom of thought and discussion. His claim is not merely that unpopular opinions deserve politeness.','“An illustration: freedom of thought,” pp. 5–10'));
+    quote('If all mankind minus one were of one opinion, and only one person were of the contrary opinion, mankind would be no more justified in silencing that one person, than he, if he had the power, would be justified in silencing mankind.','John Stuart Mill, On Liberty, p. 100.',note('This quotation gives the principle of intellectual liberty its sharpest form. The following build explains why Mill thinks suppression loses whatever the dissenting opinion turns out to be.','“An illustration: freedom of thought,” p. 5','Primary work quoted: John Stuart Mill, On Liberty (1859), p. 100.'));
+    build('fallibility','Censorship assumes a certainty human beings do not possess',[
+      'An unpopular view is not a reason to silence it. Before suppressing an opinion, Mill says, we would need to know that the opinion is false and that our own view is certainly true.',
+      'But being certain is not the same as being right. History shows that people have treated false and even absurd beliefs as settled truths, so censoring dissent assumes human infallibility.',
+      'Mill uses Socrates and Jesus as stark examples. Their societies, acting through judges who believed they were doing right, punished views that later generations regarded very differently.'
+    ],'“An illustration: freedom of thought,” pp. 5–6','The examples are illustrations of fallibility. They do not prove that every dissenter is right.');
+    duo('Whatever the dissenting view is, Mill says suppression loses',
+      {label:'If it is true',text:'Suppressing it prevents people from exchanging an error for truth, or from correcting an incomplete view with a partially true challenge.'},
+      {label:'If it is false',text:'Suppressing it leaves the received view untested. People may retain the right conclusion without understanding why it is right.'},
+      note('This comparison is the core of Mill’s argument for free discussion. The third case, partial truth on both sides, will make the case still stronger.','“An illustration: freedom of thought,” pp. 5, 9–10'));
+    build('dogma','An unchallenged truth can become a dead dogma',[
+      'Even a true opinion loses something when it is never questioned. People can repeat the words of a belief without grasping its reasons, meaning, or practical force.',
+      'Mill calls such an unexamined belief a “dead dogma” rather than a living truth. A challenge forces people to understand and defend the view they hold.',
+      'The risk is practical as well as intellectual. When a false view is presented persuasively, defenders of the received truth may be unable to answer it, and the false view may win support it does not deserve.'
+    ],'“An illustration: freedom of thought,” pp. 9–10','The argument’s discussion of evolutionary theory is one illustration of this danger: neglecting objections can leave a true view poorly defended.');
+    quote('However true it may be, if it is not fully, frequently, and fearlessly discussed, it will be held as a dead dogma, not a living truth.','John Stuart Mill, On Liberty, p. 114.',note('The quotation condenses Mill’s positive case for contestation. The next question presses the major objection to it.','“An illustration: freedom of thought,” p. 9','Primary work quoted: John Stuart Mill, On Liberty (1859), p. 114.'));
+    question('The knowledge objection','What if a true belief makes people less happy—or even makes society worse?','Rousseau’s disagreement with Mill raises this possibility. Perhaps ignorance, rather than knowledge, can sometimes protect happiness or social order.',note('This is not a decorative counterpoint. It challenges a premise Mill needs: that truth and open inquiry are generally connected to human improvement.','“An illustration: freedom of thought,” pp. 7–9'));
+
+    section('IV','Is truth always worth knowing?',note('The argument uses Rousseau to sharpen an objection to Mill: a society might value a belief for its effects even when the belief is false.','“An illustration: freedom of thought,” pp. 7–10'));
+    build('utility-objection','The case for suppression can be made in the name of happiness',[
+      'Rousseau’s remarks on the sciences and arts suggest that knowledge may corrupt rather than improve human life. This is a direct challenge to Mill’s confidence in free inquiry.',
+      'The objection does not need to claim that every unpopular view is false. It can say that a true view should still be suppressed if widespread belief in it would damage happiness or dissolve social bonds.',
+      'For example, someone might argue that a society needs religious belief to avoid selfishness and immorality, so atheism should not be freely propagated even if it happened to be true.'
+    ],'“An illustration: freedom of thought,” pp. 7–9','Keep the objection distinct from Mill’s own view. It changes the question from “Is it true?” to “Will believing it make society better or worse?”');
+    quote('The usefulness of an opinion is itself matter of opinion: as disputable, as open to discussion, and requiring discussion as much as the opinion itself.','John Stuart Mill, On Liberty, p. 104.',note('Mill’s reply is that a censor who decides an opinion is socially harmful needs the same impossible certainty as a censor who decides an opinion is false.','“An illustration: freedom of thought,” p. 9','Primary work quoted: John Stuart Mill, On Liberty (1859), p. 104.'));
+    build('reply','Mill replies: the alleged harm of a belief is also contestable',[
+      'Mill argues that deciding whether an opinion is socially useful is itself an opinion open to dispute. A claim that atheism, science, or dissent will destroy society therefore cannot be treated as certain.',
+      'The Roman suppression of Christianity shows the point. Romans could regard Christianity as dangerous to social order, but that did not make their judgment infallible or their suppression justified.',
+      'The argument adds a pressure point: if we are uncertain whether truth promotes happiness, that uncertainty alone does not obviously favor permission rather than prohibition. Mill seems to need the further assumption that truth generally supports happiness.'
+    ],'“An illustration: freedom of thought,” pp. 8–9','The final sentence names an unresolved premise in Mill’s reply. Do not turn it into a claim that the argument settles the objection.');
+    build('partial-truth','Partial truth makes open contest especially valuable',[
+      'Most disagreements are not a simple contest between complete truth and complete falsehood. More commonly, each side sees part of the matter while missing another part.',
+      'If each side has a fragment of truth, full and free discussion is the only route by which a more complete view can emerge. Suppression blocks that correction.',
+      'Mill therefore concludes that expression of opinions against the current orthodoxy benefits humanity in every case: when the challenger is right, wrong, or partly right.'
+    ],'“An illustration: freedom of thought,” p. 10','This completes the argument for liberty of thought. The next section asks why Mill still permits limits on some expressions.');
+    question('From opinion to action','If censorship is never justified, why does Mill allow some speech to be punished?','Mill’s answer turns on context. The same proposition can participate in discussion or become part of an imminent threat to others.',note('The next section introduces Mill’s distinction through his example of speech about corn-dealers.','“Limits to free speech,” pp. 10–11'));
+
+    section('V','Speech can cross into harm',note('Mill’s defense of free discussion is not a defense of every utterance in every setting.','“Limits to free speech,” pp. 10–15'));
+    quote('An opinion that corn-dealers are starvers of the poor, or that private property is robbery, ought to be unmolested when simply circulated through the press, but may justly incur punishment when delivered orally to an excited mob assembled before the house of a corn-dealer.','John Stuart Mill, On Liberty, p. 131.',note('The contrast is central: the proposition remains the same, but the surrounding conditions transform its likely effect on others.','“Limits to free speech,” pp. 10–11','Primary work quoted: John Stuart Mill, On Liberty (1859), p. 131.'));
+    build('incitement','Context can turn expression into a likely cause of harm',[
+      'Mill accepts limits on expression when it is very likely to lead to harm to others. Speech that is part of an excited mob’s immediate confrontation can be regulated because it may incite violence.',
+      'The same words may be protected when circulated through the press as a contribution to discussion. For Mill, the relevant difference is not whether an idea is offensive, but whether its expression in this context creates a strong prospect of physical harm.',
+      'This is why Mill’s position is not simply “free speech has value in itself.” The argument presents free discussion as a means to truth and social improvement, and that rationale does not operate in the same way when speech functions as incitement.'
+    ],'“Limits to free speech,” pp. 10–11','Make the contextual distinction explicit: Mill does not say that the original opinion has become false.');
+    question('Beyond physical violence','If speech can cause serious psychological harm or stigmatize a group, is Mill’s limit too narrow?','The argument introduces hate speech and pornography debates to show why citing Mill does not settle every contemporary dispute about expression.',note('The following slides present extensions and complications, not simple applications of Mill’s principle.','“Limits to free speech,” pp. 11–15'));
+    build('hate-speech','Later debates ask whether harm includes more than immediate violence',[
+      'The argument describes hate speech as expression that targets a person or group with stigmatizing qualities and treats them as unwelcome or legitimate objects of hostility.',
+      'Repeated or normalized hate speech can affect a target’s safety, psychological well-being, and perhaps physical health. Many countries have laws against the most serious cases, while others defend broader legal protection for expression.',
+      'Catherine MacKinnon and Andrea Dworkin offer another kind of argument about pornography as they define it: they argue that material depicting sexual subordination can be a civil-rights violation that helps silence women rather than merely communicate an idea.',
+      'These arguments do not prove where every legal line should fall. They show that the relation between expression, harm, equality, and freedom is more complicated than a slogan about a “marketplace of ideas.”'
+    ],'“Limits to free speech,” pp. 11–15','Attribute the arguments precisely: the argument reports the views of later theorists and notes that these debates remain contested.');
+    question('A quotation is not a complete answer','Can Mill’s defense of discussion decide every dispute about deplatforming, hate speech, or pornography?','The argument’s answer is cautionary: Mill himself accepted limits, and later thinkers question whether his account captures every form of harm.',note('This checkpoint closes the speech section by resisting an easy appeal to authority. The final section asks what Mill means by “harm to others.”','“Limits to free speech,” pp. 13–15'));
+
+    section('VI','Harm is narrower than offence',note('Mill’s Liberty Principle depends on a boundary between actions that merely displease others and actions that give others a claim to restraint.','“Harm to others,” pp. 15–17'));
+    build('self-other','Mill distinguishes self-regarding from other-regarding action',[
+      'A self-regarding action concerns only the person who acts, or concerns others only with their free consent. On Mill’s view, society has no business coercively interfering with such action.',
+      'An other-regarding action affects or involves another person. The Liberty Principle seems to allow regulation and supervision when an action belongs to this class and threatens harm to someone else.',
+      'But this distinction is difficult to apply. A private group may worship as it wishes without coercing anyone, yet someone who dislikes the religion may feel anguish or frustration because the group will not join the established faith.',
+      'Mill’s answer must be that offence, annoyance, and thwarted wishes are not by themselves the kind of harm that justifies coercion.'
+    ],'“Harm to others,” pp. 15–16','Use the private-worship example to separate a person’s feeling offended from the kind of injury Mill thinks warrants constraint.');
+    duo('Not every effect on another person counts as a harm',
+      {label:'Mere dislike or offence',text:'A neighbor’s religion, dress, or personal choices may distress someone else. Mill denies that such reactions alone create a right to control the other person.'},
+      {label:'Damage to protected interests',text:'Murder, assault, rape, theft, and fraud attack a person’s safety, security, or property. These are clear candidates for legitimate restraint.'},
+      note('The comparison identifies the direction of Mill’s distinction. It does not yet give a complete definition of harm.','“Harm to others,” pp. 15–17'));
+    build('interests','“Harm” is often read as damage to another person’s interests',[
+      'Mill sometimes says that external control is justified only for actions that concern the interests of other people. This suggests that harming another means damaging an interest they have.',
+      'The argument notes that interests include more than money. Personal safety and security clearly matter, which is why violence, theft, and fraud fit naturally within the Liberty Principle.',
+      'Still, no adequate general definition of “interests” has been supplied. The concept helps explain obvious wrongs, but it does not yet tell us which less obvious effects on other people count as harms.'
+    ],'“Harm to others,” pp. 16–17','This is an interpretive attempt to clarify Mill, not a final solution stated by Mill himself.');
+    quote('Whoever succeeds in an overcrowded profession, or in a competitive examination; whoever is preferred to another in any contest for an object which both desire, reaps benefit from the loss of others.','John Stuart Mill, On Liberty, p. 163.',note('The quotation makes the remaining problem vivid: competition can badly affect another person’s interests, yet Mill does not want to forbid it.','“Harm to others,” p. 17','Primary work quoted: John Stuart Mill, On Liberty (1859), p. 163.'));
+    build('insufficient','Harming an interest is not enough to justify constraint',[
+      'Choosing black shoes rather than brown shoes may disappoint the brown shoe-polish industry, but Mill gives that industry no right to intervene. The fact that someone is affected is not enough.',
+      'The same point holds in more serious cases. A person who wins a job, an examination, or a contest may benefit from another person’s loss and disappointment, but Mill intends to leave such competition free.',
+      'So harm to another’s interests is not a sufficient condition for coercion. Mill still owes a more precise account of which harms give society a right to interfere and which harms must be tolerated as part of liberty.'
+    ],'“Harm to others,” pp. 16–17','End on the incompleteness of the definition. The argument deliberately leaves the Liberty Principle under pressure rather than pretending the word “harm” solves every case.');
+    question('The unfinished boundary','Which injuries count as harms that justify coercion—and which burdens must a free society tolerate?','Mill’s principle is powerful because it rejects authority based on mere dislike. Its difficulty is drawing a principled, non-arbitrary line once every action affects someone else.',note('This question prepares the final diagnostic: Mill’s theory succeeds only if liberty can be protected without ignoring genuine harms to others.','“Harm to others,” pp. 15–17'));
+
+    diagnostic('Can a society protect people from real harm without letting offence, fear, or majority dislike become a license to rule?',note('Leave the question open. It brings together the argument’s central tension between individual liberty, public security, fallibility, and social power.','Whole argument'));
+    refs([
+      '<strong>Source material:</strong> “The Place of Liberty - Mill on Liberty.”',
+      '<strong>Mill, John Stuart.</strong> <em>On Liberty</em> (1859), in <em>Utilitarianism and Other Writings</em>, ed. Mary Warnock. Collins, 2003. Passages quoted in the source material.',
+      '<strong>Rousseau, Jean-Jacques.</strong> <em>Discourse on the Arts and Sciences</em> (1750). Discussed in the source material.',
+      '<strong>MacKinnon, Catherine.</strong> “Pornography, Civil Rights, and Speech” (1985). Discussed in the source material.'
+    ],note('The references include only the source material, primary work quoted, and works explicitly discussed and used in the deck.','Whole argument'));
+
+    const deck=document.getElementById('deck');
+    const escapeHTML=value=>String(value).replace(/[&<>"']/g,char=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[char]));
+    function renderSlide(slide,index){
+      const node=document.createElement('article');
+      node.className=`slide ${slide.type}${slide.type==='content'?' top':''}`;
+      node.dataset.index=index;
+      node.dataset.group=slide.buildGroup||'';
+      let content='';
+      if(slide.type==='cover') content=`<div class="slide-inner"><p class="eyebrow">John Stuart Mill</p><h1 class="title">${escapeHTML(slide.title)}</h1><p class="work">${escapeHTML(slide.work)}</p><p class="course">${escapeHTML(slide.course)}</p></div>`;
+      if(slide.type==='section') content=`<div class="slide-inner"><p class="eyebrow">${escapeHTML(slide.eyebrow)}</p><h2 class="title">${escapeHTML(slide.title)}</h2><div class="rule"></div></div>`;
+      if(slide.type==='content') content=`<div class="slide-inner"><h2 class="title">${escapeHTML(slide.title)}</h2><div class="body">${slide.paragraphs.map((p,i)=>`<p class="${i===slide.paragraphs.length-1?'fresh':''}">${escapeHTML(p)}</p>`).join('')}</div></div>`;
+      if(slide.type==='question'||slide.type==='diagnostic') content=`<div class="slide-inner"><p class="eyebrow">${escapeHTML(slide.eyebrow)}</p><h2 class="prompt">${escapeHTML(slide.prompt)}</h2>${slide.context?`<p class="context">${escapeHTML(slide.context)}</p>`:''}</div>`;
+      if(slide.type==='quote') content=`<div class="slide-inner"><blockquote>${escapeHTML(slide.text)}</blockquote><cite>${escapeHTML(slide.cite)}</cite></div>`;
+      if(slide.type==='duo') content=`<div class="slide-inner"><h2 class="title">${escapeHTML(slide.title)}</h2><div class="duo-grid"><section class="duo-col"><h3>${escapeHTML(slide.left.label)}</h3><p>${escapeHTML(slide.left.text)}</p></section><section class="duo-col"><h3>${escapeHTML(slide.right.label)}</h3><p>${escapeHTML(slide.right.text)}</p></section></div></div>`;
+      if(slide.type==='head') content=`<div class="slide-inner"><h2 class="title">${escapeHTML(slide.title)}</h2><div class="head-list">${slide.items.map(item=>`<div class="head-item"><b>${escapeHTML(item.label)}</b><span>${escapeHTML(item.text)}</span></div>`).join('')}</div></div>`;
+      if(slide.type==='refs') content=`<div class="slide-inner"><p class="eyebrow">Sources used in this account</p><h2 class="title">${escapeHTML(slide.title)}</h2><div class="refs-list">${slide.items.map(item=>`<div class="ref">${item}</div>`).join('')}</div></div>`;
+      node.innerHTML=content;
+      return node;
+    }
+    slides.forEach((slide,index)=>deck.appendChild(renderSlide(slide,index)));
+    const rendered=[...document.querySelectorAll('.slide')];
+    const progress=document.getElementById('progress');
+    const counter=document.getElementById('counter');
+    const notesBody=document.getElementById('notes-body');
+    const overview=document.getElementById('overview');
+    const notesPanel=document.getElementById('notes');
+    let current=0;
+    function fitBuildGroups(){
+      const groups=new Map();
+      rendered.forEach(slide=>{const key=slide.dataset.group;if(key) groups.set(key,slide);});
+      rendered.forEach(slide=>slide.style.setProperty('--fit','1'));
+      groups.forEach(last=>{
+        last.classList.add('measuring');
+        const inner=last.querySelector('.slide-inner');
+        const natural=inner.scrollHeight;
+        const available=window.innerHeight*.765;
+        const fit=Math.min(1,Math.max(.72,available/natural));
+        rendered.filter(slide=>slide.dataset.group===last.dataset.group).forEach(slide=>slide.style.setProperty('--fit',fit.toFixed(3)));
+        last.classList.remove('measuring');
+      });
+    }
+    function updateOverview(){
+      document.querySelectorAll('.overview-card').forEach(card=>card.classList.toggle('current',Number(card.dataset.target)===current));
+    }
+    function show(index){
+      current=Math.max(0,Math.min(slides.length-1,index));
+      rendered.forEach((slide,i)=>slide.classList.toggle('active',i===current));
+      progress.style.width=`${((current+1)/slides.length)*100}%`;
+      counter.textContent=`${current+1} / ${slides.length}`;
+      notesBody.textContent=slides[current].notes||'No speaker notes for this slide.';
+      updateOverview();
+    }
+    function togglePanel(panel){const willOpen=!panel.classList.contains('open');document.querySelectorAll('.panel').forEach(item=>item.classList.remove('open'));if(willOpen)panel.classList.add('open')}
+    slides.forEach((slide,index)=>{
+      const card=document.createElement('button');card.className='overview-card';card.dataset.target=index;card.innerHTML=`<span class="num">${String(index+1).padStart(2,'0')}</span><span class="label">${escapeHTML(slide.title||slide.prompt||slide.eyebrow||'Untitled slide')}</span>`;card.addEventListener('click',()=>{overview.classList.remove('open');show(index)});document.getElementById('overview-grid').appendChild(card);
+    });
+    document.addEventListener('keydown',event=>{
+      if(event.key==='Escape'){document.querySelectorAll('.panel').forEach(panel=>panel.classList.remove('open'));return}
+      if(event.key==='o'||event.key==='O'){togglePanel(overview);return}
+      if(event.key==='n'||event.key==='N'){togglePanel(notesPanel);return}
+      if(event.key==='f'||event.key==='F'){toggleFullscreen();return}
+      if(['ArrowRight','ArrowDown','PageDown',' '].includes(event.key)){event.preventDefault();show(current+1)}
+      if(['ArrowLeft','ArrowUp','PageUp'].includes(event.key)){event.preventDefault();show(current-1)}
+    });
+    document.querySelectorAll('[data-close]').forEach(button=>button.addEventListener('click',()=>document.getElementById(button.dataset.close).classList.remove('open')));
+    function toggleFullscreen(){if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();else document.exitFullscreen?.()}
+    document.getElementById('fullscreen').addEventListener('click',toggleFullscreen);
+    let touchStart=null;deck.addEventListener('touchstart',event=>{touchStart=event.changedTouches[0].clientX},{passive:true});deck.addEventListener('touchend',event=>{if(touchStart===null)return;const dx=event.changedTouches[0].clientX-touchStart;if(Math.abs(dx)>55)show(current+(dx<0?1:-1));touchStart=null},{passive:true});
+    window.addEventListener('resize',()=>{fitBuildGroups();show(current)});
+    fitBuildGroups();show(0);
+  </script>
+</body>
+</html>

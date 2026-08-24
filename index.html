@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Interactive political philosophy presentations and activities.">
+  <title>Political Philosophy — Course Library</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #12141a;
+      --bg-deep: #0d0f14;
+      --panel: #1a1d26;
+      --panel-hover: #222631;
+      --text: #efe7d6;
+      --muted: #b9b09f;
+      --gold: #c9a24b;
+      --gold-bright: #e2bf70;
+      --line: rgba(239, 231, 214, .14);
+      --shadow: 0 18px 55px rgba(0, 0, 0, .25);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 85% -10%, rgba(201, 162, 75, .12), transparent 34rem),
+        radial-gradient(circle at 0% 35%, rgba(80, 105, 130, .08), transparent 30rem),
+        var(--bg);
+      font-family: Inter, system-ui, sans-serif;
+    }
+
+    a { color: inherit; }
+
+    .shell {
+      width: min(1180px, calc(100% - 2.5rem));
+      margin: 0 auto;
+      padding: 3.25rem 0 5rem;
+    }
+
+    .eyebrow {
+      margin: 0 0 .8rem;
+      color: var(--gold-bright);
+      font: 600 .75rem/1.2 "IBM Plex Mono", monospace;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3 { font-family: "Cormorant Garamond", Georgia, serif; }
+
+    h1 {
+      max-width: 760px;
+      margin: 0;
+      font-size: clamp(3.6rem, 8vw, 7.3rem);
+      font-weight: 600;
+      letter-spacing: -.045em;
+      line-height: .88;
+    }
+
+    .intro {
+      max-width: 650px;
+      margin: 1.6rem 0 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+
+    .rule {
+      height: 1px;
+      margin: 2.4rem 0 1.5rem;
+      background: linear-gradient(90deg, var(--gold), var(--line), transparent);
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .75rem;
+      align-items: center;
+      margin: 0 0 3.2rem;
+    }
+
+    .search-wrap {
+      position: relative;
+      flex: 1 1 320px;
+    }
+
+    .search-wrap::before {
+      content: "⌕";
+      position: absolute;
+      top: 50%;
+      left: 1rem;
+      color: var(--gold-bright);
+      font-size: 1.4rem;
+      transform: translateY(-54%);
+    }
+
+    input, select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      outline: none;
+      color: var(--text);
+      background: rgba(26, 29, 38, .92);
+      font: 500 .9rem/1.2 Inter, system-ui, sans-serif;
+    }
+
+    input {
+      padding: .95rem 1.1rem .95rem 2.7rem;
+    }
+
+    select {
+      width: auto;
+      min-width: 190px;
+      padding: .95rem 2.5rem .95rem 1.1rem;
+    }
+
+    input:focus, select:focus { border-color: var(--gold); }
+
+    .count {
+      color: var(--muted);
+      font: .75rem/1.2 "IBM Plex Mono", monospace;
+      letter-spacing: .04em;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .library-section { margin-top: 3rem; }
+
+    .section-heading {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-heading h2 {
+      margin: 0 0 .65rem;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 600;
+      letter-spacing: -.025em;
+    }
+
+    .section-heading span {
+      color: var(--gold-bright);
+      font: .7rem/1.2 "IBM Plex Mono", monospace;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+      gap: .85rem;
+    }
+
+    .card {
+      display: flex;
+      min-height: 142px;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 1.25rem 1.25rem 1.1rem;
+      border: 1px solid var(--line);
+      border-radius: 2px;
+      text-decoration: none;
+      background: linear-gradient(145deg, rgba(34, 38, 49, .86), rgba(26, 29, 38, .86));
+      box-shadow: 0 1px 0 rgba(255, 255, 255, .02) inset;
+      transition: border-color .18s ease, background .18s ease, transform .18s ease, box-shadow .18s ease;
+    }
+
+    .card:hover, .card:focus-visible {
+      border-color: rgba(226, 191, 112, .7);
+      outline: none;
+      background: var(--panel-hover);
+      box-shadow: var(--shadow);
+      transform: translateY(-3px);
+    }
+
+    .card-type {
+      color: var(--gold-bright);
+      font: 500 .68rem/1.2 "IBM Plex Mono", monospace;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+
+    .card h3 {
+      margin: .8rem 0 1rem;
+      font-size: 1.65rem;
+      font-weight: 600;
+      line-height: .98;
+    }
+
+    .card-arrow {
+      align-self: flex-end;
+      color: var(--gold);
+      font: 1.2rem/1 "IBM Plex Mono", monospace;
+      transition: transform .18s ease;
+    }
+
+    .card:hover .card-arrow, .card:focus-visible .card-arrow { transform: translateX(4px); }
+
+    .empty {
+      display: none;
+      margin: 2rem 0;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    footer {
+      margin-top: 4rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .78rem;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 620px) {
+      .shell { width: min(100% - 1.25rem, 1180px); padding-top: 2rem; }
+      .toolbar { margin-bottom: 2.3rem; }
+      select { flex: 1 1 100%; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <p class="eyebrow">Political Philosophy · Interactive Course Library</p>
+    <h1>Think through the arguments.</h1>
+    <p class="intro">Choose a presentation or activity below. Each deck opens in its own full-screen, interactive page with keyboard, touch, overview, notes, and fullscreen controls.</p>
+
+    <div class="rule"></div>
+
+    <div class="toolbar" aria-label="Library controls">
+      <label class="search-wrap">
+        <span class="sr-only">Search presentations</span>
+        <input id="search" type="search" placeholder="Search by philosopher or topic…" autocomplete="off">
+      </label>
+      <label>
+        <span class="sr-only">Filter by section</span>
+        <select id="section-filter">
+          <option value="all">All sections</option>
+          <option value="foundations">Foundations &amp; contract</option>
+          <option value="liberty">Liberty &amp; liberalism</option>
+          <option value="justice">Justice &amp; equality</option>
+          <option value="democracy">Democracy</option>
+          <option value="activities">Activities</option>
+        </select>
+      </label>
+      <span class="count" id="count" aria-live="polite">23 resources</span>
+    </div>
+
+    <section class="library-section" data-section="foundations">
+      <div class="section-heading"><h2>Foundations &amp; contract</h2><span>01</span></div>
+      <div class="cards">
+        <a class="card" data-search="hobbes state nature" href="Presentations/State%20of%20Nature%20-%20Hobbes.html"><span class="card-type">Thomas Hobbes</span><h3>The State of Nature</h3><span class="card-arrow">→</span></a>
+        <a class="card" data-search="locke state nature" href="Presentations/Locke%20-%20State%20of%20Nature.html"><span class="card-type">John Locke</span><h3>The State of Nature</h3><span class="card-arrow">→</span></a>
+        <a class="card" data-search="locke social contract" href="Presentations/Locke%20-%20The%20Social%20Contract.html"><span class="card-type">John Locke</span><h3>The Social Contract</h3><span class="card-arrow">→</span></a>
+        <a class="card" data-search="locke property markets" href="Presentations/Locke%20-%20Property%20and%20Markets.html"><span class="card-type">John Locke</span><h3>Property &amp; Markets</h3><span class="card-arrow">→</span></a>
+        <a class="card" data-search="rousseau state nature" href="Presentations/Rousseau%20-%20State%20of%20Nature.html"><span class="card-type">Jean-Jacques Rousseau</span><h3>The State of Nature</h3><span class="card-arrow">→</span></a>
+        <a class="card" data-search="rousseau general will" href="Presentations/Rousseau%20-%20The%20General%20Will.html"><span class="card-type">Jean-Jacques Rousseau</span><h3>The General Will</h3><span class="card-arrow">→</span></a>
+        <a class="card" data-search="social contract radical criticism" href="Presentations/Radical%20Criticism%20-%20The%20Social%20Contract.html"><span class="card-type">Criticism</span><h3>Radical Criticism of the Social Contract</h3><span class="card-arrow">→</span></a>
+      </div>
+    </section>
+
+    <section class="library-section" data-section="liberty">
+      <div class="section-heading"><h2>Liberty &amp; liberalism</h2><span>02</span></div>
+      <div class="cards">
+        <a class="card" data-search="bentham utilitarianism" href="Presentations/Jeremy%20Bentham%20-%20Utilitarianism.html"><span class="card-type">Jeremy Bentham</span><h3>Utilitarianism</h3><span class="card-arrow">→</span></a>
+        <a class="card" data-search="mill liberty" href="Presentations/John%20Stuart%20Mill%20-%20On%20Liberty.html"><span class="card-type">John Stuart Mill</span><h3>On Liberty</h3><span class="card-arrow">→</span></a>
+        <a class="card" data-search="mill justifying liberty" href="Presentations/John%20Stuart%20Mill%20-%20Justifying%20Liberty.html"><span class="card-type">John Stuart Mill</span><h3>Justifying Liberty</h3><span class="card-arrow">→</span></a>
+        <a class="card" data-search="liberalism problems" href="Presentations/Problems%20with%20Liberalism.html"><span class="card-type">Liberalism</span><h3>Problems with Liberalism</h3><span class="card-arrow">→</span></a>
+      </div>
+    </section>
+
+    <section class="library-section" data-section="justice">
+      <div class="section-heading"><h2>Justice &amp; equality</h2><span>03</span></div>
+      <div class="cards">
+        <a class="card" data-search="political philosophy distributive justice" href="Presentations/Political%20Philosophy%20-%20The%20Problem%20of%20Distributive%20Justice.html"><span class="card-type">Political Philosophy</span><h3>The Problem of Distributive Justice</h3><span class="card-arrow">→</span></a>
+        <a class="card" data-search="justice everyone" href="Presentations/Justice%20for%20Everyone.html"><span class="card-type">Justice</span><h3>Justice for Everyone</h3><span class="card-arrow">→</span></a>
+        <a class="card" data-search="justice everywhere" href="Presentations/Justice%20Everywhere.html"><span class="card-type">Justice</span><h3>Justice Everywhere</h3><span class="card-arrow">→</span></a>
+        <a class="card" data-search="rawls choosing justice" href="Presentations/Rawls%20-%20Choosing%20Justice.html"><span class="card-type">John Rawls</span><h3>Choosing Justice</h3><span class="card-arrow">→</span></a>
+        <a class="card" data-search="rawls critics" href="Presentations/Rawls%20-%20His%20Critics.html"><span class="card-type">John Rawls</span><h3>Rawls &amp; His Critics</h3><span class="card-arrow">→</span></a>
+        <a class="card" data-search="iris marion young injustice oppression" href="Presentations/Iris%20Marion%20Young%20-%20Injustice%20and%20Oppression.html"><span class="card-type">Iris Marion Young</span><h3>Injustice &amp; Oppression</h3><span class="card-arrow">→</span></a>
+      </div>
+    </section>
+
+    <section class="library-section" data-section="democracy">
+      <div class="section-heading"><h2>Democracy</h2><span>04</span></div>
+      <div class="cards">
+        <a class="card" data-search="plato democracy" href="Presentations/Plato%20-%20Against%20Democracy.html"><span class="card-type">Plato</span><h3>Against Democracy</h3><span class="card-arrow">→</span></a>
+        <a class="card" data-search="richard kraut plato democracy" href="Presentations/Richard%20Kraut%20-%20Plato%20against%20Democracy.html"><span class="card-type">Richard Kraut</span><h3>Plato Against Democracy</h3><span class="card-arrow">→</span></a>
+        <a class="card" data-search="mill representative democracy" href="Presentations/John%20Stuart%20Mill%20-%20Representative%20Democracy.html"><span class="card-type">John Stuart Mill</span><h3>Representative Democracy</h3><span class="card-arrow">→</span></a>
+      </div>
+    </section>
+
+    <section class="library-section" data-section="activities">
+      <div class="section-heading"><h2>Activities</h2><span>05</span></div>
+      <div class="cards">
+        <a class="card" data-search="day 1 questions" href="Day%201%20questions.html"><span class="card-type">Class activity</span><h3>Day 1 Questions</h3><span class="card-arrow">→</span></a>
+        <a class="card" data-search="day 1 case first questions" href="Day%201%20questions%20-%20case%20first.html"><span class="card-type">Class activity</span><h3>Day 1 Questions — Case First</h3><span class="card-arrow">→</span></a>
+        <a class="card" data-search="state nature simulation society" href="state-of-nature-simulation.html"><span class="card-type">Interactive simulation</span><h3>Building a Society</h3><span class="card-arrow">→</span></a>
+      </div>
+    </section>
+
+    <p class="empty" id="empty">No resources match that search.</p>
+
+    <footer>
+      Edit the HTML files to update a presentation. Once this folder is uploaded to GitHub Pages, committed changes will automatically update the live site.
+    </footer>
+  </main>
+
+  <script>
+    const search = document.getElementById('search');
+    const filter = document.getElementById('section-filter');
+    const count = document.getElementById('count');
+    const empty = document.getElementById('empty');
+    const sections = [...document.querySelectorAll('.library-section')];
+    const cards = [...document.querySelectorAll('.card')];
+
+    function updateLibrary() {
+      const query = search.value.trim().toLowerCase();
+      const selected = filter.value;
+      let visible = 0;
+
+      sections.forEach(section => {
+        const sectionVisible = selected === 'all' || section.dataset.section === selected;
+        let sectionCards = 0;
+        section.querySelectorAll('.card').forEach(card => {
+          const matches = sectionVisible && (!query || `${card.textContent} ${card.dataset.search}`.toLowerCase().includes(query));
+          card.hidden = !matches;
+          if (matches) { visible += 1; sectionCards += 1; }
+        });
+        section.hidden = sectionCards === 0;
+      });
+
+      count.textContent = `${visible} ${visible === 1 ? 'resource' : 'resources'}`;
+      empty.style.display = visible ? 'none' : 'block';
+    }
+
+    search.addEventListener('input', updateLibrary);
+    filter.addEventListener('change', updateLibrary);
+  </script>
+</body>
+</html>

@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hobbes - The State of Nature</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#12141a;
+    --bg-2:#1a1d26;
+    --text:#efe7d6;
+    --vellum:#c9c2ae;
+    --gold:#c9a24b;
+    --gold-dim:#8a713a;
+    --border:rgba(239,231,214,0.14);
+    --fit:1;
+  }
+  *{box-sizing:border-box}
+  html,body{width:100%;height:100%;margin:0;overflow:hidden;background:var(--bg);color:var(--text)}
+  body{font-family:Inter,system-ui,sans-serif}
+  button{font:inherit}
+  #deck{position:relative;width:100vw;height:100vh;background:radial-gradient(circle at 50% -20%,rgba(201,162,75,.065),transparent 44%),var(--bg)}
+  .slide{position:absolute;inset:0;display:none;align-items:center;justify-content:center;padding:7.2vh 7vw 8vh;text-align:center;overflow:hidden}
+  .slide.active,.slide.measuring{display:flex}
+  .slide.measuring{visibility:hidden;pointer-events:none}
+  .slide.top{align-items:flex-start;padding-top:8.5vh}
+  .slide-inner{width:min(980px,86vw);max-height:82vh;margin:auto;transform-origin:top center}
+  .slide.top .slide-inner{margin:0 auto}
+  .slide.duo .slide-inner{width:min(1140px,90vw)}
+  .eyebrow{margin:0 0 1.2rem;color:var(--gold);font:600 clamp(12px,1.12vw,17px)/1.3 "IBM Plex Mono",monospace;letter-spacing:.18em;text-transform:uppercase}
+  .title{margin:0;font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;letter-spacing:-.018em}
+  .cover .title{font-size:calc(clamp(58px,7.6vw,104px)*var(--fit));line-height:.96;max-width:12ch;margin-inline:auto}
+  .cover .work{font:500 calc(clamp(20px,2.15vw,31px)*var(--fit))/1.4 "Cormorant Garamond",Georgia,serif;color:var(--vellum);margin:1.5rem auto 0;max-width:36ch}
+  .cover .course{margin-top:2.4rem;color:var(--gold);font:500 calc(clamp(11px,1vw,15px)*var(--fit))/1.4 "IBM Plex Mono",monospace;letter-spacing:.14em;text-transform:uppercase}
+  .section .slide-inner{width:min(900px,86vw)}
+  .section .title{font-size:calc(clamp(48px,6.2vw,84px)*var(--fit));line-height:1.02}
+  .section .rule{width:52px;height:1px;background:var(--gold-dim);margin:1.8rem auto 0}
+  .content .title,.head .title,.duo .title{font-size:calc(clamp(38px,4.5vw,62px)*var(--fit));line-height:1.05;margin-bottom:1.6rem}
+  .content .body{font-family:"Cormorant Garamond",Georgia,serif;font-size:calc(clamp(25px,2.35vw,35px)*var(--fit));line-height:1.34;text-align:left}
+  .content .body p{
+    margin:0 0 1.05em -1.25rem;
+    padding:.08em .7em .08em 1rem;
+    border-left:3px solid transparent;
+    color:rgba(201,194,174,.52);
+    font-weight:600;
+    background:linear-gradient(90deg,rgba(201,162,75,0),rgba(201,162,75,0));
+  }
+  .content .body p:last-child{margin-bottom:0}
+  .content .body p.fresh{
+    color:var(--text);
+    border-left-color:var(--gold);
+    background:linear-gradient(90deg,rgba(201,162,75,.15),rgba(201,162,75,0) 78%);
+    text-shadow:0 0 18px rgba(239,231,214,.08);
+  }
+  .question .slide-inner,.diagnostic .slide-inner{width:min(900px,86vw)}
+  .question .prompt,.diagnostic .prompt{margin:0;font-family:"Cormorant Garamond",Georgia,serif;font-size:calc(clamp(42px,5.2vw,72px)*var(--fit));line-height:1.08;font-weight:600;letter-spacing:-.015em}
+  .question .prompt::after,.diagnostic .prompt::after{content:"";display:block;width:42px;height:2px;background:var(--gold);margin:1.8rem auto 0}
+  .question .context{max-width:48ch;margin:1.35rem auto 0;color:var(--vellum);font:500 calc(clamp(18px,1.7vw,25px)*var(--fit))/1.4 "Cormorant Garamond",Georgia,serif}
+  .quote blockquote{margin:0 auto;max-width:26ch;font-family:"Cormorant Garamond",Georgia,serif;font-size:calc(clamp(39px,4.45vw,63px)*var(--fit));line-height:1.12;font-weight:500}
+  .quote blockquote::before{content:"“";color:var(--gold);margin-right:.08em}
+  .quote blockquote::after{content:"”";color:var(--gold);margin-left:.08em}
+  .quote cite{display:block;margin-top:1.6rem;color:var(--vellum);font:500 calc(clamp(12px,1.15vw,17px)*var(--fit))/1.45 "IBM Plex Mono",monospace;font-style:normal}
+  .duo-grid{display:grid;grid-template-columns:1fr 1fr;gap:4.5rem;text-align:left;margin-top:1.5rem}
+  .duo-col{padding-top:1.1rem;border-top:1px solid var(--border)}
+  .duo-col h3{margin:0 0 .85rem;color:var(--gold);font:600 calc(clamp(13px,1.25vw,18px)*var(--fit))/1.3 "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase}
+  .duo-col p{margin:0;color:var(--text);font:500 calc(clamp(24px,2.15vw,33px)*var(--fit))/1.34 "Cormorant Garamond",Georgia,serif}
+  .head-list{display:grid;gap:1.15rem;text-align:left;margin-top:1.8rem}
+  .head-item{display:grid;grid-template-columns:9rem 1fr;gap:1.5rem;align-items:baseline;padding-top:1rem;border-top:1px solid var(--border)}
+  .head-item b{color:var(--gold);font:600 calc(clamp(12px,1.1vw,16px)*var(--fit))/1.3 "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase}
+  .head-item span{font:500 calc(clamp(23px,2.05vw,31px)*var(--fit))/1.3 "Cormorant Garamond",Georgia,serif}
+  .diagnostic .eyebrow{color:var(--vellum)}
+  .diagnostic .prompt{font-size:calc(clamp(52px,6.6vw,90px)*var(--fit))}
+  .refs .slide-inner{width:min(980px,86vw);text-align:left}
+  .refs .title{font-size:calc(clamp(40px,4.6vw,64px)*var(--fit));margin-bottom:1.7rem}
+  .refs-list{display:grid;gap:1.05rem}
+  .ref{padding-top:.95rem;border-top:1px solid var(--border);font:500 calc(clamp(18px,1.65vw,24px)*var(--fit))/1.38 "Cormorant Garamond",Georgia,serif;color:var(--vellum)}
+  .ref strong{color:var(--text);font-weight:600}
+  #progress{position:fixed;top:0;left:0;height:2px;width:0;background:var(--gold);z-index:30}
+  #nav-hint,#counter{position:fixed;bottom:18px;z-index:30;color:var(--vellum);font:500 12px/1.3 "IBM Plex Mono",monospace;letter-spacing:.08em}
+  #nav-hint{left:24px} #counter{right:24px}
+  #fullscreen{position:fixed;top:20px;right:22px;z-index:30;color:var(--vellum);background:transparent;border:1px solid var(--border);border-radius:3px;padding:8px 11px;cursor:pointer;font:500 11px/1 "IBM Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase}
+  #fullscreen:hover{color:var(--gold);border-color:var(--gold-dim)}
+  .panel{position:fixed;inset:4vh 4vw;z-index:60;display:none;background:rgba(18,20,26,.985);border:1px solid var(--border);overflow:auto}
+  .panel.open{display:block}
+  .panel-head{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;padding:18px 22px;background:var(--bg-2);border-bottom:1px solid var(--border);z-index:2}
+  .panel-head h2{margin:0;font:600 14px/1 "IBM Plex Mono",monospace;letter-spacing:.15em;text-transform:uppercase;color:var(--gold)}
+  .close{color:var(--text);background:transparent;border:1px solid var(--border);padding:7px 10px;cursor:pointer}
+  #overview-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;padding:20px}
+  .overview-card{min-height:126px;padding:16px;text-align:left;background:var(--bg-2);border:1px solid var(--border);color:var(--text);cursor:pointer}
+  .overview-card:hover,.overview-card.current{border-color:var(--gold-dim)}
+  .overview-card .num{display:block;color:var(--gold);font:500 11px/1.3 "IBM Plex Mono",monospace;margin-bottom:12px}
+  .overview-card .label{font:600 22px/1.1 "Cormorant Garamond",Georgia,serif}
+  #notes-body{padding:28px 34px;white-space:pre-wrap;color:var(--text);font:400 18px/1.62 Inter,sans-serif;max-width:900px}
+  @media (max-width:760px){
+    .slide{padding:9vh 8vw 10vh}.slide.top{padding-top:9.5vh}.slide-inner,.slide.duo .slide-inner{width:84vw}
+    .duo-grid{grid-template-columns:1fr;gap:1.5rem}.head-item{grid-template-columns:1fr;gap:.45rem}
+    #nav-hint{display:none}#fullscreen{top:12px;right:12px}.content .body{font-size:calc(clamp(22px,5.6vw,30px)*var(--fit))}
+    .duo-col p{font-size:calc(clamp(22px,5.3vw,29px)*var(--fit))}
+  }
+  /* Hobbes: a tense, high-contrast visual system built around fear and authority. */
+  :root{--bg:#0b1018;--bg-2:#121b28;--text:#f2eee3;--vellum:#bac3c9;--gold:#df8d45;--gold-dim:#8f4a2d;--border:rgba(242,238,227,.16)}
+  #deck{background:
+    radial-gradient(circle at 84% 12%,rgba(204,70,48,.18),transparent 24%),
+    linear-gradient(115deg,rgba(223,141,69,.07) 0 1px,transparent 1px 11vw),
+    linear-gradient(145deg,#07101c 0%,#0b1018 48%,#15111a 100%)}
+  #deck::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.55;background:repeating-linear-gradient(90deg,transparent 0 7.2vw,rgba(242,238,227,.035) 7.25vw 7.32vw)}
+  #deck::after{content:"";position:absolute;right:-8vw;bottom:-22vh;width:48vw;height:48vw;border:1px solid rgba(223,141,69,.18);border-radius:50%;box-shadow:0 0 0 7vw rgba(223,141,69,.025),0 0 0 14vw rgba(223,141,69,.015);pointer-events:none}
+  .slide{padding-inline:9vw}
+  .slide-inner{position:relative;z-index:1}
+  .cover .slide-inner{padding:2.5rem 4rem;border-block:1px solid var(--border);background:linear-gradient(90deg,rgba(223,141,69,.10),transparent 48%,rgba(204,70,48,.08));box-shadow:0 18px 50px rgba(0,0,0,.24)}
+  .cover .title{max-width:10.5ch;letter-spacing:-.035em;text-shadow:0 6px 30px rgba(0,0,0,.42)}
+  .cover .course{display:inline-block;padding:.55rem .8rem;border:1px solid rgba(223,141,69,.42);background:rgba(11,16,24,.45)}
+  .section .slide-inner{padding:2.4rem 3rem;max-width:min(960px,86vw);border-left:4px solid var(--gold);text-align:left;background:linear-gradient(90deg,rgba(223,141,69,.12),transparent 70%)}
+  .section .rule{margin-left:0;width:9rem;height:3px;background:linear-gradient(90deg,var(--gold),transparent)}
+  .section .eyebrow{text-align:left}
+  .content .title,.head .title,.duo .title{max-width:19ch;padding-bottom:.7rem;border-bottom:1px solid var(--border)}
+  .content .body p{border-left-width:4px;border-left-color:rgba(223,141,69,.42);border-radius:0 3px 3px 0}
+  .content .body p.fresh{background:linear-gradient(90deg,rgba(223,141,69,.19),rgba(204,70,48,.05) 56%,transparent 85%)}
+  .question .slide-inner,.diagnostic .slide-inner{padding:2.7rem 3.5rem;background:rgba(7,16,28,.62);border:1px solid rgba(223,141,69,.24);box-shadow:inset 0 0 0 9px rgba(223,141,69,.025),0 24px 55px rgba(0,0,0,.2)}
+  .question .prompt::after,.diagnostic .prompt::after{width:7.5rem;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+  .quote .slide-inner{padding:1rem 3rem;border-inline:1px solid rgba(223,141,69,.35)}
+  .quote blockquote{font-style:italic;text-shadow:0 5px 22px rgba(0,0,0,.28)}
+  .quote cite{padding-top:1rem;border-top:1px solid var(--border)}
+  .duo-grid{gap:2.4rem}
+  .duo-col{min-height:15rem;padding:1.5rem 1.6rem;border:1px solid var(--border);border-top:4px solid var(--gold);background:linear-gradient(145deg,rgba(18,27,40,.9),rgba(10,14,23,.68))}
+  .head-item{grid-template-columns:10rem 1fr;border-left:2px solid transparent;padding-left:1rem}
+  .head-item:nth-child(odd){border-left-color:rgba(223,141,69,.58)}
+  #progress{height:4px;background:linear-gradient(90deg,#cc4630,var(--gold))}
+  #fullscreen{border-radius:0;border-color:rgba(223,141,69,.45)}
+  .panel{background:rgba(7,16,28,.98)}
+  .overview-card{background:linear-gradient(145deg,#121b28,#0b1018);border-left:3px solid transparent}
+  .overview-card:hover,.overview-card.current{border-left-color:var(--gold);border-color:rgba(223,141,69,.42)}
+  @media (max-width:760px){.cover .slide-inner,.section .slide-inner,.question .slide-inner,.diagnostic .slide-inner{padding:1.7rem 1.5rem}.quote .slide-inner{padding:1rem 1.4rem}}
+</style>
+<link rel="stylesheet" href="presentation-polish.css">
+<script src="presentation-polish.js" defer></script>
+</head>
+<body>
+<div id="deck" aria-live="polite"></div>
+<div id="progress"></div>
+<div id="nav-hint">ARROWS / SPACE · O OVERVIEW · N NOTES · F FULLSCREEN</div>
+<div id="counter">1 / 1</div>
+<button id="fullscreen" aria-label="Toggle fullscreen">Fullscreen</button>
+
+<section id="overview" class="panel" aria-label="Slide overview">
+  <div class="panel-head"><h2>Overview</h2><button class="close" data-close="overview">Close</button></div>
+  <div id="overview-grid"></div>
+</section>
+<aside id="notes" class="panel" aria-label="Speaker notes">
+  <div class="panel-head"><h2>Speaker notes</h2><button class="close" data-close="notes">Close</button></div>
+  <div id="notes-body"></div>
+</aside>
+
+<script>
+const slides=[];
+const source=(section,extra='')=>`[Sources]\nSource material, section “${section}.”${extra?`\n${extra}`:''}\n[/Sources]`;
+const add=s=>slides.push(s);
+const cover=(title,work,course,notes)=>add({type:'cover',title,work,course,notes});
+const section=(roman,title,notes)=>add({type:'section',eyebrow:`${roman}. ${title.toUpperCase()}`,title,notes});
+const question=(eyebrow,prompt,context,notes)=>add({type:'question',eyebrow,prompt,context,notes});
+const quote=(text,cite,notes)=>add({type:'quote',text,cite,notes});
+const duo=(title,left,right,notes)=>add({type:'duo',title,left,right,notes});
+const head=(title,items,notes)=>add({type:'head',title,items,notes});
+const diagnostic=(prompt,notes)=>add({type:'diagnostic',eyebrow:'The Hobbes test',prompt,notes});
+const refs=(items,notes)=>add({type:'refs',title:'References',items,notes});
+function build(id,title,paragraphs,notes,sectionName){
+  paragraphs.forEach((_,i)=>add({type:'content',title,paragraphs:paragraphs.slice(0,i+1),buildGroup:id,notes:`${notes}${i<paragraphs.length-1?'\n\nPause before revealing the next step.':''}\n\n${source(sectionName)}`}));
+}
+
+cover('The State of Nature','Thomas Hobbes on fear, cooperation, and sovereign power','Political Philosophy',`Begin with the comparison Hobbes demands: restrictive government versus no reliable government at all.\n\n${source('The central question of the argument')}`);
+
+section('I','What does government prevent?',`Frame the state of nature as a test of political justification, not a claim that every society literally began this way.\n\n${source('The central question of the argument')}`);
+
+build('absence','The state of nature removes common authority',[
+  'The state of nature is an imagined condition with no common government, no accepted political authority, and no legal system able to enforce public rules.',
+  'It is a thought experiment, so Hobbes does not need to prove that every human being once lived in this condition. He asks what would happen if effective authority disappeared.',
+  'The experiment tests two questions: Why is a state justified at all, and what must a state accomplish in order to deserve that justification?',
+  'Hobbes wrote amid the English Civil War, when the collapse of public order made armed conflict, insecurity, and unreliable law immediate political dangers.'
+],'Keep the hypothetical method and the historical motivation distinct.','The central question of the argument; Hobbes’s historical concern: civil war');
+
+question('Why this thought experiment?','What becomes fragile when no recognized power can settle disputes?','The question identifies the work political authority must perform before its restrictions can be judged worth accepting.',`Let the practical functions of government come into view before turning to Hobbes’s theory of human behavior.\n\n${source('Hobbes’s historical concern: civil war')}`);
+
+build('stakes','Effective government changes what people can reasonably expect',[
+  'When law can be enforced, a person does not have to secure every claim by private force. Without enforcement, each person must become their own protector.',
+  'When agreements are backed by public power, promises can guide future action. Without that power, an agreement remains fragile whenever betrayal becomes useful.',
+  'Reliable rules make long-term planning and large-scale cooperation possible. Insecurity instead rewards precautions, suspicion, and pre-emptive action.',
+  'For Hobbes, the worst political condition is not demanding government. It is a world where no power can reliably keep people from harming one another.'
+],'Emphasize the shift in reasonable expectations, not merely the presence of written rules.','Hobbes’s historical concern: civil war');
+
+question('The next step','What about ordinary human beings makes the absence of authority unstable?','A list of missing institutions is not yet an argument. Hobbes must explain why people without those institutions would move toward conflict.',`The next section begins with Hobbes’s account of desire.\n\n${source('Hobbes’s method: begin with human nature')}`);
+
+section('II','Why does desire never finally rest?',`Introduce only the parts of Hobbes’s materialism needed to explain continuing desire, felicity, and power.\n\n${source('Hobbes’s method: begin with human nature')}`);
+
+build('motion','Hobbes treats human beings as matter in motion',[
+  'Hobbes is a materialist: he thinks human beings are entirely physical, so sensation, desire, fear, and hope must arise through physical processes.',
+  'His mechanical comparisons are deliberately vivid: the heart is like a spring, nerves are like strings, and joints are like wheels.',
+  'Hobbes applies the broad idea of inertia to human life. Motion continues until another force changes it, and desire continues as one aim gives way to another.',
+  'There is therefore no permanent mental resting point while a person is alive. Human life is an ongoing movement toward things that appear good and away from things that appear harmful.'
+],'The mechanical language supports a political premise: desire has no final stopping point.','Human beings as matter in motion');
+
+head('The mechanical picture',[
+  ['Heart','A spring that keeps the body in motion.'],
+  ['Nerves','Strings that transmit physical effects.'],
+  ['Joints','Wheels that make bodily movement possible.']
+],`Treat these as Hobbes’s explanatory comparisons rather than modern anatomy.\n\n${source('Human beings as matter in motion')}`);
+
+build('felicity','Felicity is success that must continue',[
+  'Hobbes calls the ongoing achievement of desired things “felicity.” It is not a final state in which every desire has been satisfied forever.',
+  'A person is successful only while new desires can still be met. Present satisfaction therefore gives no guarantee about tomorrow.',
+  'Because future desires and dangers are uncertain, people seek security: dependable ways to protect what they have and obtain what they may later need.',
+  'Security requires resources, allies, influence, skill, reputation, and strength. Hobbes gathers all of these present means under the name “power.”'
+],'Define felicity before using it to explain power.','Felicity');
+
+question('The bridge to power','Why does uncertainty about tomorrow make having enough today feel unsafe?','Present goods must also function as protection against future needs, losses, and other people’s growing capabilities.',`The next section explains why the search for security becomes a search for additional power.\n\n${source('Felicity; Power and the restless desire for more')}`);
+
+section('III','Why does security demand more power?',`Build the chain from future uncertainty to competition, fear, and pre-emption.\n\n${source('Power and the restless desire for more')}`);
+
+build('power','Power means present control over future possibilities',[
+  'Hobbes defines power as a person’s present means to obtain some future apparent good. Power is whatever improves the ability to get or protect what may matter later.',
+  'Wealth, allies, reputation, status, intelligence, skill, influence, and control over resources can all count as power.',
+  'Power matters defensively as well as competitively. A person with more options is better placed to meet future desires and protect existing possessions.',
+  'No one can safely assume that present power will remain sufficient. Other people are also seeking resources, protection, and influence, so security becomes a continuing project.'
+],'Keep power broader than domination or physical force.','Power and the restless desire for more');
+
+quote('A restless desire of Power after power, that ceaseth only in Death.','Thomas Hobbes, Leviathan (1651), quoted in the source material, “Power and the restless desire for more.”',`Let the wording sit briefly, then clarify that the claim concerns continuing security rather than universal love of domination.\n\n${source('Power and the restless desire for more','Primary work quoted: Thomas Hobbes, Leviathan (1651).')}`);
+
+build('pressure','Three conditions turn vulnerability into rivalry',[
+  'First, people are naturally equal in a politically important sense: even the weak can kill the strong through surprise, planning, weapons, or alliances.',
+  'This equality is shared vulnerability. No one is so powerful that everyone else can be treated as harmless.',
+  'Second, desirable goods such as land, food, shelter, status, and control over resources are scarce. Several people may reasonably hope to obtain what not everyone can possess.',
+  'Third, intentions are uncertain. Even a peaceful person cannot know that others will remain peaceful when gain, safety, or reputation gives them a reason to attack.'
+],'Equality here does not mean identical talents or possessions.','Natural equality; Scarcity; Uncertainty and fear');
+
+head('Three causes of quarrel',[
+  ['Competition','Attack for gain: resources, goods, or control.'],
+  ['Diffidence','Attack for safety: remove a possible threat before it strikes.'],
+  ['Glory','Attack for reputation: appear strong enough to deter exploitation.']
+],`Diffidence means mistrust or insecurity, not modesty.\n\n${source('The three causes of quarrel')}`);
+
+build('spiral','Fear can make violence rational without making it desirable',[
+  'A person who waits peacefully can be placed at a severe disadvantage if someone else attacks first.',
+  'That possibility makes pre-emption tempting: I may strike because I fear you might strike, while you reason in exactly the same way about me.',
+  'Mutual fear can therefore generate conflict even when neither person enjoys violence and both would prefer a condition of reliable peace.'
+],'The spiral depends on uncertainty and vulnerability, not sadism.','Uncertainty and fear');
+
+question('The rational trap','If waiting may be fatal, how can peaceful intentions make waiting safe?','The problem is not discovering who secretly loves violence. It is that intentions cannot remove the strategic danger created by uncertainty.',`Let the question remain open until war is defined as a continuing condition of insecurity.\n\n${source('Uncertainty and fear; Hobbes is not simply saying people are evil')}`);
+
+section('IV','War can exist before anyone is fighting',`Define war as a known willingness to fight without reliable assurance of peace.\n\n${source('“War” does not mean nonstop fighting')}`);
+
+build('readiness','War is a condition of continual readiness',[
+  'Hobbes does not mean that every person fights at every moment. Actual violence can stop for a time while the condition of war continues.',
+  'War exists when there is a known willingness to fight and no reliable assurance that peace will last.',
+  'The source material compares this condition to bad weather. Rainy weather is not only the instant when rain falls; it is a situation in which rain is expected and preparation makes sense.',
+  'Continual danger makes trust, investment, building, trade, science, art, record-keeping, and long-term cooperation extremely difficult.'
+],'Connect the weather analogy to the practical loss of long-term projects.','“War” does not mean nonstop fighting; “Solitary, poor, nasty, brutish, and short”');
+
+duo('Hobbes does not need people to be evil',
+  {label:'The common caricature',text:'Conflict follows because human beings naturally enjoy cruelty and attack whenever they can.'},
+  {label:'The structural argument',text:'Self-interested, vulnerable, fearful people can create violent conditions even when most would prefer security and peace.'},
+  `Keep character and structure distinct.\n\n${source('Hobbes is not simply saying people are evil')}`);
+
+quote('Solitary, poore, nasty, brutish, and short.','Thomas Hobbes, Leviathan (1651), quoted in the source material, “Solitary, poor, nasty, brutish, and short.”',`The famous conclusion is an effect of insecurity, not an unsupported insult about human nature.\n\n${source('“Solitary, poor, nasty, brutish, and short”','Primary work quoted: Thomas Hobbes, Leviathan (1651).')}`);
+
+question('What insecurity destroys','Why plant, build, trade, or create when no authority can protect the result?','The state of nature threatens more than survival. It removes the stable expectations that make civilization and shared flourishing possible.',`Use the examples to connect physical danger with the collapse of social cooperation.\n\n${source('“Solitary, poor, nasty, brutish, and short”')}`);
+
+section('V','Can private judgment limit self-defense?',`Distinguish natural right, moral praise, law, covenant, justice, and property.\n\n${source('Natural right: liberty to preserve oneself; No justice or injustice in the state of nature?')}`);
+
+build('right','The right of nature permits whatever survival seems to require',[
+  'The right of nature is each person’s liberty to use their own power as they judge necessary for self-preservation.',
+  'A right is a liberty: the absence of an obligation not to act. It is not a command to attack, and it does not make violence admirable.',
+  'Because there is no public judge, each person decides what counts as danger and what means count as necessary defense.',
+  'Pre-emption dangerously expands self-defense. An attack can be described as protection against a possible future attack, so the right of nature reaches toward a right to everything.'
+],'Keep permission, command, and praise separate.','Natural right: liberty to preserve oneself');
+
+quote('Nothing can be Unjust.','Thomas Hobbes, Leviathan (1651), quoted in the source material, “No justice or injustice in the state of nature?”',`The claim concerns justice in its full political sense where no common power exists.\n\n${source('No justice or injustice in the state of nature?','Primary work quoted: Thomas Hobbes, Leviathan (1651).')}`);
+
+build('justice','Justice needs rules that can publicly bind',[
+  'Hobbes connects injustice with breaking a law or violating a valid covenant. A covenant is a binding agreement in which each side must be able to rely on the other.',
+  'Public law requires a recognized lawgiver, while a dependable covenant requires confidence that performance can be enforced.',
+  'Without common power, rules about contracts and property cannot reliably settle conduct. Possession remains vulnerable because no authority can determine and protect ownership.'
+],'This does not mean that every action without government is morally praiseworthy.','No justice or injustice in the state of nature?');
+
+question('The limit of private morality','Can moral restraint control conflict when every person decides what survival permits?','The same act can appear to one person as necessary defense and to another as unjust aggression. A private conviction does not settle the public dispute.',`The next section introduces rational principles of peace without pretending that principles alone can enforce themselves.\n\n${source('No justice or injustice in the state of nature?; Laws of nature: reason points toward peace')}`);
+
+section('VI','Why does reason recommend peace?',`Present the laws of nature as practical conclusions about survival, then expose their enforcement problem.\n\n${source('Laws of nature: reason points toward peace')}`);
+
+build('laws','The laws of nature are rational rules for survival',[
+  'Hobbes calls the laws of nature conclusions of reason: principles that show people how they can best preserve themselves.',
+  'The first law says to seek peace when peace is possible, but to use the advantages of war when peace cannot be secured.',
+  'The second says to give up the unlimited right to everything when others are willing to accept the same restraint.',
+  'The third says to perform covenants that have been made. Together, these rules make reciprocal restraint the rational route to peace.'
+],'Define each rule through its practical purpose.','Laws of nature: reason points toward peace');
+
+question('The apparent contradiction','How can reason recommend peace while also making attack look rational?','Peace is best if everyone cooperates. Yet cooperation can expose one person to danger when others may defect. The next distinction separates these two perspectives.',`Do not resolve the tension before individual and collective rationality are defined.\n\n${source('The apparent contradiction: is reason telling us to fight or make peace?')}`);
+
+section('VII','Why does a good agreement collapse?',`Use the hillside illustration to separate individual rationality from collective rationality.\n\n${source('The apparent contradiction: is reason telling us to fight or make peace?')}`);
+
+build('rationality','What is rational for one can be disastrous for all',[
+  'An action is individually rational when it serves one person’s interests given what other people are likely to do.',
+  'A rule is collectively rational when everyone would be better off if everyone followed it.',
+  'Illustration: each farmer on a hillside gains usable land by cutting trees, but if all cut, the soil erodes and every farm is damaged.',
+  'The shared agreement is beneficial, yet each farmer can still gain by breaking it while everyone else complies. This is the structure of a prisoner’s dilemma.'
+],'The hillside case is an explanatory illustration presented in the source material.','The apparent contradiction: is reason telling us to fight or make peace?');
+
+duo('The same rule looks different under uncertainty',
+  {label:'If everyone follows it',text:'Peace and security become possible, cooperation benefits everyone, and agreements can support long-term projects.'},
+  {label:'If others may break it',text:'Compliance becomes risky, self-protection may require defection, and the agreement lacks reliable force.'},
+  `The contrast isolates the assurance problem.\n\n${source('The apparent contradiction: is reason telling us to fight or make peace?')}`);
+
+build('forums','Wanting peace is not the same as safely acting peacefully',[
+  'Hobbes says the laws of nature bind in foro interno, the internal forum. A person should recognize peace as desirable and sincerely include its rules in deliberation.',
+  'They do not always bind in foro externo, outward conduct, when obedience would make a person a predictable victim of aggression.',
+  'A person who lays down weapons while everyone else remains armed may display peaceful intent, but also makes themselves prey to others.',
+  'The laws of nature become reliably action-guiding only when people have assurance that others will comply as well.'
+],'Translate both Latin expressions immediately and preserve the difference between endorsement and safe performance.','In foro interno and in foro externo');
+
+question('The assurance problem','What can make a beneficial promise safe to keep when betrayal is still possible?','Good intentions identify the cooperative outcome, but only credible enforcement can change the risk each person faces when deciding whether to comply.',`The question points directly to the function of sovereign power.\n\n${source('In foro interno and in foro externo; The solution: a sovereign power')}`);
+
+section('VIII','What changes when a sovereign appears?',`Define the sovereign by the public functions that solve the assurance problem.\n\n${source('The solution: a sovereign power')}`);
+
+build('sovereign','A sovereign makes cooperation individually safer',[
+  'A sovereign is a person or institution with enough recognized authority and practical power to enforce common rules.',
+  'The sovereign establishes public standards and punishes violations, replacing private judgment with decisions that can become final for everyone.',
+  'Enforcement changes expectations. Each person gains a reason to believe that others also face strong incentives to obey rather than betray.',
+  'The state does not make people angels. It makes peaceful cooperation rational in practice by providing assurance, protection, and the conditions of civilized life.'
+],'Return to the opening comparison: the state is justified here as an answer to mutual insecurity.','The solution: a sovereign power');
+
+diagnostic('How much authority should people surrender to make peace dependable?',`The question preserves Hobbes’s achievement and the central unresolved danger: a power strong enough to secure peace may also become oppressive.\n\n${source('Further questions')}`);
+
+refs([
+  ['Source material','“Hobbes and the State of Nature.”'],
+  ['Primary work quoted and discussed','Thomas Hobbes, Leviathan (1651), quotations reproduced as they appear in the source material.'],
+  ['Scientific idea discussed','Galileo’s principle of inertia, as presented in the source material.'],
+  ['Historical context','The English Civil War (1642–1651), as presented in the source material.']
+],`Every visible claim and quotation is grounded in the source material.\n\n${source('Hobbes and the State of Nature')}`);
+
+const deck=document.getElementById('deck');
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+function renderSlide(s,i){
+  const article=document.createElement('article');
+  article.className=`slide ${s.type}${s.type==='content'||s.type==='head'?' top':''}`;
+  article.dataset.index=i;
+  if(s.buildGroup) article.dataset.buildGroup=s.buildGroup;
+  let html='<div class="slide-inner">';
+  if(s.type==='cover') html+=`<h1 class="title">${esc(s.title)}</h1><p class="work">${esc(s.work)}</p><div class="course">${esc(s.course)}</div>`;
+  if(s.type==='section') html+=`<div class="eyebrow">${esc(s.eyebrow)}</div><h2 class="title">${esc(s.title)}</h2><div class="rule"></div>`;
+  if(s.type==='content') html+=`<h2 class="title">${esc(s.title)}</h2><div class="body">${s.paragraphs.map((p,j)=>`<p class="${j===s.paragraphs.length-1?'fresh':''}">${esc(p)}</p>`).join('')}</div>`;
+  if(s.type==='question'||s.type==='diagnostic') html+=`<div class="eyebrow">${esc(s.eyebrow)}</div><p class="prompt">${esc(s.prompt)}</p>${s.context?`<p class="context">${esc(s.context)}</p>`:''}`;
+  if(s.type==='quote') html+=`<blockquote>${esc(s.text)}</blockquote><cite>${esc(s.cite)}</cite>`;
+  if(s.type==='duo') html+=`<h2 class="title">${esc(s.title)}</h2><div class="duo-grid">${[s.left,s.right].map(x=>`<div class="duo-col"><h3>${esc(x.label)}</h3><p>${esc(x.text)}</p></div>`).join('')}</div>`;
+  if(s.type==='head') html+=`<h2 class="title">${esc(s.title)}</h2><div class="head-list">${s.items.map(x=>`<div class="head-item"><b>${esc(x[0])}</b><span>${esc(x[1])}</span></div>`).join('')}</div>`;
+  if(s.type==='refs') html+=`<h2 class="title">${esc(s.title)}</h2><div class="refs-list">${s.items.map(x=>`<div class="ref"><strong>${esc(x[0])}.</strong> ${esc(x[1])}</div>`).join('')}</div>`;
+  article.innerHTML=html+'</div>';
+  deck.appendChild(article);
+  return article;
+}
+const nodes=slides.map(renderSlide);
+let current=0;
+const counter=document.getElementById('counter');
+const progress=document.getElementById('progress');
+const notes=document.getElementById('notes');
+const notesBody=document.getElementById('notes-body');
+const overview=document.getElementById('overview');
+const overviewGrid=document.getElementById('overview-grid');
+function labelFor(s){return s.title||s.prompt||s.text||'Slide';}
+slides.forEach((s,i)=>{const b=document.createElement('button');b.className='overview-card';b.innerHTML=`<span class="num">${String(i+1).padStart(2,'0')} / ${slides.length}</span><span class="label">${esc(labelFor(s))}</span>`;b.addEventListener('click',()=>{closePanels();show(i)});overviewGrid.appendChild(b)});
+const cards=[...overviewGrid.children];
+function show(i){
+  current=Math.max(0,Math.min(slides.length-1,i));
+  nodes.forEach((n,j)=>n.classList.toggle('active',j===current));
+  cards.forEach((n,j)=>n.classList.toggle('current',j===current));
+  counter.textContent=`${current+1} / ${slides.length}`;
+  progress.style.width=`${((current+1)/slides.length)*100}%`;
+  notesBody.textContent=slides[current].notes||'No notes for this slide.';
+  document.title=`${current+1}/${slides.length} · Hobbes - The State of Nature`;
+}
+function openPanel(panel){closePanels();panel.classList.add('open')}
+function closePanels(){overview.classList.remove('open');notes.classList.remove('open')}
+function togglePanel(panel){panel.classList.contains('open')?closePanels():openPanel(panel)}
+function toggleFullscreen(){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen().catch(()=>{})}
+document.getElementById('fullscreen').addEventListener('click',toggleFullscreen);
+document.querySelectorAll('.close').forEach(b=>b.addEventListener('click',closePanels));
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){closePanels();return}
+  if(overview.classList.contains('open')||notes.classList.contains('open')) return;
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();show(current+1)}
+  else if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();show(current-1)}
+  else if(e.key.toLowerCase()==='o') togglePanel(overview);
+  else if(e.key.toLowerCase()==='n') togglePanel(notes);
+  else if(e.key.toLowerCase()==='f') toggleFullscreen();
+});
+let touchX=0,touchY=0;
+document.addEventListener('touchstart',e=>{touchX=e.changedTouches[0].screenX;touchY=e.changedTouches[0].screenY},{passive:true});
+document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].screenX-touchX,dy=e.changedTouches[0].screenY-touchY;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy))show(current+(dx<0?1:-1))},{passive:true});
+function fits(node){const inner=node.querySelector('.slide-inner');return inner.scrollHeight<=node.clientHeight*.82&&inner.scrollWidth<=node.clientWidth*.92}
+function fitNode(node,start=1){let f=start;node.classList.add('measuring');node.style.setProperty('--fit',f);while(f>.72&&!fits(node)){f-=.02;node.style.setProperty('--fit',f)}node.classList.remove('measuring');return f}
+function fitAll(){
+  nodes.forEach(n=>n.style.setProperty('--fit',1));
+  const groups={};nodes.forEach(n=>{if(n.dataset.buildGroup)(groups[n.dataset.buildGroup]??=[]).push(n)});
+  const grouped=new Set(Object.values(groups).flat());
+  Object.values(groups).forEach(group=>{const final=group[group.length-1];const f=fitNode(final);group.forEach(n=>n.style.setProperty('--fit',f))});
+  nodes.filter(n=>!grouped.has(n)).forEach(n=>fitNode(n));
+  show(current);
+}
+let resizeTimer;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(fitAll,120)});
+if(document.fonts?.ready)document.fonts.ready.then(fitAll);else fitAll();
+show(0);
+</script>
+</body>
+</html>

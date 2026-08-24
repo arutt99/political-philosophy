@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jeremy Bentham - Utilitarianism</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f6f4ee;
+    --bg-2:#eef0eb;
+    --text:#1f2937;
+    --muted:#66737d;
+    --accent:#0d8f89;
+    --accent-dim:#6ab9b1;
+    --support:#e68b69;
+    --rule:rgba(31,41,55,.16);
+    --fit:1;
+  }
+  *{box-sizing:border-box}
+  html,body{width:100%;height:100%;margin:0;overflow:hidden;background:var(--bg);color:var(--text)}
+  body{font-family:Inter,system-ui,sans-serif}
+  button{font:inherit}
+  #deck{position:relative;width:100vw;height:100vh;background:
+    radial-gradient(ellipse at 8% -5%,rgba(13,143,137,.13),transparent 29%),
+    radial-gradient(ellipse at 94% 105%,rgba(230,139,105,.12),transparent 31%),
+    linear-gradient(135deg,#f8f7f1 0%,#f6f4ee 52%,#f0f2ed 100%)}
+  #deck::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.48;background:
+    repeating-linear-gradient(90deg,transparent 0 8.2vw,rgba(31,41,55,.032) 8.24vw 8.3vw),
+    repeating-linear-gradient(0deg,transparent 0 6.3vh,rgba(31,41,55,.025) 6.34vh 6.4vh)}
+  #deck::after{content:"";position:absolute;right:7vw;bottom:-17vh;width:33vw;height:33vw;border:1px solid rgba(13,143,137,.22);border-radius:50%;box-shadow:0 0 0 4vw rgba(13,143,137,.035),0 0 0 8vw rgba(230,139,105,.025);pointer-events:none}
+  .slide{position:absolute;inset:0;display:none;align-items:center;justify-content:center;padding:7.2vh 7vw 8vh;text-align:center;overflow:hidden}
+  .slide.active,.slide.measuring{display:flex}
+  .slide.measuring{visibility:hidden;pointer-events:none}
+  .slide.top{align-items:flex-start;padding-top:8.5vh}
+  .slide-inner{position:relative;z-index:1;width:min(980px,86vw);max-height:82vh;margin:auto;transform-origin:top center}
+  .slide.top .slide-inner{margin:0 auto}
+  .slide.duo .slide-inner{width:min(1140px,90vw)}
+  .eyebrow{margin:0 0 1.2rem;color:var(--accent);font:600 clamp(12px,1.12vw,17px)/1.3 "IBM Plex Mono",monospace;letter-spacing:.18em;text-transform:uppercase}
+  .title{margin:0;font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;letter-spacing:-.018em}
+  .cover .title{font-size:calc(clamp(58px,7.6vw,104px)*var(--fit));line-height:.96;max-width:10.5ch;margin-inline:auto;color:var(--text)}
+  .cover .work{font:500 calc(clamp(20px,2.15vw,31px)*var(--fit))/1.4 "Cormorant Garamond",Georgia,serif;color:var(--muted);margin:1.5rem auto 0;max-width:36ch}
+  .cover .course{display:inline-block;margin-top:2.4rem;padding:.55rem .8rem;color:var(--accent);border:1px solid rgba(13,143,137,.35);font:500 calc(clamp(11px,1vw,15px)*var(--fit))/1.4 "IBM Plex Mono",monospace;letter-spacing:.14em;text-transform:uppercase}
+  .section .slide-inner{width:min(960px,86vw);padding:1.9rem 2.4rem 2.1rem;border-left:4px solid var(--accent);background:linear-gradient(90deg,rgba(13,143,137,.12),transparent 72%);text-align:left}
+  .section .title{font-size:calc(clamp(48px,6.2vw,84px)*var(--fit));line-height:1.02;color:var(--text);max-width:13ch}
+  .section .rule{width:9rem;height:3px;background:linear-gradient(90deg,var(--accent),rgba(13,143,137,0));margin:1.7rem 0 0}
+  .content .slide-inner,.head .slide-inner{width:min(1050px,88vw);padding:1.1rem 0 1.45rem}
+  .content .title,.head .title,.duo .title{font-size:calc(clamp(38px,4.5vw,62px)*var(--fit));line-height:1.05;margin-bottom:1.35rem;color:var(--text);max-width:20ch;padding-bottom:.7rem;border-bottom:1px solid var(--rule)}
+  .content .body{font-family:"Cormorant Garamond",Georgia,serif;font-size:calc(clamp(25px,2.35vw,35px)*var(--fit));line-height:1.34;text-align:left}
+  .content .body p{margin:0 0 1.05em 0;padding:.42em 1.05em;border-left:3px solid transparent;color:rgba(72,85,96,.58);font-weight:600;background:transparent}
+  .content .body p:last-child{margin-bottom:0}
+  .content .body p.fresh{color:var(--text);border-left-color:var(--accent);background:linear-gradient(90deg,rgba(13,143,137,.15),rgba(230,139,105,.055) 58%,transparent 88%);text-shadow:none}
+  .question .slide-inner,.diagnostic .slide-inner{width:min(920px,86vw);padding:2.3rem 3rem;background:rgba(255,255,252,.44);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);box-shadow:inset 0 0 0 8px rgba(13,143,137,.025)}
+  .question .prompt,.diagnostic .prompt{margin:0;font-family:"Cormorant Garamond",Georgia,serif;font-size:calc(clamp(42px,5.2vw,72px)*var(--fit));line-height:1.08;font-weight:600;letter-spacing:-.015em;color:var(--text)}
+  .question .prompt::after,.diagnostic .prompt::after{content:"";display:block;width:6rem;height:3px;background:linear-gradient(90deg,var(--accent),var(--support));margin:1.8rem auto 0}
+  .question .context{max-width:49ch;margin:1.35rem auto 0;color:var(--muted);font:500 calc(clamp(18px,1.7vw,25px)*var(--fit))/1.4 "Cormorant Garamond",Georgia,serif}
+  .quote .slide-inner{max-width:min(930px,84vw);padding:2.1rem 3rem;background:rgba(255,253,248,.7);border-left:4px solid var(--support);box-shadow:8px 8px 0 rgba(230,139,105,.12);text-align:left}
+  .quote blockquote{margin:0 auto;max-width:28ch;font-family:"Cormorant Garamond",Georgia,serif;font-size:calc(clamp(39px,4.45vw,63px)*var(--fit));line-height:1.12;font-weight:500;color:var(--text);font-style:italic}
+  .quote blockquote::before{content:"“";color:var(--accent);margin-right:.08em}
+  .quote blockquote::after{content:"”";color:var(--accent);margin-left:.08em}
+  .quote cite{display:block;margin-top:1.6rem;padding-top:1rem;border-top:1px solid var(--rule);color:var(--muted);font:500 calc(clamp(12px,1.15vw,17px)*var(--fit))/1.45 "IBM Plex Mono",monospace;font-style:normal}
+  .duo-grid{display:grid;grid-template-columns:1fr 1fr;gap:3.2rem;text-align:left;margin-top:1.5rem}
+  .duo-col{min-height:15rem;padding:1.25rem 0;border:0;border-top:4px solid var(--accent)}
+  .duo-col:nth-child(2){border-top-color:var(--support)}
+  .duo-col h3{margin:0 0 .85rem;color:var(--accent);font:600 calc(clamp(13px,1.25vw,18px)*var(--fit))/1.3 "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase}
+  .duo-col:nth-child(2) h3{color:#bd6043}
+  .duo-col p{margin:0;color:var(--text);font:500 calc(clamp(24px,2.15vw,33px)*var(--fit))/1.34 "Cormorant Garamond",Georgia,serif}
+  .head-list{display:grid;gap:.65rem;text-align:left;margin-top:1.8rem}
+  .head-item{display:grid;grid-template-columns:10rem 1fr;gap:1.5rem;align-items:baseline;padding:.95rem 0;border-top:1px solid var(--rule)}
+  .head-item b{color:var(--accent);font:600 calc(clamp(12px,1.1vw,16px)*var(--fit))/1.3 "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase}
+  .head-item span{font:500 calc(clamp(23px,2.05vw,31px)*var(--fit))/1.3 "Cormorant Garamond",Georgia,serif;color:var(--text)}
+  .head-item:nth-child(even){border-top-color:rgba(230,139,105,.42)}
+  .diagnostic .eyebrow{color:var(--muted)}
+  .diagnostic .prompt{font-size:calc(clamp(52px,6.6vw,90px)*var(--fit))}
+  .refs .slide-inner{width:min(980px,86vw);text-align:left}
+  .refs .title{font-size:calc(clamp(40px,4.6vw,64px)*var(--fit));margin-bottom:1.7rem}
+  .refs-list{display:grid;gap:1.05rem}
+  .ref{padding-top:.95rem;border-top:1px solid var(--rule);font:500 calc(clamp(18px,1.65vw,24px)*var(--fit))/1.38 "Cormorant Garamond",Georgia,serif;color:var(--muted)}
+  .ref strong{color:var(--text);font-weight:600}
+  #progress{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,var(--accent),var(--support));z-index:30}
+  #nav-hint,#counter{position:fixed;bottom:18px;z-index:30;color:var(--muted);font:500 12px/1.3 "IBM Plex Mono",monospace;letter-spacing:.08em}
+  #nav-hint{left:24px} #counter{right:24px}
+  #fullscreen{position:fixed;top:20px;right:22px;z-index:30;color:var(--text);background:rgba(246,244,238,.65);border:1px solid rgba(31,41,55,.22);border-radius:2px;padding:8px 11px;cursor:pointer;font:500 11px/1 "IBM Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase}
+  #fullscreen:hover{color:var(--accent);border-color:var(--accent)}
+  .panel{position:fixed;inset:4vh 4vw;z-index:60;display:none;background:rgba(246,244,238,.985);border:1px solid rgba(31,41,55,.18);overflow:auto}
+  .panel.open{display:block}
+  .panel-head{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;padding:18px 22px;background:#e9eee9;border-bottom:1px solid var(--rule);z-index:2}
+  .panel-head h2{margin:0;color:var(--accent);font:600 14px/1 "IBM Plex Mono",monospace;letter-spacing:.15em;text-transform:uppercase}
+  .close{color:var(--text);background:transparent;border:1px solid rgba(31,41,55,.2);padding:7px 10px;cursor:pointer}
+  #overview-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;padding:20px}
+  .overview-card{min-height:126px;padding:16px;text-align:left;background:#fbfaf5;border:1px solid rgba(31,41,55,.16);color:var(--text);cursor:pointer}
+  .overview-card:hover,.overview-card.current{border-color:var(--accent);box-shadow:5px 5px 0 rgba(230,139,105,.12)}
+  .overview-card .num{display:block;color:var(--accent);font:500 11px/1.3 "IBM Plex Mono",monospace;margin-bottom:12px}
+  .overview-card .label{font:600 22px/1.1 "Cormorant Garamond",Georgia,serif}
+  #notes-body{padding:28px 34px;white-space:pre-wrap;color:var(--text);font:400 18px/1.62 Inter,sans-serif;max-width:900px}
+  @media (max-width:760px){
+    .slide{padding:9vh 8vw 10vh}.slide.top{padding-top:9.5vh}.slide-inner,.slide.duo .slide-inner{width:84vw}
+    .duo-grid{grid-template-columns:1fr;gap:1.5rem}.head-item{grid-template-columns:1fr;gap:.45rem}
+    #nav-hint{display:none}#fullscreen{top:12px;right:12px}.content .body{font-size:calc(clamp(22px,5.6vw,30px)*var(--fit))}
+    .duo-col p{font-size:calc(clamp(22px,5.3vw,29px)*var(--fit))}
+    .cover .slide-inner,.section .slide-inner,.question .slide-inner,.diagnostic .slide-inner,.quote .slide-inner{padding:1.7rem 1.5rem}
+    .content .slide-inner,.head .slide-inner{padding:1rem 0}.head-item{grid-template-columns:1fr}
+  }
+</style>
+<link rel="stylesheet" href="presentation-polish.css">
+<script src="presentation-polish.js" defer></script>
+</head>
+<body>
+<div id="deck" aria-live="polite"></div>
+<div id="progress"></div>
+<div id="nav-hint">ARROWS / SPACE · O OVERVIEW · N NOTES · F FULLSCREEN</div>
+<div id="counter">1 / 1</div>
+<button id="fullscreen" aria-label="Toggle fullscreen">Fullscreen</button>
+
+<section id="overview" class="panel" aria-label="Slide overview">
+  <div class="panel-head"><h2>Overview</h2><button class="close" data-close="overview">Close</button></div>
+  <div id="overview-grid"></div>
+</section>
+<aside id="notes" class="panel" aria-label="Speaker notes">
+  <div class="panel-head"><h2>Speaker notes</h2><button class="close" data-close="notes">Close</button></div>
+  <div id="notes-body"></div>
+</aside>
+
+<script>
+const slides=[];
+const src=(pages,extra='')=>`[Sources]\nSource material, “Justifying the State - Utilitarianism,” pp. ${pages}.${extra?`\n${extra}`:''}\n[/Sources]`;
+const add=s=>slides.push(s);
+const cover=(title,work,course,notes)=>add({type:'cover',title,work,course,notes});
+const section=(roman,title,notes)=>add({type:'section',eyebrow:`${roman}. ${title.toUpperCase()}`,title,notes});
+const question=(eyebrow,prompt,context,notes)=>add({type:'question',eyebrow,prompt,context,notes});
+const quote=(text,cite,notes)=>add({type:'quote',text,cite,notes});
+const duo=(title,left,right,notes)=>add({type:'duo',title,left,right,notes});
+const head=(title,items,notes)=>add({type:'head',title,items,notes});
+const diagnostic=(prompt,notes)=>add({type:'diagnostic',eyebrow:'The utilitarian test',prompt,notes});
+const refs=(items,notes)=>add({type:'refs',title:'References',items,notes});
+function build(id,title,paragraphs,notes,pages){
+  paragraphs.forEach((_,i)=>add({type:'content',title,paragraphs:paragraphs.slice(0,i+1),buildGroup:id,notes:`${notes}${i<paragraphs.length-1?'\n\nPause before revealing the next step.':''}\n\n${src(pages)}`}));
+}
+
+cover('Utilitarianism','Justifying the state through happiness, rules, and rights','Political Philosophy',`Open with the tension in the title: a theory that measures political institutions by their effects can make the state look necessary, but may also permit injustice.\n\n${src('1')}`);
+
+section('I','Why should anyone obey the state?',`The argument turns to utilitarianism after contract arguments fail and anarchism remains difficult. The first task is to identify the standard by which political authority will be judged.\n\n${src('1')}`);
+
+quote('Subjects should obey Kings … so long as the probable mischiefs of obedience are less than the probable mischiefs of resistance.','Jeremy Bentham, A Fragment on Government (1776), quoted in the source material, p. 1.',`Let the conditional structure of Bentham’s claim sit on screen: obedience is not automatically owed; it depends on consequences.\n\n${src('1','Primary work quoted: Jeremy Bentham, A Fragment on Government (1776).')}`);
+
+build('problem','The political question becomes a comparison of consequences',[
+  'The argument presents utilitarianism as a pressing way to justify the state after contract arguments fail and the difficulties of anarchism remain.',
+  'Utilitarianism asks which available arrangement produces the highest total sum of utility, understood here for convenience as the greatest amount of happiness.',
+  'The political question is therefore conditional: does obedience to a state create more happiness than resistance, disobedience, or living without a state?'
+],'Keep the comparison open. The argument will first define utility, then test what follows when the comparison is applied to laws and institutions.','1');
+
+question('The standard of judgment','What would make a coercive institution worth obeying?','The state can demand obedience only if its restrictions produce a better human outcome than the alternatives that are actually available.',`This question names the standard the rest of the argument will apply.\n\n${src('1')}`);
+
+section('II','What exactly does utilitarianism maximize?',`Define utility before using it to compare laws, governments, and social arrangements.\n\n${src('1')}`);
+
+build('utility','Utility means the happiness produced by an action',[
+  'The fundamental utilitarian idea is that the morally correct action in any situation brings about the highest possible total sum of utility.',
+  'Utility may be understood as happiness, pleasure, or the satisfaction of desires and preferences. The argument uses happiness as a convenient shorthand.',
+  'The theory therefore asks an agent to choose the available action that creates more happiness, or less unhappiness, than any other action available at that time.'
+],'The definition is about the outcome produced by an action, not the actor’s motive or the action’s traditional label.','1');
+
+head('Three ways the argument glosses “utility”',[
+  ['Happiness','How good or satisfying life feels.'],
+  ['Pleasure','The enjoyable experience an action or outcome creates.'],
+  ['Desire satisfaction','The fulfillment of what people want or prefer.']
+],`These are interpretive options named by the argument. The argument proceeds with happiness because the comparison is easier to state that way.\n\n${src('1')}`);
+
+question('The hidden demand','If the best action creates the most happiness, how can happiness be compared?','A maximization rule needs some way to compare possible outcomes, including the happiness of different people.',`The next step exposes a measurement problem that the argument treats as unresolved but temporarily manageable.\n\n${src('1-2')}`);
+
+section('III','Can happiness be measured across people?',`Introduce the problem of interpersonal comparisons without letting it derail the main political argument.\n\n${src('1-2')}`);
+
+build('measure','Maximization requires more than knowing who is happier',[
+  'To determine which situation creates the most happiness, a utilitarian seems to need a scale for comparing different outcomes.',
+  'The difficulty is not only comparing one person’s happiness with another’s. The theory also seems to require judgments about how much more happiness one person has than another.',
+  'The argument calls this the problem of interpersonal comparisons of utility. No solution has been universally accepted, so the utilitarian still owes an account of how the comparisons can be made.'
+],'Do not pretend the measurement problem is solved. The argument brackets it so the political argument can be examined on its own terms.','1-2');
+
+duo('A comparison can be possible without being perfectly measured',
+  {label:'The objection',text:'Without precise units of happiness, the theory cannot calculate which of several actions creates the most total utility.'},
+  {label:'The argument’s assumption',text:'Everyday observation and conversation still let us recognize that some people live in misery while others lead wonderfully enjoyable lives.'},
+  `The argument grants the practical assumption for now while reminding us that a full utilitarian theory must explain the comparison.\n\n${src('1-2')}`);
+
+section('IV','What happens if everyone calculates directly?',`Apply the utilitarian standard to ordinary law-breaking. This is where the argument’s first major tension appears.\n\n${src('2-3')}`);
+
+build('direct','Direct utilitarianism can make law-breaking look obligatory',[
+  'Bentham’s political claim can be restated as a rule of direct calculation: obey a law if obedience produces more social happiness than disobedience.',
+  'Suppose stealing a book from a large bookshop would make one person happier, while no one would find out and no noticeable loss or harm would follow.',
+  'On that description, utilitarianism seems not merely to permit the theft but to require it, because the available outcome contains more happiness than the available alternative.'
+],'Keep the case narrow. The point is not that theft is harmless in every situation, but that direct calculation can authorize a violation when the immediate effects look favorable.','2');
+
+question('The law-breaker’s charter','Would direct calculation turn every law into a temporary suggestion?','If each person may break a law whenever a local happiness gain seems larger, the stability of law itself becomes part of the calculation.',`The next build asks what happens when the same reasoning is generalized.\n\n${src('2-3')}`);
+
+build('insecurity','When everyone calculates locally, security collapses',[
+  'If people broke laws whenever they thought doing so would increase general happiness, any possession could be taken whenever another person’s gain seemed larger than the owner’s loss.',
+  'Possessions would become insecure, and people might stop working to produce anything if someone else could take the result whenever a calculation favored taking it.',
+  'The resulting insecurity would create great overall unhappiness. Each local choice could look beneficial while the combined pattern made everyone worse off.'
+],'The argument compares this result to the insecurity of a state of nature and identifies it as another prisoner’s dilemma: individual gains can collectively diminish happiness.','2-3');
+
+duo('The same action changes meaning at two levels',
+  {label:'Local calculation',text:'Taking the book can increase one person’s happiness while producing no noticeable immediate harm.'},
+  {label:'General pattern',text:'A society in which everyone may take whenever the local balance favors taking cannot sustain secure possession, production, or trust.'},
+  `The distinction explains why the utilitarian cannot stop at the immediate consequences of one isolated act.\n\n${src('2-3')}`);
+
+section('V','Why might rules create more happiness than calculations?',`The argument’s answer is indirect or rule utilitarianism: follow rules because a stable system of rules produces the best overall consequences.\n\n${src('3-4')}`);
+
+build('indirect','Rule utilitarianism protects the conditions of happiness',[
+  'The utilitarian can argue that we need a body of laws that will be respected even when breaking one law on one occasion would seem to increase happiness.',
+  'Indirect utilitarianism, also called rule utilitarianism, asks which system of rules would lead to the greatest happiness if people followed it.',
+  'The strategy is deliberately indirect: we follow non-utilitarian rules such as obeying the law, because direct utilitarian reasoning by each individual would destroy the security that happiness depends on.'
+],'Emphasize the reversal. The theory still aims at happiness, but it does not ask each person to maximize happiness afresh at every decision.','3');
+
+duo('Happiness can be self-defeating when pursued head-on',
+  {label:'Direct pursuit',text:'Make happiness the immediate goal of every choice, and each disappointment becomes a reason to change course again.'},
+  {label:'Indirect pursuit',text:'Form an ambition, pursue a hobby, or make friends; happiness may follow as a side-effect of activities with other aims.'},
+  `The argument uses the lotus-eater analogy to make the social point intuitive: a stable path can produce happiness more reliably than a direct chase.\n\n${src('3')}`);
+
+head('The rule utilitarian’s political instructions',[
+  ['Pass laws','Choose a law only when it contributes more happiness than competing laws or the absence of law.'],
+  ['Obey laws','Treat laws as binding and disobey only to avoid disaster, because ordinary obedience supports a stable system.'],
+  ['Replace laws','Repeal and replace laws that fail to serve their proper utilitarian function.']
+],`These three instructions extend Bentham’s view as presented in the argument. They distinguish ordinary obedience from the higher-level evaluation of laws.\n\n${src('4')}`);
+
+question('The institutional question','If stable rules produce happiness, what institution can provide and enforce them?','The argument now moves from individual conduct to the state as the provider of a body of law.',`This is the bridge from rule-following to political obligation.\n\n${src('3-4')}`);
+
+section('VI','When does the state win the comparison?',`State the utilitarian justification of the state before testing its premises.\n\n${src('4-5')}`);
+
+build('state','The state is justified when it outperforms feasible alternatives',[
+  'The state is a provider and enforcer of a body of law. Its utilitarian justification depends on what this arrangement does for human happiness.',
+  'The state is justified if and only if it contributes more to human happiness than any feasible competing arrangement.',
+  'If the basic alternatives are a state and a state of nature, and a state greatly outperforms the state of nature in producing security and cooperation, the utilitarian justification of the state looks complete.'
+],'The argument grants the comparison for the sake of argument, especially the Hobbesian thought that a state avoids the insecurity of the state of nature.','4');
+
+build('formal','The justification can be written as a short argument',[
+  'Premise one: the morally best society is the one in which happiness is maximized.',
+  'Premise two: the state promotes happiness better than the state of nature, and premise three: the state and the state of nature are the only alternatives available.'
+],'Hold the formal structure steady. The next state draws the conclusion and adds the further duty the argument identifies.','4-5');
+
+build('conclusion','If the premises hold, supporting the state becomes a duty',[
+  'From the three premises, it follows that the morally best society is one with a state.',
+  'If people also have a moral duty to bring about the best society, then they have a moral duty to bring about and support the state.',
+  'The argument is formally valid: if its premises are true, its conclusion must be true. The remaining question is whether its central moral premise is acceptable.'
+],'Separate validity from soundness. The argument’s next move is not to deny the conclusion follows, but to challenge the principle that defines the best society.','4-5');
+
+section('VII','Where does the argument carry its moral risk?',`The argument sets aside objections to the state-versus-nature comparison and identifies the principle of utility as the vulnerable premise.\n\n${src('4-5')}`);
+
+question('The vulnerable premise','If the state clearly produces more happiness, can that alone make it morally right?','A valid argument can still rest on a moral standard that permits outcomes many people regard as unacceptable.',`The next section tests the principle of utility with the scapegoat objection.\n\n${src('4-5')}`);
+
+build('scapegoat','The scapegoat objection targets the pursuit of general happiness',[
+  'Critics argue that utilitarian morality permits, or even requires, grave injustices when those injustices increase the general happiness.',
+  'Imagine a horrific bombing. The public wants the guilty people found, demands vengeance, and seeks reassurance that another attack will not happen.',
+  'If plausible but innocent suspects were arrested and sentenced, public fear and anger might fall even though the suspects suffered. If that balance created more total happiness, utilitarianism would appear to justify punishing the innocent.'
+],'The objection is not that punishing the innocent is better than punishing the guilty. It is that utilitarian calculation may defend a miscarriage of justice when every consequence is counted.','5-6');
+
+quote('It cannot be right these actions should go any further.','Lord Denning, Court of Appeal judgment (1980), quoted in the source material in connection with the Birmingham Six, p. 6.',`The quotation captures the pressure to protect an institution’s public legitimacy even when that pressure risks suppressing the truth.\n\n${src('6','Primary work discussed: Lord Denning’s 1980 Court of Appeal judgment, quoted in the argument.')}`);
+
+section('VIII','Can public reassurance justify an innocent person’s suffering?',`Move from the fictional scapegoat case to the Birmingham Six, the real case used in the argument.\n\n${src('5-7')}`);
+
+build('birmingham','The Birmingham Six makes the objection concrete',[
+  'The Birmingham Six were convicted of murder in 1975 after an IRA pub bombing. They claimed that police had beaten confessions out of them.',
+  'When the six men tried to bring a civil action against the police, Lord Denning argued that letting the case proceed could expose an appalling vista: police perjury and violence, involuntary confessions, and erroneous convictions.',
+  'The convictions were eventually quashed in 1991. Critics say Denning’s reasoning illustrates a utilitarian temptation: leave innocent people in prison rather than admit that the legal system has produced a frightening truth.'
+],'Keep the historical sequence and the philosophical lesson distinct. The case is evidence for the objection as the argument presents it, not a complete history of the episode.','6-7');
+
+duo('What the public gains versus what the scapegoat loses',
+  {label:'The public balance',text:'Vengeance, reassurance, and confidence in the legal order may reduce widespread fear or anger.'},
+  {label:'The individual cost',text:'An innocent person loses liberty and is treated as a tool for producing a larger social benefit.'},
+  `The objection becomes morally sharp when the calculation treats one person’s suffering as a cost that can be outweighed by everyone else’s comfort.\n\n${src('5-7')}`);
+
+section('IX','Can rules turn utility into rights?',`Rule utilitarianism now returns as the strongest defense: perhaps rules against victimization maximize happiness over time.\n\n${src('7-8')}`);
+
+build('rule_rescue','Indirect utilitarianism can defend a rule against scapegoating',[
+  'A society in which people know that innocent individuals can be victimized and kept in prison will become insecure: anyone may fear becoming the next scapegoat.',
+  'That insecurity can depress general happiness so severely that the utilitarian must grant people a right not to be punished unless they are guilty.',
+  'The same reasoning can support releasing the Birmingham Six: the immediate discredit to the judicial system may be outweighed by better confession procedures and greater long-term security for everyone.'
+],'This is the argument’s most promising defense. It shows how rule utilitarianism can produce protections that look like individual rights without treating rights as independent of utility.','7');
+
+question('The secrecy problem','What if victimization creates no public insecurity because no one learns that it happened?','If people do not know about the injustice, they may not experience the fear that rule utilitarianism uses to reject scapegoating.',`The next build presses the indirect defense at exactly its weakest point.\n\n${src('7-8')}`);
+
+build('secret','A secret injustice can survive the rule-based defense',[
+  'Critics argue that general insecurity follows from scapegoating only when the public realizes what is happening.',
+  'If a government victimizes an innocent person efficiently and secretly, the population may feel reassured rather than threatened, so the utilitarian balance could appear positive.',
+  'That possibility is troubling because it suggests that secret scapegoating could be justified on utilitarian grounds even while everyone remains unaware of the danger.'
+],'Do not resolve this by assuming that secrecy is impossible. The argument treats the possibility itself as a reason to doubt whether rule utilitarianism can secure rights.','7-8');
+
+section('X','What if the result is right for the wrong reason?',`The argument’s deepest objection does not depend on whether the utilitarian calculation can be repaired. It challenges the idea that the calculation should settle the issue at all.\n\n${src('8')}`);
+
+build('wrongreason','Some protections should not depend on their consequences',[
+  'Even if the utilitarian calculation works out, opponents argue that the result may be morally correct for the wrong reason.',
+  'Perhaps no one should be victimized, whatever the benefits in general happiness. On this view, the Birmingham Six should be released whether or not their release produces good consequences.',
+  'The objection therefore asks for a principle that protects people as people, rather than protecting them only when doing so maximizes the total balance of happiness.'
+],'The phrase “wrong reason” marks a disagreement about what makes an action right, not merely a disagreement about arithmetic.','8');
+
+question('Are utility-based rights really rights?','If rights exist only because they maximize happiness, what happens when violating them would maximize happiness instead?','The question isolates why a utilitarian theory of rights may look like a strategic concession rather than a genuine moral limit.',`Let the question remain open long enough to expose the theory’s pressure point.\n\n${src('8')}`);
+
+build('synthesis','The state defense is strong, but the moral foundation remains suspect',[
+  'The indirect utilitarian justification of the state explains why stable laws and reliable enforcement can produce more happiness than a state of nature.',
+  'It also explains why ordinary obedience may be required even when breaking one law would appear beneficial in isolation.',
+  'But the argument ends with a provisional dissatisfaction: utilitarianism may still permit injustice, even in indirect form, and its attempt to build rights from happiness may reveal a lack of faith in its own principle.'
+],'This is the argument’s provisional verdict. It does not deny that the state can be justified by its effects; it questions whether maximizing happiness is enough to justify every moral limit.','8');
+
+diagnostic('Can a theory protect rights only when rights maximize happiness and still explain why rights matter?',`End with the argument’s central philosophical tension: the state may be justified because it secures human welfare, yet a welfare calculation may be unable to explain why some ways of treating people are wrong even when they pay off.\n\n${src('8')}`);
+
+refs([
+  ['Source material','“Justifying the State - Utilitarianism,” source PDF, pp. 1-8.'],
+  ['Primary work quoted','Jeremy Bentham, A Fragment on Government (1776), quotation reproduced in the source material, p. 1.'],
+  ['Judgment discussed','Lord Denning, Court of Appeal judgment (1980), quotation reproduced in the source material, p. 6.'],
+  ['Further work mentioned','John Stuart Mill, On Liberty, identified in the argument as a later discussion of a utilitarian theory of rights, p. 8.']
+],`All visible claims, cases, and quotations are grounded in the source material.\n\n${src('1-8')}`);
+
+const deck=document.getElementById('deck');
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+function renderSlide(s,i){
+  const article=document.createElement('article');
+  article.className=`slide ${s.type}${s.type==='content'||s.type==='head'?' top':''}`;
+  article.dataset.index=i;
+  if(s.buildGroup) article.dataset.buildGroup=s.buildGroup;
+  let html='<div class="slide-inner">';
+  if(s.type==='cover') html+=`<h1 class="title">${esc(s.title)}</h1><p class="work">${esc(s.work)}</p><div class="course">${esc(s.course)}</div>`;
+  if(s.type==='section') html+=`<div class="eyebrow">${esc(s.eyebrow)}</div><h2 class="title">${esc(s.title)}</h2><div class="rule"></div>`;
+  if(s.type==='content') html+=`<h2 class="title">${esc(s.title)}</h2><div class="body">${s.paragraphs.map((p,j)=>`<p class="${j===s.paragraphs.length-1?'fresh':''}">${esc(p)}</p>`).join('')}</div>`;
+  if(s.type==='question'||s.type==='diagnostic') html+=`<div class="eyebrow">${esc(s.eyebrow)}</div><p class="prompt">${esc(s.prompt)}</p>${s.context?`<p class="context">${esc(s.context)}</p>`:''}`;
+  if(s.type==='quote') html+=`<blockquote>${esc(s.text)}</blockquote><cite>${esc(s.cite)}</cite>`;
+  if(s.type==='duo') html+=`<h2 class="title">${esc(s.title)}</h2><div class="duo-grid">${[s.left,s.right].map(x=>`<div class="duo-col"><h3>${esc(x.label)}</h3><p>${esc(x.text)}</p></div>`).join('')}</div>`;
+  if(s.type==='head') html+=`<h2 class="title">${esc(s.title)}</h2><div class="head-list">${s.items.map(x=>`<div class="head-item"><b>${esc(x[0])}</b><span>${esc(x[1])}</span></div>`).join('')}</div>`;
+  if(s.type==='refs') html+=`<h2 class="title">${esc(s.title)}</h2><div class="refs-list">${s.items.map(x=>`<div class="ref"><strong>${esc(x[0])}.</strong> ${esc(x[1])}</div>`).join('')}</div>`;
+  article.innerHTML=html+'</div>';
+  deck.appendChild(article);
+  return article;
+}
+const nodes=slides.map(renderSlide);
+let current=0;
+const counter=document.getElementById('counter');
+const progress=document.getElementById('progress');
+const notes=document.getElementById('notes');
+const notesBody=document.getElementById('notes-body');
+const overview=document.getElementById('overview');
+const overviewGrid=document.getElementById('overview-grid');
+function labelFor(s){return s.title||s.prompt||s.text||'Slide';}
+slides.forEach((s,i)=>{const b=document.createElement('button');b.className='overview-card';b.innerHTML=`<span class="num">${String(i+1).padStart(2,'0')} / ${slides.length}</span><span class="label">${esc(labelFor(s))}</span>`;b.addEventListener('click',()=>{closePanels();show(i)});overviewGrid.appendChild(b)});
+const cards=[...overviewGrid.children];
+function show(i){
+  current=Math.max(0,Math.min(slides.length-1,i));
+  nodes.forEach((n,j)=>n.classList.toggle('active',j===current));
+  cards.forEach((n,j)=>n.classList.toggle('current',j===current));
+  counter.textContent=`${current+1} / ${slides.length}`;
+  progress.style.width=`${((current+1)/slides.length)*100}%`;
+  notesBody.textContent=slides[current].notes||'No notes for this slide.';
+  document.title=`${current+1}/${slides.length} · Jeremy Bentham - Utilitarianism`;
+}
+function openPanel(panel){closePanels();panel.classList.add('open')}
+function closePanels(){overview.classList.remove('open');notes.classList.remove('open')}
+function togglePanel(panel){panel.classList.contains('open')?closePanels():openPanel(panel)}
+function toggleFullscreen(){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen().catch(()=>{})}
+document.getElementById('fullscreen').addEventListener('click',toggleFullscreen);
+document.querySelectorAll('.close').forEach(b=>b.addEventListener('click',closePanels));
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){closePanels();return}
+  if(overview.classList.contains('open')||notes.classList.contains('open')) return;
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();show(current+1)}
+  else if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();show(current-1)}
+  else if(e.key.toLowerCase()==='o') togglePanel(overview);
+  else if(e.key.toLowerCase()==='n') togglePanel(notes);
+  else if(e.key.toLowerCase()==='f') toggleFullscreen();
+});
+let touchX=0,touchY=0;
+document.addEventListener('touchstart',e=>{touchX=e.changedTouches[0].screenX;touchY=e.changedTouches[0].screenY},{passive:true});
+document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].screenX-touchX,dy=e.changedTouches[0].screenY-touchY;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy))show(current+(dx<0?1:-1))},{passive:true});
+function fits(node){const inner=node.querySelector('.slide-inner');return inner.scrollHeight<=node.clientHeight*.82&&inner.scrollWidth<=node.clientWidth*.92}
+function fitNode(node,start=1){let f=start;node.classList.add('measuring');node.style.setProperty('--fit',f);while(f>.72&&!fits(node)){f-=.02;node.style.setProperty('--fit',f)}node.classList.remove('measuring');return f}
+function fitAll(){
+  nodes.forEach(n=>n.style.setProperty('--fit',1));
+  const groups={};nodes.forEach(n=>{if(n.dataset.buildGroup)(groups[n.dataset.buildGroup]??=[]).push(n)});
+  const grouped=new Set(Object.values(groups).flat());
+  Object.values(groups).forEach(group=>{const final=group[group.length-1];const f=fitNode(final);group.forEach(n=>n.style.setProperty('--fit',f))});
+  nodes.filter(n=>!grouped.has(n)).forEach(n=>fitNode(n));
+  show(current);
+}
+let resizeTimer;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(fitAll,120)});
+if(document.fonts?.ready)document.fonts.ready.then(fitAll);else fitAll();
+show(0);
+</script>
+</body>
+</html>

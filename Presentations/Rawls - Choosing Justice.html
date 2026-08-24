@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rawls - Choosing Justice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#251f32;
+    --bg-deep:#191521;
+    --text:#f5f0e9;
+    --muted:#c8c0d3;
+    --accent:#9dd9d0;
+    --accent-dim:#638d9a;
+    --accent-soft:rgba(157,217,208,.15);
+    --border:rgba(245,240,233,.15);
+    --fit:1;
+  }
+  *{box-sizing:border-box}
+  html,body{width:100%;height:100%;margin:0;overflow:hidden;background:var(--bg-deep);color:var(--text)}
+  body{font-family:Inter,system-ui,sans-serif}
+  button{font:inherit}
+  #deck{position:relative;width:100vw;height:100vh;overflow:hidden;background:radial-gradient(ellipse 74% 62% at 50% -12%,rgba(157,217,208,.11),transparent 62%),radial-gradient(circle at 83% 92%,rgba(167,143,202,.12),transparent 35%),var(--bg)}
+  #deck::before,#deck::after{content:"";position:absolute;pointer-events:none;border:1px solid rgba(157,217,208,.11);border-radius:50%;filter:blur(.1px)}
+  #deck::before{width:min(68vw,880px);height:min(68vw,880px);left:50%;top:50%;transform:translate(-50%,-50%)}
+  #deck::after{width:min(52vw,680px);height:min(52vw,680px);left:50%;top:50%;transform:translate(-50%,-50%)}
+  .slide{position:absolute;inset:0;display:none;align-items:center;justify-content:center;padding:7.2vh 7vw 8vh;text-align:center;overflow:hidden}
+  .slide.active,.slide.measuring{display:flex}
+  .slide.measuring{visibility:hidden;pointer-events:none}
+  .slide.top{align-items:flex-start;padding-top:8.5vh}
+  .slide-inner{position:relative;width:min(980px,86vw);max-height:82vh;margin:auto;transform-origin:top center}
+  .slide.top .slide-inner{margin:0 auto}
+  .slide.duo .slide-inner{width:min(1140px,90vw)}
+  .eyebrow{margin:0 0 1.2rem;color:var(--accent);font:600 clamp(12px,1.12vw,17px)/1.3 "IBM Plex Mono",monospace;letter-spacing:.18em;text-transform:uppercase}
+  .title{margin:0;font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;letter-spacing:-.018em}
+  .cover .title{font-size:calc(clamp(58px,7.6vw,104px)*var(--fit));line-height:.96;max-width:13ch;margin-inline:auto;text-shadow:0 4px 26px rgba(0,0,0,.2)}
+  .cover .work{font:500 calc(clamp(20px,2.15vw,31px)*var(--fit))/1.4 "Cormorant Garamond",Georgia,serif;color:var(--muted);margin:1.5rem auto 0;max-width:36ch}
+  .cover .course{margin-top:2.4rem;color:var(--accent);font:500 calc(clamp(11px,1vw,15px)*var(--fit))/1.4 "IBM Plex Mono",monospace;letter-spacing:.14em;text-transform:uppercase}
+  .section .slide-inner{width:min(900px,86vw);padding:2rem 2.7rem;border-block:1px solid var(--border);background:linear-gradient(90deg,transparent,rgba(157,217,208,.045),transparent)}
+  .section .title{font-size:calc(clamp(48px,6.2vw,84px)*var(--fit));line-height:1.02}
+  .section .rule{width:76px;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);margin:1.8rem auto 0}
+  .content .title,.head .title,.duo .title{font-size:calc(clamp(38px,4.5vw,62px)*var(--fit));line-height:1.05;margin-bottom:1.6rem;max-width:19ch;padding-bottom:.7rem;border-bottom:1px solid var(--border)}
+  .content .body{font-family:"Cormorant Garamond",Georgia,serif;font-size:calc(clamp(25px,2.35vw,35px)*var(--fit));line-height:1.34;text-align:left}
+  .content .body p{margin:0 0 1.05em -1.25rem;padding:.08em .7em .08em 1rem;border-left:3px solid transparent;color:rgba(200,192,211,.58);font-weight:600;background:linear-gradient(90deg,rgba(157,217,208,0),rgba(157,217,208,0))}
+  .content .body p:last-child{margin-bottom:0}
+  .content .body p.fresh{color:var(--text);border-left-color:var(--accent);background:linear-gradient(90deg,var(--accent-soft),rgba(157,217,208,0) 78%);text-shadow:0 0 18px rgba(245,240,233,.07)}
+  .question .slide-inner,.diagnostic .slide-inner{width:min(900px,86vw);padding:2.7rem 3.5rem;background:rgba(25,21,33,.55);border:1px solid rgba(157,217,208,.24);box-shadow:inset 0 0 0 9px rgba(157,217,208,.025),0 24px 55px rgba(0,0,0,.18)}
+  .question .prompt,.diagnostic .prompt{margin:0;font-family:"Cormorant Garamond",Georgia,serif;font-size:calc(clamp(42px,5.2vw,72px)*var(--fit));line-height:1.08;font-weight:600;letter-spacing:-.015em}
+  .question .prompt::after,.diagnostic .prompt::after{content:"";display:block;width:7.5rem;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);margin:1.8rem auto 0}
+  .question .context{max-width:48ch;margin:1.35rem auto 0;color:var(--muted);font:500 calc(clamp(18px,1.7vw,25px)*var(--fit))/1.4 "Cormorant Garamond",Georgia,serif}
+  .quote .slide-inner{padding:1rem 3rem;border-inline:1px solid rgba(157,217,208,.35)}
+  .quote blockquote{margin:0 auto;max-width:26ch;font-family:"Cormorant Garamond",Georgia,serif;font-size:calc(clamp(39px,4.45vw,63px)*var(--fit));line-height:1.12;font-weight:500;font-style:italic;text-shadow:0 5px 22px rgba(0,0,0,.25)}
+  .quote blockquote::before{content:"“";color:var(--accent);margin-right:.08em}
+  .quote blockquote::after{content:"”";color:var(--accent);margin-left:.08em}
+  .quote cite{display:block;margin-top:1.6rem;padding-top:1rem;border-top:1px solid var(--border);color:var(--muted);font:500 calc(clamp(12px,1.15vw,17px)*var(--fit))/1.45 "IBM Plex Mono",monospace;font-style:normal}
+  .duo-grid{display:grid;grid-template-columns:1fr 1fr;gap:2.4rem;text-align:left;margin-top:1.5rem}
+  .duo-col{min-height:15rem;padding:1.5rem 1.6rem;border:1px solid var(--border);border-top:4px solid var(--accent);background:linear-gradient(145deg,rgba(41,34,55,.72),rgba(25,21,33,.54))}
+  .duo-col h3{margin:0 0 .85rem;color:var(--accent);font:600 calc(clamp(13px,1.25vw,18px)*var(--fit))/1.3 "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase}
+  .duo-col p{margin:0;color:var(--text);font:500 calc(clamp(24px,2.15vw,33px)*var(--fit))/1.34 "Cormorant Garamond",Georgia,serif}
+  .head-list{display:grid;gap:1.15rem;text-align:left;margin-top:1.8rem}
+  .head-item{display:grid;grid-template-columns:10rem 1fr;gap:1.5rem;align-items:baseline;border-left:2px solid rgba(157,217,208,.55);padding:1rem 0 0 1rem;border-top:1px solid var(--border)}
+  .head-item b{color:var(--accent);font:600 calc(clamp(12px,1.1vw,16px)*var(--fit))/1.3 "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase}
+  .head-item span{font:500 calc(clamp(23px,2.05vw,31px)*var(--fit))/1.3 "Cormorant Garamond",Georgia,serif}
+  .diagnostic .eyebrow{color:var(--muted)}
+  .diagnostic .prompt{font-size:calc(clamp(52px,6.6vw,90px)*var(--fit))}
+  .refs .slide-inner{width:min(980px,86vw);text-align:left}
+  .refs .title{font-size:calc(clamp(40px,4.6vw,64px)*var(--fit));margin-bottom:1.7rem}
+  .refs-list{display:grid;gap:1.05rem}
+  .ref{padding-top:.95rem;border-top:1px solid var(--border);font:500 calc(clamp(18px,1.65vw,24px)*var(--fit))/1.38 "Cormorant Garamond",Georgia,serif;color:var(--muted)}
+  .ref strong{color:var(--text);font-weight:600}
+  #progress{position:fixed;z-index:20;left:0;top:0;width:0;height:4px;background:linear-gradient(90deg,#8770a5,var(--accent));transition:width .24s ease}
+  #nav-hint,#counter{position:fixed;z-index:20;bottom:2.35vh;color:rgba(200,192,211,.72);font:500 clamp(10px,.86vw,13px)/1.2 "IBM Plex Mono",monospace;letter-spacing:.08em}
+  #nav-hint{left:3vw}#counter{right:3vw}
+  #fullscreen{position:fixed;z-index:20;right:3vw;top:2.35vh;color:var(--muted);background:rgba(25,21,33,.56);border:1px solid rgba(157,217,208,.45);padding:.55rem .75rem;cursor:pointer;font:500 clamp(10px,.86vw,13px)/1.2 "IBM Plex Mono",monospace;letter-spacing:.06em}
+  .panel{position:fixed;z-index:30;inset:0;display:none;overflow:auto;padding:5vh 7vw 8vh;background:rgba(25,21,33,.98)}
+  .panel.open{display:block}.panel-head{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);padding-bottom:1rem;margin-bottom:1.5rem}
+  .panel-head h2{margin:0;font:600 clamp(28px,3vw,46px)/1 "Cormorant Garamond",Georgia,serif}.close{border:1px solid var(--border);background:transparent;color:var(--text);padding:.55rem .8rem;cursor:pointer;font:500 12px/1 "IBM Plex Mono",monospace}
+  #overview-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem}.overview-card{min-height:100px;text-align:left;padding:1rem;background:linear-gradient(145deg,#302944,#1d1928);border:1px solid var(--border);border-left:3px solid transparent;color:var(--text);cursor:pointer}.overview-card:hover,.overview-card.current{border-left-color:var(--accent);border-color:rgba(157,217,208,.42)}.overview-card .num{display:block;color:var(--accent);font:500 11px/1 "IBM Plex Mono",monospace;letter-spacing:.1em}.overview-card .label{display:block;margin-top:.7rem;font:600 21px/1.12 "Cormorant Garamond",Georgia,serif}
+  #notes-body{white-space:pre-wrap;max-width:82ch;color:var(--muted);font:500 clamp(17px,1.45vw,23px)/1.55 "Cormorant Garamond",Georgia,serif}
+  @media (max-width:760px){.slide{padding:7vh 6vw 9vh}.slide.top{padding-top:7vh}.slide-inner,.slide.duo .slide-inner{width:min(92vw,980px)}.section .slide-inner,.question .slide-inner,.diagnostic .slide-inner{padding:1.7rem 1.5rem}.quote .slide-inner{padding:1rem 1.4rem}.duo-grid{grid-template-columns:1fr;gap:1rem}.head-item{grid-template-columns:1fr;gap:.45rem}.head-item b{padding-top:0}#nav-hint{display:none}}
+</style>
+<link rel="stylesheet" href="presentation-polish.css">
+<script src="presentation-polish.js" defer></script>
+</head>
+<body>
+<div id="deck" aria-live="polite"></div>
+<div id="progress"></div>
+<div id="nav-hint">ARROWS / SPACE · O OVERVIEW · N NOTES · F FULLSCREEN</div>
+<div id="counter">1 / 1</div>
+<button id="fullscreen" aria-label="Toggle fullscreen">Fullscreen</button>
+<section id="overview" class="panel" aria-label="Slide overview"><div class="panel-head"><h2>Overview</h2><button class="close">Close</button></div><div id="overview-grid"></div></section>
+<aside id="notes" class="panel" aria-label="Speaker notes"><div class="panel-head"><h2>Speaker notes</h2><button class="close">Close</button></div><div id="notes-body"></div></aside>
+
+<script>
+const slides=[];
+const source=(pages,extra='')=>`[Sources]\nThe Distribution of Property - Rawls Theory of Justice, ${pages}.${extra?`\n${extra}`:''}\n[/Sources]`;
+const note=(pages,text='')=>`${text?`${text}\n\n`:''}${source(pages)}`;
+const add=s=>slides.push(s);
+const cover=(title,work,course,notes)=>add({type:'cover',title,work,course,notes});
+const section=(roman,title,notes)=>add({type:'section',eyebrow:`${roman}. ${title.toUpperCase()}`,title,notes});
+const question=(eyebrow,prompt,context,notes)=>add({type:'question',eyebrow,prompt,context,notes});
+const quote=(text,cite,notes)=>add({type:'quote',text,cite,notes});
+const duo=(title,left,right,notes)=>add({type:'duo',title,left,right,notes});
+const head=(title,items,notes)=>add({type:'head',title,items,notes});
+const diagnostic=(prompt,notes)=>add({type:'diagnostic',eyebrow:'The Rawls test',prompt,notes});
+const refs=(items,notes)=>add({type:'refs',title:'References',items,notes});
+const build=(group,title,parts,notes)=>parts.forEach((_,i)=>add({type:'content',title,paragraphs:parts.slice(0,i+1),buildGroup:group,notes}));
+
+cover('Choosing principles of justice','John Rawls and the original position','A THEORY OF JUSTICE (1971)',note('pp. 1-21','This account reconstructs the argument developed in the source material.'));
+
+question('The opening problem','How can a rule be fair when each person already knows what the rule will do for them?','Rawls begins with an ordinary dispute to show why justice needs a way to filter out the advantage of knowing one’s own position.',note('pp. 1-3','Let the tension remain before introducing the hypothetical contract.'));
+
+section('I','A fair agreement must begin before the deal',note('pp. 1-3','The poker example introduces the method without assuming that real people would agree on a complete theory of justice.'));
+
+build('poker','The card on the floor creates a dispute about fairness',[
+  'Two people are playing poker. One sees the Ace of Spades face up on the floor before looking at their own hand and asks for a re-deal; the other wants to play on.',
+  'The disagreement is not simply about force. Both can ask what the fair outcome is, even though each now has an interest in getting the answer that favors them.',
+  'An actual agreement would settle the matter if the players had already adopted a rule that covered this case.',
+  'But when no such agreement exists, the dispute remains: what can make a rule fair rather than merely advantageous?'
+],note('pp. 1-2','The example is from the argument. Do not treat it as a historical event.'));
+
+head('Four ways to settle a dispute',[
+  ['Actual rule','A written or familiar rule can decide the case when the parties already accepted it.'],
+  ['Impartial judge','A respected referee or observer can offer a decision that does not rest on either player’s interest.'],
+  ['Imagined judge','Thinking about what an impartial person would say can sometimes expose a self-serving judgment.'],
+  ['Hypothetical agreement','The parties can ask what they would have agreed to before the disputed advantage was known.']
+],note('pp. 1-3','The final route is the one Rawls develops.'));
+
+build('before-deal','The hypothetical agreement removes the bias created by the hand',[
+  'To ask what the players would have agreed to before the cards were dealt is to ask them to decide without knowing whose particular interests the rule will serve.',
+  'That ignorance does not guarantee agreement, but it blocks the obvious temptation to defend a rule only because one has a good hand right now.',
+  'Rawls carries this idea from a game to society: principles of justice are justified when they would be chosen under a suitably fair initial situation.'
+],note('pp. 2-3','Emphasize that the agreement is hypothetical, not a historical contract.'));
+
+question('The larger version','What must people not know if they are to choose fair rules for an entire society?','The poker case works because the relevant advantage can be hidden. Rawls’s next task is to specify a much more demanding form of ignorance.',note('pp. 3-4'));
+
+section('II','The original position turns ignorance into impartiality',note('pp. 3-7','The original position is Rawls’s name for the imagined choice situation.'));
+
+build('bias','Justice needs a standpoint that does not begin with social advantage',[
+  'People often disagree about justice because they already know the social cards they have been dealt, including wealth, talents, status, and power.',
+  'A wealthy person may resist taxation while a poor person may favor it, so simply asking everyone in society to agree will not resolve the dispute.',
+  'Rawls’s leading thought is that justice requires impartiality, and impartiality can be modeled by preventing people from knowing which advantages or disadvantages are theirs.'
+],note('pp. 3-4','The argument presents self-interest as one source of bias, not the only source of disagreement.'));
+
+build('veil','The veil of ignorance hides the facts that invite self-favoring rules',[
+  'In the original position, parties do not know their place in society, class position, social status, gender, race, or possession of natural assets such as abilities and strengths.',
+  'They also do not know their conception of the good: their particular religious, moral, philosophical, or personal view about what makes life worthwhile.',
+  'Because no one knows which group they will belong to once the veil is lifted, no one can rationally design a principle that deliberately burdens a group they might turn out to be in.'
+],note('pp. 4-5','Define the veil as a condition of the thought experiment, not a claim that these characteristics do not matter in real life.'));
+
+head('Behind the veil: what is hidden and what remains',[
+  ['Hidden','Social position, natural talents, identity, personal aims, special psychological tendencies, and a generation’s particular situation.'],
+  ['Known','People can have a sense of justice and a conception of the good, and social life takes place under neither desperate scarcity nor unlimited abundance.']
+],note('pp. 5-7','This distinction is essential: the parties are not ignorant of everything.'));
+
+build('primary-goods','The parties still need reasons to choose',[
+  'If the parties knew nothing about themselves and wanted nothing, they could not decide how society should be arranged.',
+  'Rawls therefore gives them a thin theory of the good: they know they want primary goods, including liberties, opportunities, wealth, income, and the social bases of self-respect.',
+  'Primary goods are supposed to be useful whatever a person’s deeper aims turn out to be. The parties prefer more of them to fewer and choose efficient means to their ends.'
+],note('p. 6','A thin theory of the good supplies motivation without reintroducing a particular way of life.'));
+
+build('model','The original position is a device, not a portrait of real people',[
+  'The parties are rational, mutually disinterested, and not envious: each chooses for their own future without taking pleasure or pain in anyone else’s fortune.',
+  'Rawls is not claiming that real people are actually like this. The unusual assumptions are methodological devices meant to identify principles that do not depend on anyone’s accidental social starting point.'
+],note('pp. 6-7','Keep the model distinct from an account of ordinary human psychology.'));
+
+build('circumstances','Justice matters in a world with enough to divide, but not enough for everyone to have everything',[
+  'In conditions of dire scarcity, survival can make ordinary judgments of justice seem beside the point. In conditions of unlimited abundance, conflicts over shares would barely arise.',
+  'Rawls assumes the circumstances of justice: society lies between those extremes, so people need principles for distributing benefits and burdens under moderate scarcity.'
+],note('p. 7','The parties lack local facts about their society but know this general condition.'));
+
+question('What would rational people protect first?','If you might occupy any social position, which protections would be too dangerous to give away?','The veil pushes the parties toward equal basic liberties, then toward rules for opportunities and economic inequality.',note('pp. 5, 8'));
+
+section('III','Rawls permits inequality only on fair terms',note('pp. 8-11','The argument names three principles and then focuses on the Difference Principle.'));
+
+head('The principles chosen in the original position',[
+  ['Equal liberty','Each person has an equal right to the most extensive system of basic liberties compatible with the same liberty for all.'],
+  ['Fair opportunity','Offices and positions must be open to all under conditions of fair equality of opportunity.'],
+  ['Difference principle','Social and economic inequalities are allowed only when they are to the greatest benefit of the least advantaged.']
+],note('p. 8','Paraphrases the principles quoted from Rawls in the source material.'));
+
+build('priority','Some principles have priority over others',[
+  'Rawls gives the Liberty Principle lexical priority over fair opportunity and the Difference Principle. Lexical priority means that, once society has reached a reasonable level of wealth, liberty is not traded away for economic gain.',
+  'Fair equality of opportunity likewise has priority over the Difference Principle. A society may not defend an unequal outcome merely by saying that it produces greater total wealth.',
+  'This is why Rawls rejects the thought that slavery could be justified by showing it made enslaved people materially better off than they would otherwise be. Equal liberty must come first.'
+],note('p. 8','Lexical priority is stronger than treating liberty as one good to be balanced against other goods.'));
+
+build('presumption','The Difference Principle begins with equality, not with a ban on every difference',[
+  'Rawls’s starting presumption is broadly egalitarian: primary goods should be distributed equally among citizens unless an unequal arrangement can be justified.',
+  'An inequality is permitted when it makes everyone better off and, most importantly, leaves the least advantaged better off than they would be under the available alternative.'
+],note('p. 9','Clarify that Rawls asks whether an inequality benefits the worst off, not merely whether it benefits some people.'));
+
+build('incentives','Inequality may be allowed when it is necessary for mutual benefit',[
+  'Some people may work harder when extra rewards are available, and their effort can create jobs, useful goods, or tax revenue that benefit others.',
+  'Rawls accepts the conditional claim that an inequality should be permitted if it is necessary to make the least advantaged better off than they would otherwise be.',
+  'Whether a particular incentive is actually necessary is an empirical question for psychology and economics, not something that follows from philosophy alone.'
+],note('p. 9','The Difference Principle is not simply envy of those who earn more.'));
+
+question('Why not choose utilitarianism?','If a society produces a higher average level of well-being, why should someone behind the veil reject it?','The answer turns on how a rational person should choose when they do not know which position in that society will be theirs.',note('pp. 9-11'));
+
+section('IV','Choosing a society means choosing under uncertainty',note('pp. 9-15','The hospital-bed scenario makes the original position concrete.'));
+
+build('hospital','The hospital-bed version makes the veil personal',[
+  'Imagine waking in a hospital with extensive memory loss. You do not know your name, sex, race, family, occupation, class, strengths, skills, or even the century in which you live.',
+  'Before your memory returns, you must choose the principles for the society you will soon enter. You know only that you want primary goods and that you will live with the society you choose.',
+  'The choice can be described as one person’s decision because the parties in the original position have the same information and are assumed to reason in the same way.'
+],note('pp. 9-10','This is an adaptation of the original position given in the argument.'));
+
+question('The liberty choice','Why would equal liberty look rational from the hospital bed?','Without knowing which group you will belong to, discriminating against a group risks discriminating against yourself. Wanting as much of the relevant primary goods as possible also supports extensive equal liberty.',note('pp. 10-11'));
+
+build('rational-choice','The difficult question is how to choose economic principles under uncertainty',[
+  'The Liberty Principle appears to follow quickly, but the Difference Principle requires a rule for deciding among risky social possibilities.',
+  'Rawls treats this as a problem of rational choice under uncertainty: which decision rule should guide a choice when you do not know which outcome will become yours?'
+],note('p. 11','The point is not that every ordinary uncertainty should be handled in the same way.'));
+
+build('safe-or-risky','A safe option and a gamble can recommend different kinds of rationality',[
+  'The argument contrasts a dependable modest outcome with a risky option that usually delivers much more but sometimes produces a serious loss.',
+  'Maximizing expected utility chooses the option with the highest average value across its possible outcomes. It therefore favors a gamble when the average payoff is higher.',
+  'Maximin instead asks which option makes the worst possible outcome as good as possible. It favors the safe option when the gamble’s bad outcome is substantially worse.'
+],note('pp. 12-13','This condenses the restaurant example from the argument without changing the decision-rule contrast.'));
+
+head('Three ways to choose under uncertainty',[
+  ['Expected utility','Choose the option with the highest average value across possible outcomes.'],
+  ['Maximin','Choose the option whose worst possible outcome is better than the alternatives’ worst outcomes.'],
+  ['Maximax','Choose the option with the best possible outcome, even when that outcome is very unlikely.']
+],note('pp. 13-14','The argument treats maximax mainly as a contrast that exposes how risk-seeking can ignore disastrous possibilities.'));
+
+build('societies','Each decision rule points toward a different society',[
+  'Choosing the highest expected average position points toward average utilitarianism: arrange society to make the average position as good as possible.',
+  'Choosing the best possible outcome points toward a highly unequal society with a privileged, wealthy, and powerful class.',
+  'Choosing the best worst outcome points toward Rawls’s Difference Principle: make the least advantaged position as good as possible.'
+],note('p. 15','This is the central bridge from rational-choice rules to competing principles of justice.'));
+
+question('The burden of Rawls’s argument','Is maximin really the rational rule for this particular choice?','Rawls does not claim that maximin should govern every decision under uncertainty. He argues that the original position has special features that make risk unusually hard to justify.',note('p. 15'));
+
+section('V','A fair contract rules out choices no one could live with',note('pp. 15-18','Rawls adds physical, logical, and formal constraints before defending maximin.'));
+
+build('constraints','The original position does not permit just any wish',[
+  'The parties must choose principles that are physically possible for a society between scarcity and abundance; they cannot simply demand that everyone live in a palace.',
+  'They must also choose principles that are logically possible and whose terms are public: every party must be able to know what the agreement requires.'
+],note('pp. 15-16','Publicity rules out a contract whose rules are deliberately concealed from some of its parties.'));
+
+build('finality','A genuine agreement must survive the outcome it creates',[
+  'Rawls adds finality: if parties make a contract in good faith, they must be prepared to live with its terms even when they later find themselves poorly placed by them.',
+  'This is the idea of strains of commitment. A person who would immediately seek to overturn the chosen arrangement after drawing a bad social position was not prepared to make that choice in good faith.',
+  'Finality matters because a just society should also be stable over time, rather than resting on principles that its worst-off members predictably reject once the veil is lifted.'
+],note('pp. 16-17','The argument later questions how much weight this contract-like constraint should carry.'));
+
+question('When is expected utility rational?','Why does a rule that is sensible for repeated gambles become less persuasive for one irreversible choice?','The next step separates a long series of independent chances from a single decision that fixes one’s social prospects.',note('pp. 17-18'));
+
+section('VI','The choice is made once, not over and over',note('pp. 17-20','Rawls’s strongest case for maximin depends on the special risks of the original position.'));
+
+build('long-run','Expected utility works best when losses can be absorbed across many independent choices',[
+  'In a long series of genuinely independent gambles, a person who regularly accepts favorable odds will, on average, do better than someone who always plays safe.',
+  'That reasoning makes maximizing expected utility attractive in ordinary economic theory, where decisions are treated as repeated opportunities rather than one unrepeatable settlement.'
+],note('p. 17','The argument illustrates the point with a recurring wage gamble.'));
+
+build('one-shot','The original position is not a repeatable gamble',[
+  'The choice of a society is a one-off decision. Once the veil is lifted, a person does not receive a second opportunity to redraw the social terms if the gamble goes badly.',
+  'Because the choice is unrepeatable, the appeal to a favorable average no longer settles the issue. A high average can still coexist with a very bad position for the person making the choice.'
+],note('p. 18','This is Rawls’s key distinction from the long-run case.'));
+
+build('grave-risk','Rawls says the possible loss is too grave to gamble with',[
+  'Even if equal liberty is guaranteed, a society that maximizes an average may leave some people very poor, unemployed, or homeless if that is the side effect of a highly efficient arrangement.',
+  'From behind the veil, you might turn out to be one of those people. Rawls argues that accepting this risk is foolish when a principle can instead secure the best possible position for whoever is worst off.',
+  'If the gamble fails, the strains of commitment reappear: the person who ends up badly off may reasonably want to reject the arrangement they supposedly chose.'
+],note('pp. 18-19','The argument identifies grave risk as the main work of Rawls’s case for maximin.'));
+
+question('Is safety enough?','Does rejecting a gamble with a disastrous downside automatically prove that maximin is the right rule?','A critic can accept the need to avoid catastrophe while still seeking an intermediate rule that permits some risk and preserves a safety net.',note('pp. 19-20'));
+
+build('safety-net','The strongest alternative is constrained maximization',[
+  'Constrained maximization says: maximize expected benefits, but exclude options that contain an unacceptably bad possibility.',
+  'That rule could allow significant inequality when it raises average prosperity while also requiring a minimum income or welfare protection so that no one falls into desperation.',
+  'It aims to keep the practical appeal of a market society while avoiding the worst risks that make unconstrained utilitarianism troubling behind the veil.'
+],note('pp. 19-20','The argument presents this as a serious intermediate alternative, not merely a caricature.'));
+
+build('minimum','Rawls replies that the safety net has no non-arbitrary level behind the veil',[
+  'The parties do not know their society’s actual productivity, prices, or needs, so they cannot sensibly choose a fixed amount that will always keep people adequately fed, clothed, and housed.',
+  'A relative rule such as half the average income also looks arbitrary: why half rather than a quarter or three-quarters, and why assume that any of those levels will be enough?',
+  'Rawls’s proposed answer is to choose the most general rule possible: make the worst-off position as good as it can be. That is simply the Difference Principle again.'
+],note('p. 20','The argument notes that critics may doubt whether Rawls has exhausted the possible non-arbitrary safety-net principles.'));
+
+section('VII','The case for Rawls is qualified, not complete',note('pp. 20-21','The source material ends by identifying the next question rather than treating Rawls’s justification as settled.'));
+
+build('qualified','What the argument has achieved and what remains open',[
+  'The original position gives a powerful way to ask which principles people could endorse without knowing whether they will be privileged or disadvantaged.',
+  'The argument finds some plausibility in the claim that equal liberty, fair opportunity, and the Difference Principle would be chosen, while also questioning the priority Rawls assigns and whether maximin defeats every rival rule.'
+],note('pp. 20-21','Rawls also appeals to fraternity and reciprocity, but the argument says the details and force of that argument remain controversial.'));
+
+question('The final challenge','Why should a choice made behind a veil of ignorance justify justice for people who are not behind that veil?','Rawls still needs to explain why the original position is the right method of justification, rather than merely an ingenious thought experiment.',note('p. 21','This question is explicitly left for the next topic in the argument.'));
+
+diagnostic('Would you accept this society if you had to enter it without knowing who you would be?',note('pp. 1-21','This question captures the central test supplied by the original position.'));
+
+refs([
+  ['Source material','“The Distribution of Property - Rawls Theory of Justice.”'],
+  ['Primary work quoted and discussed','John Rawls, A Theory of Justice (1971; revised edition, 1999), as quoted in the source material.'],
+  ['Ideas discussed','The original position, the veil of ignorance, primary goods, lexical priority, the Difference Principle, maximin, and constrained maximization, all as presented in the source material.']
+],note('pp. 1-21','Every visible claim and quotation is grounded in the source material.'));
+
+const deck=document.getElementById('deck');
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+function renderSlide(s,i){
+  const article=document.createElement('article');
+  article.className=`slide ${s.type}${s.type==='content'||s.type==='head'?' top':''}`;
+  article.dataset.index=i;
+  if(s.buildGroup) article.dataset.buildGroup=s.buildGroup;
+  let html='<div class="slide-inner">';
+  if(s.type==='cover') html+=`<h1 class="title">${esc(s.title)}</h1><p class="work">${esc(s.work)}</p><div class="course">${esc(s.course)}</div>`;
+  if(s.type==='section') html+=`<div class="eyebrow">${esc(s.eyebrow)}</div><h2 class="title">${esc(s.title)}</h2><div class="rule"></div>`;
+  if(s.type==='content') html+=`<h2 class="title">${esc(s.title)}</h2><div class="body">${s.paragraphs.map((p,j)=>`<p class="${j===s.paragraphs.length-1?'fresh':''}">${esc(p)}</p>`).join('')}</div>`;
+  if(s.type==='question'||s.type==='diagnostic') html+=`<div class="eyebrow">${esc(s.eyebrow)}</div><p class="prompt">${esc(s.prompt)}</p>${s.context?`<p class="context">${esc(s.context)}</p>`:''}`;
+  if(s.type==='quote') html+=`<blockquote>${esc(s.text)}</blockquote><cite>${esc(s.cite)}</cite>`;
+  if(s.type==='duo') html+=`<h2 class="title">${esc(s.title)}</h2><div class="duo-grid">${[s.left,s.right].map(x=>`<div class="duo-col"><h3>${esc(x.label)}</h3><p>${esc(x.text)}</p></div>`).join('')}</div>`;
+  if(s.type==='head') html+=`<h2 class="title">${esc(s.title)}</h2><div class="head-list">${s.items.map(x=>`<div class="head-item"><b>${esc(x[0])}</b><span>${esc(x[1])}</span></div>`).join('')}</div>`;
+  if(s.type==='refs') html+=`<h2 class="title">${esc(s.title)}</h2><div class="refs-list">${s.items.map(x=>`<div class="ref"><strong>${esc(x[0])}.</strong> ${esc(x[1])}</div>`).join('')}</div>`;
+  article.innerHTML=html+'</div>';
+  deck.appendChild(article);
+  return article;
+}
+const nodes=slides.map(renderSlide);
+let current=0;
+const counter=document.getElementById('counter');
+const progress=document.getElementById('progress');
+const notes=document.getElementById('notes');
+const notesBody=document.getElementById('notes-body');
+const overview=document.getElementById('overview');
+const overviewGrid=document.getElementById('overview-grid');
+function labelFor(s){return s.title||s.prompt||s.text||'Slide';}
+slides.forEach((s,i)=>{const b=document.createElement('button');b.className='overview-card';b.innerHTML=`<span class="num">${String(i+1).padStart(2,'0')} / ${slides.length}</span><span class="label">${esc(labelFor(s))}</span>`;b.addEventListener('click',()=>{closePanels();show(i)});overviewGrid.appendChild(b)});
+const cards=[...overviewGrid.children];
+function show(i){current=Math.max(0,Math.min(slides.length-1,i));nodes.forEach((n,j)=>n.classList.toggle('active',j===current));cards.forEach((n,j)=>n.classList.toggle('current',j===current));counter.textContent=`${current+1} / ${slides.length}`;progress.style.width=`${((current+1)/slides.length)*100}%`;notesBody.textContent=slides[current].notes||'No notes for this slide.';document.title=`${current+1}/${slides.length} · Rawls - Choosing Justice`;}
+function openPanel(panel){closePanels();panel.classList.add('open');}
+function closePanels(){overview.classList.remove('open');notes.classList.remove('open');}
+function togglePanel(panel){panel.classList.contains('open')?closePanels():openPanel(panel);}
+function toggleFullscreen(){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen().catch(()=>{});}
+document.getElementById('fullscreen').addEventListener('click',toggleFullscreen);
+document.querySelectorAll('.close').forEach(b=>b.addEventListener('click',closePanels));
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closePanels();return;}if(overview.classList.contains('open')||notes.classList.contains('open')) return;if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();show(current+1);}else if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();show(current-1);}else if(e.key.toLowerCase()==='o') togglePanel(overview);else if(e.key.toLowerCase()==='n') togglePanel(notes);else if(e.key.toLowerCase()==='f') toggleFullscreen();});
+let touchX=0,touchY=0;
+document.addEventListener('touchstart',e=>{touchX=e.changedTouches[0].screenX;touchY=e.changedTouches[0].screenY;},{passive:true});
+document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].screenX-touchX,dy=e.changedTouches[0].screenY-touchY;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy))show(current+(dx<0?1:-1));},{passive:true});
+function fits(node){const inner=node.querySelector('.slide-inner');return inner.scrollHeight<=node.clientHeight*.82&&inner.scrollWidth<=node.clientWidth*.92;}
+function fitNode(node,start=1){let f=start;node.classList.add('measuring');node.style.setProperty('--fit',f);while(f>.72&&!fits(node)){f-=.02;node.style.setProperty('--fit',f);}node.classList.remove('measuring');return f;}
+function fitAll(){nodes.forEach(n=>n.style.setProperty('--fit',1));const groups={};nodes.forEach(n=>{if(n.dataset.buildGroup)(groups[n.dataset.buildGroup]??=[]).push(n);});const grouped=new Set(Object.values(groups).flat());Object.values(groups).forEach(group=>{const final=group[group.length-1];const f=fitNode(final);group.forEach(n=>n.style.setProperty('--fit',f));});nodes.filter(n=>!grouped.has(n)).forEach(n=>fitNode(n));show(current);}
+let resizeTimer;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(fitAll,120);});
+if(document.fonts?.ready)document.fonts.ready.then(fitAll);else fitAll();
+show(0);
+</script>
+</body>
+</html>

@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rawls - His Critics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#eeece4;
+    --paper-deep:#dfddd3;
+    --ink:#20221f;
+    --muted:#69706a;
+    --accent:#b84a3f;
+    --accent-dim:#9d8574;
+    --accent-soft:rgba(184,74,63,.12);
+    --cool:#64889a;
+    --rule:rgba(32,34,31,.19);
+    --fit:1;
+  }
+  *{box-sizing:border-box}
+  html,body{width:100%;height:100%;margin:0;overflow:hidden;background:var(--paper-deep);color:var(--ink)}
+  body{font-family:Inter,system-ui,sans-serif}
+  button{font:inherit}
+  #deck{position:relative;width:100vw;height:100vh;overflow:hidden;background:
+    radial-gradient(ellipse at 8% 7%,rgba(184,74,63,.09),transparent 28%),
+    radial-gradient(ellipse at 92% 92%,rgba(100,136,154,.10),transparent 30%),
+    linear-gradient(118deg,transparent 0 48.5%,rgba(32,34,31,.055) 48.55% 48.72%,transparent 48.77%),
+    repeating-linear-gradient(0deg,transparent 0 9.6vh,rgba(32,34,31,.032) 9.65vh 9.72vh),
+    var(--paper)}
+  #deck::before,#deck::after{content:"";position:absolute;pointer-events:none}
+  #deck::before{left:5.2vw;top:0;width:1px;height:100%;background:linear-gradient(transparent,rgba(184,74,63,.38) 14%,rgba(184,74,63,.14) 86%,transparent)}
+  #deck::after{right:6vw;top:11vh;width:17vw;height:67vh;border-left:1px solid rgba(100,136,154,.16);border-right:1px solid rgba(100,136,154,.10);transform:skewX(-10deg)}
+  .slide{position:absolute;inset:0;display:none;align-items:center;justify-content:center;padding:7.2vh 7vw 8vh;text-align:center;overflow:hidden}
+  .slide.active,.slide.measuring{display:flex}
+  .slide.measuring{visibility:hidden;pointer-events:none}
+  .slide.top{align-items:flex-start;padding-top:8.5vh}
+  .slide-inner{position:relative;z-index:1;width:min(980px,86vw);max-height:82vh;margin:auto;transform-origin:top center}
+  .slide.top .slide-inner{margin:0 auto}
+  .slide.duo .slide-inner{width:min(1140px,90vw)}
+  .eyebrow{margin:0 0 1.2rem;color:var(--accent);font:600 clamp(12px,1.12vw,17px)/1.3 "IBM Plex Mono",monospace;letter-spacing:.18em;text-transform:uppercase}
+  .title{margin:0;font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;letter-spacing:-.018em}
+  .cover .slide-inner{padding:3rem 3.8rem;border-block:1px solid var(--rule);background:linear-gradient(90deg,rgba(238,236,228,.25),rgba(238,236,228,.67),rgba(238,236,228,.25))}
+  .cover .title{font-size:calc(clamp(58px,7.6vw,104px)*var(--fit));line-height:.96;max-width:11.5ch;margin-inline:auto}
+  .cover .work{font:500 calc(clamp(20px,2.15vw,31px)*var(--fit))/1.4 "Cormorant Garamond",Georgia,serif;color:var(--muted);margin:1.5rem auto 0;max-width:37ch}
+  .cover .course{margin-top:2.4rem;color:var(--accent);font:500 calc(clamp(11px,1vw,15px)*var(--fit))/1.4 "IBM Plex Mono",monospace;letter-spacing:.14em;text-transform:uppercase}
+  .section .slide-inner{width:min(900px,86vw);padding:2.3rem 2.8rem 2.45rem;border-left:4px solid var(--accent);border-block:1px solid var(--rule);text-align:left;background:linear-gradient(90deg,rgba(184,74,63,.085),rgba(238,236,228,.22) 76%,transparent)}
+  .section .eyebrow{text-align:left}
+  .section .title{font-size:calc(clamp(48px,6.2vw,84px)*var(--fit));line-height:1.02}
+  .section .rule{width:8.5rem;height:2px;background:linear-gradient(90deg,var(--accent),var(--cool),transparent);margin:1.8rem 0 0}
+  .content .title,.head .title,.duo .title{font-size:calc(clamp(38px,4.5vw,62px)*var(--fit));line-height:1.05;margin-bottom:1.6rem;max-width:19ch;padding-bottom:.7rem;border-bottom:1px solid var(--rule)}
+  .content .body{font-family:"Cormorant Garamond",Georgia,serif;font-size:calc(clamp(25px,2.35vw,35px)*var(--fit));line-height:1.34;text-align:left}
+  .content .body p{margin:0 0 1.05em -1.25rem;padding:.08em .7em .08em 1rem;border-left:3px solid rgba(184,74,63,.28);color:rgba(105,112,106,.83);font-weight:600;background:linear-gradient(90deg,rgba(184,74,63,0),rgba(184,74,63,0))}
+  .content .body p:last-child{margin-bottom:0}
+  .content .body p.fresh{color:var(--ink);border-left-color:var(--accent);background:linear-gradient(90deg,var(--accent-soft),rgba(184,74,63,0) 78%);text-shadow:0 0 18px rgba(32,34,31,.04)}
+  .question .slide-inner,.diagnostic .slide-inner{width:min(900px,86vw);padding:2.75rem 3.5rem;border:1px solid rgba(184,74,63,.34);box-shadow:inset 0 0 0 9px rgba(184,74,63,.025),0 18px 40px rgba(32,34,31,.06);background:rgba(238,236,228,.74)}
+  .question .prompt,.diagnostic .prompt{margin:0;font-family:"Cormorant Garamond",Georgia,serif;font-size:calc(clamp(42px,5.2vw,72px)*var(--fit));line-height:1.08;font-weight:600;letter-spacing:-.015em}
+  .question .prompt::after,.diagnostic .prompt::after{content:"";display:block;width:7.5rem;height:2px;background:linear-gradient(90deg,var(--accent),var(--cool));margin:1.8rem auto 0}
+  .question .context{max-width:48ch;margin:1.35rem auto 0;color:var(--muted);font:500 calc(clamp(18px,1.7vw,25px)*var(--fit))/1.4 "Cormorant Garamond",Georgia,serif}
+  .quote .slide-inner{padding:1rem 3rem;border-inline:1px solid rgba(184,74,63,.34)}
+  .quote blockquote{margin:0 auto;max-width:26ch;font-family:"Cormorant Garamond",Georgia,serif;font-size:calc(clamp(39px,4.45vw,63px)*var(--fit));line-height:1.12;font-weight:500;font-style:italic}
+  .quote blockquote::before{content:"“";color:var(--accent);margin-right:.08em}
+  .quote blockquote::after{content:"”";color:var(--accent);margin-left:.08em}
+  .quote cite{display:block;margin-top:1.6rem;padding-top:1rem;border-top:1px solid var(--rule);color:var(--muted);font:500 calc(clamp(12px,1.15vw,17px)*var(--fit))/1.45 "IBM Plex Mono",monospace;font-style:normal}
+  .duo-grid{display:grid;grid-template-columns:1fr 1fr;gap:2.4rem;text-align:left;margin-top:1.5rem}
+  .duo-col{min-height:15rem;padding:1.5rem 1.6rem;border:1px solid var(--rule);border-top:4px solid var(--accent);background:linear-gradient(145deg,rgba(238,236,228,.88),rgba(223,221,211,.52))}
+  .duo-col:nth-child(2){border-top-color:var(--cool)}
+  .duo-col h3{margin:0 0 .85rem;color:var(--accent);font:600 calc(clamp(13px,1.25vw,18px)*var(--fit))/1.3 "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase}
+  .duo-col:nth-child(2) h3{color:var(--cool)}
+  .duo-col p{margin:0;color:var(--ink);font:500 calc(clamp(24px,2.15vw,33px)*var(--fit))/1.34 "Cormorant Garamond",Georgia,serif}
+  .head-list{display:grid;gap:1.05rem;text-align:left;margin-top:1.8rem}
+  .head-item{display:grid;grid-template-columns:10rem 1fr;gap:1.5rem;align-items:baseline;border-left:2px solid rgba(184,74,63,.55);padding:1rem 0 0 1rem;border-top:1px solid var(--rule)}
+  .head-item:nth-child(even){border-left-color:rgba(100,136,154,.58)}
+  .head-item b{color:var(--accent);font:600 calc(clamp(12px,1.1vw,16px)*var(--fit))/1.3 "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase}
+  .head-item:nth-child(even) b{color:var(--cool)}
+  .head-item span{font:500 calc(clamp(23px,2.05vw,31px)*var(--fit))/1.3 "Cormorant Garamond",Georgia,serif}
+  .diagnostic .eyebrow{color:var(--muted)}
+  .diagnostic .prompt{font-size:calc(clamp(52px,6.6vw,90px)*var(--fit))}
+  .refs .slide-inner{width:min(980px,86vw);text-align:left}
+  .refs .title{font-size:calc(clamp(40px,4.6vw,64px)*var(--fit));margin-bottom:1.7rem}
+  .refs-list{display:grid;gap:1.05rem}
+  .ref{padding-top:.95rem;border-top:1px solid var(--rule);font:500 calc(clamp(18px,1.65vw,24px)*var(--fit))/1.38 "Cormorant Garamond",Georgia,serif;color:var(--muted)}
+  .ref strong{color:var(--ink);font-weight:600}
+  #progress{position:fixed;z-index:20;left:0;top:0;width:0;height:4px;background:linear-gradient(90deg,var(--cool),var(--accent));transition:width .24s ease}
+  #nav-hint,#counter{position:fixed;z-index:20;bottom:2.35vh;color:rgba(105,112,106,.95);font:500 clamp(10px,.86vw,13px)/1.2 "IBM Plex Mono",monospace;letter-spacing:.08em}
+  #nav-hint{left:3vw}#counter{right:3vw}
+  #fullscreen{position:fixed;z-index:20;right:3vw;top:2.35vh;color:var(--muted);background:rgba(238,236,228,.58);border:1px solid rgba(184,74,63,.48);padding:.55rem .75rem;cursor:pointer;font:500 clamp(10px,.86vw,13px)/1.2 "IBM Plex Mono",monospace;letter-spacing:.06em;text-transform:uppercase}
+  #fullscreen:hover{border-color:var(--accent);color:var(--accent)}
+  .panel{position:fixed;z-index:30;inset:0;display:none;overflow:auto;padding:5vh 7vw 8vh;background:rgba(238,236,228,.985)}
+  .panel.open{display:block}.panel-head{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--rule);padding-bottom:1rem;margin-bottom:1.5rem}
+  .panel-head h2{margin:0;font:600 clamp(28px,3vw,46px)/1 "Cormorant Garamond",Georgia,serif}.close{border:1px solid var(--rule);background:transparent;color:var(--ink);padding:.55rem .8rem;cursor:pointer;font:500 12px/1 "IBM Plex Mono",monospace}
+  #overview-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem}.overview-card{min-height:100px;text-align:left;padding:1rem;background:linear-gradient(145deg,#f4f1e8,#e4e0d5);border:1px solid var(--rule);border-left:3px solid transparent;color:var(--ink);cursor:pointer}.overview-card:hover,.overview-card.current{border-left-color:var(--accent);border-color:rgba(184,74,63,.42)}.overview-card .num{display:block;color:var(--accent);font:500 11px/1 "IBM Plex Mono",monospace;letter-spacing:.1em}.overview-card .label{display:block;margin-top:.7rem;font:600 21px/1.12 "Cormorant Garamond",Georgia,serif}
+  #notes-body{white-space:pre-wrap;max-width:82ch;color:var(--muted);font:500 clamp(17px,1.45vw,23px)/1.55 "Cormorant Garamond",Georgia,serif}
+  @media (max-width:760px){.slide{padding:7vh 6vw 9vh}.slide.top{padding-top:7vh}.slide-inner,.slide.duo .slide-inner{width:min(92vw,980px)}.cover .slide-inner,.section .slide-inner,.question .slide-inner,.diagnostic .slide-inner{padding:1.7rem 1.5rem}.quote .slide-inner{padding:1rem 1.4rem}.duo-grid{grid-template-columns:1fr;gap:1rem}.head-item{grid-template-columns:1fr;gap:.45rem}.head-item b{padding-top:0}#nav-hint{display:none}}
+</style>
+<link rel="stylesheet" href="presentation-polish.css">
+<script src="presentation-polish.js" defer></script>
+</head>
+<body>
+<div id="deck" aria-live="polite"></div>
+<div id="progress"></div>
+<div id="nav-hint">ARROWS / SPACE · O OVERVIEW · N NOTES · F FULLSCREEN</div>
+<div id="counter">1 / 1</div>
+<button id="fullscreen" aria-label="Toggle fullscreen">Fullscreen</button>
+<section id="overview" class="panel" aria-label="Slide overview"><div class="panel-head"><h2>Overview</h2><button class="close">Close</button></div><div id="overview-grid"></div></section>
+<aside id="notes" class="panel" aria-label="Speaker notes"><div class="panel-head"><h2>Speaker notes</h2><button class="close">Close</button></div><div id="notes-body"></div></aside>
+
+<script>
+const slides=[];
+const src=(pages,extra='')=>`[Sources]\nSource material, “The Distribution of Property - Rawls and His Critics,” p. ${pages}.${extra?`\n${extra}`:''}\n[/Sources]`;
+const note=(pages,text='',extra='')=>`${text?`${text}\n\n`:''}${src(pages,extra)}`;
+const add=s=>slides.push(s);
+const cover=(title,work,course,notes)=>add({type:'cover',title,work,course,notes});
+const section=(roman,title,notes)=>add({type:'section',eyebrow:`${roman}. ${title.toUpperCase()}`,title,notes});
+const question=(eyebrow,prompt,context,notes)=>add({type:'question',eyebrow,prompt,context,notes});
+const quote=(text,cite,notes)=>add({type:'quote',text,cite,notes});
+const duo=(title,left,right,notes)=>add({type:'duo',title,left,right,notes});
+const head=(title,items,notes)=>add({type:'head',title,items,notes});
+const diagnostic=(prompt,notes)=>add({type:'diagnostic',eyebrow:'The property-and-liberty test',prompt,notes});
+const refs=(items,notes)=>add({type:'refs',title:'References',items,notes});
+const build=(group,title,parts,pages,text='',extra='')=>parts.forEach((_,i)=>add({type:'content',title,paragraphs:parts.slice(0,i+1),buildGroup:group,notes:note(pages,`${text}${i<parts.length-1?`${text?'\n\n':''}Pause before revealing the next step.`:''}`,extra)}));
+
+cover('Rawls and his critics','Can equality survive liberty?','THE DISTRIBUTION OF PROPERTY',note('1–9','This account reconstructs the challenges to Rawls developed in the source material.'));
+
+question('The opening puzzle','Can an imaginary agreement ever tell us what justice requires?','Rawls asks which principles people would choose from a fair starting point. His critics ask why the result of an imagined agreement should have any moral authority at all.',note('1','Keep the distinction between an imagined agreement and an actual agreement visible from the beginning.'));
+
+section('I','A made-up agreement proves nothing by itself',note('1','The argument begins with a challenge to the hypothetical-contract method, not with a rejection of justice as a moral question.'));
+
+build('fantasy-contracts','An imaginary bargain can have an obviously unjust outcome',[
+  'Imagine that, in exchange for a copy of this book, you agree to give away all your worldly possessions.',
+  'That imagined exchange is a hypothetical contract, but its result is hardly just simply because it is described as an agreement.',
+  'Another imagined contract could reverse the terms and give you all of someone else’s possessions instead. The two fantasies point toward incompatible outcomes.',
+  'So the bare fact that a rule would be agreed to in a hypothetical contract cannot, by itself, establish that the rule is just.'
+],'1','The example comes directly from the argument. Treat it as a test of the method, not as a real transaction.');
+
+quote('A hypothetical contract is not simply a pale form of an actual contract; it is no contract at all.','Ronald Dworkin, “The Original Position” (1973), quoted in the source material',note('1','Let the quotation name the strongest version of the objection.','Ronald Dworkin, “The Original Position” ([1973]), reprinted in Reading Rawls, ed. Norman Daniels, as quoted in the source material.'));
+
+build('privileged-method','Rawls needs to show why his imagined agreement is different',[
+  'A criticism of arbitrary hypothetical contracts does not yet show that Rawls’s particular contract is arbitrary.',
+  'Rawls says that the original position has special authority because every feature of its choice situation can be defended as fair.',
+  'The original position is therefore meant to be a device of representation: its limits are supposed to represent moral convictions that people can accept.'
+],'1–2','The contrast is between a fictional deal that merely happens to be imagined and a model whose restrictions are morally justified.');
+
+question('The method test','What must a fair starting point include before its agreement can matter?','Rawls must show both that the original position reflects moral beliefs and that people placed there can actually reach some agreement.',note('2','This question introduces the two constraints that organize the first set of criticisms.'));
+
+section('II','The original position may hide a disputed picture of human good',note('2–3','The next criticism questions the assumptions that let the parties choose at all.'));
+
+build('two-constraints','Rawls’s setup must be fair and capable of producing agreement',[
+  'First, the assumptions about what the parties know and do not know must reflect relatively uncontroversial moral beliefs. Making parties ignorant of race and sex, for example, represents the thought that racial and sexual discrimination are wrong.',
+  'Second, the parties must be described so that agreement is achievable. If they cannot choose anything, the method has failed before it reaches a principle of justice.'
+],'2','The argument treats these as distinct requirements. A feature can help produce agreement yet still be morally controversial.');
+
+head('The choice situation carries two burdens',[
+  ['Moral burden','Every restriction in the original position must represent a defensible belief about fairness.'],
+  ['Practical burden','The parties must still have enough shared ground to make a choice rather than remain unable to agree.'],
+  ['Critical leverage','A critic can challenge Rawls by showing that a condition needed for agreement is not itself fair.']
+],note('2','These are paraphrases of the argument’s distinction between fairness and achievability.'));
+
+build('primary-goods','The parties need some shared reason to prefer one society to another',[
+  'Rawls makes the parties ignorant of their own conception of the good: they do not know what particular way of life they will value.',
+  'Without some basis for preference, however, they could not choose principles of justice. They would not know what they had reason to want.',
+  'Rawls therefore gives them a thin theory of the good: they want primary goods, such as liberties, opportunities, wealth, income, and the social bases of self-respect.',
+  'These goods are said to be all-purpose means. Whatever deeper aims a person later has, more primary goods are supposed to help them pursue those aims.'
+],'2','Define the thin theory as a limited account of what people generally need in order to choose; it is not a full theory of a good life.');
+
+duo('Are primary goods neutral between ways of life?',
+  {label:'Rawls’s claim',text:'Liberty, opportunity, income, wealth, and self-respect are useful whatever else a person values, so the parties can rationally prefer more of them to less.'},
+  {label:'The criticism',text:'Those goods may fit a modern commercial society especially well and may not capture the value of communal or non-commercial forms of life.'},
+  note('2–3','Keep the criticism narrow: it challenges neutrality, not the thought that any of these goods can matter.'));
+
+build('commercial-bias','A shared list of goods may already favor individualist life',[
+  'The critic accepts that primary goods can be important, but denies that they are neutral across all reasonable conceptions of the good.',
+  'Income and wealth are especially central in capitalist economies built around wages, profit, and exchange.',
+  'A more communal form of life might give wealth, income, liberty, or opportunity a smaller role while placing greater value on goods that Rawls’s list does not foreground.',
+  'If that is right, then the original position reaches agreement partly by building a commercial and individualist picture of life into its starting assumptions.'
+],'2–3','Use “may” carefully. The argument presents a challenge, not a conclusive proof that Rawls’s list is biased.');
+
+question('The neutrality question','Can one list of “all-purpose” goods speak fairly for people whose ways of life value very different things?','The next criticism raises a parallel concern about the other facts Rawls hides: talents, social background, and the ability to make an effort.',note('3','The issue is not whether people differ; the issue is whether Rawls has modeled those differences fairly.'));
+
+build('moral-arbitrariness','Rawls treats natural and social advantages as morally arbitrary',[
+  'The parties in the original position do not know their natural talents, social assets, or family background.',
+  'Rawls says that these advantages are arbitrary from a moral point of view: no one deserves to be born stronger, more intelligent, more attractive, or into a wealthy and cultivated family.',
+  'The veil represents this arbitrariness by treating natural assets as common assets, whose benefits should be available to all members of society.',
+  'Rawls extends the thought further: even the ability to work hard or make a sustained effort is shaped by social and natural conditions beyond a person’s control.'
+],'3','The argument stresses that Rawls’s claim is about moral desert, not about whether talents make practical differences.');
+
+head('Why this claim is controversial',[
+  ['Ordinary intuition','People often think that someone who develops a skill through effort deserves some reward for using it well.'],
+  ['Rawls’s reply','The capacity to make that effort is itself influenced by circumstances for which the person cannot claim full credit.'],
+  ['What is at stake','If the claim about moral arbitrariness is not accepted, the veil’s treatment of talents and social background no longer looks obviously fair.']
+],note('3–4','The argument does not settle the argument. It identifies a point at which reasonable people may refuse Rawls’s description of the original position.'));
+
+question('The pressure on Rawls','What happens if the original position no longer looks like a fair representation?','Rawls’s two principles are justified by being chosen from that position. Doubt about the setup therefore becomes doubt about the principles that emerge from it.',note('3–4','This is the bridge from method criticism to a new attack on the results of Rawls’s theory.'));
+
+section('III','Nozick says liberty and a property pattern pull in opposite directions',note('4','Nozick’s challenge is not mainly that Rawls chose from the wrong thought experiment. It is that the Difference Principle cannot live consistently with liberty.'));
+
+build('different-attack','The target now shifts from the method to the results',[
+  'Some critics argue that the main difficulty for Rawls is not how he chooses principles, but the principles he ends up with.',
+  'They claim that the Liberty Principle and the Difference Principle may be impossible to follow together: a society cannot both respect liberty and continually arrange property according to a distributive rule.'
+],'4','State the criticism before attributing it to Nozick. The argument first maps the general conflict.');
+
+duo('Two opposite ways to connect liberty and property',
+  {label:'Equality worry',text:'If the rich can do much more than the poor, unequal property may create unequal liberty. A Difference Principle that allows property inequality could then conflict with equal liberty.'},
+  {label:'Libertarian worry',text:'If liberty protects people’s control over their holdings, then limiting acquisition or use of property looks like limiting liberty. A distributive principle may therefore be forbidden.'},
+  note('4','The argument says the second complaint is the more common and the one Nozick develops most forcefully.'));
+
+build('classification','Nozick begins by asking what makes a distribution just',[
+  'Nozick distinguishes end-state theories from historical theories of justice.',
+  'An end-state theory judges a distribution by its present structure, while a historical theory insists that present holdings cannot be judged without knowing how people obtained them and how resources were allocated.'
+],'4–5','Use “distribution” in its ordinary sense here: who has what.');
+
+head('Nozick’s further distinction among historical theories',[
+  ['Patterned','A patterned theory says goods should be distributed according to a formula, such as need, ability, desert, or status.'],
+  ['Unpatterned','An unpatterned theory treats just distribution as a matter of legitimate procedures by which people acquire and transfer holdings.'],
+  ['Nozick’s view','Nozick identifies his own account as unpatterned and treats most rival views as either patterned or end-state.']
+],note('5','The phrase “to each according to their…” captures the shape of a patterned principle.'));
+
+question('The pattern challenge','Can a society preserve a distributive pattern once people are free to exchange what they have?','Nozick’s answer is built around one imagined distribution, one voluntary payment, and the new distribution that follows.',note('5','The next section reconstructs Nozick’s Wilt Chamberlain example one inferential step at a time.'));
+
+section('IV','Free choices can undo a distributive pattern',note('5','The Wilt Chamberlain example is intended as a general challenge to every patterned theory, not only to Rawls.'));
+
+build('d1','Start with a distribution that fits a favored pattern',[
+  'Suppose a society distributes property according to a principle of need: the more someone needs, the more money they receive.',
+  'Call this initial distribution D1. For the sake of the example, assume that D1 is just by the chosen pattern.',
+  'Nozick does not need the pattern to be need. The same structure could begin with any favorite formula for distributing goods.'
+],'5','The example assumes the pattern at the start so that the disagreement can focus on what later voluntary choices do to it.');
+
+build('d2','A voluntary payment creates a new distribution',[
+  'Now imagine that Wilt Chamberlain makes an arrangement with his team to receive twenty-five cents from each spectator at a home game.',
+  'A million spectators voluntarily place a quarter in Wilt’s box when they come to watch him play.',
+  'Wilt is now $250,000 better off, and the society has moved from D1 to a new distribution, D2.'
+],'5','The numerical details and scenario are from the argument. The point is not to assess basketball salaries; it is to isolate the effect of many voluntary payments.');
+
+question('The intuitive hinge','If D1 was just and each person freely paid a quarter, what should we say about D2?','Nozick thinks the answer is that D2 is also just. Defenders of distributive patterns must explain why that answer is too quick.',note('5–6','Do not resolve the question yet. The next slides separate Nozick’s three claims.'));
+
+build('disruption','Nozick’s first claim is that free action disrupts every pattern',[
+  'A pattern can be disturbed when people make exchanges, gifts, gambles, consumption choices, or other voluntary transfers.',
+  'In the Chamberlain case, spectators choose basketball over some other purchase, such as chocolate, and the pattern shifts as a result.',
+  'Whatever the starting formula is, Nozick says that free actions are likely to move holdings away from it.'
+],'6','This is a structural claim about patterned distributions, not a prediction that every deviation is equally large.');
+
+build('fragility','Keeping the pattern may require an unlikely shared commitment',[
+  'A defender of a pattern might ask people to make choices that preserve it, at least within a tolerable range of variation. But this is difficult if people disagree about what justice requires or have reasons to make exchanges that benefit them personally.',
+  'Nozick’s pressure point is that a pattern seems vulnerable whenever ordinary freedom of action is not subordinated to maintaining it.'
+],'6','The argument acknowledges the practical possibility of tolerating some variation, then asks whether people will be motivated to preserve the pattern.');
+
+build('voluntary-move','Nozick’s second claim is that voluntary change preserves justice',[
+  'Nozick argues that if D1 is just and people voluntarily move from D1 to D2, then D2 must also be just.',
+  'If that is right, then justice cannot require the original pattern, because a just distribution can fail to match it.',
+  'The argument would therefore defeat every patterned conception of justice, not only the principle of need used to introduce the example.'
+],'6','This is the crucial inference defenders of patterns must resist.');
+
+question('Was D2 really chosen?','Does a voluntary action automatically mean that people voluntarily brought about every social result of that action?','The argument offers a first reply: spectators may have willingly paid Wilt while never realizing that their combined payments would create D2.',note('6','This distinction targets the gap between choosing an individual action and choosing its unanticipated aggregate outcome.'));
+
+build('aggregate-outcome','A voluntary payment does not necessarily make the new pattern voluntary',[
+  'It would be implausible to say that Wilt’s supporters did not voluntarily give him their quarters. But they may not have known that their separate payments would together produce D2.',
+  'So D2 can result from voluntary acts without being a distributive arrangement that anyone knowingly and voluntarily chose.'
+],'6','The argument calls this a subtle point. Do not turn it into the claim that the individual payments were coerced.');
+
+build('power-reply','Even voluntary wealth can create claims for people who did not choose it',[
+  'A second reply grants that D2 came about voluntarily, yet denies that voluntary origin alone settles whether it is just.',
+  'Wilt’s new wealth might let him harm others through market power, hoarding, speculation, or other forms of influence. People who did not choose to watch Wilt, including people not yet born, may therefore have a legitimate complaint about the social power it creates.'
+],'6–7','The argument gives these as possible replies, not as a completed theory of when wealth becomes unjust.');
+
+section('V','A pattern may survive only by intruding on liberty',note('7','Nozick’s third claim is the strongest: maintaining a pattern requires restrictions or redistribution that impede liberty.'));
+
+build('enforcement','Nozick says a society has only two ways to maintain a pattern',[
+  'Suppose a society decides that it must preserve a distributive pattern even though people want to make Wilt-like exchanges.',
+  'It can ban transactions that would disrupt the pattern, or it can allow the transactions and then repeatedly redistribute property afterward.',
+  'Either route requires intrusion into people’s lives: stopping some actions, investigating holdings, or periodically taking resources away for redistribution.'
+],'7','The argument’s point is a disjunction. It does not say every distributional policy must choose the most invasive imaginable mechanism.');
+
+build('even-communism','Abolishing money does not remove the problem for Nozick',[
+  'Nozick says that even a society without private money must allocate goods, and some people will still want to trade what they have received.',
+  'Skilful traders could gain extra goods, and small industries could emerge from things such as legitimately acquired furniture or saucepans. Inequalities of possession would then reappear, so the pattern would again require control or redistribution to be maintained.'
+],'7','The unusual examples are from the argument and illustrate Nozick’s claim that trade, not money alone, threatens a pattern.');
+
+head('Why Nozick thinks this reaches Rawls',[
+  ['A pattern','The Difference Principle directs economic inequality to make the least advantaged position as good as possible.'],
+  ['A disruption','Once people spend, exchange, and acquire different amounts, the distribution will eventually cease to satisfy that principle.'],
+  ['A priority','Rawls gives liberty priority over the Difference Principle, so Nozick says Rawls must reject the pattern if maintaining it restricts liberty.']
+],note('7–8','The argument frames the Difference Principle as patterned for the purposes of Nozick’s challenge.'));
+
+question('The apparent contradiction','If a distributive principle must be maintained by interference, does Rawls’s priority of liberty force him to abandon it?','Rawls has a formal reply, but the argument then asks whether it really answers the deeper worry about taxation and redistribution.',note('8','This question marks the shift from Nozick’s challenge to Rawls’s potential responses.'));
+
+section('VI','Taxation changes the question: whose liberty is being protected?',note('8–9','Rawls denies that his principles formally conflict, then contests Nozick’s description of redistribution as grave interference.'));
+
+build('basic-liberties','Rawls’s Liberty Principle is not a rule of total non-interference',[
+  'Rawls’s Liberty Principle does not distribute liberty as an unlimited freedom from every restriction or regulation. It requires an extensive scheme of basic liberties, including freedom of speech and the right to run for public office.',
+  'Because basic liberties are not identical with an absolute right to keep every holding untouched, Rawls can deny that the two principles are formally inconsistent.'
+],'8','The formal response is important but intentionally modest. The argument says more is needed to blunt Nozick’s challenge.');
+
+build('civilized-tax','Rawls can portray redistribution as ordinary public policy',[
+  'In the abstract, maintaining the Difference Principle may require taxation and redistribution of property.',
+  'But Rawls’s defender can say that this happens through familiar tax and welfare systems: high earners pay more tax, while people with low incomes receive supplements. Paying tax may be unpleasant, but this picture need not amount to constant surveillance or a grave interference with the shape of a person’s life.'
+],'8','The argument presents taxation as both a restriction on disposable income and a mechanism of redistribution.');
+
+quote('Taxation, then, is slavery—a theft of your time.','Nozick’s conclusion as presented in the source material',note('9','Use the quotation to make the libertarian objection feel as forceful as it is meant to be before turning to Rawls’s reply.'));
+
+build('forced-labor','Nozick compares redistributive taxation to compelled work',[
+  'Suppose a person works forty hours a week and twenty-five percent of their wages is taxed for redistribution to poorer people. Nozick says that the person cannot do that job at that wage without paying the tax, so ten hours of the week are effectively spent working for others.',
+  'The analogy is meant to show that taxation takes not only money but a portion of a person’s labor and time, which Nozick sees as a serious loss of liberty.'
+],'9','The forty-hour and twenty-five-percent calculation appears in the source material. Keep the point distinct from an endorsement of the analogy.');
+
+build('rawls-reply','Rawls’s defenders call the slavery analogy a massive exaggeration',[
+  'They can grant a grain of truth: taxation can require people to contribute to purposes they would not personally choose. But paid work under taxation still leaves much more choice about one’s work, hours, and employer than a system of forced labor normally allows.',
+  'Calling redistribution slavery therefore obscures the difference between an obligation within a system of social choice and the near-total control characteristic of forced labor.'
+],'9','The argument does not deny that taxation can burden liberty. It challenges the strength and accuracy of Nozick’s comparison.');
+
+build('liberty-both-sides','Redistribution can also enlarge the liberty of people with less',[
+  'Taxation for redistribution can increase the income of poorer people. More income can give poorer people choices that they would otherwise lack, including choices about work, housing, and the direction of their lives.',
+  'The conflict is therefore not simply liberty versus interference. It is a dispute about which social arrangement gives people the most meaningful range of liberty overall.'
+],'9','Close by stressing the argument’s conclusion: the question remains open, but Nozick has not shown that Rawls’s principles are inconsistent.');
+
+question('What freedom demands','When voluntary choices generate unequal power, does protecting liberty mean leaving those choices untouched, or preserving the conditions that make liberty real for everyone?','The argument ends without settling the dispute. Its lesson is that property and liberty cannot be treated as separate questions.',note('9','Let the final question connect the methodological critiques to the political stakes of Nozick’s challenge.'));
+
+diagnostic('When a just pattern and free choice diverge, which claim to liberty should decide?',note('1–9','This question captures the argument’s central tension: whether liberty protects any voluntary transfer, or requires institutions that make freedom more widely usable.'));
+
+refs([
+  ['Source material','“The Distribution of Property - Rawls and His Critics,” source PDF, pp. 1–9.'],
+  ['Primary work quoted','Ronald Dworkin, “The Original Position” (1973), as quoted in the source material.'],
+  ['Arguments discussed','Rawls’s original position and Difference Principle, and Nozick’s Wilt Chamberlain and taxation arguments, all as presented in the source material.']
+],note('1–9','Every visible claim and quotation in this deck is grounded in the source material.'));
+
+const deck=document.getElementById('deck');
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+function renderSlide(s,i){
+  const article=document.createElement('article');
+  article.className=`slide ${s.type}${s.type==='content'||s.type==='head'?' top':''}`;
+  article.dataset.index=i;
+  if(s.buildGroup) article.dataset.buildGroup=s.buildGroup;
+  let html='<div class="slide-inner">';
+  if(s.type==='cover') html+=`<h1 class="title">${esc(s.title)}</h1><p class="work">${esc(s.work)}</p><div class="course">${esc(s.course)}</div>`;
+  if(s.type==='section') html+=`<div class="eyebrow">${esc(s.eyebrow)}</div><h2 class="title">${esc(s.title)}</h2><div class="rule"></div>`;
+  if(s.type==='content') html+=`<h2 class="title">${esc(s.title)}</h2><div class="body">${s.paragraphs.map((p,j)=>`<p class="${j===s.paragraphs.length-1?'fresh':''}">${esc(p)}</p>`).join('')}</div>`;
+  if(s.type==='question'||s.type==='diagnostic') html+=`<div class="eyebrow">${esc(s.eyebrow)}</div><p class="prompt">${esc(s.prompt)}</p>${s.context?`<p class="context">${esc(s.context)}</p>`:''}`;
+  if(s.type==='quote') html+=`<blockquote>${esc(s.text)}</blockquote><cite>${esc(s.cite)}</cite>`;
+  if(s.type==='duo') html+=`<h2 class="title">${esc(s.title)}</h2><div class="duo-grid">${[s.left,s.right].map(x=>`<div class="duo-col"><h3>${esc(x.label)}</h3><p>${esc(x.text)}</p></div>`).join('')}</div>`;
+  if(s.type==='head') html+=`<h2 class="title">${esc(s.title)}</h2><div class="head-list">${s.items.map(x=>`<div class="head-item"><b>${esc(x[0])}</b><span>${esc(x[1])}</span></div>`).join('')}</div>`;
+  if(s.type==='refs') html+=`<h2 class="title">${esc(s.title)}</h2><div class="refs-list">${s.items.map(x=>`<div class="ref"><strong>${esc(x[0])}.</strong> ${esc(x[1])}</div>`).join('')}</div>`;
+  article.innerHTML=html+'</div>';
+  deck.appendChild(article);
+  return article;
+}
+const nodes=slides.map(renderSlide);
+let current=0;
+const counter=document.getElementById('counter');
+const progress=document.getElementById('progress');
+const notes=document.getElementById('notes');
+const notesBody=document.getElementById('notes-body');
+const overview=document.getElementById('overview');
+const overviewGrid=document.getElementById('overview-grid');
+function labelFor(s){return s.title||s.prompt||s.text||'Slide';}
+slides.forEach((s,i)=>{const b=document.createElement('button');b.className='overview-card';b.innerHTML=`<span class="num">${String(i+1).padStart(2,'0')} / ${slides.length}</span><span class="label">${esc(labelFor(s))}</span>`;b.addEventListener('click',()=>{closePanels();show(i)});overviewGrid.appendChild(b)});
+const cards=[...overviewGrid.children];
+function show(i){current=Math.max(0,Math.min(slides.length-1,i));nodes.forEach((n,j)=>n.classList.toggle('active',j===current));cards.forEach((n,j)=>n.classList.toggle('current',j===current));counter.textContent=`${current+1} / ${slides.length}`;progress.style.width=`${((current+1)/slides.length)*100}%`;notesBody.textContent=slides[current].notes||'No notes for this slide.';document.title=`${current+1}/${slides.length} · Rawls - His Critics`;}
+function openPanel(panel){closePanels();panel.classList.add('open');}
+function closePanels(){overview.classList.remove('open');notes.classList.remove('open');}
+function togglePanel(panel){panel.classList.contains('open')?closePanels():openPanel(panel);}
+function toggleFullscreen(){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen().catch(()=>{});}
+document.getElementById('fullscreen').addEventListener('click',toggleFullscreen);
+document.querySelectorAll('.close').forEach(b=>b.addEventListener('click',closePanels));
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closePanels();return;}if(overview.classList.contains('open')||notes.classList.contains('open')) return;if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();show(current+1);}else if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();show(current-1);}else if(e.key.toLowerCase()==='o') togglePanel(overview);else if(e.key.toLowerCase()==='n') togglePanel(notes);else if(e.key.toLowerCase()==='f') toggleFullscreen();});
+let touchX=0,touchY=0;
+document.addEventListener('touchstart',e=>{touchX=e.changedTouches[0].screenX;touchY=e.changedTouches[0].screenY;},{passive:true});
+document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].screenX-touchX,dy=e.changedTouches[0].screenY-touchY;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy))show(current+(dx<0?1:-1));},{passive:true});
+function fits(node){const inner=node.querySelector('.slide-inner');return inner.scrollHeight<=node.clientHeight*.82&&inner.scrollWidth<=node.clientWidth*.92;}
+function fitNode(node,start=1){let f=start;node.classList.add('measuring');node.style.setProperty('--fit',f);while(f>.72&&!fits(node)){f-=.02;node.style.setProperty('--fit',f);}node.classList.remove('measuring');return f;}
+function fitAll(){nodes.forEach(n=>n.style.setProperty('--fit',1));const groups={};nodes.forEach(n=>{if(n.dataset.buildGroup)(groups[n.dataset.buildGroup]??=[]).push(n);});const grouped=new Set(Object.values(groups).flat());Object.values(groups).forEach(group=>{const final=group[group.length-1];const f=fitNode(final);group.forEach(n=>n.style.setProperty('--fit',f));});nodes.filter(n=>!grouped.has(n)).forEach(n=>fitNode(n));show(current);}
+let resizeTimer;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(fitAll,120);});
+if(document.fonts?.ready)document.fonts.ready.then(fitAll);else fitAll();
+show(0);
+</script>
+</body>
+</html>

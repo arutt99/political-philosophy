@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Locke - The Social Contract</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#10171f;
+    --bg-2:#172330;
+    --text:#f1eee5;
+    --vellum:#b9c6d2;
+    --gold:#77b6d8;
+    --gold-dim:#49778f;
+    --border:rgba(216,231,240,0.16);
+    --fit:1;
+  }
+  *{box-sizing:border-box}
+  html,body{width:100%;height:100%;margin:0;overflow:hidden;background:var(--bg);color:var(--text)}
+  body{font-family:Inter,system-ui,sans-serif}
+  button{font:inherit}
+  #deck{position:relative;width:100vw;height:100vh;background:linear-gradient(90deg,rgba(119,182,216,.045) 1px,transparent 1px),linear-gradient(rgba(119,182,216,.025) 1px,transparent 1px),radial-gradient(circle at 50% -20%,rgba(119,182,216,.09),transparent 44%),var(--bg)}
+  .slide{position:absolute;inset:0;display:none;align-items:center;justify-content:center;padding:7.2vh 7vw 8vh;text-align:center;overflow:hidden}
+  .slide.active,.slide.measuring{display:flex}
+  .slide.measuring{visibility:hidden;pointer-events:none}
+  .slide.top{align-items:flex-start;padding-top:8.5vh}
+  .slide-inner{width:min(980px,86vw);max-height:82vh;margin:auto;transform-origin:top center}
+  .slide.top .slide-inner{margin:0 auto}
+  .slide.duo .slide-inner{width:min(1140px,90vw)}
+  .eyebrow{margin:0 0 1.2rem;color:var(--gold);font:600 clamp(12px,1.12vw,17px)/1.3 "IBM Plex Mono",monospace;letter-spacing:.18em;text-transform:uppercase}
+  .title{margin:0;font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;letter-spacing:-.018em}
+  .cover .title{font-size:calc(clamp(58px,7.6vw,104px)*var(--fit));line-height:.96;max-width:12ch;margin-inline:auto}
+  .cover .work{font:500 calc(clamp(20px,2.15vw,31px)*var(--fit))/1.4 "Cormorant Garamond",Georgia,serif;color:var(--vellum);margin:1.5rem auto 0;max-width:36ch}
+  .cover .course{margin-top:2.4rem;color:var(--gold);font:500 calc(clamp(11px,1vw,15px)*var(--fit))/1.4 "IBM Plex Mono",monospace;letter-spacing:.14em;text-transform:uppercase}
+  .section .slide-inner{width:min(900px,86vw)}
+  .section .title{font-size:calc(clamp(48px,6.2vw,84px)*var(--fit));line-height:1.02}
+  .section .rule{width:52px;height:1px;background:var(--gold-dim);margin:1.8rem auto 0}
+  .content .title,.head .title,.duo .title{font-size:calc(clamp(38px,4.5vw,62px)*var(--fit));line-height:1.05;margin-bottom:1.6rem}
+  .content .body{font-family:"Cormorant Garamond",Georgia,serif;font-size:calc(clamp(25px,2.35vw,35px)*var(--fit));line-height:1.34;text-align:left}
+  .content .body p{
+    margin:0 0 1.05em -1.25rem;
+    padding:.08em .7em .08em 1rem;
+    border-left:3px solid transparent;
+    color:rgba(201,194,174,.52);
+    font-weight:600;
+    background:linear-gradient(90deg,rgba(201,162,75,0),rgba(201,162,75,0));
+  }
+  .content .body p:last-child{margin-bottom:1.05em}
+  .content .body p.fresh{
+    color:var(--text);
+    border-left-color:var(--gold);
+    background:linear-gradient(90deg,rgba(201,162,75,.15),rgba(201,162,75,0) 78%);
+    text-shadow:0 0 18px rgba(239,231,214,.08);
+  }
+  .question .slide-inner,.diagnostic .slide-inner{width:min(900px,86vw)}
+  .question .prompt,.diagnostic .prompt{margin:0;font-family:"Cormorant Garamond",Georgia,serif;font-size:calc(clamp(42px,5.2vw,72px)*var(--fit));line-height:1.08;font-weight:600;letter-spacing:-.015em}
+  .question .prompt::after,.diagnostic .prompt::after{content:"";display:block;width:42px;height:2px;background:var(--gold);margin:1.8rem auto 0}
+  .question .context{max-width:48ch;margin:1.35rem auto 0;color:var(--vellum);font:500 calc(clamp(18px,1.7vw,25px)*var(--fit))/1.4 "Cormorant Garamond",Georgia,serif}
+  .quote blockquote{margin:0 auto;max-width:26ch;font-family:"Cormorant Garamond",Georgia,serif;font-size:calc(clamp(39px,4.45vw,63px)*var(--fit));line-height:1.12;font-weight:500}
+  .quote blockquote::before{content:"“";color:var(--gold);margin-right:.08em}
+  .quote blockquote::after{content:"”";color:var(--gold);margin-left:.08em}
+  .quote cite{display:block;margin-top:1.6rem;color:var(--vellum);font:500 calc(clamp(12px,1.15vw,17px)*var(--fit))/1.45 "IBM Plex Mono",monospace;font-style:normal}
+  .duo-grid{display:grid;grid-template-columns:1fr 1fr;gap:4.5rem;text-align:left;margin-top:1.5rem}
+  .duo-col{padding-top:1.1rem;border-top:1px solid var(--border)}
+  .duo-col h3{margin:0 0 .85rem;color:var(--gold);font:600 calc(clamp(13px,1.25vw,18px)*var(--fit))/1.3 "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase}
+  .duo-col p{margin:0;color:var(--text);font:500 calc(clamp(24px,2.15vw,33px)*var(--fit))/1.34 "Cormorant Garamond",Georgia,serif}
+  .head-list{display:grid;gap:1.15rem;text-align:left;margin-top:1.8rem}
+  .head-item{display:grid;grid-template-columns:9rem 1fr;gap:1.5rem;align-items:baseline;padding-top:1rem;border-top:1px solid var(--border)}
+  .head-item b{color:var(--gold);font:600 calc(clamp(12px,1.1vw,16px)*var(--fit))/1.3 "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase}
+  .head-item span{font:500 calc(clamp(23px,2.05vw,31px)*var(--fit))/1.3 "Cormorant Garamond",Georgia,serif}
+  .diagnostic .eyebrow{color:var(--vellum)}
+  .diagnostic .prompt{font-size:calc(clamp(52px,6.6vw,90px)*var(--fit))}
+  .refs .slide-inner{width:min(980px,86vw);text-align:left}
+  .refs .title{font-size:calc(clamp(40px,4.6vw,64px)*var(--fit));margin-bottom:1.7rem}
+  .refs-list{display:grid;gap:1.05rem}
+  .ref{padding-top:.95rem;border-top:1px solid var(--border);font:500 calc(clamp(18px,1.65vw,24px)*var(--fit))/1.38 "Cormorant Garamond",Georgia,serif;color:var(--vellum)}
+  .ref strong{color:var(--text);font-weight:600}
+  #progress{position:fixed;top:0;left:0;height:2px;width:0;background:var(--gold);z-index:30}
+  #nav-hint,#counter{position:fixed;bottom:18px;z-index:30;color:var(--vellum);font:500 12px/1.3 "IBM Plex Mono",monospace;letter-spacing:.08em}
+  #nav-hint{left:24px} #counter{right:24px}
+  #fullscreen{position:fixed;top:20px;right:22px;z-index:30;color:var(--vellum);background:transparent;border:1px solid var(--border);border-radius:3px;padding:8px 11px;cursor:pointer;font:500 11px/1 "IBM Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase}
+  #fullscreen:hover{color:var(--gold);border-color:var(--gold-dim)}
+  .panel{position:fixed;inset:4vh 4vw;z-index:60;display:none;background:rgba(18,20,26,.985);border:1px solid var(--border);overflow:auto}
+  .panel.open{display:block}
+  .panel-head{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;padding:18px 22px;background:var(--bg-2);border-bottom:1px solid var(--border);z-index:2}
+  .panel-head h2{margin:0;font:600 14px/1 "IBM Plex Mono",monospace;letter-spacing:.15em;text-transform:uppercase;color:var(--gold)}
+  .close{color:var(--text);background:transparent;border:1px solid var(--border);padding:7px 10px;cursor:pointer}
+  #overview-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;padding:20px}
+  .overview-card{min-height:126px;padding:16px;text-align:left;background:var(--bg-2);border:1px solid var(--border);color:var(--text);cursor:pointer}
+  .overview-card:hover,.overview-card.current{border-color:var(--gold-dim)}
+  .overview-card .num{display:block;color:var(--gold);font:500 11px/1.3 "IBM Plex Mono",monospace;margin-bottom:12px}
+  .overview-card .label{font:600 22px/1.1 "Cormorant Garamond",Georgia,serif}
+  #notes-body{padding:28px 34px;white-space:pre-wrap;color:var(--text);font:400 18px/1.62 Inter,sans-serif;max-width:900px}
+  @media (max-width:760px){
+    .slide{padding:9vh 8vw 10vh}.slide.top{padding-top:9.5vh}.slide-inner,.slide.duo .slide-inner{width:84vw}
+    .duo-grid{grid-template-columns:1fr;gap:1.5rem}.head-item{grid-template-columns:1fr;gap:.45rem}
+    #nav-hint{display:none}#fullscreen{top:12px;right:12px}.content .body{font-size:calc(clamp(22px,5.6vw,30px)*var(--fit))}
+    .duo-col p{font-size:calc(clamp(22px,5.3vw,29px)*var(--fit))}
+  }
+  /* Locke: a measured constitutional blueprint — public rules, clear lines, and balanced authority. */
+  :root{--bg:#13253c;--bg-2:#1d3656;--text:#f4efe4;--vellum:#c7d5d8;--gold:#e1a653;--gold-dim:#9c6730;--border:rgba(214,229,232,.2)}
+  body{font-family:"Source Sans 3",Inter,system-ui,sans-serif}
+  .title,.content .body,.question .prompt,.diagnostic .prompt,.quote blockquote,.duo-col p,.head-item span,.ref{font-family:"Libre Baskerville",Georgia,serif}
+  .eyebrow,.cover .course,.duo-col h3,.head-item b,#nav-hint,#counter,#fullscreen,.quote cite{font-family:"Space Mono","IBM Plex Mono",monospace}
+  #deck{background:linear-gradient(rgba(225,166,83,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(225,166,83,.035) 1px,transparent 1px),radial-gradient(circle at 85% 8%,rgba(89,162,190,.2),transparent 24%),linear-gradient(145deg,#10243a,#173150 62%,#1e3550);background-size:3.8rem 3.8rem,3.8rem 3.8rem,auto,auto}
+  #deck::before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,transparent 0 7%,rgba(225,166,83,.06) 7% 7.25%,transparent 7.25% 92.75%,rgba(225,166,83,.06) 92.75% 93%,transparent 93%)}
+  #deck::after{content:"";position:absolute;right:6vw;bottom:7vh;width:24vw;height:24vw;border:1px solid rgba(225,166,83,.28);border-radius:50%;box-shadow:0 0 0 1.35vw rgba(225,166,83,.045),0 0 0 3.1vw rgba(95,167,191,.035);pointer-events:none}
+  .slide-inner{position:relative;z-index:1}
+  .cover .slide-inner{padding:3.1rem 4rem;border:1px solid var(--border);border-radius:0;background:linear-gradient(90deg,rgba(13,34,57,.82),rgba(20,52,81,.42));box-shadow:18px 18px 0 rgba(7,17,28,.18)}
+  .cover .title{max-width:12ch;letter-spacing:-.04em;text-shadow:none}
+  .cover .work{color:var(--vellum)}
+  .cover .course{display:inline-block;padding:.52rem .75rem;color:var(--gold);border:1px solid rgba(225,166,83,.46);border-radius:0;background:rgba(12,29,48,.38)}
+  .section .slide-inner{max-width:min(1020px,88vw);padding:1.7rem 2.2rem 1.8rem;text-align:left;border-left:5px solid var(--gold);border-bottom:1px solid var(--border);background:linear-gradient(90deg,rgba(225,166,83,.1),transparent 72%)}
+  .section .eyebrow{text-align:left;color:var(--gold)}
+  .section .rule{width:100%;height:2px;margin:1.45rem 0 0;background:linear-gradient(90deg,var(--gold) 0 18%,rgba(199,213,216,.24) 18% 100%)}
+  .content .slide-inner,.head .slide-inner{width:min(1040px,88vw);padding:1rem 1.55rem 1.4rem;border-left:1px solid rgba(199,213,216,.24);background:rgba(8,26,44,.2)}
+  .content .title,.head .title,.duo .title{margin-bottom:1.35rem;padding-bottom:.65rem;border-bottom:1px solid rgba(199,213,216,.24)}
+  .content .body p{margin-left:0;padding:.4em 1em;color:rgba(199,213,216,.61);border-left:3px solid transparent;background:transparent}
+  .content .body p:nth-child(odd){background:rgba(225,166,83,.035)}
+  .content .body p.fresh{color:var(--text);border-left-color:var(--gold);background:linear-gradient(90deg,rgba(225,166,83,.17),rgba(97,167,192,.055),transparent 80%);text-shadow:none}
+  .question .slide-inner,.diagnostic .slide-inner{padding:2.55rem 3.1rem;border:1px solid rgba(225,166,83,.42);border-radius:0;background:linear-gradient(135deg,rgba(15,38,62,.94),rgba(23,54,83,.9));box-shadow:12px 12px 0 rgba(225,166,83,.13)}
+  .question .prompt::after,.diagnostic .prompt::after{width:6.25rem;height:3px;border-radius:0;background:linear-gradient(90deg,var(--gold),transparent)}
+  .question .context{color:var(--vellum)}
+  .quote .slide-inner{max-width:min(950px,84vw);padding:2.25rem 3rem;border-left:5px solid var(--gold);border-right:1px solid rgba(199,213,216,.2);border-radius:0;background:rgba(10,29,48,.42)}
+  .quote blockquote{font-style:italic}
+  .quote cite{color:var(--vellum)}
+  .duo-grid{gap:2.8rem}
+  .duo-col{min-height:0;padding:1.4rem 1.45rem;border:1px solid rgba(199,213,216,.2);border-top:4px solid var(--gold);border-radius:0;background:rgba(10,30,50,.4)}
+  .duo-col:nth-child(2){border-top-color:#74b5cf;background:rgba(26,55,82,.32)}
+  .duo-col h3,.head-item b{color:var(--gold)}
+  .head-list{gap:.55rem}
+  .head-item{grid-template-columns:10.5rem 1fr;padding:.9rem 1rem;border:0;border-top:1px solid rgba(199,213,216,.22);border-radius:0;background:transparent}
+  .head-item:nth-child(even){background:rgba(225,166,83,.04)}
+  #progress{height:4px;background:linear-gradient(90deg,#77b5cf,var(--gold))}
+  #nav-hint,#counter{color:var(--vellum)}
+  #fullscreen{color:var(--text);border-color:rgba(225,166,83,.45);border-radius:0;background:rgba(12,31,50,.48)}
+  .panel{background:rgba(12,30,49,.988)}
+  .panel-head{background:#1d3656}.panel-head h2,.overview-card .num{color:var(--gold)}.close{color:var(--text)}
+  .overview-card{color:var(--text);border-radius:0;background:linear-gradient(135deg,#1b3857,#142e49)}
+  .overview-card:hover,.overview-card.current{border-color:var(--gold);box-shadow:7px 7px 0 rgba(225,166,83,.13)}
+  #notes-body{color:var(--vellum)}
+  @media (max-width:760px){.cover .slide-inner,.section .slide-inner,.question .slide-inner,.diagnostic .slide-inner,.quote .slide-inner{padding:1.7rem 1.5rem}.content .slide-inner,.head .slide-inner{padding:1rem}.head-item{grid-template-columns:1fr}}
+</style>
+<link rel="stylesheet" href="presentation-polish.css">
+<script src="presentation-polish.js" defer></script>
+</head>
+<body>
+<div id="deck" aria-live="polite"></div>
+<div id="progress"></div>
+<div id="nav-hint">ARROWS / SPACE · O OVERVIEW · N NOTES · F FULLSCREEN</div>
+<div id="counter">1 / 1</div>
+<button id="fullscreen" aria-label="Toggle fullscreen">Fullscreen</button>
+
+<section id="overview" class="panel" aria-label="Slide overview">
+  <div class="panel-head"><h2>Overview</h2><button class="close" data-close="overview">Close</button></div>
+  <div id="overview-grid"></div>
+</section>
+<aside id="notes" class="panel" aria-label="Speaker notes">
+  <div class="panel-head"><h2>Speaker notes</h2><button class="close" data-close="notes">Close</button></div>
+  <div id="notes-body"></div>
+</aside>
+
+<script>
+const slides=[];
+const src=(pages,extra="")=>"[Sources]\nSource material, \"The social contract,\" source PDF, pp. "+pages+"."+(extra?"\n"+extra:"")+"\n[/Sources]";
+const add=s=>slides.push(s);
+const cover=(title,work,course,notes)=>add({type:"cover",title,work,course,notes});
+const section=(roman,title,notes)=>add({type:"section",eyebrow:roman+". "+title.toUpperCase(),title,notes});
+const question=(eyebrow,prompt,context,notes)=>add({type:"question",eyebrow,prompt,context,notes});
+const quote=(text,cite,notes)=>add({type:"quote",text,cite,notes});
+const duo=(title,left,right,notes)=>add({type:"duo",title,left,right,notes});
+const head=(title,items,notes)=>add({type:"head",title,items,notes});
+const diagnostic=(prompt,notes)=>add({type:"diagnostic",eyebrow:"The social-contract test",prompt,notes});
+const refs=(items,notes)=>add({type:"refs",title:"References",items,notes});
+function build(id,title,paragraphs,notes,pages){
+  const compactThree=new Set(["advantage-not-enough","generations","leaving","act-gap","shared-law"]);
+  const states=paragraphs.length===4
+    ? [paragraphs[0],paragraphs[1]+" "+paragraphs[2],paragraphs[3]]
+    : compactThree.has(id)
+      ? [paragraphs[0],paragraphs[1]+" "+paragraphs[2]]
+      : paragraphs;
+  states.forEach((_,i)=>add({type:"content",title,paragraphs:states.slice(0,i+1),buildGroup:id,notes:notes+(i<states.length-1?"\n\nPause before revealing the next step.":"")+"\n\n"+src(pages)}));
+}
+
+cover("The Social Contract","Can consent make political power legitimate?","Political Philosophy","Open with the ordinary but demanding question: when may a state make laws for a person who never chose it?\n\n"+src("1-13"));
+question("The problem","Why should a law bind someone who never agreed to it?","A state does more than recommend. It claims the right to make laws and compel obedience. The argument asks what could make that authority legitimate.","Let the difference between advice and authority register before introducing consent.\n\n"+src("1-2"));
+
+section("I","Political authority needs a special kind of explanation","Frame the problem of political obligation: a state claims a moral right to direct people, not merely the power to coerce them.\n\n"+src("1-2"));
+build("voluntarism","Consent promises to explain political authority",[
+  "Voluntarism is the view that another person can acquire political power over you only through something you voluntarily do.",
+  "The idea is not that every duty must be chosen. You can have a duty not to attack innocent people even if you never promised to have it.",
+  "But a state claims something different: the right to make laws for you and compel you to obey them.",
+  "For Locke, that special authority over a free person must somehow be traced back to that person's own consent."
+],"Define voluntarism before testing the proposed contracts. Keep the distinction between ordinary moral duties and political authority clear.","1-2");
+quote("All Men are naturally in [the state of nature], and remain so, till by their own Consents they make themselves Members of some Politick Society.","John Locke, Second Treatise of Civil Government, sec. 15, p. 278","Use the quotation to state Locke's starting premise, not as proof that consent has actually occurred.\n\n"+src("1","Locke quotation reproduced in the source material."));
+build("advantage-not-enough","A better life is not yet a voluntary agreement",[
+  "Life under a state might be safer, more orderly, and more advantageous than life without one.",
+  "Yet, on a voluntarist view, showing that rule benefits you does not by itself show that anyone may rule you.",
+  "A state that governs without your consent would still lack the right to govern, even if civil society were much better for you."
+],"The argument insists that benefit and authorization are different questions.","2");
+question("The central wager","Can every person be bound only by consent - and still be bound?","Social-contract theory must satisfy two demands at once: each person's obligation must be voluntary, and the state's authority must reach everyone it governs.","This sets up the two requirements that every version of the theory will face.\n\n"+src("2"));
+
+section("II","The social contract looks elegant from a distance","Introduce the promise of a contract: universal authority could be built out of individual permission.\n\n"+src("2"));
+duo("A successful contract theory would satisfy both demands",
+  {label:"Voluntarism",text:"Political obligation arises only when a person has voluntarily consented to political authority."},
+  {label:"Universalism",text:"Every person whom the state claims to govern is genuinely obligated to obey it."},
+  "Emphasize the pressure created by putting these demands together.\n\n"+src("2"));
+build("elegance","The proposed solution is simple in outline",[
+  "If every person consented to the state, the state could claim authority over every person without treating anyone as naturally subordinate.",
+  "The contract might be imagined as an agreement with the state, or as an agreement among individuals to create one.",
+  "Either way, consent seems to convert many private acts of choice into one public authority.",
+  "The difficulty is not seeing why this would justify a state. The difficulty is finding consent in the real world."
+],"Transition from the abstract elegance of the theory to its practical tests.","2");
+question("Where is the agreement?","What would count as evidence that you actually consented?","The first possibility treats the contract as a real event in the past. That proposal must explain both its evidence and its reach.","The question is a hinge: the next section tests the historical version.\n\n"+src("2-3"));
+
+section("III","A contract made by ancestors cannot bind descendants","Test the original-contract theory as a historical event.\n\n"+src("2-3"));
+build("historical","The historical contract is hard to believe",[
+  "An original contract would be a real event in which people left the state of nature and entered civil society.",
+  "A momentous agreement that created political society should have left some historical trace, yet the argument asks us where any such evidence could be found.",
+  "The proposal also assumes people in a state of nature had the communication, coordination, and legal concepts needed to make and respect an agreement.",
+  "Critics inspired by Rousseau argue that this assumption gives supposedly pre-political people the very sophistication the contract is meant to explain."
+],"Do not turn the evidence objection into a merely archival complaint. It also challenges whether the imagined parties could contract at all.","2-3");
+question("Even if it happened...","Why should one generation's contract govern the next?","The deeper objection does not depend on proving that no original contract ever occurred. It asks what its success could establish about people living now.","Pause after the question. The next build makes the intergenerational problem explicit.\n\n"+src("3"));
+build("generations","Past consent does not travel through time",[
+  "No ordinary legal system allows one generation to make a contract that automatically binds succeeding generations.",
+  "Existing citizens did not sign an agreement merely because their ancestors may have signed one.",
+  "So a historical contract cannot explain why present-day individuals have political obligations to their state."
+],"This is decisive against the original-contract interpretation, but not yet against every interpretation of social contract theory.","3");
+
+section("IV","Almost no one explicitly agrees to be governed","Examine contemporary forms of apparent express consent.\n\n"+src("3-4"));
+build("express","Present consent would need to be real and ongoing",[
+  "If political obligation must be voluntary, people who are currently bound by the state must have a genuine opportunity to consent.",
+  "Most people cannot remember ever being officially asked whether they agree to be governed.",
+  "The clearest modern case is naturalization: a person seeking citizenship may explicitly accept a state's authority.",
+  "But that leaves the vast majority of citizens, who acquire membership by birth, without any comparable act of express consent."
+],"Distinguish a ceremonial pledge from a voluntary, legally meaningful act of authorization.","3-4");
+head("Why familiar pledges do not solve the problem",[
+  ["No real choice","A pledge required of schoolchildren or scouts is not a freely chosen political act."],
+  ["No legal standing","Children are not yet able to make the kind of binding commitment the theory requires."],
+  ["No universal practice","Most states never require every citizen to make such a pledge in the first place."]
+],"This slide gathers the reasons that a symbol of allegiance is not automatically consent.\n\n"+src("3-4"));
+build("voting","Voting is an ambiguous sign of consent",[
+  "Perhaps voting for a government communicates consent to its authority.",
+  "Even a voter who loses could be said to accept the political system as a whole by taking part in its election.",
+  "But a person who votes against the government may be rejecting not only its leaders but the system itself.",
+  "And abstaining cannot plausibly count as consent. Making voting compulsory would not help, because a coerced vote is not voluntary consent."
+],"Show why voting is politically meaningful without assuming it performs the precise moral role consent theory needs.","4");
+question("A more demanding democracy?","Would active participation turn political obligation into consent?","The argument notes a participatory-democracy ideal in which everyone governs much more actively. That may make consent more plausible, but it also means ordinary democracies fall short of the ideal.","Do not resolve participatory democracy here; the argument returns to it later.\n\n"+src("4"));
+
+section("V","Quietly accepting protection is not the same as saying yes","Move from express consent to tacit consent.\n\n"+src("5-6"));
+build("tacit","Tacit consent tries to find agreement in everyday life",[
+  "Tacit consent is consent communicated without an explicit statement.",
+  "Its central thought is that a person quietly accepts political authority by enjoying the state's protection and other benefits.",
+  "On this view, benefits do not directly create an obligation. Rather, receiving them is supposed to be an act that communicates consent.",
+  "That extra step matters: the argument remains voluntarist only if the person's conduct really counts as agreeing."
+],"Mark the distinction between a fairness argument about benefits and a consent argument based on what acceptance of benefits means.","5");
+quote("Every Man that hath any Possession, or Enjoyment, of any part of the Dominions of any Government, doth thereby give his tacit Consent.","Locke, Second Treatise of Civil Government, sec. 119, p. 348","Locke extends the claim widely: land, a week's lodging, and even travel on a highway can count as enjoying the government's dominion.\n\n"+src("5","Locke quotation reproduced in the source material."));
+build("leaving","The tacit-consent argument seems to depend on an exit",[
+  "The natural reply is that anyone who dislikes the state's package of benefits and burdens can simply leave.",
+  "If staying is a freely available alternative to leaving, continued residence might be treated as a voluntary choice.",
+  "But this only works when leaving is a realistic way to dissent, not merely a theoretical possibility."
+],"Set up Hume's objection as a challenge to whether residence is voluntary enough to communicate consent.","5-6");
+quote("We may as well assert, that a man, by remaining in a vessel, freely consents to the dominion of the master; though he was carried on board while asleep, and must leap into the ocean, and perish, the moment he leaves her.","David Hume, 'Of the Original Contract,' p. 475","Let the ship analogy do its work: remaining is not consent when departure is ruinous or impossible.\n\n"+src("5-6","Hume quotation reproduced in the source material."));
+build("exit-cost","Why residence alone cannot do the job",[
+  "A poor worker may know no foreign language or customs and depend day to day on small wages earned at home.",
+  "For such a person, leaving a country may mean losing livelihood, relationships, and any realistic prospect of safety.",
+  "If nothing can count as dissent except emigration, then staying puts too heavy a price on refusing consent.",
+  "Residence alone therefore cannot be treated as a voluntary act that authorizes the state."
+],"Keep the argument focused on the cost of dissent rather than on whether every state is equally oppressive.","5-6");
+build("rousseau-exit","A narrow version of tacit consent may survive",[
+  "Rousseau allows that residence can count as consent only in a genuinely free state.",
+  "He notes that family, goods, lack of asylum, necessity, and violence can keep a person in a country against that person's will.",
+  "His point is that residence carries meaning only when dissent by departure is simple enough to be a real option.",
+  "The argument grants this insight but argues that modern nation-states rarely meet that condition."
+],"Use Rousseau as a qualification, not as a full defense of contemporary tacit consent.","6");
+duo("The setting changes what staying means",
+  {label:"A walled city-state",text:"Leaving may be as simple as walking through the gates, so residence can look more like a choice."},
+  {label:"A modern nation-state",text:"A would-be emigrant may have no feasible destination, no admission elsewhere, and no acceptable alternative regime."},
+  "The contrast explains why the argument sides with Hume about tacit consent in the modern world.\n\n"+src("6"));
+question("The tacit-consent verdict","Can a person authorize a state by doing what they must do to live?","The argument's answer is no: the conditions that would make continued residence a voluntary sign of agreement are usually absent.","This closes actual consent and makes room for a hypothetical alternative.\n\n"+src("6"));
+
+section("VI","Would you choose the state if you started without one?","Introduce hypothetical consent as a thought experiment rather than an actual agreement.\n\n"+src("7-10"));
+build("hypothetical","The contract becomes an imagined choice",[
+  "A hypothetical contract asks what rational people would do if they found themselves without a state, in a state of nature.",
+  "It need not claim that the state of nature was a real historical stage or that anyone actually signed an agreement there.",
+  "Instead, the thought experiment asks whether people who understood their plight would freely join together to recreate political authority.",
+  "If every rational person would make that choice, the theorist asks, how could the state fail to be justified?"
+],"Explain the counterfactual clearly: it tests a state's appeal under imagined conditions rather than reporting a past event.","7-8");
+question("A powerful answer - to which question?","Does a choice you would make count as a choice you have made?","The thought experiment may show that a state is attractive or necessary. The issue is whether that is enough for a theory that says obligation must arise from actual voluntary acts.","Make the semantic shift from actual to hypothetical consent visible.\n\n"+src("8"));
+build("act-gap","Hypothetical consent is not an act of consent",[
+  "Voluntarism says political obligations arise through a person's own voluntary acts.",
+  "But a hypothetical act is not an act, and an imagined signature is not a signature.",
+  "So hypothetical consent cannot, by itself, meet the voluntarist demand that each person actually authorize the state."
+],"The objection is conceptual rather than empirical: even a perfect prediction of choice is not the choice itself.","8");
+duo("Two ways to understand the hypothetical contract",
+  {label:"A voluntarist defense",text:"It would need to show that imagined consent somehow supplies the real act of authorization."},
+  {label:"A defense by state features",text:"It shows that the state offers peace and security - qualities that make it worthy of consent."},
+  "The argument argues that the second interpretation is more plausible, but it changes the theory's basis of justification.\n\n"+src("8-9"));
+build("features","When the state is worthy of consent, consent drops out",[
+  "Suppose the thought experiment shows that a certain kind of state is our best hope for peace and security.",
+  "Then the state's desirable features, not anyone's consent, provide the main reason to justify it.",
+  "Hypothetical contract theory would then resemble a utilitarian defense: the state is justified because it promotes human well-being.",
+  "That may support the state, but it no longer provides the voluntarist solution that social-contract theory originally promised."
+],"Do not treat this as a knockdown objection to all state justification. It is an objection to a particular voluntarist route.","8-9");
+build("disposition","A final rescue: perhaps consent is hidden inside us",[
+  "Perhaps most people would express consent if they were carefully asked and required to think seriously about the state.",
+  "The theory can call this a disposition to consent: an unexpressed attitude that becomes visible through the state-of-nature thought experiment.",
+  "On this view, the thought experiment does not create consent for the first time. It reveals consent that was present all along.",
+  "The argument compares this to an unspoken belief, such as having always believed that giraffes do not have nine legs."
+],"Present dispositional consent charitably before criticizing its force.","9");
+question("Can an unspoken attitude bind you?","Would a consent you never expressed, acknowledged, or even considered normally create an obligation?","The next problem is not whether such a disposition can be described. It is whether it has the moral and legal force that consent is supposed to have.","The answer should not depend on assuming everyone would choose the state.\n\n"+src("9-10"));
+build("dissent","One genuine dissenter breaks universalism",[
+  "Unexpressed dispositions to consent are rarely treated as binding in other moral or legal contexts.",
+  "More importantly, some people may reflect on the state of nature and still prefer it to the state because they distrust centralized power or judge political authority too dangerous.",
+  "Such anarchists actively dissent, so they cannot be said to possess a disposition to consent.",
+  "Calling them irrational would not prove that they consented. A single genuine dissenter prevents consent theory from grounding universal political obligation."
+],"This is the cumulative dilemma: universalism fails precisely because voluntarism gives dissent its force.","9-10");
+
+section("VII","If consent fails, must the state lose its authority?","Follow the argument into the renewed anarchist challenge.\n\n"+src("10-13"));
+build("anarchism","The anarchist turns failed consent into a critique",[
+  "If no acceptable consent argument justifies the state, some people may have no political obligation to obey it.",
+  "The philosophical anarchist argues that the police and the state act illegitimately when they exercise authority over a person who never authorized them.",
+  "At the most radical extreme, obedience would rest only on prudence or fear of punishment, not on a duty to obey the law."
+],"State the anarchist conclusion carefully: it targets a general duty to obey because the state commands, not every moral reason to act.","10-11");
+build("independent-morality","Law can overlap with morality without creating a duty to obey law",[
+  "A person may still have independent moral duties not to murder, rape, or injure others.",
+  "The police may sometimes do what any citizen may do: protect innocent people and bring wrongdoers to justice.",
+  "But on the anarchist view, these are reasons to support particular actions, not reasons to obey merely because the state or police require them.",
+  "The responsible person must therefore judge every law and official action by independent moral standards."
+],"Make the distinction between this law is morally right and law as such gives a reason explicit.","11");
+question("The critical insight","Why should anyone ever disobey a law?","The argument agrees that blind obedience cannot be right. Otherwise one would have to defend laws that persecute people or punish consensual identity and conduct with death.","The case establishes a moral limit on obedience before the argument turns to a different danger.\n\n"+src("11"));
+build("private-judgment","Private judgment can recreate the problem of conflict",[
+  "Suppose people obey the law only when it perfectly matches their own moral judgment.",
+  "One person may reject redistributive taxation, while another may reject inherited wealth and the property claims built on it.",
+  "If each person may set aside any law they judge unjust, public questions become governed by conflicting private codes.",
+  "The argument says this begins to resemble the chaotic condition Locke wanted to escape: individuals deciding public matters for themselves."
+],"Use the taxation and inheritance examples as illustrations from the argument of how reasonable-seeming judgments can collide.","11-12");
+duo("The final tension is not blind obedience versus pure freedom",
+  {label:"The anarchist's gain",text:"No one should treat a law as beyond moral criticism merely because it is officially enacted."},
+  {label:"The anarchist's risk",text:"If every person acts only on private judgment, shared public rules can lose their ability to coordinate conflicting lives."},
+  "The argument treats both sides as serious; do not present the conclusion as a simple rejection of criticism.\n\n"+src("11-12"));
+build("shared-law","Why shared law still matters",[
+  "Locke's response is that a publicly laid down and accepted set of laws can guide people's dealings better than their competing private judgments.",
+  "Within reason, having a shared rule may matter more than each person's conviction that a different rule would be best.",
+  "This is a practical defense of political order: it seeks to prevent public life from dissolving into rival moral verdicts."
+],"Do not imply that shared law is automatically just. The phrase within reason preserves the earlier limit on obedience.","12");
+build("reply","The anarchist can press back one more time",[
+  "The anarchist may reply that there is one correct moral perspective and that people could eventually come to share it.",
+  "But even if true moral principles exist, the practical question remains: how can everyone reliably recognize them?",
+  "For those who doubt that such universal recognition is possible, philosophical anarchism remains morally attractive in theory but difficult to live with in practice."
+],"The argument ends with an unresolved practical concern, not a final proof that every state is legitimate.","12-13");
+diagnostic("When a law conflicts with your judgment, what could make it yours to obey?","Leave the tension open: consent protects freedom from unchosen rule, while shared law protects public life from competing private judgments.\n\n"+src("1-13"));
+refs([
+  ["Source material","The social contract, source PDF, pp. 1-13."],
+  ["Primary text quoted","Locke, Second Treatise of Civil Government, ed. Peter Laslett (1689; 1988 edition), secs. 15 and 119."],
+  ["Primary text quoted","Hume, Of the Original Contract, in Essays Moral, Political and Literary (1748), ed. E. F. Miller, p. 475."],
+  ["Primary text discussed","Rousseau, The Social Contract (1762), book IV, chapter 2, p. 124n."]
+],"The references list only works quoted or explicitly discussed in the source material.\n\n"+src("1-13"));const deck=document.getElementById('deck');
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+function renderSlide(s,i){
+  const article=document.createElement('article');
+  article.className=`slide ${s.type}${s.type==='content'||s.type==='head'?' top':''}`;
+  article.dataset.index=i;
+  if(s.buildGroup) article.dataset.buildGroup=s.buildGroup;
+  let html='<div class="slide-inner">';
+  if(s.type==='cover') html+=`<h1 class="title">${esc(s.title)}</h1><p class="work">${esc(s.work)}</p><div class="course">${esc(s.course)}</div>`;
+  if(s.type==='section') html+=`<div class="eyebrow">${esc(s.eyebrow)}</div><h2 class="title">${esc(s.title)}</h2><div class="rule"></div>`;
+  if(s.type==='content') html+=`<h2 class="title">${esc(s.title)}</h2><div class="body">${s.paragraphs.map((p,j)=>`<p class="${j===s.paragraphs.length-1?'fresh':''}">${esc(p)}</p>`).join('')}</div>`;
+  if(s.type==='question'||s.type==='diagnostic') html+=`<div class="eyebrow">${esc(s.eyebrow)}</div><p class="prompt">${esc(s.prompt)}</p>${s.context?`<p class="context">${esc(s.context)}</p>`:''}`;
+  if(s.type==='quote') html+=`<blockquote>${esc(s.text)}</blockquote><cite>${esc(s.cite)}</cite>`;
+  if(s.type==='duo') html+=`<h2 class="title">${esc(s.title)}</h2><div class="duo-grid">${[s.left,s.right].map(x=>`<div class="duo-col"><h3>${esc(x.label)}</h3><p>${esc(x.text)}</p></div>`).join('')}</div>`;
+  if(s.type==='head') html+=`<h2 class="title">${esc(s.title)}</h2><div class="head-list">${s.items.map(x=>`<div class="head-item"><b>${esc(x[0])}</b><span>${esc(x[1])}</span></div>`).join('')}</div>`;
+  if(s.type==='refs') html+=`<h2 class="title">${esc(s.title)}</h2><div class="refs-list">${s.items.map(x=>`<div class="ref"><strong>${esc(x[0])}.</strong> ${esc(x[1])}</div>`).join('')}</div>`;
+  article.innerHTML=html+'</div>';
+  deck.appendChild(article);
+  return article;
+}
+const nodes=slides.map(renderSlide);
+let current=0;
+const counter=document.getElementById('counter');
+const progress=document.getElementById('progress');
+const notes=document.getElementById('notes');
+const notesBody=document.getElementById('notes-body');
+const overview=document.getElementById('overview');
+const overviewGrid=document.getElementById('overview-grid');
+function labelFor(s){return s.title||s.prompt||s.text||'Slide';}
+slides.forEach((s,i)=>{const b=document.createElement('button');b.className='overview-card';b.innerHTML=`<span class="num">${String(i+1).padStart(2,'0')} / ${slides.length}</span><span class="label">${esc(labelFor(s))}</span>`;b.addEventListener('click',()=>{closePanels();show(i)});overviewGrid.appendChild(b)});
+const cards=[...overviewGrid.children];
+function show(i){
+  current=Math.max(0,Math.min(slides.length-1,i));
+  nodes.forEach((n,j)=>n.classList.toggle('active',j===current));
+  cards.forEach((n,j)=>n.classList.toggle('current',j===current));
+  counter.textContent=`${current+1} / ${slides.length}`;
+  progress.style.width=`${((current+1)/slides.length)*100}%`;
+  notesBody.textContent=slides[current].notes||'No notes for this slide.';
+  document.title=`${current+1}/${slides.length} · Locke - The Social Contract`;
+}
+function openPanel(panel){closePanels();panel.classList.add('open')}
+function closePanels(){overview.classList.remove('open');notes.classList.remove('open')}
+function togglePanel(panel){panel.classList.contains('open')?closePanels():openPanel(panel)}
+function toggleFullscreen(){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen().catch(()=>{})}
+document.getElementById('fullscreen').addEventListener('click',toggleFullscreen);
+document.querySelectorAll('.close').forEach(b=>b.addEventListener('click',closePanels));
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){closePanels();return}
+  if(overview.classList.contains('open')||notes.classList.contains('open')) return;
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();show(current+1)}
+  else if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();show(current-1)}
+  else if(e.key.toLowerCase()==='o') togglePanel(overview);
+  else if(e.key.toLowerCase()==='n') togglePanel(notes);
+  else if(e.key.toLowerCase()==='f') toggleFullscreen();
+});
+let touchX=0,touchY=0;
+document.addEventListener('touchstart',e=>{touchX=e.changedTouches[0].screenX;touchY=e.changedTouches[0].screenY},{passive:true});
+document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].screenX-touchX,dy=e.changedTouches[0].screenY-touchY;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy))show(current+(dx<0?1:-1))},{passive:true});
+function fits(node){const inner=node.querySelector('.slide-inner');return inner.scrollHeight<=node.clientHeight*.82&&inner.scrollWidth<=node.clientWidth*.92}
+function fitNode(node,start=1){let f=start;node.classList.add('measuring');node.style.setProperty('--fit',f);while(f>.72&&!fits(node)){f-=.02;node.style.setProperty('--fit',f)}node.classList.remove('measuring');return f}
+function fitAll(){
+  nodes.forEach(n=>n.style.setProperty('--fit',1));
+  const groups={};nodes.forEach(n=>{if(n.dataset.buildGroup)(groups[n.dataset.buildGroup]??=[]).push(n)});
+  const grouped=new Set(Object.values(groups).flat());
+  Object.values(groups).forEach(group=>{const final=group[group.length-1];const f=fitNode(final);group.forEach(n=>n.style.setProperty('--fit',f))});
+  nodes.filter(n=>!grouped.has(n)).forEach(n=>fitNode(n));
+  show(current);
+}
+let resizeTimer;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(fitAll,120)});
+if(document.fonts?.ready)document.fonts.ready.then(fitAll);else fitAll();
+show(0);
+</script>
+</body>
+</html>

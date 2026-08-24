@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Building a Society — State of Nature Simulation</title>
+<style>
+  :root{
+    --bg:#14110F;
+    --bg-panel:#1D1812;
+    --bg-panel-2:#211B14;
+    --text:#F3ECDD;
+    --text-dim:#B7AC98;
+    --accent:#E8A33D;
+    --accent-soft:#8C6A2E;
+    --accent2:#7FA39A;
+    --line:#3B3327;
+    --danger:#C0674A;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0; padding:0; height:100%;
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    overflow:hidden;
+  }
+  .serif{ font-family: Georgia, "Iowan Old Style", "Palatino Linotype", Palatino, serif; }
+
+  #deck{ position:relative; width:100vw; height:100vh; }
+
+  .slide{
+    position:absolute; inset:0;
+    display:none;
+    flex-direction:column;
+    justify-content:center;
+    padding: 5vh 6vw 4.5vh 6vw;
+    background:
+      radial-gradient(ellipse at 15% 0%, rgba(232,163,61,0.07), transparent 55%),
+      var(--bg);
+  }
+  .slide.active{ display:flex; }
+
+  .eyebrow{
+    font-size:22px;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--accent);
+    font-weight:600;
+    margin:0 0 10px 0;
+  }
+  .eyebrow.muted{ color:var(--text-dim); }
+
+  h1.title{
+    font-family: Georgia, "Iowan Old Style", Palatino, serif;
+    font-size:64px;
+    line-height:1.08;
+    margin:0 0 18px 0;
+    color:var(--text);
+    font-weight:700;
+  }
+  h2.title{
+    font-family: Georgia, "Iowan Old Style", Palatino, serif;
+    font-size:58px;
+    line-height:1.1;
+    margin:0 0 14px 0;
+    color:var(--text);
+    font-weight:700;
+  }
+
+  .subtitle{
+    font-size:32px;
+    color:var(--text-dim);
+    margin:0 0 8px 0;
+    line-height:1.4;
+  }
+
+  /* ---------- Title slide ---------- */
+  #slide-title{ justify-content:center; align-items:flex-start; }
+  #slide-title .lantern{
+    font-size:44px; margin-bottom:22px; color:var(--accent);
+  }
+  #slide-title h1.title{ font-size:76px; max-width:16ch; }
+  #slide-title .subtitle{ font-size:34px; max-width:40ch; }
+  #slide-title .meta{
+    margin-top:40px;
+    font-size:26px;
+    color:var(--text-dim);
+    border-top:1px solid var(--line);
+    padding-top:20px;
+    max-width:50ch;
+  }
+
+  /* ---------- Instructions slide ---------- */
+  .howto-grid{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px 60px;
+    margin-top: 20px;
+  }
+  .howto-card{
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:26px 30px;
+  }
+  .howto-card .num{
+    color:var(--accent);
+    font-size:24px;
+    font-weight:700;
+    font-family:Georgia,serif;
+    margin-bottom:6px;
+    display:block;
+  }
+  .howto-card p{
+    font-size:28px;
+    line-height:1.4;
+    margin:0;
+    color:var(--text);
+  }
+
+  /* ---------- Event slides ---------- */
+  .event-head{
+    display:flex;
+    align-items:baseline;
+    gap:26px;
+    margin-bottom:14px;
+    border-bottom:1px solid var(--line);
+    padding-bottom:20px;
+  }
+  .event-num{
+    font-family:Georgia,serif;
+    font-size:90px;
+    font-weight:700;
+    color:var(--accent);
+    line-height:1;
+  }
+  .event-head h2{
+    font-family:Georgia,serif;
+    font-size:50px;
+    margin:0;
+    color:var(--text);
+    line-height:1.15;
+  }
+
+  .event-body{
+    display:grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 50px;
+    margin-top:24px;
+  }
+  .event-col{ display:flex; flex-direction:column; }
+
+  .scenario{
+    font-size:30px;
+    line-height:1.45;
+    color:var(--text);
+    margin:0 0 18px 0;
+  }
+
+  blockquote{
+    margin:0 0 16px 0;
+    padding: 10px 0 10px 26px;
+    border-left: 4px solid var(--accent-soft);
+    font-family:Georgia,serif;
+    font-style:italic;
+    font-size:28px;
+    line-height:1.4;
+    color:var(--text);
+    background:transparent;
+  }
+  blockquote .who{
+    display:block;
+    font-family:-apple-system,sans-serif;
+    font-style:normal;
+    font-size:19px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--text-dim);
+    margin-top:6px;
+  }
+
+  .decide-label{
+    font-size:22px;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--accent2);
+    font-weight:700;
+    margin-bottom:12px;
+  }
+  ul.decide{
+    list-style:none;
+    margin:0; padding:0;
+  }
+  ul.decide li{
+    font-size:32px;
+    line-height:1.4;
+    padding:16px 0 16px 34px;
+    position:relative;
+    color:var(--text);
+    border-bottom: 1px dashed var(--line);
+  }
+  ul.decide li:last-child{ border-bottom:none; }
+  ul.decide li::before{
+    content:"";
+    position:absolute;
+    left:2px; top:19px;
+    width:10px; height:10px;
+    border-radius:50%;
+    background:var(--accent2);
+  }
+  .record-note{
+    margin-top:14px;
+    font-size:21px;
+    color:var(--text-dim);
+    font-style:italic;
+    border-top:1px solid var(--line);
+    padding-top:12px;
+  }
+
+  /* ---------- Final plan slides ---------- */
+  .final-grid{
+    display:grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+    margin-top:14px;
+  }
+  .final-card{
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:22px 24px;
+  }
+  .final-card h3{
+    font-family:Georgia,serif;
+    color:var(--accent);
+    font-size:26px;
+    margin:0 0 10px 0;
+  }
+  .final-card ul{
+    margin:0; padding-left:22px;
+    font-size:22px;
+    line-height:1.45;
+    color:var(--text);
+  }
+  .final-card ul li{ margin-bottom:6px; }
+  .final-card p{
+    font-size:22px;
+    line-height:1.45;
+    color:var(--text);
+    margin:0;
+  }
+
+  .checklist-wrap{
+    columns:2;
+    column-gap:60px;
+    margin-top:12px;
+    font-size:26px;
+  }
+  .checklist-wrap div{
+    break-inside: avoid;
+    padding:8px 0;
+    border-bottom:1px dashed var(--line);
+    color:var(--text);
+  }
+  .checklist-wrap div::before{
+    content:"☐";
+    color:var(--accent2);
+    margin-right:14px;
+    font-size:26px;
+  }
+
+  .prompt-list{
+    list-style:none;
+    margin:16px 0 0 0; padding:0;
+  }
+  .prompt-list li{
+    font-size:29px;
+    line-height:1.4;
+    padding:12px 0;
+    border-bottom:1px dashed var(--line);
+    color:var(--text);
+  }
+  .prompt-list li b{ color:var(--accent); font-family:Georgia,serif; }
+
+  /* ---------- Chrome: nav, fullscreen, indicator ---------- */
+  #controls{
+    position:fixed;
+    bottom:18px; right:24px;
+    display:flex; align-items:center; gap:16px;
+    z-index:50;
+    font-size:16px;
+    color:var(--text-dim);
+    font-family:-apple-system,sans-serif;
+  }
+  #slide-indicator{
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    padding:6px 14px;
+    border-radius:20px;
+    letter-spacing:0.05em;
+  }
+  #fullscreen-btn{
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    color:var(--text);
+    padding:7px 16px;
+    border-radius:20px;
+    cursor:pointer;
+    font-size:15px;
+    font-family:inherit;
+  }
+  #fullscreen-btn:hover{ border-color:var(--accent); color:var(--accent); }
+
+  #nav-arrows{
+    position:fixed;
+    bottom:18px; left:24px;
+    display:flex; gap:10px;
+    z-index:50;
+  }
+  .nav-btn{
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    color:var(--text);
+    width:38px; height:38px;
+    border-radius:50%;
+    cursor:pointer;
+    font-size:18px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .nav-btn:hover{ border-color:var(--accent); color:var(--accent); }
+
+  @media (max-width: 900px){
+    .event-body{ grid-template-columns:1fr; }
+    .howto-grid{ grid-template-columns:1fr; }
+    .final-grid{ grid-template-columns:1fr; }
+  }
+</style>
+<link rel="stylesheet" href="Presentations/presentation-polish.css">
+</head>
+<body class="state-nature-simulation">
+
+<div id="deck">
+
+  <!-- 1: TITLE -->
+  <section class="slide active" id="slide-title">
+    <div class="lantern">◆</div>
+    <h1 class="title serif">Building a Society</h1>
+    <p class="subtitle">A state-of-nature simulation on property, authority, and the origins of the state</p>
+    <div class="meta">Six events. Your community must decide, each time, whether to create a new rule, a new office, or a new institution — and whether any of that adds up to a <em>state</em>.</div>
+  </section>
+
+  <!-- 2: HOW TO RUN IT -->
+  <section class="slide" id="slide-howto">
+    <div class="eyebrow">Before we begin</div>
+    <h2 class="title serif">How this works</h2>
+    <div class="howto-grid">
+      <div class="howto-card">
+        <span class="num serif">01</span>
+        <p>You already wrote an <b>Initial Settlement Plan</b>. Keep it in front of you — every event will pressure-test it.</p>
+      </div>
+      <div class="howto-card">
+        <span class="num serif">02</span>
+        <p>Each event presents a dispute with no clean answer. Decide as a group, then <b>record the decision</b> before moving on.</p>
+      </div>
+      <div class="howto-card">
+        <span class="num serif">03</span>
+        <p>Decisions carry forward. If Event 2 creates a property rule, that rule is now part of your community when Event 4 hits.</p>
+      </div>
+      <div class="howto-card">
+        <span class="num serif">04</span>
+        <p>At the end, you'll fill out a <b>Final Settlement Plan</b> — and answer the boundary question: did you build a state?</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- EVENT 1 -->
+  <section class="slide" id="slide-e1">
+    <div class="event-head">
+      <div class="event-num serif">1</div>
+      <h2>The private supply</h2>
+    </div>
+    <div class="event-body">
+      <div class="event-col">
+        <p class="scenario">The community discovers that one person secretly removed enough food for five people for one day.</p>
+        <blockquote>"No one owned the food. I found it and moved it. I am keeping it in case the rest of you make bad decisions."<span class="who">The person who took it</span></blockquote>
+        <div class="record-note">Record your decision before continuing.</div>
+      </div>
+      <div class="event-col">
+        <div class="decide-label">Decide</div>
+        <ul class="decide">
+          <li>Who owns a resource no one has claimed?</li>
+          <li>Who has the authority to judge and punish this person?</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- EVENT 2 -->
+  <section class="slide" id="slide-e2">
+    <div class="event-head">
+      <div class="event-num serif">2</div>
+      <h2>Competing land claims</h2>
+    </div>
+    <div class="event-body">
+      <div class="event-col">
+        <p class="scenario">Two members claim the same fertile plot beside the stream. Others worry that private ownership will restrict everyone's access to water.</p>
+        <blockquote>"I marked the land first, so it is mine."<span class="who">First claimant</span></blockquote>
+        <blockquote>"I cleared the land and began cultivating it, so it is mine."<span class="who">Second claimant</span></blockquote>
+      </div>
+      <div class="event-col">
+        <div class="decide-label">Decide</div>
+        <ul class="decide">
+          <li>What creates ownership of land — first possession, or labor?</li>
+          <li>Who has the authority to settle competing claims?</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- EVENT 3 -->
+  <section class="slide" id="slide-e3">
+    <div class="event-head">
+      <div class="event-num serif">3</div>
+      <h2>The expert who refuses</h2>
+    </div>
+    <div class="event-body">
+      <div class="event-col">
+        <p class="scenario">A member with deep agricultural knowledge believes the community's farming plan will fail. The majority votes for it anyway.</p>
+        <blockquote>"You may outvote me, but that does not make you correct. I will not help carry out a plan that I believe is dangerous."<span class="who">The expert</span></blockquote>
+      </div>
+      <div class="event-col">
+        <div class="decide-label">Decide</div>
+        <ul class="decide">
+          <li>Does expertise outweigh the majority's vote?</li>
+          <li>May the community compel the expert to cooperate?</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- EVENT 4 -->
+  <section class="slide" id="slide-e4">
+    <div class="event-head">
+      <div class="event-num serif">4</div>
+      <h2>The disputed theft</h2>
+    </div>
+    <div class="event-body">
+      <div class="event-col">
+        <p class="scenario">A valuable knife disappears, then turns up among another person's belongings. Friends and relatives begin taking sides.</p>
+        <blockquote>"I did not steal it. Someone placed it there because they want me punished."<span class="who">The accused</span></blockquote>
+        <p class="scenario" style="font-size:26px;color:var(--text-dim);">The owner insists the knife's location proves guilt.</p>
+      </div>
+      <div class="event-col">
+        <div class="decide-label">Decide</div>
+        <ul class="decide">
+          <li>Has guilt been established, and by what standard of evidence?</li>
+          <li>Who has the authority to investigate and judge — and must they be neutral?</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- EVENT 5 -->
+  <section class="slide" id="slide-e5">
+    <div class="event-head">
+      <div class="event-num serif">5</div>
+      <h2>The neighboring settlement</h2>
+    </div>
+    <div class="event-body">
+      <div class="event-col">
+        <p class="scenario">Scouts find another settlement about ten kilometers away — more people, better tools. It has not attacked or threatened anyone.</p>
+        <blockquote>"If we wait until they attack, it will be too late. We need defenses, guards, and a leader who can act quickly."<span class="who">Pro-defense members</span></blockquote>
+        <blockquote>"Preparing for war may convince them we're hostile. Our fear could create the conflict we're trying to prevent."<span class="who">Skeptics</span></blockquote>
+      </div>
+      <div class="event-col">
+        <div class="decide-label">Decide</div>
+        <ul class="decide">
+          <li>Does the neighboring settlement pose a real threat?</li>
+          <li>How much individual freedom should be traded for collective security?</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- EVENT 6 -->
+  <section class="slide" id="slide-e6">
+    <div class="event-head">
+      <div class="event-num serif">6</div>
+      <h2>The group that wants to leave</h2>
+    </div>
+    <div class="event-body">
+      <div class="event-col">
+        <p class="scenario">Five members reject the community's rules and want to found a separate settlement. They intend to take a quarter of the food, several tools, seeds they helped collect, personal possessions, and access to part of the stream.</p>
+        <blockquote>"Losing these resources will endanger everyone who remains."<span class="who">The majority</span></blockquote>
+      </div>
+      <div class="event-col">
+        <div class="decide-label">Decide</div>
+        <ul class="decide">
+          <li>May members leave, and what may they take with them?</li>
+          <li>Can the majority stop them — and does that make the system truly voluntary?</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL PLAN 1 -->
+  <section class="slide" id="slide-final1">
+    <div class="eyebrow">Debrief · Part 1</div>
+    <h2 class="title serif">Final Settlement Plan</h2>
+    <p class="scenario" style="max-width:70ch;">Look back at your Initial Settlement Plan and Institutional Record. Describe your final structure, your three most important rules, and which institutions you actually built.</p>
+    <div class="checklist-wrap">
+      <div>Leader</div>
+      <div>Council</div>
+      <div>Voting system</div>
+      <div>Property rules</div>
+      <div>Investigator</div>
+      <div>Judge / dispute-settler</div>
+      <div>Guards or defense force</div>
+      <div>Punishment system</div>
+      <div>Tax or required contribution</div>
+      <div>Emergency powers</div>
+      <div>Right to leave</div>
+    </div>
+  </section>
+
+  <!-- FINAL PLAN 2 -->
+  <section class="slide" id="slide-final2">
+    <div class="eyebrow">Debrief · Part 2</div>
+    <h2 class="title serif">Enforcement, legitimacy, and the boundary question</h2>
+    <ul class="prompt-list">
+      <li><b>Enforcement —</b> What happens when someone refuses a collective decision? Can the community use force — never, only to prevent immediate harm, for limited rules, or for all legitimate decisions?</li>
+      <li><b>Legitimacy —</b> Why should someone who disagrees accept your community's decisions? Is consent required?</li>
+      <li><b>The boundary question —</b> At what point, if any, did your community become a <em>state</em>? What feature of your system best supports that answer?</li>
+    </ul>
+  </section>
+
+  <!-- FINAL PLAN 3 -->
+  <section class="slide" id="slide-final3">
+    <div class="eyebrow">Debrief · Final judgment</div>
+    <h2 class="title serif">What did you build?</h2>
+    <div class="checklist-wrap" style="columns:1; max-width:60ch; margin-top:22px;">
+      <div>Individuals cooperating informally</div>
+      <div>A voluntary association</div>
+      <div>Several overlapping voluntary associations</div>
+      <div>A community with rules but no state</div>
+      <div>A minimal state</div>
+      <div>A democratic state</div>
+      <div>An authoritarian state</div>
+      <div>Something else</div>
+    </div>
+  </section>
+
+</div>
+
+<div id="nav-arrows">
+  <button class="nav-btn" id="prev-btn" title="Previous (←)">‹</button>
+  <button class="nav-btn" id="next-btn" title="Next (→ / space)">›</button>
+</div>
+
+<div id="controls">
+  <span id="slide-indicator">1 / 10</span>
+  <button id="fullscreen-btn">⛶ Fullscreen</button>
+</div>
+
+<script>
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  let current = 0;
+
+  function show(i){
+    if(i < 0) i = 0;
+    if(i >= slides.length) i = slides.length - 1;
+    slides[current].classList.remove('active');
+    current = i;
+    slides[current].classList.add('active');
+    document.getElementById('slide-indicator').textContent = (current+1) + ' / ' + slides.length;
+  }
+
+  document.getElementById('next-btn').addEventListener('click', () => show(current+1));
+  document.getElementById('prev-btn').addEventListener('click', () => show(current-1));
+
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'ArrowRight' || e.key === ' '){ e.preventDefault(); show(current+1); }
+    else if(e.key === 'ArrowLeft'){ e.preventDefault(); show(current-1); }
+    else if(e.key === 'f' || e.key === 'F'){ toggleFullscreen(); }
+  });
+
+  function toggleFullscreen(){
+    if(!document.fullscreenElement){
+      document.documentElement.requestFullscreen().catch(()=>{});
+    } else {
+      document.exitFullscreen();
+    }
+  }
+  document.getElementById('fullscreen-btn').addEventListener('click', toggleFullscreen);
+
+  show(0);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Iris Marion Young - Injustice and Oppression</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#e8edf4;
+    --paper-deep:#d9e1ec;
+    --ink:#18243a;
+    --muted:#5e6d80;
+    --accent:#b6384d;
+    --accent-dim:#9d6975;
+    --accent-soft:rgba(182,56,77,.115);
+    --support:#3e6d9d;
+    --support-soft:rgba(62,109,157,.11);
+    --rule:rgba(24,36,58,.18);
+    --fit:1;
+  }
+  *{box-sizing:border-box}
+  html,body{width:100%;height:100%;margin:0;overflow:hidden;background:var(--paper-deep);color:var(--ink)}
+  body{font-family:Inter,system-ui,sans-serif}
+  button{font:inherit}
+  #deck{position:relative;width:100vw;height:100vh;overflow:hidden;background:
+    radial-gradient(ellipse at 8% 88%,rgba(182,56,77,.08),transparent 27%),
+    radial-gradient(ellipse at 90% 11%,rgba(62,109,157,.10),transparent 27%),
+    linear-gradient(90deg,transparent 0 14.8%,rgba(24,36,58,.045) 14.86% 14.94%,transparent 15%),
+    linear-gradient(0deg,transparent 0 25.6%,rgba(24,36,58,.032) 25.68% 25.76%,transparent 25.84%),
+    repeating-linear-gradient(90deg,transparent 0 12.4vw,rgba(24,36,58,.025) 12.44vw 12.48vw,transparent 12.52vw),
+    var(--paper)}
+  #deck::before,#deck::after{content:"";position:absolute;pointer-events:none}
+  #deck::before{left:7vw;top:-10vh;width:1px;height:120vh;background:linear-gradient(transparent,rgba(182,56,77,.46) 15%,rgba(182,56,77,.16) 82%,transparent);transform:rotate(14deg)}
+  #deck::after{right:6.5vw;top:12vh;width:18vw;height:70vh;border-left:1px solid rgba(62,109,157,.20);border-top:1px solid rgba(62,109,157,.15);transform:skewY(-7deg)}
+  .slide{position:absolute;inset:0;display:none;align-items:center;justify-content:center;padding:7.2vh 7vw 8vh;text-align:center;overflow:hidden}
+  .slide.active,.slide.measuring{display:flex}
+  .slide.measuring{visibility:hidden;pointer-events:none}
+  .slide.top{align-items:flex-start;padding-top:8.5vh}
+  .slide-inner{position:relative;z-index:1;width:min(980px,86vw);max-height:82vh;margin:auto;transform-origin:top center}
+  .slide.top .slide-inner{margin:0 auto}
+  .slide.duo .slide-inner{width:min(1140px,90vw)}
+  .eyebrow{margin:0 0 1.2rem;color:var(--accent);font:600 calc(clamp(12px,1.12vw,17px)*var(--fit))/1.3 "IBM Plex Mono",monospace;letter-spacing:.18em;text-transform:uppercase}
+  .title{margin:0;font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;letter-spacing:-.018em}
+  .cover .slide-inner{padding:3rem 3.8rem;border-block:1px solid var(--rule);background:linear-gradient(90deg,rgba(232,237,244,.24),rgba(232,237,244,.72),rgba(232,237,244,.24))}
+  .cover .title{font-size:calc(clamp(58px,7.6vw,104px)*var(--fit));line-height:.96;max-width:11.8ch;margin-inline:auto}
+  .cover .work{font:500 calc(clamp(20px,2.15vw,31px)*var(--fit))/1.4 "Cormorant Garamond",Georgia,serif;color:var(--muted);margin:1.5rem auto 0;max-width:37ch}
+  .cover .course{margin-top:2.4rem;color:var(--accent);font:500 calc(clamp(11px,1vw,15px)*var(--fit))/1.4 "IBM Plex Mono",monospace;letter-spacing:.14em;text-transform:uppercase}
+  .section .slide-inner{width:min(900px,86vw);padding:2.3rem 2.8rem 2.45rem;border-left:4px solid var(--accent);border-block:1px solid var(--rule);text-align:left;background:linear-gradient(90deg,var(--accent-soft),rgba(232,237,244,.24) 76%,transparent)}
+  .section .eyebrow{text-align:left}
+  .section .title{font-size:calc(clamp(48px,6.2vw,84px)*var(--fit));line-height:1.02}
+  .section .rule{width:8.5rem;height:2px;background:linear-gradient(90deg,var(--accent),var(--support),transparent);margin:1.8rem 0 0}
+  .content .title,.head .title,.duo .title{font-size:calc(clamp(38px,4.5vw,62px)*var(--fit));line-height:1.05;margin-bottom:1.6rem;max-width:19ch;padding-bottom:.7rem;border-bottom:1px solid var(--rule)}
+  .content .body{font-family:"Cormorant Garamond",Georgia,serif;font-size:calc(clamp(25px,2.35vw,35px)*var(--fit));line-height:1.34;text-align:left}
+  .content .body p{margin:0 0 1.05em -1.25rem;padding:.08em .7em .08em 1rem;border-left:3px solid rgba(182,56,77,.30);color:rgba(94,109,128,.91);font-weight:600;background:linear-gradient(90deg,rgba(182,56,77,0),rgba(182,56,77,0))}
+  .content .body p:last-child{margin-bottom:0}
+  .content .body p.fresh{color:var(--ink);border-left-color:var(--accent);background:linear-gradient(90deg,var(--accent-soft),rgba(182,56,77,0) 78%);text-shadow:0 0 18px rgba(24,36,58,.04)}
+  .question .slide-inner,.diagnostic .slide-inner{width:min(900px,86vw);padding:2.75rem 3.5rem;border:1px solid rgba(182,56,77,.36);box-shadow:inset 0 0 0 9px rgba(182,56,77,.025),0 18px 40px rgba(24,36,58,.07);background:rgba(232,237,244,.78)}
+  .question .prompt,.diagnostic .prompt{margin:0;font-family:"Cormorant Garamond",Georgia,serif;font-size:calc(clamp(42px,5.2vw,72px)*var(--fit));line-height:1.08;font-weight:600;letter-spacing:-.015em}
+  .question .prompt::after,.diagnostic .prompt::after{content:"";display:block;width:7.5rem;height:2px;background:linear-gradient(90deg,var(--accent),var(--support));margin:1.8rem auto 0}
+  .question .context{max-width:48ch;margin:1.35rem auto 0;color:var(--muted);font:500 calc(clamp(18px,1.7vw,25px)*var(--fit))/1.4 "Cormorant Garamond",Georgia,serif}
+  .quote .slide-inner{padding:1rem 3rem;border-inline:1px solid rgba(182,56,77,.34)}
+  .quote blockquote{margin:0 auto;max-width:26ch;font-family:"Cormorant Garamond",Georgia,serif;font-size:calc(clamp(39px,4.45vw,63px)*var(--fit));line-height:1.12;font-weight:500;font-style:italic}
+  .quote blockquote::before{content:"“";color:var(--accent);margin-right:.08em}
+  .quote blockquote::after{content:"”";color:var(--accent);margin-left:.08em}
+  .quote cite{display:block;margin-top:1.6rem;padding-top:1rem;border-top:1px solid var(--rule);color:var(--muted);font:500 calc(clamp(12px,1.15vw,17px)*var(--fit))/1.45 "IBM Plex Mono",monospace;font-style:normal}
+  .duo-grid{display:grid;grid-template-columns:1fr 1fr;gap:2.4rem;text-align:left;margin-top:1.5rem}
+  .duo-col{min-height:15rem;padding:1.5rem 1.6rem;border:1px solid var(--rule);border-top:4px solid var(--accent);background:linear-gradient(145deg,rgba(232,237,244,.90),rgba(217,225,236,.58))}
+  .duo-col:nth-child(2){border-top-color:var(--support)}
+  .duo-col h3{margin:0 0 .85rem;color:var(--accent);font:600 calc(clamp(13px,1.25vw,18px)*var(--fit))/1.3 "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase}
+  .duo-col:nth-child(2) h3{color:var(--support)}
+  .duo-col p{margin:0;color:var(--ink);font:500 calc(clamp(24px,2.15vw,33px)*var(--fit))/1.34 "Cormorant Garamond",Georgia,serif}
+  .head-list{display:grid;gap:1.05rem;text-align:left;margin-top:1.8rem}
+  .head-item{display:grid;grid-template-columns:10rem 1fr;gap:1.5rem;align-items:baseline;border-left:2px solid rgba(182,56,77,.58);padding:1rem 0 0 1rem;border-top:1px solid var(--rule)}
+  .head-item:nth-child(even){border-left-color:rgba(62,109,157,.62)}
+  .head-item b{color:var(--accent);font:600 calc(clamp(12px,1.1vw,16px)*var(--fit))/1.3 "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase}
+  .head-item:nth-child(even) b{color:var(--support)}
+  .head-item span{font:500 calc(clamp(23px,2.05vw,31px)*var(--fit))/1.3 "Cormorant Garamond",Georgia,serif}
+  .diagnostic .eyebrow{color:var(--muted)}
+  .diagnostic .prompt{font-size:calc(clamp(52px,6.6vw,90px)*var(--fit))}
+  .refs .slide-inner{width:min(980px,86vw);text-align:left}
+  .refs .title{font-size:calc(clamp(40px,4.6vw,64px)*var(--fit));margin-bottom:1.7rem}
+  .refs-list{display:grid;gap:1.05rem}
+  .ref{padding-top:.95rem;border-top:1px solid var(--rule);font:500 calc(clamp(18px,1.65vw,24px)*var(--fit))/1.38 "Cormorant Garamond",Georgia,serif;color:var(--muted)}
+  .ref strong{color:var(--ink);font-weight:600}
+  #progress{position:fixed;z-index:20;left:0;top:0;width:0;height:4px;background:linear-gradient(90deg,var(--support),var(--accent));transition:width .24s ease}
+  #nav-hint,#counter{position:fixed;z-index:20;bottom:2.35vh;color:rgba(94,109,128,.97);font:500 clamp(10px,.86vw,13px)/1.2 "IBM Plex Mono",monospace;letter-spacing:.08em}
+  #nav-hint{left:3vw}#counter{right:3vw}
+  #fullscreen{position:fixed;z-index:20;right:3vw;top:2.35vh;color:var(--muted);background:rgba(232,237,244,.60);border:1px solid rgba(182,56,77,.50);padding:.55rem .75rem;cursor:pointer;font:500 clamp(10px,.86vw,13px)/1.2 "IBM Plex Mono",monospace;letter-spacing:.06em;text-transform:uppercase}
+  #fullscreen:hover{border-color:var(--accent);color:var(--accent)}
+  .panel{position:fixed;z-index:30;inset:0;display:none;overflow:auto;padding:5vh 7vw 8vh;background:rgba(232,237,244,.988)}
+  .panel.open{display:block}
+  .panel-head{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--rule);padding-bottom:1rem;margin-bottom:1.5rem}
+  .panel-head h2{margin:0;font:600 clamp(28px,3vw,46px)/1 "Cormorant Garamond",Georgia,serif}
+  .close{border:1px solid var(--rule);background:transparent;color:var(--ink);padding:.55rem .8rem;cursor:pointer;font:500 12px/1 "IBM Plex Mono",monospace}
+  #overview-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem}
+  .overview-card{min-height:100px;text-align:left;padding:1rem;background:linear-gradient(145deg,#f1f4f8,#dce4ed);border:1px solid var(--rule);border-left:3px solid transparent;color:var(--ink);cursor:pointer}
+  .overview-card:hover,.overview-card.current{border-left-color:var(--accent);border-color:rgba(182,56,77,.44)}
+  .overview-card .num{display:block;color:var(--accent);font:500 11px/1 "IBM Plex Mono",monospace;letter-spacing:.1em}
+  .overview-card .label{display:block;margin-top:.7rem;font:600 21px/1.12 "Cormorant Garamond",Georgia,serif}
+  #notes-body{white-space:pre-wrap;max-width:82ch;color:var(--muted);font:500 clamp(17px,1.45vw,23px)/1.55 "Cormorant Garamond",Georgia,serif}
+  @media (max-width:760px){
+    .slide{padding:7vh 6vw 9vh}
+    .slide.top{padding-top:7vh}
+    .slide-inner,.slide.duo .slide-inner{width:min(92vw,980px)}
+    .cover .slide-inner,.section .slide-inner,.question .slide-inner,.diagnostic .slide-inner{padding:1.7rem 1.5rem}
+    .quote .slide-inner{padding:1rem 1.4rem}
+    .duo-grid{grid-template-columns:1fr;gap:1rem}
+    .head-item{grid-template-columns:1fr;gap:.45rem}
+    .head-item b{padding-top:0}
+    #nav-hint{display:none}
+  }
+</style>
+<link rel="stylesheet" href="presentation-polish.css">
+<script src="presentation-polish.js" defer></script>
+</head>
+<body>
+<div id="deck" aria-live="polite"></div>
+<div id="progress"></div>
+<div id="nav-hint">ARROWS / SPACE · O OVERVIEW · N NOTES · F FULLSCREEN</div>
+<div id="counter">1 / 1</div>
+<button id="fullscreen" aria-label="Toggle fullscreen">Fullscreen</button>
+<section id="overview" class="panel" aria-label="Slide overview"><div class="panel-head"><h2>Overview</h2><button class="close">Close</button></div><div id="overview-grid"></div></section>
+<aside id="notes" class="panel" aria-label="Speaker notes"><div class="panel-head"><h2>Speaker notes</h2><button class="close">Close</button></div><div id="notes-body"></div></aside>
+
+<script>
+const slides=[];
+const src=(pages,extra='')=>'[Sources]\nSource material, “The Distribution of Property - Injustice and Oppression,” pp. '+pages+'.'+(extra?'\n'+extra:'')+'\n[/Sources]';
+const note=(pages,text='',extra='')=>(text?text+'\n\n':'')+src(pages,extra);
+const add=s=>slides.push(s);
+const cover=(title,work,course,notes)=>add({type:'cover',title:title,work:work,course:course,notes:notes});
+const section=(roman,title,notes)=>add({type:'section',eyebrow:roman+'. '+title.toUpperCase(),title:title,notes:notes});
+const question=(eyebrow,prompt,context,notes)=>add({type:'question',eyebrow:eyebrow,prompt:prompt,context:context,notes:notes});
+const quote=(text,cite,notes)=>add({type:'quote',text:text,cite:cite,notes:notes});
+const duo=(title,left,right,notes)=>add({type:'duo',title:title,left:left,right:right,notes:notes});
+const head=(title,items,notes)=>add({type:'head',title:title,items:items,notes:notes});
+const diagnostic=(prompt,notes)=>add({type:'diagnostic',eyebrow:'The structural-injustice test',prompt:prompt,notes:notes});
+const refs=(items,notes)=>add({type:'refs',title:'References',items:items,notes:notes});
+function build(group,title,parts,pages,text='',extra=''){
+  parts.forEach(function(_,i){
+    const pause=i<parts.length-1?(text?'\n\n':'')+'Pause before revealing the next step.':'';
+    add({type:'content',title:title,paragraphs:parts.slice(0,i+1),buildGroup:group,notes:note(pages,text+pause,extra)});
+  });
+}
+
+cover('Injustice and oppression','Why distribution is not the whole story','THE DISTRIBUTION OF PROPERTY',note('1-5','This account follows the source material from ideal theories of justice to structural injustice and oppression.'));
+
+question('The opening tension','What if the urgent injustice is already happening while theory imagines a perfect society?','The argument begins with a worry about philosophical distance: debates over ideal distribution can seem remote from low wages, racism, sexism, unemployment, and unpaid bills.',note('1','Hold the tension open. The argument does not reject justice; it asks where theorizing should begin.'));
+
+section('I','An ideal theory can miss the injustice in front of us',note('1','The opening section contrasts two starting points for political philosophy.'));
+
+build('rawls-debate','Rawls made distribution central to modern political philosophy',[
+  'John Rawls argues that a just society should make the worst-off position as good as possible.',
+  'Other theories permit greater inequality, and Nozick’s account can treat a society as just whatever its unequal consequences.',
+  'The debate asks what distribution justice requires, but the argument questions whether this is always the right place to begin.'
+],'1','Introduce Rawls and Nozick only as they appear in the argument. The central turn is methodological.');
+
+question('The methodological challenge','Must we first design an ideal society before we can recognize the injustice of this one?','This question matters because the argument contrasts abstract theories of justice with people living under serious, immediate harms.',note('1','The next sequence explains the non-ideal alternative.'));
+
+build('ideal-distance','Ideal theory begins with a model of justice',[
+  'Ideal theory asks what a fully just society would look like and what principles should govern it.',
+  'A critic worries that this can become overly abstract when people already face racism, sexism, unemployment, or work that barely pays the bills.',
+  'The criticism is not that justice is unimportant. It is that an account of justice should begin from the actual ways people are wronged.'
+],'1','Stress the shift in starting point, not a rejection of moral theory.');
+
+build('sen-start','We can identify injustice without completing a perfect theory',[
+  'A skeptical reply says that no society can be called unjust unless we first possess a fully worked-out theory of justice.',
+  'The argument rejects that reply. Back-breaking work for wages that barely allow survival can look unjust even when no theory tells us the exact just wage.',
+  'Amartya Sen argues that people can identify aspects of the world as unjust without first constructing a complete picture of a perfectly just world.'
+],'1-2','This is the argument’s reason for beginning from recognizable injustice.');
+
+duo('Two ways to begin thinking about justice',
+  {label:'Ideal theory',text:'Start by describing the principles and institutions of a fully just society, then assess the world by comparison.'},
+  {label:'Non-ideal approach',text:'Start with serious harms people endure now, then ask what would reduce or overcome those injustices.'},
+  note('1-2','The argument presents these as competing emphases, not as a claim that one method makes every other method useless.'));
+
+section('II','Oppression is more than an unfair share of goods',note('2','Young expands the focus from distribution to social relations that constrain people’s lives.'));
+
+build('young-turn','Young asks what injustice feels like in social life',[
+  'Iris Marion Young argues that justice should not focus only on how goods are distributed.',
+  'Many people, especially people who are minoritized, live within oppressive social relations that leave them vulnerable to domination.',
+  'Those relations can restrict people’s ability to lead fulfilling lives of value, even when the problem cannot be described simply as receiving too few goods.'
+],'2','This is the conceptual pivot of the argument.');
+
+build('five-faces','Young names five recurring forms of oppression',[
+  'Young calls them the five faces of oppression: exploitation, marginalization, powerlessness, violence, and cultural imperialism.',
+  'The list shifts attention from a single distributional question to several ways that institutions and social expectations can limit people.',
+  'The point is not that every person experiences every face. It is that injustice can take several connected forms at once.'
+],'2','The argument gives this list as a framework for seeing forms of oppression that ideal distributive theories can miss.');
+
+head('The five faces name different kinds of social harm',[
+  ['Exploitation','Work enriches others while leaving the worker barely able to survive.'],
+  ['Marginalization','People are excluded from work and other major institutions.'],
+  ['Powerlessness','People are left out of decisions that shape their own lives.'],
+  ['Violence','People face harms connected to gender or race.'],
+  ['Cultural imperialism','Mainstream institutions fail to recognize or suppress marginalized cultures.']
+],note('2','The short definitions paraphrase the argument’s presentation of Young.'));
+
+question('A necessary distinction','Is a person oppressed only when they receive too little, or also when they are excluded, dominated, endangered, or misrecognized?','The next slides slow down over Young’s categories so that the difference between an unequal share and an oppressive relation becomes visible.',note('2','This question marks why the five faces matter.'));
+
+build('exploitation','Exploitation turns demanding work into profit for others',[
+  'For Young, exploitation concerns punishing work that pays barely enough to survive while creating substantial profits for other people.',
+  'The injustice is therefore relational: one group’s labor sustains advantages that another group is unable to share.'
+],'2','Keep the point tied to the argument’s account of low-paid, punishing work.');
+
+build('marginalization','Marginalization excludes people from central social institutions',[
+  'Marginalization is primarily a matter of being out of work or otherwise excluded from major institutions of society.',
+  'It is not merely a low rank within an institution: being pushed to its edge or kept outside can cut people off from income, recognition, participation, and ordinary social belonging.'
+],'2','The final sentence draws out consequences already implicit in the argument’s definition without adding a new factual claim.');
+
+build('powerlessness','Powerlessness means decisions are made over people’s heads',[
+  'Powerlessness is connected to democracy because it means being left out of decision-making concerning one’s own life.',
+  'A person can have formal rights while still lacking meaningful influence over the conditions they must live under.',
+  'Young’s point is that injustice can persist when people are governed by decisions they cannot effectively shape.'
+],'2','Connect this explicitly to the argument’s earlier concern about deliberative democracy.');
+
+duo('Two faces that are often ignored in abstract debates',
+  {label:'Violence',text:'Violence is especially connected in the argument to domestic violence and racist assaults: realities suffered by many people but rarely centered in political philosophy.'},
+  {label:'Cultural imperialism',text:'Cultural imperialism occurs when mainstream institutions and media fail to recognize or suppress a group’s culture, especially for ethnically marginalized groups.'},
+  note('2','These are paraphrases of Young’s two remaining faces as described in the source material.'));
+
+question('What ties the five faces together?','Why call all five faces “oppression” rather than five unrelated social problems?','The argument’s answer points to structural injustice: harms can arise from the way a system operates, not only from a single person’s deliberate decision.',note('2-3','The next section introduces the structural connection.'));
+
+section('III','A system can be unjust even when no one person planned the harm',note('2-3','The argument now names the form of injustice that links Young’s examples.'));
+
+build('structural-injustice','Structural injustice is produced by ordinary social arrangements',[
+  'Young’s central contribution is to make structural injustice visible.',
+  'Structural injustice means that people can suffer not only because someone deliberately acts against them, but also because systems such as the economy function in harmful ways.',
+  'The harm is still real even when no single individual can be identified as the sole author of the outcome.'
+],'2-3','Distinguish absence of a single culprit from absence of injustice.');
+
+build('global-structure','Structural injustice can stretch across the globe',[
+  'The argument uses sweatshop labor as an example: badly paid workers in East Asia make goods for Western markets through long hours and poor working conditions, connecting distant consumers, markets, profits, and labor conditions.',
+  'Young’s point is not simply that one person committed a discrete wrong. It is that a system can organize benefits and burdens in deeply unjust ways.'
+],'3','Treat the case as the argument’s illustration of global structural injustice.');
+
+build('local-structure','Structural injustice can also reshape a neighborhood',[
+  'The argument gives gentrification as a more local example: processes of neighborhood change can lead people with low incomes toward homelessness.',
+  'No individual person need intend that result for the process as a whole to be deeply unjust.'
+],'3','The sequence preserves the argument’s contrast between global and local cases.');
+
+head('The structure connects actions that seem separate',[
+  ['Workers','Long, poorly paid work supports goods sold elsewhere.'],
+  ['Institutions','Employment, housing, and media can include some people while excluding others.'],
+  ['Beneficiaries','People may gain from arrangements without having designed the whole system.'],
+  ['Harms','The costs can appear as insecurity, exclusion, violence, or lost cultural recognition.']
+],note('2-3','This is a plain-language synthesis of the argument’s account of structural injustice.'));
+
+build('responsibility-gap','No single culprit does not mean no one has a role in reform',[
+  'Structural injustice creates a difficult responsibility problem because the system has no single author, even though people can participate in, benefit from, or contribute to its harms without individually intending them.',
+  'That makes responsibility for reform harder to assign, but it does not turn the injustice into something that can simply be ignored.'
+],'3','The argument explicitly raises difficult questions about who has responsibility and power to reform structures.');
+
+question('Are formal rights enough?','If people already have a right not to be attacked or excluded, why does oppression still persist?','This question tests the gap between possessing a right on paper and living within institutions that reliably secure a life of value.',note('3','The next sequence considers why the argument says rights and redistribution are insufficient by themselves.'));
+
+build('rights-limit','Formal rights can leave oppressive conditions intact',[
+  'The argument says that formal rights or liberties are not the cure for many forms of oppression; people affected by violence may already possess the right not to be treated violently.',
+  'A right that exists in principle does not by itself change the social conditions under which violence or exclusion continues.'
+],'3','Do not deny the value of rights. The claim is that rights can be necessary without being sufficient.');
+
+build('redistribution-limit','Redistribution can help without ending oppression',[
+  'Policies of redistribution can be welcome and important, but a different distribution of income does not automatically change who has power, who is excluded, or which cultures are recognized.',
+  'Real progress therefore requires systematic reform of unjust structures.'
+],'3','This is the argument’s direct conclusion about why distribution is not the whole story.');
+
+question('The reform problem','If rights and redistribution are not enough, who has the power and responsibility to change an unjust structure?','The argument does not provide an easy formula. It emphasizes that systematic reform is necessary and that the question of agency needs further thought.',note('3','Leave this issue unsettled before moving to Shelby’s account of response under injustice.'));
+
+section('IV','Living under injustice can change what resistance looks like',note('3','Shelby’s case asks how people should respond when the basic structure is already unjust.'));
+
+build('shelby-context','Shelby starts from racial injustice rather than an ideal society',[
+  'Tommie Shelby does not reject Rawls’s project of describing a just basic structure, but he focuses on Black Americans living under extreme racial injustice in what he calls the dark ghetto.',
+  'The case shifts the question from what a just society would look like to how people may respond while living under an unjust one.'
+],'3','This describes Shelby’s position only as the source material presents it.');
+
+build('dark-ghetto','The conditions combine economic hardship and political exclusion',[
+  'The argument describes high unemployment and access mainly to low-paid, low-status, high-demand work, coupled with a lack of political power.',
+  'Shelby’s case also brings together all five of Young’s faces of oppression rather than isolating a single injury.'
+],'3','Keep the focus on the combination of conditions in the argument.');
+
+head('The case is not only about income',[
+  ['Work','Available employment is low paid, low status, and high demand.'],
+  ['Power','People lack political power over the conditions governing their lives.'],
+  ['Oppression','The setting can include exploitation, marginalization, powerlessness, violence, and cultural oppression.']
+],note('3','This slide restates the elements of the argument’s account of the dark ghetto.'));
+
+question('A difficult response','Can refusing an available low-paid job ever count as a legitimate response to injustice?','The question follows Shelby’s concern that ordinary expectations of cooperation may change when the basic structure itself is unjust.',note('3','The next slides present Shelby’s qualified answer rather than a blanket permission to disregard responsibility.'));
+
+build('responsibility-resistance','Shelby keeps individual responsibility in view',[
+  'Shelby holds that each individual remains responsible for their own life.',
+  'But responsibility does not require treating every available low-paid job as a morally mandatory response to an unjust social order.',
+  'Under conditions of extreme racial injustice, some anti-authoritarian behavior can be a legitimate response and a form of protest.'
+],'3','Keep the qualification clear: the argument does not say that individual responsibility disappears.');
+
+build('refusal-protest','A refusal can challenge the terms imposed by an unjust structure',[
+  'The argument gives one example: not taking a low-paid job when it is offered.',
+  'In Shelby’s account, that refusal can express resistance to an unjust basic structure rather than mere indifference to responsibility.',
+  'The example asks whether cooperation with an oppressive order should always be treated as an unquestionable duty.'
+],'3','This is an interpretive question raised by the argument, not an instruction about any particular person’s employment decision.');
+
+question('Who is entitled to theorize?','What changes when people who suffer injustice enter debates that have often been conducted by people protected from it?','The final movement turns the method back on those who theorize about justice and asks what privilege can hide.',note('3-4','This question follows directly from the argument’s uncomfortable conclusion.'));
+
+section('V','The view from privilege can conceal the structure of injustice',note('3-4','The argument now reflects on who participates in abstract debates about justice.'));
+
+build('privilege-problem','Those who theorize may be insulated from the harms they discuss',[
+  'The argument identifies an uncomfortable fact: people with the privilege to enter abstract debates about justice often do not suffer the relevant injustices themselves.',
+  'They may also benefit from and contribute to the very injustices they theorize about.',
+  'That possibility makes distance from lived experience a problem for political philosophy, not merely a personal biography.'
+],'3-4','This is a challenge to the conditions of debate, not a claim that only one kind of person can reason about justice.');
+
+build('inclusion-transform','Including victims of injustice can transform the debate',[
+  'Bringing people who suffer injustice into dialogues about justice can change what those debates notice, because their experience can reveal structural injustice that abstract theories overlook.',
+  'It can also help clarify which social reforms are needed to overcome systematic injustice around the world.'
+],'4','This is the argument’s positive implication about inclusion.');
+
+duo('What changes when injustice is the starting point?',
+  {label:'Abstract distance',text:'The central question can become which ideal distribution follows from liberty or another principle.'},
+  {label:'Lived injustice',text:'The central question becomes which structures expose people to exploitation, exclusion, powerlessness, violence, and cultural suppression.'},
+  note('1-4','This comparison synthesizes the argument’s contrast between ideal theory and an injustice-first approach.'));
+
+section('VI','Liberty alone cannot settle the distribution of property',note('5','The conclusion returns to the account’s original question while preserving the new focus on injustice.'));
+
+build('liberty-not-enough','Valuing liberty does not determine one property regime',[
+  'The argument concludes that valuing liberty is not enough to determine how property should be distributed.',
+  'Most of the theories considered, except utilitarianism, appeal to liberty among other values.',
+  'Yet none of the arguments is uniquely convincing, so liberty does not settle the distributive question by itself.'
+],'5','This is the argument’s explicit conclusion about property and liberty.');
+
+build('multiple-angles','Justice can be approached from more than one angle',[
+  'Nozick asks which property regime liberty permits, while Rawls uses a social-contract-style method to choose principles of justice.',
+  'The argument also directs attention to urgent injustices that can be seen in the world as it is.',
+  'Political philosophy therefore cannot be reduced to a single question about the best distribution of property.'
+],'5','Mention the social-contract method only as the argument does; no outside reconstruction is added.');
+
+head('The debate now has two powerful starting points',[
+  ['Ideal theory','Rawls-inspired approaches ask which principles would govern a just society.'],
+  ['Non-ideal theory','Sen, Young, Shelby, and social-contract critics begin from real-world injustice.'],
+  ['Shared pressure','Both approaches must explain what justice demands and why it matters for actual social arrangements.']
+],note('5','The final item is a synthesis: the argument presents a division in contemporary political philosophy without claiming the two sides share every method.'));
+
+question('Why does Rawls still matter?','If so many thinkers challenge Rawls’s conclusions or method, why does his framework remain central?','The argument ends by noting that Rawls remains the dominant figure even for theorists who reject his approach, because they still need to explain why they depart from it.',note('5','This question prepares the final conclusion.'));
+
+build('rawls-dominance','Rawls remains the reference point of the debate',[
+  'Many political theorists follow Rawls’s framework and either accept or modify his theory.',
+  'Even theorists who reject his conclusions or his methodology often explain their own position by showing why Rawls is wrong or incomplete.',
+  'The lasting dispute is not only about how much property people should have. It is also about whether justice should begin with an ideal model or with the injustices people already endure.'
+],'5','This is the argument’s final synthesis.');
+
+diagnostic('When a social system harms people without a single villain, what would justice require us to change?',note('2-5','Do not resolve this question. It captures Young’s challenge: justice must address structures as well as distributions.'));
+
+refs([
+  ['Source material','“The Distribution of Property - Injustice and Oppression,” source PDF, pp. 1-5.'],
+  ['Thinkers discussed','John Rawls, Amartya Sen, Iris Marion Young, and Tommie Shelby, as presented in the source material.'],
+  ['Concepts used','Ideal theory, the five faces of oppression, structural injustice, racial injustice, and liberty, all as presented in the source material.']
+],note('1-5','Every visible claim in this deck is grounded in the source material.'));
+
+const deck=document.getElementById('deck');
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c];});
+function renderSlide(s,i){
+  const article=document.createElement('article');
+  article.className='slide '+s.type+(s.type==='content'||s.type==='head'?' top':'');
+  article.dataset.index=i;
+  if(s.buildGroup) article.dataset.buildGroup=s.buildGroup;
+  let html='<div class="slide-inner">';
+  if(s.type==='cover') html+='<h1 class="title">'+esc(s.title)+'</h1><p class="work">'+esc(s.work)+'</p><div class="course">'+esc(s.course)+'</div>';
+  if(s.type==='section') html+='<div class="eyebrow">'+esc(s.eyebrow)+'</div><h2 class="title">'+esc(s.title)+'</h2><div class="rule"></div>';
+  if(s.type==='content') html+='<h2 class="title">'+esc(s.title)+'</h2><div class="body">'+s.paragraphs.map(function(p,j){return '<p class="'+(j===s.paragraphs.length-1?'fresh':'')+'">'+esc(p)+'</p>';}).join('')+'</div>';
+  if(s.type==='question'||s.type==='diagnostic') html+='<div class="eyebrow">'+esc(s.eyebrow)+'</div><p class="prompt">'+esc(s.prompt)+'</p>'+(s.context?'<p class="context">'+esc(s.context)+'</p>':'');
+  if(s.type==='quote') html+='<blockquote>'+esc(s.text)+'</blockquote><cite>'+esc(s.cite)+'</cite>';
+  if(s.type==='duo') html+='<h2 class="title">'+esc(s.title)+'</h2><div class="duo-grid">'+[s.left,s.right].map(function(x){return '<div class="duo-col"><h3>'+esc(x.label)+'</h3><p>'+esc(x.text)+'</p></div>';}).join('')+'</div>';
+  if(s.type==='head') html+='<h2 class="title">'+esc(s.title)+'</h2><div class="head-list">'+s.items.map(function(x){return '<div class="head-item"><b>'+esc(x[0])+'</b><span>'+esc(x[1])+'</span></div>';}).join('')+'</div>';
+  if(s.type==='refs') html+='<h2 class="title">'+esc(s.title)+'</h2><div class="refs-list">'+s.items.map(function(x){return '<div class="ref"><strong>'+esc(x[0])+'.</strong> '+esc(x[1])+'</div>';}).join('')+'</div>';
+  article.innerHTML=html+'</div>';
+  deck.appendChild(article);
+  return article;
+}
+const nodes=slides.map(renderSlide);
+let current=0;
+const counter=document.getElementById('counter');
+const progress=document.getElementById('progress');
+const notes=document.getElementById('notes');
+const notesBody=document.getElementById('notes-body');
+const overview=document.getElementById('overview');
+const overviewGrid=document.getElementById('overview-grid');
+function labelFor(s){return s.title||s.prompt||s.text||'Slide';}
+slides.forEach(function(s,i){
+  const b=document.createElement('button');
+  b.className='overview-card';
+  b.innerHTML='<span class="num">'+String(i+1).padStart(2,'0')+' / '+slides.length+'</span><span class="label">'+esc(labelFor(s))+'</span>';
+  b.addEventListener('click',function(){closePanels();show(i);});
+  overviewGrid.appendChild(b);
+});
+const cards=[...overviewGrid.children];
+function show(i){
+  current=Math.max(0,Math.min(slides.length-1,i));
+  nodes.forEach(function(n,j){n.classList.toggle('active',j===current);});
+  cards.forEach(function(n,j){n.classList.toggle('current',j===current);});
+  counter.textContent=(current+1)+' / '+slides.length;
+  progress.style.width=((current+1)/slides.length)*100+'%';
+  notesBody.textContent=slides[current].notes||'No notes for this slide.';
+  document.title=(current+1)+'/'+slides.length+' · Iris Marion Young - Injustice and Oppression';
+}
+function openPanel(panel){closePanels();panel.classList.add('open');}
+function closePanels(){overview.classList.remove('open');notes.classList.remove('open');}
+function togglePanel(panel){panel.classList.contains('open')?closePanels():openPanel(panel);}
+function toggleFullscreen(){if(document.fullscreenElement){document.exitFullscreen();}else{document.documentElement.requestFullscreen().catch(function(){});}}
+document.getElementById('fullscreen').addEventListener('click',toggleFullscreen);
+document.querySelectorAll('.close').forEach(function(b){b.addEventListener('click',closePanels);});
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'){closePanels();return;}
+  if(overview.classList.contains('open')||notes.classList.contains('open')) return;
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();show(current+1);}
+  else if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();show(current-1);}
+  else if(e.key.toLowerCase()==='o') togglePanel(overview);
+  else if(e.key.toLowerCase()==='n') togglePanel(notes);
+  else if(e.key.toLowerCase()==='f') toggleFullscreen();
+});
+let touchX=0,touchY=0;
+document.addEventListener('touchstart',function(e){touchX=e.changedTouches[0].screenX;touchY=e.changedTouches[0].screenY;},{passive:true});
+document.addEventListener('touchend',function(e){const dx=e.changedTouches[0].screenX-touchX,dy=e.changedTouches[0].screenY-touchY;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy))show(current+(dx<0?1:-1));},{passive:true});
+function fits(node){const inner=node.querySelector('.slide-inner');return inner.scrollHeight<=node.clientHeight*.82&&inner.scrollWidth<=node.clientWidth*.92;}
+function fitNode(node,start=1){let f=start;node.classList.add('measuring');node.style.setProperty('--fit',f);while(f>.72&&!fits(node)){f-=.02;node.style.setProperty('--fit',f);}node.classList.remove('measuring');return f;}
+function fitAll(){
+  nodes.forEach(function(n){n.style.setProperty('--fit',1);});
+  const groups={};
+  nodes.forEach(function(n){if(n.dataset.buildGroup){(groups[n.dataset.buildGroup]||(groups[n.dataset.buildGroup]=[])).push(n);}});
+  const grouped=new Set(Object.values(groups).flat());
+  Object.values(groups).forEach(function(group){const final=group[group.length-1];const f=fitNode(final);group.forEach(function(n){n.style.setProperty('--fit',f);});});
+  nodes.filter(function(n){return !grouped.has(n);}).forEach(function(n){fitNode(n);});
+  show(current);
+}
+let resizeTimer;
+window.addEventListener('resize',function(){clearTimeout(resizeTimer);resizeTimer=setTimeout(fitAll,120);});
+if(document.fonts&&document.fonts.ready){document.fonts.ready.then(fitAll);}else{fitAll();}
+show(0);
+</script>
+</body>
+</html>

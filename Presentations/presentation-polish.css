@@ -1,0 +1,149 @@
+/*
+  Shared widescreen treatment for the course decks.
+  The original visual systems stay intact; these rules only reclaim unused
+  horizontal space and let headings read at presentation scale on desktop.
+*/
+
+@supports (height: 100dvh) {
+  html,
+  body,
+  #deck,
+  .deck {
+    min-height: 100dvh;
+  }
+}
+
+@media (min-width: 761px) {
+  :root {
+    --polish-content-frame: min(1640px, 90vw);
+    --polish-wide-frame: min(1760px, 91.5vw);
+    --polish-duo-frame: min(1760px, 91.5vw);
+  }
+
+  .slide {
+    padding-inline: 4vw !important;
+  }
+
+  .slide-inner,
+  .content .slide-inner,
+  .head .slide-inner,
+  .refs .slide-inner {
+    width: var(--polish-wide-frame) !important;
+    max-width: var(--polish-wide-frame) !important;
+  }
+
+  .slide.duo .slide-inner {
+    width: var(--polish-duo-frame) !important;
+    max-width: var(--polish-duo-frame) !important;
+  }
+
+  .cover .slide-inner,
+  .section .slide-inner,
+  .question .slide-inner,
+  .diagnostic .slide-inner,
+  .quote .slide-inner {
+    width: var(--polish-content-frame) !important;
+    max-width: var(--polish-content-frame) !important;
+  }
+
+  /* Let a title occupy the frame before it is asked to wrap. */
+  .cover .title,
+  .section .title,
+  .content .title,
+  .head .title,
+  .duo .title,
+  .refs .title {
+    max-width: none !important;
+  }
+
+  .cover .title {
+    font-size: calc(clamp(64px, 7.15vw, 116px) * var(--fit, 1)) !important;
+  }
+
+  .section .title {
+    font-size: calc(clamp(52px, 5.85vw, 94px) * var(--fit, 1)) !important;
+  }
+
+  .content .title,
+  .head .title,
+  .duo .title {
+    font-size: calc(clamp(42px, 4.75vw, 74px) * var(--fit, 1)) !important;
+    line-height: 1.02 !important;
+  }
+
+  .refs .title {
+    font-size: calc(clamp(44px, 4.9vw, 76px) * var(--fit, 1)) !important;
+  }
+
+  .question .prompt,
+  .diagnostic .prompt {
+    max-width: min(34ch, 86vw);
+    margin-inline: auto;
+  }
+
+  .quote blockquote {
+    max-width: min(34ch, 84vw);
+  }
+
+  .duo-grid {
+    gap: clamp(2.25rem, 3.25vw, 4rem);
+  }
+
+  /* The three introductory decks live one directory above the course decks. */
+  body.day1-classic .slide {
+    padding-inline: 5vw !important;
+  }
+
+  body.day1-classic .slide.title h1 {
+    font-size: clamp(56px, 7vw, 100px);
+    max-width: min(26ch, 88vw);
+  }
+
+  body.day1-classic .question {
+    font-size: clamp(44px, 5.55vw, 78px);
+    line-height: 1.16;
+    max-width: min(34ch, 88vw);
+  }
+
+  body.day1-case-first .slide {
+    padding-inline: clamp(2.5rem, 5vw, 7rem) !important;
+  }
+
+  body.day1-case-first h1,
+  body.day1-case-first h2,
+  body.day1-case-first .case-question,
+  body.day1-case-first .takeaway h2 {
+    max-width: none;
+  }
+
+  body.day1-case-first h1 {
+    font-size: clamp(3.6rem, 7.4vw, 8rem);
+  }
+
+  body.day1-case-first h2,
+  body.day1-case-first .case-question {
+    font-size: clamp(2.55rem, 5.25vw, 5.7rem);
+  }
+
+  body.day1-case-first .case,
+  body.day1-case-first .takeaway {
+    max-width: min(84rem, 90vw);
+  }
+
+  body.state-nature-simulation .slide {
+    padding-inline: 5vw !important;
+  }
+
+  body.state-nature-simulation #slide-title h1.title {
+    font-size: clamp(76px, 7.1vw, 116px);
+    max-width: none;
+  }
+
+  body.state-nature-simulation h2.title {
+    font-size: clamp(50px, 4.8vw, 76px);
+  }
+
+  body.state-nature-simulation .event-head h2 {
+    font-size: clamp(46px, 4.5vw, 70px);
+  }
+}

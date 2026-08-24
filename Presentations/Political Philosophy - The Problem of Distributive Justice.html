@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Problem of Distributive Justice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#17111d;
+    --bg-2:#23182b;
+    --text:#f4eadb;
+    --muted:#b9aabd;
+    --accent:#63d6d0;
+    --accent-dim:#347f80;
+    --warm:#d7b37a;
+    --border:rgba(244,234,219,.16);
+    --fit:1;
+  }
+  *{box-sizing:border-box}
+  html,body{width:100%;height:100%;margin:0;overflow:hidden;background:var(--bg);color:var(--text)}
+  body{font-family:Inter,system-ui,sans-serif}
+  button{font:inherit}
+  #deck{position:relative;width:100vw;height:100vh;background:
+    radial-gradient(circle at 76% 10%,rgba(99,214,208,.11),transparent 25%),
+    radial-gradient(circle at 15% 110%,rgba(215,179,122,.08),transparent 31%),
+    linear-gradient(115deg,rgba(244,234,219,.028) 0 1px,transparent 1px 12vw),
+    linear-gradient(145deg,#130e18 0%,#17111d 52%,#211329 100%)}
+  #deck::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.55;background:repeating-linear-gradient(90deg,transparent 0 8vw,rgba(99,214,208,.035) 8.05vw 8.12vw)}
+  #deck::after{content:"";position:absolute;right:-10vw;bottom:-24vh;width:50vw;height:50vw;border:1px solid rgba(99,214,208,.17);border-radius:50%;box-shadow:0 0 0 8vw rgba(99,214,208,.025),0 0 0 16vw rgba(99,214,208,.012);pointer-events:none}
+  .slide{position:absolute;inset:0;display:none;align-items:center;justify-content:center;padding:7.2vh 7vw 8vh;text-align:center;overflow:hidden}
+  .slide.active,.slide.measuring{display:flex}
+  .slide.measuring{visibility:hidden;pointer-events:none}
+  .slide.top{align-items:flex-start;padding-top:8.5vh}
+  .slide-inner{position:relative;z-index:1;width:min(980px,86vw);max-height:82vh;margin:auto;transform-origin:top center}
+  .slide.top .slide-inner{margin:0 auto}
+  .slide.duo .slide-inner{width:min(1140px,90vw)}
+  .eyebrow{margin:0 0 1.2rem;color:var(--accent);font:600 calc(clamp(12px,1.12vw,17px)*var(--fit))/1.3 "IBM Plex Mono",monospace;letter-spacing:.18em;text-transform:uppercase}
+  .title{margin:0;font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;letter-spacing:-.018em}
+  .cover .title{font-size:calc(clamp(58px,7.6vw,104px)*var(--fit));line-height:.96;max-width:11ch;margin-inline:auto}
+  .cover .work{font:500 calc(clamp(20px,2.15vw,31px)*var(--fit))/1.4 "Cormorant Garamond",Georgia,serif;color:var(--muted);margin:1.5rem auto 0;max-width:36ch}
+  .cover .course{margin-top:2.4rem;color:var(--accent);font:500 calc(clamp(11px,1vw,15px)*var(--fit))/1.4 "IBM Plex Mono",monospace;letter-spacing:.14em;text-transform:uppercase}
+  .section .slide-inner{width:min(900px,86vw);padding:2.4rem 3rem;border-left:4px solid var(--accent);background:linear-gradient(90deg,rgba(99,214,208,.12),transparent 72%);text-align:left}
+  .section .title{font-size:calc(clamp(48px,6.2vw,84px)*var(--fit));line-height:1.02}
+  .section .rule{width:9rem;height:3px;background:linear-gradient(90deg,var(--accent),transparent);margin:1.8rem 0 0}
+  .section .eyebrow{text-align:left}
+  .content .title,.head .title,.duo .title{font-size:calc(clamp(38px,4.5vw,62px)*var(--fit));line-height:1.05;margin-bottom:1.6rem;max-width:19ch;padding-bottom:.7rem;border-bottom:1px solid var(--border)}
+  .content .body{font-family:"Cormorant Garamond",Georgia,serif;font-size:calc(clamp(25px,2.35vw,35px)*var(--fit));line-height:1.34;text-align:left}
+  .content .body p{margin:0 0 1.05em -1.25rem;padding:.08em .7em .08em 1rem;border-left:4px solid rgba(99,214,208,.38);color:rgba(185,170,189,.55);font-weight:600;background:linear-gradient(90deg,rgba(99,214,208,0),rgba(99,214,208,0));border-radius:0 3px 3px 0}
+  .content .body p:last-child{margin-bottom:0}
+  .content .body p.fresh{color:var(--text);border-left-color:var(--accent);background:linear-gradient(90deg,rgba(99,214,208,.18),rgba(99,214,208,.03) 58%,transparent 88%);text-shadow:0 0 18px rgba(244,234,219,.08)}
+  .question .slide-inner,.diagnostic .slide-inner{width:min(900px,86vw);padding:2.7rem 3.5rem;background:rgba(19,14,24,.64);border:1px solid rgba(99,214,208,.28);box-shadow:inset 0 0 0 9px rgba(99,214,208,.025),0 24px 55px rgba(0,0,0,.2)}
+  .question .prompt,.diagnostic .prompt{margin:0;font-family:"Cormorant Garamond",Georgia,serif;font-size:calc(clamp(42px,5.2vw,72px)*var(--fit));line-height:1.08;font-weight:600;letter-spacing:-.015em}
+  .question .prompt::after,.diagnostic .prompt::after{content:"";display:block;width:7.5rem;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);margin:1.8rem auto 0}
+  .question .context{max-width:48ch;margin:1.35rem auto 0;color:var(--muted);font:500 calc(clamp(18px,1.7vw,25px)*var(--fit))/1.4 "Cormorant Garamond",Georgia,serif}
+  .quote .slide-inner{padding:1rem 3rem;border-inline:1px solid rgba(99,214,208,.35)}
+  .quote blockquote{margin:0 auto;max-width:26ch;font-family:"Cormorant Garamond",Georgia,serif;font-size:calc(clamp(39px,4.45vw,63px)*var(--fit));line-height:1.12;font-weight:500;font-style:italic;text-shadow:0 5px 22px rgba(0,0,0,.28)}
+  .quote blockquote::before{content:"“";color:var(--accent);margin-right:.08em}
+  .quote blockquote::after{content:"”";color:var(--accent);margin-left:.08em}
+  .quote cite{display:block;margin-top:1.6rem;padding-top:1rem;border-top:1px solid var(--border);color:var(--muted);font:500 calc(clamp(12px,1.15vw,17px)*var(--fit))/1.45 "IBM Plex Mono",monospace;font-style:normal}
+  .duo-grid{display:grid;grid-template-columns:1fr 1fr;gap:2.4rem;text-align:left;margin-top:1.5rem}
+  .duo-col{min-height:15rem;padding:1.5rem 1.6rem;border:1px solid var(--border);border-top:4px solid var(--accent);background:linear-gradient(145deg,rgba(35,24,43,.92),rgba(23,17,29,.7))}
+  .duo-col h3{margin:0 0 .85rem;color:var(--accent);font:600 calc(clamp(13px,1.25vw,18px)*var(--fit))/1.3 "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase}
+  .duo-col p{margin:0;color:var(--text);font:500 calc(clamp(24px,2.15vw,33px)*var(--fit))/1.34 "Cormorant Garamond",Georgia,serif}
+  .head-list{display:grid;gap:1.15rem;text-align:left;margin-top:1.8rem}
+  .head-item{display:grid;grid-template-columns:10rem 1fr;gap:1.5rem;align-items:baseline;padding-top:1rem;border-top:1px solid var(--border);border-left:2px solid transparent;padding-left:1rem}
+  .head-item:nth-child(odd){border-left-color:rgba(99,214,208,.58)}
+  .head-item b{color:var(--accent);font:600 calc(clamp(12px,1.1vw,16px)*var(--fit))/1.3 "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase}
+  .head-item span{font:500 calc(clamp(23px,2.05vw,31px)*var(--fit))/1.3 "Cormorant Garamond",Georgia,serif}
+  .diagnostic .eyebrow{color:var(--muted)}
+  .diagnostic .prompt{font-size:calc(clamp(52px,6.6vw,90px)*var(--fit))}
+  .refs .slide-inner{width:min(980px,86vw);text-align:left}
+  .refs .title{font-size:calc(clamp(40px,4.6vw,64px)*var(--fit));margin-bottom:1.7rem}
+  .refs-list{display:grid;gap:1.05rem}
+  .ref{padding-top:.95rem;border-top:1px solid var(--border);font:500 calc(clamp(18px,1.65vw,24px)*var(--fit))/1.38 "Cormorant Garamond",Georgia,serif;color:var(--muted)}
+  .ref strong{color:var(--text);font-weight:600}
+  #progress{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,var(--accent-dim),var(--accent));z-index:30}
+  #nav-hint,#counter{position:fixed;bottom:18px;z-index:30;color:var(--muted);font:500 12px/1.3 "IBM Plex Mono",monospace;letter-spacing:.08em}
+  #nav-hint{left:24px} #counter{right:24px}
+  #fullscreen{position:fixed;top:20px;right:22px;z-index:30;color:var(--muted);background:transparent;border:1px solid rgba(99,214,208,.42);border-radius:0;padding:8px 11px;cursor:pointer;font:500 11px/1 "IBM Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase}
+  #fullscreen:hover{color:var(--accent);border-color:var(--accent)}
+  .panel{position:fixed;inset:4vh 4vw;z-index:60;display:none;background:rgba(19,14,24,.985);border:1px solid var(--border);overflow:auto}
+  .panel.open{display:block}
+  .panel-head{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;padding:18px 22px;background:var(--bg-2);border-bottom:1px solid var(--border);z-index:2}
+  .panel-head h2{margin:0;color:var(--accent);font:600 14px/1 "IBM Plex Mono",monospace;letter-spacing:.15em;text-transform:uppercase}
+  .close{color:var(--text);background:transparent;border:1px solid var(--border);padding:7px 10px;cursor:pointer}
+  #overview-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;padding:20px}
+  .overview-card{min-height:126px;padding:16px;text-align:left;background:linear-gradient(145deg,#23182b,#17111d);border:1px solid var(--border);border-left:3px solid transparent;color:var(--text);cursor:pointer}
+  .overview-card:hover,.overview-card.current{border-left-color:var(--accent);border-color:rgba(99,214,208,.42)}
+  .overview-card .num{display:block;color:var(--accent);font:500 11px/1.3 "IBM Plex Mono",monospace;margin-bottom:12px}
+  .overview-card .label{font:600 22px/1.1 "Cormorant Garamond",Georgia,serif}
+  #notes-body{padding:28px 34px;white-space:pre-wrap;color:var(--text);font:400 18px/1.62 Inter,sans-serif;max-width:900px}
+  @media (max-width:760px){
+    .slide{padding:9vh 8vw 10vh}.slide.top{padding-top:9.5vh}.slide-inner,.slide.duo .slide-inner{width:84vw}
+    .duo-grid{grid-template-columns:1fr;gap:1.5rem}.head-item{grid-template-columns:1fr;gap:.45rem}
+    #nav-hint{display:none}#fullscreen{top:12px;right:12px}.content .body{font-size:calc(clamp(22px,5.6vw,30px)*var(--fit))}
+    .duo-col p{font-size:calc(clamp(22px,5.3vw,29px)*var(--fit))}
+    .cover .slide-inner,.section .slide-inner,.question .slide-inner,.diagnostic .slide-inner{padding:1.7rem 1.5rem}.quote .slide-inner{padding:1rem 1.4rem}
+  }
+</style>
+<link rel="stylesheet" href="presentation-polish.css">
+<script src="presentation-polish.js" defer></script>
+</head>
+<body>
+<main id="deck" aria-live="polite"></main>
+<div id="progress"></div>
+<div id="nav-hint">ARROWS / SPACE · O OVERVIEW · N NOTES · F FULLSCREEN</div>
+<div id="counter">1 / 1</div>
+<button id="fullscreen" aria-label="Toggle fullscreen">Fullscreen</button>
+
+<section id="overview" class="panel" aria-label="Slide overview">
+  <div class="panel-head"><h2>Overview</h2><button class="close" data-close="overview">Close</button></div>
+  <div id="overview-grid"></div>
+</section>
+<aside id="notes" class="panel" aria-label="Speaker notes">
+  <div class="panel-head"><h2>Speaker notes</h2><button class="close" data-close="notes">Close</button></div>
+  <div id="notes-body"></div>
+</aside>
+
+<script>
+const slides=[];
+const add=s=>slides.push(s);
+const source=(pages,extra='')=>`[Sources]\nSource material, “The Problem of Distributive Justice,” source PDF, pp. ${pages}.${extra?`\n${extra}`:''}\n[/Sources]`;
+const cover=(title,work,course,notes)=>add({type:'cover',title,work,course,notes});
+const section=(roman,title,notes)=>add({type:'section',eyebrow:`${roman}. ${title.toUpperCase()}`,title,notes});
+const question=(eyebrow,prompt,context,notes)=>add({type:'question',eyebrow,prompt,context,notes});
+const quote=(text,cite,notes)=>add({type:'quote',text,cite,notes});
+const duo=(title,left,right,notes)=>add({type:'duo',title,left,right,notes});
+const head=(title,items,notes)=>add({type:'head',title,items,notes});
+const diagnostic=(prompt,notes)=>add({type:'diagnostic',eyebrow:'The distributive-justice test',prompt,notes});
+const refs=(items,notes)=>add({type:'refs',title:'References',items,notes});
+function build(id,title,paragraphs,notes,pages){
+  paragraphs.forEach((_,i)=>add({type:'content',title,paragraphs:paragraphs.slice(0,i+1),buildGroup:id,notes:`${notes}${i<paragraphs.length-1?'\n\nPause before revealing the next step.':''}\n\n${source(pages)}`}));
+}
+
+cover('The Problem of Distributive Justice','Property, liberty, and the meaning of an unequal society','Political Philosophy',`Open with the central tension: property can be treated as a protected part of liberty, yet unequal property can limit the opportunities of those with less.\n\n${source('1–6')}`);
+
+section('I','Why can an obvious answer be disastrously naive?',`The argument opens with Hume’s warning that a rule can look morally obvious while producing social disaster when people actually live under it.\n\n${source('1')}`);
+
+build('opening-tension','Distributive justice asks how goods should be distributed',[
+  'The problem of distributive justice is the problem of how goods—especially property and income—should be distributed among people.',
+  'The question sounds simple until we ask what makes a distribution just: equal shares, deserved shares, secure rights, useful outcomes, or something else.',
+  'The argument begins with Hume because an apparently obvious answer can become disastrous when it is turned into a social rule.'
+],'Keep the question open. The argument will test several competing ways to answer it.','1');
+
+quote('The total dissolution of society must be the immediate consequence.','David Hume, An Enquiry Concerning the Principle of Morals (1751), quoted in the source material, p. 1.',`Hume’s point is not that justice is impossible. It is that a distribution principle must be judged by how it works in a shared social world.\n\n${source('1','Primary work quoted in the argument: David Hume, An Enquiry Concerning the Principle of Morals (1751), pp. 192–193.')}`);
+
+question('The opening problem','What should a just distribution protect: equal shares, secure rights, useful outcomes, or the opportunities people have to live freely?','This question identifies the competing values that the rest of the argument places under pressure.',`The next section starts with liberty because liberal theories disagree about whether liberty protects holdings or opportunities.\n\n${source('1–3')}`);
+
+section('II','Liberty points in two directions',`Mill, Nozick, and Rawls all connect property to liberty, but they draw that connection differently.\n\n${source('1–3')}`);
+
+build('liberty','Liberty does not settle the property question by itself',[
+  'For Mill, liberty requires protection from harm. Theft, fraud, and damage to property count as harms that the law may prevent.',
+  'But normal market competition is not, for Mill, a harm that gives someone a right to protection. Losing an economic contest is not the same as being robbed.',
+  'Mill also thinks citizens should pay their share of government and support people unable to support themselves. Liberty can therefore coexist with taxation and assistance.',
+  'The argument’s first lesson is that liberty alone does not determine distributive justice. We still need to ask which other values—utility, natural rights, or equality—matter.'
+],'Do not collapse Mill’s protection from harm into protection from every disappointing market result.','1–2');
+
+duo('Two liberal routes from liberty',
+  {label:'Libertarian route',text:'Liberty protects a strong right to what an individual owns. Government must not cross that protected sphere without consent.'},
+  {label:'Welfare-liberal route',text:'Liberty requires real opportunities. Extreme inequality can leave the poor formally free but unable to use their freedom effectively.'},
+  `This comparison previews the disagreement between Nozick and Rawls.\n\n${source('2–3')}`);
+
+question('The hinge','Does liberty protect what I own, or what I can realistically do?','The answer determines whether redistribution is an invasion of liberty or a condition of equal liberty.',`The next section develops the libertarian answer through Nozick’s protected sphere.\n\n${source('2')}`);
+
+section('III','Nozick draws a hard boundary around property',`The argument presents Nozick as the strongest version of the view that liberty requires very strong property rights.\n\n${source('2')}`);
+
+build('nozick','For Nozick, property is inside an individual’s protected sphere',[
+  'The libertarian tradition follows Locke in treating property rights as natural rights: rights that do not depend entirely on a government’s permission.',
+  'Nozick’s minimal state exists to enforce individual property rights and defend citizens against one another and foreign aggressors.',
+  'Because property is a right, the state may not tax people beyond what that protective function requires. Taxation for redistribution takes something that belongs to one person for the sake of another.',
+  'The state therefore violates rights if it transfers property from the rich to the poor. Distribution should be left to the free market, gifts, and voluntary charity.',
+  'Nozick’s argument moves from individual liberty to a very pure form of capitalism: property is placed inside a protected sphere that others may not enter without consent.'
+],'Present Nozick’s position as an argument about rights, not as a claim that markets always produce equal or pleasant results.','2');
+
+question('The libertarian test','If unequal holdings arise through consent, is the resulting distribution just?','Nozick’s answer depends on the history and voluntariness of transactions, not on whether the final pattern is equal.',`The next section introduces the opposing welfare-liberal answer: property may need supervision if liberty is to be available to all.\n\n${source('2–3')}`);
+
+section('IV','Rawls treats property as a condition of liberty',`Welfare liberalism argues that the state may redistribute property when inequality undermines equal liberty or opportunity.\n\n${source('2–3')}`);
+
+build('rawls','Equal liberty may require redistribution',[
+  'The welfare-liberal objection is that leaving property entirely to the market can produce vast inequalities.',
+  'Those inequalities can damage the liberties—or at least the opportunities—of people who end up with the least.',
+  'Redistribution from the wealthy to the less fortunate can therefore be a way to secure equal liberty rather than an attack on liberty.',
+  'On this view, property is outside an individual’s absolute protected sphere. Government must supervise and intervene, subject to law, to protect liberty and justice.',
+  'The argument identifies John Rawls’s A Theory of Justice as the most important variant of welfare liberalism and a major source of contemporary debate.'
+],'Rawls is introduced here through the argument’s contrast with Nozick; do not add claims about Rawls beyond what this account supplies.','2–3');
+
+duo('Nozick and Rawls ask liberty to do opposite work',
+  {label:'Nozick',text:'Protect property from redistribution. A just state enforces the rights people already have.'},
+  {label:'Rawls',text:'Protect liberty from the effects of severe inequality. A just state may redistribute to secure equal liberty and justice.'},
+  `The disagreement is not whether liberty matters. It is what liberty requires the state to do about property.\n\n${source('2–3')}`);
+
+question('The competing liberties','Which side gets to define the relevant liberty: the owner’s freedom from interference, or the poorer person’s freedom to act with real opportunities?','The income parade gives the dispute a concrete object instead of leaving it at the level of abstract principles.',`The next section turns from theories to the shape of inequality itself.\n\n${source('2–3')}`);
+
+section('V','Before choosing principles, make inequality visible',`The argument introduces Jan Pen’s income parade as a way to make dry income statistics perceptible.\n\n${source('3–5')}`);
+
+build('parade-setup','Pen turns income statistics into a one-hour procession',[
+  'The argument defines distributive justice as a question about how goods are distributed, then proposes that facts about how goods are actually distributed can sharpen reflection.',
+  'Raw income statistics may be accurate but psychologically flat. Percentages can fail to communicate what a distribution feels like as a social structure.',
+  'Dutch economist Jan Pen offered a different representation in Income Distribution (1971): imagine a Grand Parade of everyone in the UK economy who earns a wage of any sort, including people receiving social security.',
+  'The parade lasts exactly one hour. People pass in order from the lowest incomes to the highest, and each person’s height is set by their pre-tax income.'
+],'The parade is an explanatory device, not an up-to-date dataset. The argument explicitly notes that its figures are decades old.','3–4');
+
+build('parade-low','For most of the parade, the figures stay very small',[
+  'At the beginning come people of negative height who own loss-making businesses, followed by people the size of a matchstick or cigarette.',
+  'These tiny figures include people with only a few weeks of work, schoolchildren doing odd jobs, and others with little annual income.',
+  'After ten minutes, people about three feet tall begin to pass: unemployed people, pensioners, divorced women, some young people, and struggling shop owners.',
+  'Low-paid workers follow. For the first fifteen minutes, the parade makes the bottom of the income distribution physically impossible to ignore.'
+],'Keep the visual metaphor literal: height is proportional to pre-tax income.','4');
+
+build('parade-middle','The middle of the parade is still below eye level',[
+  'After fifteen minutes, the marchers finally reach four feet tall, and skilled industrial and office workers pass with very little change in height for another fifteen minutes.',
+  'At the halfway point, spectators might expect to be looking people straight in the eye because half the parade has passed.',
+  'Pen’s point is that this expectation is wrong: after half an hour, spectators are still looking down on the tops of the marchers’ heads.',
+  'It is forty-five minutes before people of average height appear, including teachers, executive civil servants, shopkeepers, foremen, and a few farmers.'
+],'This is the moment where the metaphor becomes an argument about how unequal the distribution is, not merely a list of occupations.','4–5');
+
+build('parade-top','The last minutes contain the spectacular heights',[
+  'In the final six minutes, the top ten percent arrive. Headteachers, graduates, managers, lawyers, doctors, and accountants rise sharply above the earlier marchers.',
+  'In the final minutes, senior public officials and judges appear at heights measured in yards rather than feet.',
+  'In the last seconds, major businesspeople, managing directors, film stars, and members of the royal family become tower blocks, miles, or more.',
+  'The argument says an updated parade would feature technology entrepreneurs, hedge-fund managers, and successful YouTubers, even though the original figures are decades old.'
+],'The changing occupations are less important than the distributional image: a long low stretch followed by a spectacular final rise.','5');
+
+quote('Giants suddenly loom up.','Jan Pen, Income Distribution (1971), quoted in the source material, p. 5.',`Let the phrase name the sudden change in scale at the top of the distribution.\n\n${source('5','Primary work quoted in the argument: Jan Pen, Income Distribution (1971), p. 51.')}`);
+
+question('The parade’s pressure','What judgment is the parade trying to produce—and what would it leave out?','The image can make inequality feel morally urgent, but the argument immediately asks whether that reaction is justified by the information provided.',`The next section separates moral alarm from the methodological limits of the parade.\n\n${source('5–6')}`);
+
+section('VI','A startling distribution is not yet a verdict',`The argument does not deny that the parade is powerful. It asks whether power of presentation is the same thing as proof of injustice.\n\n${source('5–6')}`);
+
+build('reaction','The parade invites a moral reaction before it supplies a complete argument',[
+  'The image is so startling that it is hard to read without thinking there must be something wrong with a society so unequal.',
+  'That reaction may be justified, but the argument warns that the parade may not give us enough information for a properly considered judgment.',
+  'A defender of the current system could say that the parade is misleading because its scientific-looking presentation is value-laden: the data may have been selected to persuade us that society is unjust.',
+  'The key distinction is between showing that a distribution is unequal and showing that the inequality is unjust.'
+],'Keep the argument’s diagnostic caution distinct from a defense of the existing system.','5–6');
+
+duo('Two readings of the same parade',
+  {label:'Moral alarm',text:'A society in which most people remain tiny while the last few become giants looks wrong, even before we calculate the exact shares.'},
+  {label:'Methodological caution',text:'The image selects a unit, a scale, and a time sequence. It may therefore exaggerate what it is supposed to prove.'},
+  `Neither response settles the issue alone. The next objection asks who exactly counts as one person in the parade.\n\n${source('5–6')}`);
+
+question('The hidden choice','What exactly is being compared when we compare incomes?','The answer depends on the reference unit: individuals, families, or households can produce different pictures of the same economy.',`The next section follows Pen’s own question about the reference unit.\n\n${source('6')}`);
+
+section('VII','The reference unit changes the picture',`A distribution can look different when the relevant unit is an individual earner rather than a family or household.\n\n${source('6')}`);
+
+build('unit','The parade counts individual earners with very different circumstances',[
+  'Pen’s parade includes everyone in the economy who earns any income, including people who receive social security.',
+  'Some of the lowest earners are children with spare-time jobs, married women who worked for only a few weeks or hours, or people whose businesses are making losses.',
+  'Many of these people do not try to live solely from their own wages. They may belong to families whose combined income is much more substantial.',
+  'If families or households become the basic unit of comparison, many of the lowest incomes disappear from the picture.'
+],'Do not treat the household objection as a complete answer. It changes the unit of comparison; it does not yet tell us what justice requires.','6');
+
+question('The household objection','Does comparing households solve the justice problem, or only change which pattern of inequality we can see?','The argument’s next objection is deeper: even a perfectly chosen unit cannot tell us how the money was obtained.',`The final objection concerns the history and moral provenance of income.\n\n${source('6')}`);
+
+section('VIII','Income alone cannot tell us whether a distribution is just',`The argument ends its case study by separating the size of an income from the way it was acquired.\n\n${source('6')}`);
+
+build('missing','A distribution needs a history, not only a scale',[
+  'The parade tells us how much income people have, but not how they obtained it.',
+  'We do not know who acquired money through honest trade and who acquired it through theft or fraud.',
+  'We also do not know who obtained money by working hard and who obtained it by exploiting others.',
+  'Without these facts, the argument asks, how could we assess the justice of the society represented by the parade?'
+],'This is the argument’s most philosophical objection: a pattern of holdings is not yet a theory of rightful holdings.','6');
+
+question('The missing history','What must a theory of distributive justice explain besides the final size of each person’s share?','It must explain which claims to property are legitimate and which features of acquisition or transfer matter morally.',`The last section gathers the questions the argument says any fully worked-out view must answer.\n\n${source('1–6')}`);
+
+section('IX','The argument leaves the theory open, but sharpens the test',`The account does not choose Nozick, Rawls, or equality for us. It shows what a defensible answer must confront.\n\n${source('1–6')}`);
+
+build('tests','A complete account must answer four linked questions',[
+  'First: are there natural property rights strong enough to block redistribution, as the libertarian tradition claims?',
+  'Second: what place should the free market have, and what kinds of market effects count as harms rather than ordinary competition?',
+  'Third: should a society tolerate large inequalities of wealth, especially when they affect the liberties or opportunities of the poor?',
+  'Fourth: what should the government do—only enforce rights, or supervise and redistribute property in the name of liberty and justice?'
+],'Use these questions as the checklist for evaluating any theory that follows.','1–3');
+
+head('The four tests for a theory of property',[
+  ['Rights','What claims to property exist before government acts?'],
+  ['Markets','Which market effects are ordinary competition, and which are harms?'],
+  ['Inequality','When do differences in wealth threaten liberty or opportunity?'],
+  ['Government','What powers of taxation, protection, and redistribution are justified?']
+],`The headings are a concise synthesis of the questions explicitly raised in the source material.\n\n${source('2–3')}`);
+
+build('bottom-line','The argument turns a vague discomfort into a precise philosophical problem',[
+  'Liberty does not settle distributive justice by itself. It can support protection from interference, or it can support measures that secure meaningful opportunities.',
+  'Nozick and Rawls show how the same value—liberty—can generate sharply opposed views about property and redistribution.',
+  'Pen’s parade makes inequality concrete, but the parade alone cannot decide justice because its reference unit and its selection of facts matter.',
+  'A just distribution therefore requires more than a visible pattern of shares. It requires an account of rights, acquisition, market effects, inequality, and government.'
+],'Slow down on the final sentence: the argument’s achievement is to sharpen the test, not to announce a final winner.','1–6');
+
+diagnostic('When property protects liberty for some but limits opportunity for others, what should justice protect first?',`End on the tension the argument leaves unresolved. A theory must explain both why property matters to liberty and why unequal property may make liberty harder to use.\n\n${source('1–6')}`);
+
+refs([
+  ['Source material','“The Problem of Distributive Justice,” source PDF, pp. 1–6.'],
+  ['Works quoted in the argument','David Hume, An Enquiry Concerning the Principle of Morals (1751); Jan Pen, Income Distribution (1971).'],
+  ['Works and thinkers discussed in the argument','John Stuart Mill on liberty and property; John Locke on natural property rights; Robert Nozick, Anarchy, State, and Utopia (1974); John Rawls, A Theory of Justice (1971).']
+],`The references are limited to works and thinkers the source material explicitly uses in developing its argument.\n\n${source('1–6')}`);
+
+const esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const deck=document.getElementById('deck');
+const overview=document.getElementById('overview');
+const notes=document.getElementById('notes');
+const notesBody=document.getElementById('notes-body');
+const overviewGrid=document.getElementById('overview-grid');
+const counter=document.getElementById('counter');
+const progress=document.getElementById('progress');
+let current=0;
+function labelFor(s){
+  if(s.type==='cover') return s.title;
+  if(s.type==='section') return s.title;
+  if(s.type==='question'||s.type==='diagnostic') return s.prompt;
+  if(s.type==='quote') return s.text;
+  return s.title||s.type;
+}
+function renderSlide(s,i){
+  const node=document.createElement('section');
+  node.className=`slide ${s.type}${s.type==='content'?' top':''}`;
+  node.dataset.index=i;
+  node.setAttribute('aria-label',labelFor(s));
+  if(s.buildGroup) node.dataset.buildGroup=s.buildGroup;
+  let html='<div class="slide-inner">';
+  if(s.type==='cover') html+=`<div class="eyebrow">Argument reconstruction</div><h1 class="title">${esc(s.title)}</h1><p class="work">${esc(s.work)}</p><div class="course">${esc(s.course)}</div>`;
+  if(s.type==='section') html+=`<div class="eyebrow">${esc(s.eyebrow)}</div><h2 class="title">${esc(s.title)}</h2><div class="rule"></div>`;
+  if(s.type==='content') html+=`<div class="eyebrow">${esc(s.title)}</div><div class="body">${s.paragraphs.map((p,j)=>`<p class="${j===s.paragraphs.length-1?'fresh':''}">${esc(p)}</p>`).join('')}</div>`;
+  if(s.type==='question'||s.type==='diagnostic') html+=`<div class="eyebrow">${esc(s.eyebrow)}</div><p class="prompt">${esc(s.prompt)}</p>${s.context?`<p class="context">${esc(s.context)}</p>`:''}`;
+  if(s.type==='quote') html+=`<blockquote>${esc(s.text)}</blockquote><cite>${esc(s.cite)}</cite>`;
+  if(s.type==='duo') html+=`<h2 class="title">${esc(s.title)}</h2><div class="duo-grid">${[s.left,s.right].map(x=>`<div class="duo-col"><h3>${esc(x.label)}</h3><p>${esc(x.text)}</p></div>`).join('')}</div>`;
+  if(s.type==='head') html+=`<h2 class="title">${esc(s.title)}</h2><div class="head-list">${s.items.map(x=>`<div class="head-item"><b>${esc(x[0])}</b><span>${esc(x[1])}</span></div>`).join('')}</div>`;
+  if(s.type==='refs') html+=`<h2 class="title">${esc(s.title)}</h2><div class="refs-list">${s.items.map(x=>`<div class="ref"><strong>${esc(x[0])}.</strong> ${esc(x[1])}</div>`).join('')}</div>`;
+  html+='</div>';
+  node.innerHTML=html;
+  deck.appendChild(node);
+  return node;
+}
+const nodes=slides.map(renderSlide);
+function fitSlides(){
+  const groups={};
+  nodes.forEach(n=>{n.classList.add('measuring');n.style.setProperty('--fit','1');if(n.dataset.buildGroup)(groups[n.dataset.buildGroup]??=[]).push(n)});
+  const available=()=>window.innerHeight*.82;
+  const measure=n=>Math.max(n.querySelector('.slide-inner').scrollHeight,1);
+  const fits={};
+  Object.values(groups).forEach(arr=>{const max=Math.max(...arr.map(measure));fits[arr[0].dataset.buildGroup]=Math.min(1,available()/max)});
+  nodes.forEach(n=>{
+    const fit=n.dataset.buildGroup?fits[n.dataset.buildGroup]:Math.min(1,available()/measure(n));
+    n.style.setProperty('--fit',Math.max(.58,fit));
+    n.classList.remove('measuring');
+  });
+}
+function renderOverview(){
+  overviewGrid.innerHTML=slides.map((s,i)=>`<button class="overview-card${i===current?' current':''}" data-slide="${i}"><span class="num">${String(i+1).padStart(2,'0')} · ${esc(s.type)}</span><span class="label">${esc(labelFor(s))}</span></button>`).join('');
+  overviewGrid.querySelectorAll('[data-slide]').forEach(b=>b.addEventListener('click',()=>{go(Number(b.dataset.slide));closePanels()}));
+}
+function update(){
+  nodes.forEach((n,i)=>n.classList.toggle('active',i===current));
+  counter.textContent=`${current+1} / ${slides.length}`;
+  progress.style.width=`${((current+1)/slides.length)*100}%`;
+  notesBody.textContent=slides[current].notes||'No notes for this slide.';
+  overviewGrid.querySelectorAll('.overview-card').forEach((b,i)=>b.classList.toggle('current',i===current));
+}
+function go(i){current=Math.max(0,Math.min(slides.length-1,i));update()}
+function closePanels(){overview.classList.remove('open');notes.classList.remove('open')}
+function togglePanel(panel){const opening=!panel.classList.contains('open');closePanels();if(opening)panel.classList.add('open')}
+document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',closePanels));
+document.getElementById('fullscreen').addEventListener('click',()=>document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen?.());
+window.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){closePanels();return}
+  if(overview.classList.contains('open')||notes.classList.contains('open')) return;
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(current+1)}
+  else if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(current-1)}
+  else if(e.key.toLowerCase()==='o')togglePanel(overview);
+  else if(e.key.toLowerCase()==='n')togglePanel(notes);
+  else if(e.key.toLowerCase()==='f')document.getElementById('fullscreen').click();
+});
+let touchX=0;
+window.addEventListener('touchstart',e=>{touchX=e.changedTouches[0].screenX},{passive:true});
+window.addEventListener('touchend',e=>{const dx=e.changedTouches[0].screenX-touchX;if(Math.abs(dx)>45)go(current+(dx<0?1:-1))},{passive:true});
+window.addEventListener('resize',()=>{fitSlides();update()});
+fitSlides();
+renderOverview();
+update();
+</script>
+</body>
+</html>

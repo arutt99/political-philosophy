@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Locke - The State of Nature</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#12141a;
+    --bg-2:#1a1d26;
+    --text:#efe7d6;
+    --vellum:#c9c2ae;
+    --gold:#c9a24b;
+    --gold-dim:#8a713a;
+    --border:rgba(239,231,214,0.14);
+    --fit:1;
+  }
+  *{box-sizing:border-box}
+  html,body{width:100%;height:100%;margin:0;overflow:hidden;background:var(--bg);color:var(--text)}
+  body{font-family:Inter,system-ui,sans-serif}
+  button{font:inherit}
+  #deck{position:relative;width:100vw;height:100vh;background:radial-gradient(circle at 50% -20%,rgba(201,162,75,.065),transparent 44%),var(--bg)}
+  .slide{position:absolute;inset:0;display:none;align-items:center;justify-content:center;padding:7.2vh 7vw 8vh;text-align:center;overflow:hidden}
+  .slide.active,.slide.measuring{display:flex}
+  .slide.measuring{visibility:hidden;pointer-events:none}
+  .slide.top{align-items:flex-start;padding-top:8.5vh}
+  .slide-inner{width:min(980px,86vw);max-height:82vh;margin:auto;transform-origin:top center}
+  .slide.top .slide-inner{margin:0 auto}
+  .slide.duo .slide-inner{width:min(1140px,90vw)}
+  .eyebrow{margin:0 0 1.2rem;color:var(--gold);font:600 clamp(12px,1.12vw,17px)/1.3 "IBM Plex Mono",monospace;letter-spacing:.18em;text-transform:uppercase}
+  .title{margin:0;font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;letter-spacing:-.018em}
+  .cover .title{font-size:calc(clamp(58px,7.6vw,104px)*var(--fit));line-height:.96;max-width:12ch;margin-inline:auto}
+  .cover .work{font:500 calc(clamp(20px,2.15vw,31px)*var(--fit))/1.4 "Cormorant Garamond",Georgia,serif;color:var(--vellum);margin:1.5rem auto 0;max-width:36ch}
+  .cover .course{margin-top:2.4rem;color:var(--gold);font:500 calc(clamp(11px,1vw,15px)*var(--fit))/1.4 "IBM Plex Mono",monospace;letter-spacing:.14em;text-transform:uppercase}
+  .section .slide-inner{width:min(900px,86vw)}
+  .section .title{font-size:calc(clamp(48px,6.2vw,84px)*var(--fit));line-height:1.02}
+  .section .rule{width:52px;height:1px;background:var(--gold-dim);margin:1.8rem auto 0}
+  .content .title,.head .title,.duo .title{font-size:calc(clamp(38px,4.5vw,62px)*var(--fit));line-height:1.05;margin-bottom:1.6rem}
+  .content .body{font-family:"Cormorant Garamond",Georgia,serif;font-size:calc(clamp(25px,2.35vw,35px)*var(--fit));line-height:1.34;text-align:left}
+  .content .body p{
+    margin:0 0 1.05em -1.25rem;
+    padding:.08em .7em .08em 1rem;
+    border-left:3px solid transparent;
+    color:rgba(201,194,174,.52);
+    font-weight:600;
+    background:linear-gradient(90deg,rgba(201,162,75,0),rgba(201,162,75,0));
+  }
+  .content .body p:last-child{margin-bottom:1.05em}
+  .content .body p.fresh{
+    color:var(--text);
+    border-left-color:var(--gold);
+    background:linear-gradient(90deg,rgba(201,162,75,.15),rgba(201,162,75,0) 78%);
+    text-shadow:0 0 18px rgba(239,231,214,.08);
+  }
+  .question .slide-inner,.diagnostic .slide-inner{width:min(900px,86vw)}
+  .question .prompt,.diagnostic .prompt{margin:0;font-family:"Cormorant Garamond",Georgia,serif;font-size:calc(clamp(42px,5.2vw,72px)*var(--fit));line-height:1.08;font-weight:600;letter-spacing:-.015em}
+  .question .prompt::after,.diagnostic .prompt::after{content:"";display:block;width:42px;height:2px;background:var(--gold);margin:1.8rem auto 0}
+  .question .context{max-width:48ch;margin:1.35rem auto 0;color:var(--vellum);font:500 calc(clamp(18px,1.7vw,25px)*var(--fit))/1.4 "Cormorant Garamond",Georgia,serif}
+  .quote blockquote{margin:0 auto;max-width:26ch;font-family:"Cormorant Garamond",Georgia,serif;font-size:calc(clamp(39px,4.45vw,63px)*var(--fit));line-height:1.12;font-weight:500}
+  .quote blockquote::before{content:"“";color:var(--gold);margin-right:.08em}
+  .quote blockquote::after{content:"”";color:var(--gold);margin-left:.08em}
+  .quote cite{display:block;margin-top:1.6rem;color:var(--vellum);font:500 calc(clamp(12px,1.15vw,17px)*var(--fit))/1.45 "IBM Plex Mono",monospace;font-style:normal}
+  .duo-grid{display:grid;grid-template-columns:1fr 1fr;gap:4.5rem;text-align:left;margin-top:1.5rem}
+  .duo-col{padding-top:1.1rem;border-top:1px solid var(--border)}
+  .duo-col h3{margin:0 0 .85rem;color:var(--gold);font:600 calc(clamp(13px,1.25vw,18px)*var(--fit))/1.3 "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase}
+  .duo-col p{margin:0;color:var(--text);font:500 calc(clamp(24px,2.15vw,33px)*var(--fit))/1.34 "Cormorant Garamond",Georgia,serif}
+  .head-list{display:grid;gap:1.15rem;text-align:left;margin-top:1.8rem}
+  .head-item{display:grid;grid-template-columns:9rem 1fr;gap:1.5rem;align-items:baseline;padding-top:1rem;border-top:1px solid var(--border)}
+  .head-item b{color:var(--gold);font:600 calc(clamp(12px,1.1vw,16px)*var(--fit))/1.3 "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase}
+  .head-item span{font:500 calc(clamp(23px,2.05vw,31px)*var(--fit))/1.3 "Cormorant Garamond",Georgia,serif}
+  .diagnostic .eyebrow{color:var(--vellum)}
+  .diagnostic .prompt{font-size:calc(clamp(52px,6.6vw,90px)*var(--fit))}
+  .refs .slide-inner{width:min(980px,86vw);text-align:left}
+  .refs .title{font-size:calc(clamp(40px,4.6vw,64px)*var(--fit));margin-bottom:1.7rem}
+  .refs-list{display:grid;gap:1.05rem}
+  .ref{padding-top:.95rem;border-top:1px solid var(--border);font:500 calc(clamp(18px,1.65vw,24px)*var(--fit))/1.38 "Cormorant Garamond",Georgia,serif;color:var(--vellum)}
+  .ref strong{color:var(--text);font-weight:600}
+  #progress{position:fixed;top:0;left:0;height:2px;width:0;background:var(--gold);z-index:30}
+  #nav-hint,#counter{position:fixed;bottom:18px;z-index:30;color:var(--vellum);font:500 12px/1.3 "IBM Plex Mono",monospace;letter-spacing:.08em}
+  #nav-hint{left:24px} #counter{right:24px}
+  #fullscreen{position:fixed;top:20px;right:22px;z-index:30;color:var(--vellum);background:transparent;border:1px solid var(--border);border-radius:3px;padding:8px 11px;cursor:pointer;font:500 11px/1 "IBM Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase}
+  #fullscreen:hover{color:var(--gold);border-color:var(--gold-dim)}
+  .panel{position:fixed;inset:4vh 4vw;z-index:60;display:none;background:rgba(18,20,26,.985);border:1px solid var(--border);overflow:auto}
+  .panel.open{display:block}
+  .panel-head{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;padding:18px 22px;background:var(--bg-2);border-bottom:1px solid var(--border);z-index:2}
+  .panel-head h2{margin:0;font:600 14px/1 "IBM Plex Mono",monospace;letter-spacing:.15em;text-transform:uppercase;color:var(--gold)}
+  .close{color:var(--text);background:transparent;border:1px solid var(--border);padding:7px 10px;cursor:pointer}
+  #overview-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;padding:20px}
+  .overview-card{min-height:126px;padding:16px;text-align:left;background:var(--bg-2);border:1px solid var(--border);color:var(--text);cursor:pointer}
+  .overview-card:hover,.overview-card.current{border-color:var(--gold-dim)}
+  .overview-card .num{display:block;color:var(--gold);font:500 11px/1.3 "IBM Plex Mono",monospace;margin-bottom:12px}
+  .overview-card .label{font:600 22px/1.1 "Cormorant Garamond",Georgia,serif}
+  #notes-body{padding:28px 34px;white-space:pre-wrap;color:var(--text);font:400 18px/1.62 Inter,sans-serif;max-width:900px}
+  @media (max-width:760px){
+    .slide{padding:9vh 8vw 10vh}.slide.top{padding-top:9.5vh}.slide-inner,.slide.duo .slide-inner{width:84vw}
+    .duo-grid{grid-template-columns:1fr;gap:1.5rem}.head-item{grid-template-columns:1fr;gap:.45rem}
+    #nav-hint{display:none}#fullscreen{top:12px;right:12px}.content .body{font-size:calc(clamp(22px,5.6vw,30px)*var(--fit))}
+    .duo-col p{font-size:calc(clamp(22px,5.3vw,29px)*var(--fit))}
+  }
+  /* Locke: an open, measured Enlightenment system that emphasizes rights and reason. */
+  :root{--bg:#edf0ed;--bg-2:#e0e7e7;--text:#10263a;--vellum:#587080;--gold:#b17a2f;--gold-dim:#7e5b32;--border:rgba(16,38,58,.17)}
+  html,body{background:var(--bg)}
+  #deck{background:
+    radial-gradient(circle at 12% 4%,rgba(212,175,93,.28),transparent 22%),
+    radial-gradient(circle at 93% 76%,rgba(92,152,164,.18),transparent 28%),
+    linear-gradient(135deg,#f6f3e9,#e6eeee 62%,#d9e4e3)}
+  #deck::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.44;background-image:linear-gradient(rgba(16,38,58,.038) 1px,transparent 1px),linear-gradient(90deg,rgba(16,38,58,.038) 1px,transparent 1px);background-size:4.6rem 4.6rem;mask-image:linear-gradient(135deg,#000,transparent 75%)}
+  #deck::after{content:"";position:absolute;right:6vw;top:6vh;width:16vw;height:16vw;border:1px solid rgba(177,122,47,.36);border-radius:50%;box-shadow:0 0 0 1.4vw rgba(177,122,47,.07),0 0 0 3.2vw rgba(177,122,47,.035);pointer-events:none}
+  .slide-inner{position:relative;z-index:1}
+  .eyebrow{color:#8f5a1f}
+  .cover .slide-inner{padding:3.2rem 3.5rem;background:rgba(248,246,238,.62);border:1px solid rgba(16,38,58,.17);box-shadow:16px 16px 0 rgba(16,38,58,.07);transform:rotate(-.25deg)}
+  .cover .title{max-width:11ch;letter-spacing:-.03em;color:#10263a}
+  .cover .work{color:#38566a}
+  .cover .course{color:#8f5a1f}
+  .section .slide-inner{max-width:min(1040px,88vw);padding-bottom:1.5rem;border-bottom:2px solid var(--gold)}
+  .section .eyebrow{display:inline-block;padding:.45rem .7rem;background:#10263a;color:#f5efd9;letter-spacing:.12em}
+  .section .title{color:#10263a}
+  .section .rule{width:100%;height:1px;margin-top:1.35rem;background:linear-gradient(90deg,var(--gold) 0 18%,rgba(16,38,58,.18) 18% 100%)}
+  .content .slide-inner,.head .slide-inner{width:min(1050px,88vw);padding:1.1rem 2.3rem 1.5rem;background:rgba(248,247,240,.46);border-left:1px solid rgba(16,38,58,.14)}
+  .content .title,.head .title,.duo .title{color:#10263a;margin-bottom:1.35rem}
+  .content .body p{margin-left:0;padding:.42em .9em;color:rgba(16,38,58,.5);border-left:3px solid transparent}
+  .content .body p:nth-child(odd){background:rgba(105,153,160,.045)}
+  .content .body p.fresh{color:#10263a;border-left-color:#5c98a4;background:linear-gradient(90deg,rgba(92,152,164,.15),rgba(177,122,47,.07),transparent 82%);text-shadow:none}
+  .question .slide-inner,.diagnostic .slide-inner{padding:2.4rem 3rem;background:#10263a;color:#f6f3e9;box-shadow:12px 12px 0 rgba(177,122,47,.32)}
+  .question .eyebrow,.diagnostic .eyebrow{color:#d8bc75}
+  .question .prompt,.diagnostic .prompt{color:#f6f3e9}
+  .question .context{color:#c9d9d7}
+  .question .prompt::after,.diagnostic .prompt::after{width:5rem;height:3px;background:#d8bc75}
+  .quote .slide-inner{max-width:min(920px,84vw);padding:2.4rem 3rem;transform:rotate(.35deg);background:#f8f4e9;border:1px solid rgba(16,38,58,.19);box-shadow:10px 10px 0 rgba(92,152,164,.18)}
+  .quote blockquote{color:#10263a;font-style:italic}
+  .quote cite{color:#486878}
+  .duo-grid{gap:2rem}
+  .duo-col{min-height:15rem;padding:1.55rem 1.6rem;background:rgba(248,247,240,.63);border:1px solid rgba(16,38,58,.17);border-top:5px solid #5c98a4;box-shadow:7px 7px 0 rgba(16,38,58,.055)}
+  .duo-col:nth-child(2){border-top-color:var(--gold)}
+  .duo-col h3,.head-item b{color:#8f5a1f}
+  .duo-col p,.head-item span{color:#10263a}
+  .head-list{gap:.65rem}
+  .head-item{grid-template-columns:10rem 1fr;padding:1rem 1.1rem;border:1px solid rgba(16,38,58,.13);background:rgba(248,247,240,.45)}
+  .head-item:nth-child(even){margin-left:2.2rem;background:rgba(92,152,164,.08)}
+  #progress{height:4px;background:linear-gradient(90deg,#5c98a4,var(--gold))}
+  #nav-hint,#counter{color:#466778}
+  #fullscreen{color:#10263a;background:rgba(248,247,240,.58);border-color:rgba(16,38,58,.28);border-radius:20px}
+  .panel{background:rgba(237,240,237,.985)}
+  .panel-head{background:#dfe9e7}.panel-head h2,.overview-card .num{color:#8f5a1f}.close{color:#10263a}
+  .overview-card{background:#f8f6ee;color:#10263a;box-shadow:4px 4px 0 rgba(16,38,58,.06)}
+  .overview-card:hover,.overview-card.current{border-color:#5c98a4;box-shadow:7px 7px 0 rgba(177,122,47,.15)}
+  #notes-body{color:#10263a}
+  @media (max-width:760px){.cover .slide-inner,.question .slide-inner,.diagnostic .slide-inner,.quote .slide-inner{padding:1.7rem 1.5rem}.content .slide-inner,.head .slide-inner{padding:1rem 1.2rem}.head-item:nth-child(even){margin-left:0}}
+  /* Locke refinement: muted slate, parchment, and continuous rules—no abrupt dark panels. */
+  :root{--bg:#303943;--bg-2:#39434f;--text:#f2eee4;--vellum:#c8c3b7;--gold:#c5a26e;--gold-dim:#8e7655;--border:rgba(242,238,228,.15)}
+  html,body{background:var(--bg)}
+  #deck{background:
+    radial-gradient(ellipse at 8% 1%,rgba(197,162,110,.14),transparent 28%),
+    radial-gradient(ellipse at 92% 93%,rgba(122,151,165,.13),transparent 31%),
+    linear-gradient(135deg,#2a333d 0%,#303943 56%,#36414b 100%)}
+  #deck::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.44;background:repeating-linear-gradient(0deg,transparent 0 4.15rem,rgba(242,238,228,.045) 4.2rem 4.25rem)}
+  #deck::after{content:"";position:absolute;right:7vw;top:9vh;width:17vw;height:17vw;border:1px solid rgba(197,162,110,.24);border-radius:50%;box-shadow:0 0 0 1.5vw rgba(197,162,110,.035);pointer-events:none}
+  .slide-inner{position:relative;z-index:1}
+  .eyebrow{color:var(--gold)}
+  .cover .slide-inner{padding:2.8rem 3.5rem;background:transparent;border-block:1px solid var(--border);box-shadow:none;transform:none}
+  .cover .title,.section .title,.content .title,.head .title,.duo .title{color:var(--text)}
+  .cover .title{max-width:11ch;letter-spacing:-.03em;text-shadow:0 5px 22px rgba(0,0,0,.2)}
+  .cover .work{color:var(--vellum)}
+  .cover .course{color:var(--gold);padding:0;background:transparent}
+  .section .slide-inner{max-width:min(1000px,88vw);padding:1.4rem 2rem 1.6rem;border-left:3px solid var(--gold);border-bottom:1px solid var(--border);background:linear-gradient(90deg,rgba(197,162,110,.08),transparent 70%)}
+  .section .eyebrow{display:block;padding:0;background:transparent;color:var(--gold);letter-spacing:.16em}
+  .section .rule{width:7rem;height:3px;margin:1.45rem 0 0;background:linear-gradient(90deg,var(--gold),rgba(197,162,110,0))}
+  .content .slide-inner,.head .slide-inner{width:min(1050px,88vw);padding:1.1rem 0 1.45rem;background:transparent;border:0}
+  .content .title,.head .title,.duo .title{margin-bottom:1.35rem}
+  .content .body p{margin-left:0;padding:.42em 1.05em;color:rgba(200,195,183,.55);border-left:3px solid transparent;background:transparent}
+  .content .body p:nth-child(odd){background:transparent}
+  .content .body p.fresh{color:var(--text);border-left-color:var(--gold);background:linear-gradient(90deg,rgba(197,162,110,.18),rgba(197,162,110,.045) 58%,transparent 88%);text-shadow:none}
+  .question .slide-inner,.diagnostic .slide-inner{padding:2rem 2.5rem;background:transparent;color:var(--text);border-top:1px solid var(--border);border-bottom:1px solid var(--border);box-shadow:none}
+  .question .eyebrow,.diagnostic .eyebrow{color:var(--gold)}
+  .question .prompt,.diagnostic .prompt{color:var(--text)}
+  .question .context{color:var(--vellum)}
+  .question .prompt::after,.diagnostic .prompt::after{width:5.6rem;height:3px;background:linear-gradient(90deg,var(--gold),transparent)}
+  .quote .slide-inner{max-width:min(930px,84vw);padding:2rem 3rem;transform:none;background:linear-gradient(90deg,rgba(197,162,110,.09),transparent 62%);border-left:3px solid var(--gold);border-top:0;border-right:0;border-bottom:0;box-shadow:none}
+  .quote blockquote{color:var(--text);font-style:italic}
+  .quote cite{color:var(--vellum);padding-top:1rem;border-top:1px solid var(--border)}
+  .duo-grid{gap:3.2rem}
+  .duo-col{min-height:0;padding:1.1rem 0;background:transparent;border:0;border-top:3px solid var(--gold);box-shadow:none}
+  .duo-col:nth-child(2){border-top-color:#9fb2b5}
+  .duo-col h3,.head-item b{color:var(--gold)}
+  .duo-col p,.head-item span{color:var(--text)}
+  .head-list{gap:.65rem}
+  .head-item{grid-template-columns:10rem 1fr;margin:0!important;padding:.9rem 0;border:0;border-top:1px solid var(--border);background:transparent!important}
+  #progress{height:4px;background:linear-gradient(90deg,#90a8ad,var(--gold))}
+  #nav-hint,#counter{color:var(--vellum)}
+  #fullscreen{color:var(--vellum);background:rgba(48,57,67,.35);border-color:var(--border);border-radius:2px}
+  .panel{background:rgba(42,51,61,.985)}
+  .panel-head{background:#39434f}.panel-head h2,.overview-card .num{color:var(--gold)}.close{color:var(--text)}
+  .overview-card{background:#35404b;color:var(--text);box-shadow:none}
+  .overview-card:hover,.overview-card.current{border-color:var(--gold);box-shadow:none}
+  #notes-body{color:var(--text)}
+  @media (max-width:760px){.cover .slide-inner,.section .slide-inner,.question .slide-inner,.diagnostic .slide-inner,.quote .slide-inner{padding:1.6rem 1.4rem}.content .slide-inner,.head .slide-inner{padding:1rem 0}.head-item{grid-template-columns:1fr}}
+</style>
+<link rel="stylesheet" href="presentation-polish.css">
+<script src="presentation-polish.js" defer></script>
+</head>
+<body>
+<div id="deck" aria-live="polite"></div>
+<div id="progress"></div>
+<div id="nav-hint">ARROWS / SPACE · O OVERVIEW · N NOTES · F FULLSCREEN</div>
+<div id="counter">1 / 1</div>
+<button id="fullscreen" aria-label="Toggle fullscreen">Fullscreen</button>
+
+<section id="overview" class="panel" aria-label="Slide overview">
+  <div class="panel-head"><h2>Overview</h2><button class="close" data-close="overview">Close</button></div>
+  <div id="overview-grid"></div>
+</section>
+<aside id="notes" class="panel" aria-label="Speaker notes">
+  <div class="panel-head"><h2>Speaker notes</h2><button class="close" data-close="notes">Close</button></div>
+  <div id="notes-body"></div>
+</aside>
+
+<script>
+const slides=[];
+const src=(pages,extra='')=>`[Sources]\nSource material, “Locke,” source PDF, pp. ${pages}.${extra?`\n${extra}`:''}\n[/Sources]`;
+const add=s=>slides.push(s);
+const cover=(title,work,course,notes)=>add({type:'cover',title,work,course,notes});
+const section=(roman,title,notes)=>add({type:'section',eyebrow:`${roman}. ${title.toUpperCase()}`,title,notes});
+const question=(eyebrow,prompt,context,notes)=>add({type:'question',eyebrow,prompt,context,notes});
+const quote=(text,cite,notes)=>add({type:'quote',text,cite,notes});
+const duo=(title,left,right,notes)=>add({type:'duo',title,left,right,notes});
+const head=(title,items,notes)=>add({type:'head',title,items,notes});
+const diagnostic=(prompt,notes)=>add({type:'diagnostic',eyebrow:'The Locke test',prompt,notes});
+const refs=(items,notes)=>add({type:'refs',title:'References',items,notes});
+function build(id,title,paragraphs,notes,pages){
+  paragraphs.forEach((_,i)=>add({type:'content',title,paragraphs:paragraphs.slice(0,i+1),buildGroup:id,notes:`${notes}${i<paragraphs.length-1?'\n\nPause before revealing the next step.':''}\n\n${src(pages)}`}));
+}
+
+cover('The State of Nature','John Locke and the problem of judging without a judge','Political Philosophy',`Begin with the puzzle: a world without government can be peaceful, yet still become intolerable.\n\n${src('1-8')}`);
+
+section('I','Can freedom survive without a ruler?',`Introduce Locke's state of nature as a moral order without political authority.\n\n${src('1-2')}`);
+build('three-starts','Locke begins with three claims',[
+  'The state of nature is a condition without a shared political authority: no common lawmaker, public judge, or established enforcement power.',
+  'It is a state of perfect freedom, because each person directs their own actions rather than living under another person\'s political command.',
+  'It is also a state of equality, because no person has a natural right to rule or subordinate anyone else.',
+  'Yet freedom and equality are governed by the Law of Nature, a moral rule that applies before any government makes positive law.'
+],'Treat the three claims as one structure: freedom, equality, and a prior moral law.','1-2');
+question('The central puzzle','If no one naturally rules, what keeps equal and independent people from falling into Hobbesian war?','Locke must explain both why moral limits exist before government and how those limits can have practical force.',`This question identifies the two burdens of Locke's argument: moral authority and enforcement.\n\n${src('1-3')}`);
+
+section('II','Equality removes every natural throne',`Contrast Locke's moral equality with Hobbes's equality of vulnerability and with Filmer's natural hierarchy.\n\n${src('1-2')}`);
+build('moral-equality','Equality is a claim about rights',[
+  'Hobbes treats people as roughly equal in physical and mental power because even the weakest can threaten the strongest.',
+  'Locke uses equality differently. He means that nobody is born with a superior moral title to command another person.',
+  'This directly challenges Robert Filmer\'s claim that rulers inherit a God-given authority that began with Adam.'
+],'Keep factual similarity and moral status distinct: Locke is asking who has a right to rule.','1-2');
+build('law-content','The Law of Nature protects every person',[
+  'Locke thinks reason can discover a Law of Nature that applies to everyone before civil law exists.',
+  'Its basic demand is that no one ought to harm another person in life, health, liberty, or possessions.',
+  'Locke\'s theological reason is that every person belongs to God. Because people are God\'s property, one equal person cannot treat another as disposable property.',
+  'The larger principle is preservation: each person must preserve themselves and, when self-preservation is not threatened, preserve the rest of humanity as much as possible.'
+],'Define the rule, then show how the theological premise is supposed to support it.','2');
+quote('The state of Nature has a Law of Nature to govern it, which obliges every one.','John Locke, Second Treatise, section 6, pp. 270-271',`The quotation makes the key limit on natural freedom explicit: moral obligation exists before civil law.\n\n${src('3','John Locke, Second Treatise, s. 6, pp. 270-271, as quoted in the source material.')}`);
+question('Why morality is not enough','A rule can tell people what they ought to do, but what makes anyone follow it when disobedience is profitable?','Locke cannot defeat Hobbes merely by declaring violence wrong. He must show that the moral law can influence conduct without a state.',`The next section clarifies the kind of freedom this law permits before confronting enforcement.\n\n${src('2-4')}`);
+
+section('III','Liberty is not permission to do anything',`Explain Locke's distinction between liberty and licence before the argument turns to punishment.\n\n${src('3')}`);
+build('liberty-not-licence','Natural liberty has moral boundaries',[
+  'Perfect freedom does not mean an unlimited permission to do whatever seems useful.',
+  'Locke distinguishes liberty from licence. Liberty is the freedom to choose among actions that the Law of Nature permits.',
+  'Because harming another person violates the prior moral law, a prohibition on theft or attack does not count as a loss of rightful liberty.'
+],'Stress that Locke builds moral limits into the meaning of freedom itself.','3');
+duo('The same word hides two different theories',
+  {label:'Hobbesian liberty',text:'Natural liberty can permit whatever a person judges necessary for survival, including force against an innocent person.'},
+  {label:'Lockean liberty',text:'Natural liberty permits only what the Law of Nature allows, so freedom never includes a moral right to invade another person.'},
+  `The disagreement concerns the content of liberty, not merely the amount of liberty.\n\n${src('3')}`);
+question('The motivational gap','Does knowing that aggression is wrong give a threatened person enough reason to trust that others will remain peaceful?','Hobbes can accept that people recognize rules and still argue that fear, suspicion, and advantage will defeat them.',`This question returns the argument from moral definition to practical enforcement.\n\n${src('3-4')}`);
+
+section('IV','A law needs someone who can execute it',`Derive the executive power of the Law of Nature from the need for enforcement and natural equality.\n\n${src('4')}`);
+build('law-needs-force','An unenforced law would be empty',[
+  'Locke does not assume that people will automatically obey the Law of Nature.',
+  'Like every law that concerns conduct in this world, the Law of Nature needs a power able to protect the innocent and restrain offenders.',
+  'Without anyone able to respond to violations, the law would be practically vain: it could condemn harm but could not help prevent repeated harm.',
+  'Because Locke treats the Law of Nature as God\'s law, he cannot accept that it was created with no possible means of execution.'
+],'The argument does not depend on universal goodness. It depends on a law having a means of enforcement.','4');
+build('equal-executives','Equality distributes enforcement power',[
+  'No natural sovereign exists in the state of nature, so enforcement cannot belong to one person by birth or divine appointment.',
+  'If anyone has the power to execute the Law of Nature, equality requires that every person have it.',
+  'Locke therefore gives every individual the natural right to punish anyone who violates another person\'s life, liberty, health, or possessions.'
+],'Make the inference explicit: the law needs an executor; no one is naturally superior; therefore everyone shares the executive power.','4');
+question('The strange doctrine','Can every person be an enforcer without turning every dispute into a private war?','The executive power supplies Locke\'s answer to lawbreaking, but distributing it equally creates the next problem: each person also interprets the law.',`Locke calls the natural right to punish a strange doctrine and then explains its purpose and limits.\n\n${src('4-5')}`);
+
+section('V','Punishment protects a common moral order',`Separate punishment from self-defense and explain why Locke lets anyone punish an offender.\n\n${src('4-5')}`);
+build('punishment-purpose','Punishment looks backward and forward',[
+  'Self-defense tries to stop or ward off an immediate threat. Punishment responds after a person has overstepped the Law of Nature.',
+  'Punishment may require reparation, meaning an attempt to repair or compensate for the harm already done.',
+  'It may also restrain the offender and deter both that person and others from committing similar violations later.',
+  'Its severity is limited by these purposes: punishment should make wrongdoing a bad bargain, not become unlimited private revenge.'
+],'Keep reparation, restraint, deterrence, and revenge distinct.','4');
+build('anyone-can-punish','A violation threatens more than its victim',[
+  'The power to punish cannot belong only to the direct victim, because a victim may be dead or too weak to subdue the offender.',
+  'A person who rejects the common moral law threatens everyone\'s peace, so law-abiding people may join together to bring the offender to justice.'
+],'The shared executive power is supposed to let collective strength support the vulnerable.','4-5');
+quote('Each Transgression may be punished to that degree, and with so much Severity as will suffice to make it an ill bargain to the Offender.','John Locke, Second Treatise, section 12, p. 275',`The rest of Locke's sentence identifies repentance and deterrence as the governing aims.\n\n${src('4','John Locke, Second Treatise, s. 12, p. 275, as quoted in the source material.')}`);
+duo('Why the power is supposed to be natural',
+  {label:'The foreigner problem',text:'A foreigner has not consented to a country\'s civil laws, so those laws alone cannot explain the country\'s right to punish that person.'},
+  {label:'Locke\'s answer',text:'The ruler and the foreigner remain in a state of nature with one another, so punishment rests on the universal executive power of natural law.'},
+  `The argument notes that Locke later has another possible answer based on tacit consent.\n\n${src('5')}`);
+question('What enforcement could secure','If the Law of Nature can be enforced, which ordinary rights become possible before civil government exists?','Locke\'s answer extends beyond physical safety. Effective natural law is also supposed to protect stable possession and productive use.',`The next section introduces private property only to the extent developed in this argument.\n\n${src('5-6')}`);
+
+section('VI','Property turns preservation into practice',`Show why Locke thinks people must be able to use and possess parts of the natural world.\n\n${src('5-6')}`);
+build('property-need','Survival requires rightful use',[
+  'If the earth is available to humanity in common, each person still needs a way to rightfully consume particular apples, acorns, and other goods.',
+  'A rule requiring everyone\'s permission before any use would make ordinary preservation impossible: people could starve while waiting for universal consent.',
+  'Secure possession of land also supports cultivation, because people are more likely to improve a plot when they can exclude others and enjoy what it produces.'
+],'The argument sketches the form of the property argument and postpones its full development to a later chapter.','5-6');
+duo('Two routes to the same practical claim',
+  {label:'Theological route',text:'God placed humanity on earth to live, so the world must be usable in ways that make preservation possible.'},
+  {label:'Natural reason route',text:'Even without the theological premise, it seems absurd to require universal permission before anyone may use food or land needed for life.'},
+  `The argument presents natural reason as a possible way for later Lockean arguments to loosen their theological dependence.\n\n${src('5-6')}`);
+question('The secular challenge','How much of Locke\'s argument survives if someone rejects the claim that human beings belong to God?','The appeal to natural reason may support necessary use, but the theological premise originally grounds the equal moral duty to preserve humanity.',`Leave the tension visible: the argument calls the natural-reason route plausible without claiming it replaces every part of Locke's theology.\n\n${src('6')}`);
+
+section('VII','Hobbes can challenge the enforcers',`Present the strongest objection to Locke's executive power before adding the abundance premise.\n\n${src('6-7')}`);
+build('revenge-cycle','Enforcement may reproduce the problem',[
+  'Suppose several people unite to punish a violent offender and require reparation.',
+  'The offender may return with like-minded allies and treat the punishment as a reason for revenge.',
+  'Anyone considering enforcement must now ask whether intervening today creates a more dangerous enemy tomorrow.',
+  'A stable authority seems necessary to decide disputes and make judgments effective, but an acknowledged authority already looks like the beginning of a state.'
+],'This is the argument\'s Hobbesian reply: greater power can subdue power, but stable greater power resembles government.','6');
+build('natural-abundance','Locke lowers the pressure toward conflict',[
+  'Locke also assumes that nature originally provides abundant land and enough room for people to establish their own plots.',
+  'When unused land is plentiful, cultivating an independent plot is usually more attractive than invading a neighbor\'s possession.',
+  'The right to punish then supports peace partly because it rarely needs to be used: fewer collisions over land mean fewer occasions for dangerous enforcement.'
+],'Treat abundance as a second pillar of peace, not as a replacement for moral law.','7');
+question('The fragile peace','Can abundant land secure peace when stealing finished goods may still be easier than producing them?','Hobbes can accept open space and still predict conflict over harvested crops, tools, shelter, and other usable goods.',`The next section tests both abundance and private enforcement under more realistic pressures.\n\n${src('7')}`);
+
+section('VIII','Private justice creates its own insecurity',`Move through the theft objection to Locke's primary inconvenience: biased and disputed judgment.\n\n${src('7-8')}`);
+build('finished-goods','Land is not the only scarce good',[
+  'Abundant land does not guarantee an abundance of finished and consumable goods.',
+  'Taking a neighbor\'s harvest may require less work than ploughing, sowing, and waiting for one\'s own crop.',
+  'If theft is likely and punishment is unreliable, productive effort becomes risky because what one makes may end up in someone else\'s hands.'
+],'The objection shifts attention from the quantity of nature to the reliability of social expectations.','7');
+build('justice-inconvenience','The deepest problem is administering justice',[
+  'Locke does not finally say that every person constantly fights over goods. The primary inconvenience is that each person must administer the Law of Nature for themselves.',
+  'People can disagree about whether an offense occurred because the facts and the meaning of the law may be disputed.',
+  'Even when they agree that an offense occurred, they can disagree about the proper punishment and the amount of compensation.',
+  'A person may also know what justice requires but lack enough power to enforce it against a stronger offender.'
+],'Name the three defects clearly: uncertain interpretation, partial judgment, and inadequate power.','7-8');
+build('fence-case','Constructed illustration: the disputed fence',[
+  'Imagine that one neighbor moves a boundary fence after a storm. One person sees theft; the other sees a correction to an earlier surveying mistake.',
+  'Each side gathers friends, interprets the natural law, estimates the loss, and decides what force would count as proportionate punishment.',
+  'Even people who sincerely want justice can become enemies because there is no impartial judge whose public decision both sides must accept.'
+],'This is a constructed illustration, not an event from the argument. Use it to isolate disagreement about facts, law, remedy, and enforcement.','8');
+question('Why leave a mostly peaceful condition?','If most people recognize the moral law, what does government add that private conscience and mutual aid cannot supply?','Government need not invent morality. It can supply known rules, an impartial judge, and stable power to execute judgments.',`The following section adds scarcity created by money and shows why the inconveniences become urgent.\n\n${src('8')}`);
+
+section('IX','Money turns room into rivalry',`Explain the sequence from perishable limits to accumulation, land scarcity, multiplied disputes, and civil government.\n\n${src('8')}`);
+build('money-scarcity','Money changes what people have reason to accumulate',[
+  'Before money, taking far more land than a family can use has little point because surplus produce spoils.',
+  'Money is durable, so surplus goods can be exchanged for something that can be stored without rotting.',
+  'People now have a reason to cultivate more land than they need for immediate consumption and to produce goods for sale.',
+  'As more land is claimed for accumulation and exchange, the original abundance gives way to scarcity and pressure over boundaries.'
+],'Follow the causal order carefully: durable money permits hoarding, which encourages expanded production, which pressures land.','8');
+build('need-government','The inconveniences multiply',[
+  'Scarce land creates more disputes about ownership, trespass, compensation, and the proper use of force.',
+  'More disputes place greater strain on private judgment, and every person remains tempted to favor their own case.',
+  'A common government becomes imperative because it can provide publicly known rules, an impartial authority to settle disagreements, and dependable power to enforce the result.',
+  'Locke\'s state of nature is therefore not identical to war: it can begin in peace, yet its own system of private justice becomes nearly unbearable as scarcity and conflict grow.'
+],'End by preserving Locke\'s double claim: natural society is morally ordered, but civil society is needed to remedy its inconveniences.','8');
+diagnostic('When every person may judge, punish, and enforce, who can be sure that justice is not becoming revenge?',`The question tests Locke's reason for leaving natural freedom without denying that natural moral duties already exist.\n\n${src('1-8')}`);
+refs([
+  ['Source material','“Locke,” source PDF, pp. 1-8.'],
+  ['Primary work quoted and discussed','John Locke, Second Treatise of Civil Government (1689), ed. Peter Laslett (Cambridge University Press, 1988), sections and pages cited in the deck.'],
+  ['Position opposed in the argument','Sir Robert Filmer, Patriarcha (published 1680), discussed as a defense of divinely authorized natural hierarchy.']
+],`These are the only works used to reconstruct the visible argument.\n\n${src('1-8')}`);
+
+const deck=document.getElementById('deck');
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+function renderSlide(s,i){
+  const article=document.createElement('article');
+  article.className=`slide ${s.type}${s.type==='content'||s.type==='head'?' top':''}`;
+  article.dataset.index=i;
+  if(s.buildGroup) article.dataset.buildGroup=s.buildGroup;
+  let html='<div class="slide-inner">';
+  if(s.type==='cover') html+=`<h1 class="title">${esc(s.title)}</h1><p class="work">${esc(s.work)}</p><div class="course">${esc(s.course)}</div>`;
+  if(s.type==='section') html+=`<div class="eyebrow">${esc(s.eyebrow)}</div><h2 class="title">${esc(s.title)}</h2><div class="rule"></div>`;
+  if(s.type==='content') html+=`<h2 class="title">${esc(s.title)}</h2><div class="body">${s.paragraphs.map((p,j)=>`<p class="${j===s.paragraphs.length-1?'fresh':''}">${esc(p)}</p>`).join('')}</div>`;
+  if(s.type==='question'||s.type==='diagnostic') html+=`<div class="eyebrow">${esc(s.eyebrow)}</div><p class="prompt">${esc(s.prompt)}</p>${s.context?`<p class="context">${esc(s.context)}</p>`:''}`;
+  if(s.type==='quote') html+=`<blockquote>${esc(s.text)}</blockquote><cite>${esc(s.cite)}</cite>`;
+  if(s.type==='duo') html+=`<h2 class="title">${esc(s.title)}</h2><div class="duo-grid">${[s.left,s.right].map(x=>`<div class="duo-col"><h3>${esc(x.label)}</h3><p>${esc(x.text)}</p></div>`).join('')}</div>`;
+  if(s.type==='head') html+=`<h2 class="title">${esc(s.title)}</h2><div class="head-list">${s.items.map(x=>`<div class="head-item"><b>${esc(x[0])}</b><span>${esc(x[1])}</span></div>`).join('')}</div>`;
+  if(s.type==='refs') html+=`<h2 class="title">${esc(s.title)}</h2><div class="refs-list">${s.items.map(x=>`<div class="ref"><strong>${esc(x[0])}.</strong> ${esc(x[1])}</div>`).join('')}</div>`;
+  article.innerHTML=html+'</div>';
+  deck.appendChild(article);
+  return article;
+}
+const nodes=slides.map(renderSlide);
+let current=0;
+const counter=document.getElementById('counter');
+const progress=document.getElementById('progress');
+const notes=document.getElementById('notes');
+const notesBody=document.getElementById('notes-body');
+const overview=document.getElementById('overview');
+const overviewGrid=document.getElementById('overview-grid');
+function labelFor(s){return s.title||s.prompt||s.text||'Slide';}
+slides.forEach((s,i)=>{const b=document.createElement('button');b.className='overview-card';b.innerHTML=`<span class="num">${String(i+1).padStart(2,'0')} / ${slides.length}</span><span class="label">${esc(labelFor(s))}</span>`;b.addEventListener('click',()=>{closePanels();show(i)});overviewGrid.appendChild(b)});
+const cards=[...overviewGrid.children];
+function show(i){
+  current=Math.max(0,Math.min(slides.length-1,i));
+  nodes.forEach((n,j)=>n.classList.toggle('active',j===current));
+  cards.forEach((n,j)=>n.classList.toggle('current',j===current));
+  counter.textContent=`${current+1} / ${slides.length}`;
+  progress.style.width=`${((current+1)/slides.length)*100}%`;
+  notesBody.textContent=slides[current].notes||'No notes for this slide.';
+  document.title=`${current+1}/${slides.length} · Locke - The State of Nature`;
+}
+function openPanel(panel){closePanels();panel.classList.add('open')}
+function closePanels(){overview.classList.remove('open');notes.classList.remove('open')}
+function togglePanel(panel){panel.classList.contains('open')?closePanels():openPanel(panel)}
+function toggleFullscreen(){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen().catch(()=>{})}
+document.getElementById('fullscreen').addEventListener('click',toggleFullscreen);
+document.querySelectorAll('.close').forEach(b=>b.addEventListener('click',closePanels));
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){closePanels();return}
+  if(overview.classList.contains('open')||notes.classList.contains('open')) return;
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();show(current+1)}
+  else if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();show(current-1)}
+  else if(e.key.toLowerCase()==='o') togglePanel(overview);
+  else if(e.key.toLowerCase()==='n') togglePanel(notes);
+  else if(e.key.toLowerCase()==='f') toggleFullscreen();
+});
+let touchX=0,touchY=0;
+document.addEventListener('touchstart',e=>{touchX=e.changedTouches[0].screenX;touchY=e.changedTouches[0].screenY},{passive:true});
+document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].screenX-touchX,dy=e.changedTouches[0].screenY-touchY;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy))show(current+(dx<0?1:-1))},{passive:true});
+function fits(node){const inner=node.querySelector('.slide-inner');return inner.scrollHeight<=node.clientHeight*.82&&inner.scrollWidth<=node.clientWidth*.92}
+function fitNode(node,start=1){let f=start;node.classList.add('measuring');node.style.setProperty('--fit',f);while(f>.72&&!fits(node)){f-=.02;node.style.setProperty('--fit',f)}node.classList.remove('measuring');return f}
+function fitAll(){
+  nodes.forEach(n=>n.style.setProperty('--fit',1));
+  const groups={};nodes.forEach(n=>{if(n.dataset.buildGroup)(groups[n.dataset.buildGroup]??=[]).push(n)});
+  const grouped=new Set(Object.values(groups).flat());
+  Object.values(groups).forEach(group=>{const final=group[group.length-1];const f=fitNode(final);group.forEach(n=>n.style.setProperty('--fit',f))});
+  nodes.filter(n=>!grouped.has(n)).forEach(n=>fitNode(n));
+  show(current);
+}
+let resizeTimer;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(fitAll,120)});
+if(document.fonts?.ready)document.fonts.ready.then(fitAll);else fitAll();
+show(0);
+</script>
+</body>
+</html>

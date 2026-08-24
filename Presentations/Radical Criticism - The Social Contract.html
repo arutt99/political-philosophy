@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Radical Criticism - The Social Contract</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#1a1620;
+    --bg-2:#2a2030;
+    --text:#f4eee4;
+    --vellum:#cdbfcf;
+    --gold:#e5b657;
+    --gold-dim:#8b5b73;
+    --border:rgba(244,238,228,.16);
+    --fit:1;
+  }
+  *{box-sizing:border-box}
+  html,body{width:100%;height:100%;margin:0;overflow:hidden;background:var(--bg);color:var(--text)}
+  body{font-family:Inter,system-ui,sans-serif}
+  button{font:inherit}
+  #deck{position:relative;width:100vw;height:100vh;overflow:hidden;background:
+    radial-gradient(ellipse at 12% 12%,rgba(229,182,87,.12),transparent 24%),
+    radial-gradient(ellipse at 88% 88%,rgba(139,91,115,.18),transparent 34%),
+    linear-gradient(135deg,#17131c 0%,#1a1620 52%,#251b2a 100%)}
+  #deck::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.36;background:
+    linear-gradient(90deg,transparent 0 7.2vw,rgba(229,182,87,.24) 7.25vw 7.32vw,transparent 7.37vw 92.5vw,rgba(229,182,87,.13) 92.55vw 92.62vw,transparent 92.67vw),
+    repeating-linear-gradient(0deg,transparent 0 7.5rem,rgba(244,238,228,.035) 7.55rem 7.62rem,transparent 7.67rem 15rem)}
+  #deck::after{content:"";position:absolute;left:5.5vw;right:5.5vw;top:6.4vh;bottom:6.4vh;border:1px solid rgba(244,238,228,.075);border-left:3px solid rgba(229,182,87,.30);transform:skewY(-.25deg);pointer-events:none}
+  .slide{position:absolute;inset:0;display:none;align-items:center;justify-content:center;padding:7.2vh 7vw 8vh;text-align:center;overflow:hidden}
+  .slide.active,.slide.measuring{display:flex}
+  .slide.measuring{visibility:hidden;pointer-events:none}
+  .slide.top{align-items:flex-start;padding-top:8.5vh}
+  .slide-inner{position:relative;z-index:1;width:min(980px,86vw);max-height:82vh;margin:auto;transform-origin:top center}
+  .slide.top .slide-inner{margin:0 auto}
+  .slide.duo .slide-inner{width:min(1140px,90vw)}
+  .eyebrow{margin:0 0 1.2rem;color:var(--gold);font:600 clamp(12px,1.12vw,17px)/1.3 "IBM Plex Mono",monospace;letter-spacing:.18em;text-transform:uppercase}
+  .title{margin:0;font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;letter-spacing:-.018em}
+  .cover .slide-inner{padding:3rem 3.7rem;text-align:left;border-left:6px solid var(--gold);border-top:1px solid rgba(244,238,228,.23);border-bottom:1px solid rgba(244,238,228,.12);background:linear-gradient(105deg,rgba(42,32,48,.86),rgba(26,22,32,.15));box-shadow:22px 22px 0 rgba(139,91,115,.12)}
+  .cover .title{font-size:calc(clamp(58px,7.6vw,104px)*var(--fit));line-height:.96;max-width:12ch}
+  .cover .work{font:500 calc(clamp(20px,2.15vw,31px)*var(--fit))/1.4 "Cormorant Garamond",Georgia,serif;color:var(--vellum);margin:1.5rem 0 0;max-width:36ch}
+  .cover .course{margin-top:2.4rem;color:var(--gold);font:500 calc(clamp(11px,1vw,15px)*var(--fit))/1.4 "IBM Plex Mono",monospace;letter-spacing:.14em;text-transform:uppercase}
+  .section .slide-inner{width:min(900px,86vw);text-align:left;padding:2.3rem 3rem;border-left:6px solid var(--gold-dim);background:linear-gradient(90deg,rgba(42,32,48,.72),transparent 78%)}
+  .section .title{font-size:calc(clamp(48px,6.2vw,84px)*var(--fit));line-height:1.02;max-width:12ch}
+  .section .rule{width:52px;height:2px;background:var(--gold);margin:1.8rem 0 0}
+  .content .title,.head .title,.duo .title{font-size:calc(clamp(38px,4.5vw,62px)*var(--fit));line-height:1.05;margin-bottom:1.6rem;text-align:left}
+  .content .body{font-family:"Cormorant Garamond",Georgia,serif;font-size:calc(clamp(25px,2.35vw,35px)*var(--fit));line-height:1.34;text-align:left}
+  .content .body p{margin:0 0 1.05em;padding:.08em .7em .08em 1rem;border-left:3px solid transparent;color:rgba(205,191,207,.50);font-weight:600;background:linear-gradient(90deg,rgba(229,182,87,0),rgba(229,182,87,0))}
+  .content .body p:last-child{margin-bottom:1.05em}
+  .content .body p.fresh{color:var(--text);border-left-color:var(--gold);background:linear-gradient(90deg,rgba(229,182,87,.16),rgba(229,182,87,0) 80%);text-shadow:0 0 18px rgba(244,238,228,.08)}
+  .question .slide-inner,.diagnostic .slide-inner{width:min(900px,86vw);padding:2.7rem 3.2rem;text-align:left;border-top:1px solid rgba(244,238,228,.25);border-bottom:1px solid rgba(244,238,228,.14);background:linear-gradient(115deg,rgba(42,32,48,.90),rgba(26,22,32,.58))}
+  .question .prompt,.diagnostic .prompt{margin:0;font-family:"Cormorant Garamond",Georgia,serif;font-size:calc(clamp(42px,5.2vw,72px)*var(--fit));line-height:1.08;font-weight:600;letter-spacing:-.015em}
+  .question .prompt::after,.diagnostic .prompt::after{content:"";display:block;width:42px;height:3px;background:var(--gold);margin:1.8rem 0 0}
+  .question .context{max-width:48ch;margin:1.35rem 0 0;color:var(--vellum);font:500 calc(clamp(18px,1.7vw,25px)*var(--fit))/1.4 "Cormorant Garamond",Georgia,serif}
+  .quote .slide-inner{padding:2.4rem 3.2rem;max-width:min(980px,86vw);text-align:left;border-left:5px solid var(--gold);background:rgba(42,32,48,.56)}
+  .quote blockquote{margin:0;max-width:26ch;font-family:"Cormorant Garamond",Georgia,serif;font-size:calc(clamp(39px,4.45vw,63px)*var(--fit));line-height:1.12;font-weight:500}
+  .quote blockquote::before{content:"“";color:var(--gold);margin-right:.08em}
+  .quote blockquote::after{content:"”";color:var(--gold);margin-left:.08em}
+  .quote cite{display:block;margin-top:1.6rem;color:var(--vellum);font:500 calc(clamp(12px,1.15vw,17px)*var(--fit))/1.45 "IBM Plex Mono",monospace;font-style:normal}
+  .duo-grid{display:grid;grid-template-columns:1fr 1fr;gap:2.6rem;text-align:left;margin-top:1.5rem}
+  .duo-col{padding:1.5rem 1.6rem;border:1px solid rgba(244,238,228,.18);border-top:4px solid var(--gold-dim);background:rgba(42,32,48,.55)}
+  .duo-col:nth-child(2){border-top-color:var(--gold);background:rgba(89,48,66,.28)}
+  .duo-col h3{margin:0 0 .85rem;color:var(--gold);font:600 calc(clamp(13px,1.25vw,18px)*var(--fit))/1.3 "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase}
+  .duo-col p{margin:0;color:var(--text);font:500 calc(clamp(24px,2.15vw,33px)*var(--fit))/1.34 "Cormorant Garamond",Georgia,serif}
+  .head-list{display:grid;gap:.85rem;text-align:left;margin-top:1.8rem}
+  .head-item{display:grid;grid-template-columns:11rem 1fr;gap:1.5rem;align-items:baseline;padding:.85rem 1.1rem;border-top:1px solid var(--border);background:rgba(42,32,48,.42)}
+  .head-item:nth-child(even){transform:translateX(1.15rem);background:rgba(139,91,115,.11)}
+  .head-item b{color:var(--gold);font:600 calc(clamp(12px,1.1vw,16px)*var(--fit))/1.3 "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase}
+  .head-item span{font:500 calc(clamp(23px,2.05vw,31px)*var(--fit))/1.3 "Cormorant Garamond",Georgia,serif}
+  .diagnostic .eyebrow{color:var(--vellum)}
+  .diagnostic .prompt{font-size:calc(clamp(52px,6.6vw,90px)*var(--fit))}
+  .refs .slide-inner{width:min(980px,86vw);text-align:left}
+  .refs .title{font-size:calc(clamp(40px,4.6vw,64px)*var(--fit));margin-bottom:1.7rem}
+  .refs-list{display:grid;gap:1.05rem}
+  .ref{padding-top:.95rem;border-top:1px solid var(--border);font:500 calc(clamp(18px,1.65vw,24px)*var(--fit))/1.38 "Cormorant Garamond",Georgia,serif;color:var(--vellum)}
+  .ref strong{color:var(--text);font-weight:600}
+  #progress{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,var(--gold-dim),var(--gold));z-index:30}
+  #nav-hint,#counter{position:fixed;bottom:18px;z-index:30;color:var(--vellum);font:500 12px/1.3 "IBM Plex Mono",monospace;letter-spacing:.08em}
+  #nav-hint{left:24px} #counter{right:24px}
+  #fullscreen{position:fixed;top:20px;right:22px;z-index:30;color:var(--vellum);background:rgba(42,32,48,.30);border:1px solid var(--border);border-radius:2px;padding:8px 11px;cursor:pointer;font:500 11px/1 "IBM Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase}
+  #fullscreen:hover{color:var(--gold);border-color:var(--gold-dim)}
+  .panel{position:fixed;inset:4vh 4vw;z-index:60;display:none;background:rgba(26,22,32,.985);border:1px solid var(--border);overflow:auto}
+  .panel.open{display:block}
+  .panel-head{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;padding:18px 22px;background:var(--bg-2);border-bottom:1px solid var(--border);z-index:2}
+  .panel-head h2{margin:0;font:600 14px/1 "IBM Plex Mono",monospace;letter-spacing:.15em;text-transform:uppercase;color:var(--gold)}
+  .close{color:var(--text);background:transparent;border:1px solid var(--border);padding:7px 10px;cursor:pointer}
+  #overview-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;padding:20px}
+  .overview-card{min-height:126px;padding:16px;text-align:left;background:linear-gradient(145deg,#33263b,#211a28);border:1px solid var(--border);color:var(--text);cursor:pointer}
+  .overview-card:hover,.overview-card.current{border-color:var(--gold);box-shadow:0 8px 24px rgba(0,0,0,.22)}
+  .overview-card .num{display:block;color:var(--gold);font:500 11px/1.3 "IBM Plex Mono",monospace;margin-bottom:12px}
+  .overview-card .label{font:600 22px/1.1 "Cormorant Garamond",Georgia,serif}
+  #notes-body{padding:28px 34px;white-space:pre-wrap;color:var(--text);font:400 18px/1.62 Inter,sans-serif;max-width:900px}
+  @media (max-width:760px){
+    .slide{padding:9vh 8vw 10vh}.slide.top{padding-top:9.5vh}.slide-inner,.slide.duo .slide-inner{width:84vw}
+    .duo-grid{grid-template-columns:1fr;gap:1.5rem}.head-item{grid-template-columns:1fr;gap:.45rem}.head-item:nth-child(even){transform:none}
+    #nav-hint{display:none}#fullscreen{top:12px;right:12px}.content .body{font-size:calc(clamp(22px,5.6vw,30px)*var(--fit))}
+    .duo-col p{font-size:calc(clamp(22px,5.3vw,29px)*var(--fit))}
+    .cover .slide-inner,.section .slide-inner,.question .slide-inner,.diagnostic .slide-inner,.quote .slide-inner{padding:1.7rem 1.5rem}
+  }
+</style>
+<link rel="stylesheet" href="presentation-polish.css">
+<script src="presentation-polish.js" defer></script>
+</head>
+<body>
+<div id="deck" aria-live="polite"></div>
+<div id="progress"></div>
+<div id="nav-hint">ARROWS / SPACE · O OVERVIEW · N NOTES · F FULLSCREEN</div>
+<div id="counter">1 / 1</div>
+<button id="fullscreen" aria-label="Toggle fullscreen">Fullscreen</button>
+
+<section id="overview" class="panel" aria-label="Slide overview">
+  <div class="panel-head"><h2>Overview</h2><button class="close" data-close="overview">Close</button></div>
+  <div id="overview-grid"></div>
+</section>
+<aside id="notes" class="panel" aria-label="Speaker notes">
+  <div class="panel-head"><h2>Speaker notes</h2><button class="close" data-close="notes">Close</button></div>
+  <div id="notes-body"></div>
+</aside>
+
+<script>
+const slides=[];
+const src=(pages,extra="")=>"[Sources]\nSource material, \"Justifying the State - Criticism of the Social Contract,\" source PDF, pp. "+pages+"."+(extra?"\n"+extra:"")+"\n[/Sources]";
+const add=s=>slides.push(s);
+const cover=(title,work,course,notes)=>add({type:"cover",title,work,course,notes});
+const section=(roman,title,notes)=>add({type:"section",eyebrow:roman+". "+title.toUpperCase(),title,notes});
+const question=(eyebrow,prompt,context,notes)=>add({type:"question",eyebrow,prompt,context,notes});
+const quote=(text,cite,notes)=>add({type:"quote",text,cite,notes});
+const duo=(title,left,right,notes)=>add({type:"duo",title,left,right,notes});
+const head=(title,items,notes)=>add({type:"head",title,items,notes});
+const diagnostic=(prompt,notes)=>add({type:"diagnostic",eyebrow:"The social-contract test",prompt,notes});
+const refs=(items,notes)=>add({type:"refs",title:"References",items,notes});
+function build(id,title,paragraphs,notes,pages){
+  paragraphs.forEach((_,i)=>add({type:"content",title,paragraphs:paragraphs.slice(0,i+1),buildGroup:id,notes:notes+(i<paragraphs.length-1?"\n\nPause before revealing the next step.":"")+"\n\n"+src(pages)}));
+}
+
+cover("Radical Criticism of the Social Contract","When 'universal' politics hides exclusion","Political Philosophy","Begin with the gap between the language of freedom and the social arrangements that have actually governed people.\n\n"+src("1-8"));
+question("The problem","If a contract is made by free and equal people, who agreed to be second-class?","The argument shifts the social-contract question from 'Why obey the state?' to a deeper test: can a theory built on universal freedom explain societies marked by durable inequality?","Let the contradiction sit before naming the critics who develop it.\n\n"+src("1-2"));
+
+section("I","The universal contract has a hidden problem","The argument widens social-contract theory beyond political obligation: it can also be a story about the source of morality and social order.\n\n"+src("1-2"));
+build("moral-contract","A contract can explain more than obedience",[
+  "Social-contract theory is often presented as a theory of political obligation: it tries to explain why people owe obedience to the state.",
+  "But the same approach can be used more broadly, as if many of our obligations to one another were created by some kind of agreement. That broader picture makes the contract do two jobs at once: it explains political authority and it helps define what counts as justice."
+],"Keep the political question and the moral question distinct, then show why the argument connects them.","1");
+quote("They accordingly proceed to make laws and mutual agreements.","Plato, The Republic, 358e-359b, quoted in the source material, p. 1","The quotation introduces Glaucon's skeptical picture of justice as a compromise. It is not Plato's conclusion.\n\n"+src("1","Plato quotation reproduced in the source material."));
+build("justice-compromise","In Glaucon's picture, justice is a compromise",[
+  "Glaucon imagines that doing wrong is attractive, while suffering wrong is even worse.",
+  "Because people cannot reliably secure the first outcome while avoiding the second, they agree to restrain one another. Justice then has a relative value: it is accepted because people cannot get everything they want, not because justice is good in itself."
+],"The point is not that Plato endorses this view. The argument presents it as the skeptical target that Plato tries to defeat.","1-2");
+build("deeper-criticism","The radical criticism asks a different question",[
+  "Earlier criticisms ask whether anyone has really consented to the state, and therefore whether consent can generate a universal duty to obey.",
+  "The radical criticism asks what happens when we treat the whole society as if it were built by a contract among free and equal people. The problem is immediate: the societies we know have been marked by class, race, gender, sexuality, disability, religion, and other inequalities."
+],"This is the hinge of the argument. The object is no longer only the state's authority; it is the social contract's picture of who counts as an equal contracting person.","2");
+question("The contradiction","Why would free and equal people agree to their own subjugation?","A contract among equals should not naturally produce a permanent second-class status. The next section asks whether the contract story is therefore false, fraudulent, or incomplete.","Use this as the motivating problem for the sequence of criticisms that follows.\n\n"+src("2"));
+
+section("II","The contract may be written for some, by some","Rousseau's own criticism opens the possibility that the social contract is not a neutral origin story at all.\n\n"+src("2"));
+build("rousseau-fraud","Rousseau sees a contract that works against the poor",[
+  "Rousseau asks how people who are free and equal could have agreed to social arrangements that place some people beneath others.",
+  "His answer is that the rich played a profound trick: they recruited the strength of the poor to support an order that served the rich. If the society around Rousseau was produced by a contract, then it was fraudulent because people were fooled into accepting terms against their own interests."
+],"The argument presents Rousseau as both a social-contract theorist and an internal critic of the social contract he inherited.","2");
+duo("Two different contracts are now in view",
+  {label:"The actual arrangement",text:"A social order in which wealth lets one group turn the strength of another group against itself."},
+  {label:"Rousseau's project",text:"An ideal social contract that could make political membership genuinely legitimate rather than merely inherited."},
+  "The contrast matters because Rousseau does not simply abandon the contract idea; he tries to repair it.\n\n"+src("2"));
+build("repair-problem","Repairing the contract does not erase its history",[
+  "Rousseau's solution is to design a better contract rather than accept a fraudulent one as legitimate.",
+  "But the repair question remains: who was treated as a contracting person in the first place?",
+  "Pateman, Mills, and Simplican push this question through gender, race, and cognitive capacity."
+],"Move from Rousseau's general suspicion to the three specific forms of exclusion developed in the argument.","2-4");
+
+section("III","The contract is made by men, but binds women","Pateman's criticism shows how exclusion can be built into the contract's membership rules.\n\n"+src("3"));
+build("pateman","Pateman begins with an absence",[
+  "Pateman points out that women are largely absent from the writings of the social-contract theorists.",
+  "One reply says that 'man' was meant to include woman, but the political history described in the argument makes that reply hard to sustain: women were generally denied property, professions, education, and meaningful participation in political life."
+],"The argument is not about vocabulary alone. It is about who could make decisions and who had to live under them.","3");
+quote("Woman have no part in the Original Contract but are not left behind in the state of nature.","Carole Pateman, The Sexual Contract, p. 11, quoted in the source material, p. 3","Keep the force of the sentence: exclusion from the contract does not mean freedom from its consequences.\n\n"+src("3","Pateman quotation reproduced in the source material."));
+build("women-not-consulted","Women were not consulted, then placed beneath men",[
+  "Pateman's answer is direct: women did not agree to the contract because they were not consulted about it.",
+  "The contract was made only among men, and one of its effective terms was that women would be subordinated for men's advantage. Women were confined to the private realm of home and family while remaining subject to laws they had no part in creating."
+],"Make the distinction between being outside the agreement and being outside the law. The latter does not follow from the former.","3");
+build("gender-universalism","Universal freedom can conceal a gendered order",[
+  "The social contract presents itself as a promise of freedom and equality for all.",
+  "Yet Pateman argues that its actual structure privileges men by giving them political membership and leaving women in a subordinate position.",
+  "The contract's universal language therefore does not guarantee universal standing; it can universalize the privileges of the group that made it."
+],"This is the first full pattern: a theory speaks in the language of equality while its membership rules distribute power unequally.","3");
+question("The membership test","Can a contract be universal when half the people were never at the table?","The gender criticism does not ask for a nicer description of the contract. It asks whether the contract's claim to create equal membership is already undermined by who was allowed to make it.","Let the question connect Pateman's case to the racial criticism that follows.\n\n"+src("3"));
+
+section("IV","The public contract is also racialized","Mills extends the pattern beyond the private sphere of home and family.\n\n"+src("3-4"));
+build("mills","Mills asks who gets to make the public contract",[
+  "Mills argues that in a racially divided society, the social contract will be made by and for the dominant race.",
+  "Marginalized Black and brown people are excluded from the contract and subordinated by the political order it establishes. The exclusion is not only symbolic: it organizes who can participate in politics and whose interests shape public institutions."
+],"The argument treats race as a structure of political membership, not as a side issue added after the contract is already complete.","3-4");
+duo("Pateman and Mills expose different spaces of exclusion",
+  {label:"Gendered exclusion",text:"Women are pushed into a private realm and governed by rules they did not help create."},
+  {label:"Racialized exclusion",text:"Black and brown people are kept out of political membership while being used inside the public economy."},
+  "The comparison shows that exclusion can operate through different social locations while serving the same privileged group.\n\n"+src("3-4"));
+build("racial-economy","Racial domination can use labor and discard people",[
+  "Unlike the women in Pateman's account, marginalized Black and brown people are not confined to the domestic sphere.",
+  "They are embedded in public economic life on harsh and exploitative terms when their labor is useful. When their labor is not needed, they can be discarded into unemployment and grinding poverty, while the arrangement continues to benefit already wealthy members of the dominant white race."
+],"The point is a double position: participation in the economy does not amount to equal membership in the political order.","4");
+build("slavery-and-after","Slavery is the clearest example, not the whole argument",[
+  "The argument identifies race-based slavery as the most obvious example of racial domination built into social arrangements.",
+  "Mills also argues that racial domination and discrimination persist in many forms beyond slavery.",
+  "The contract criticism therefore targets a continuing pattern: a society can call itself a community of equals while organizing public life around racial hierarchy."
+],"Do not reduce Mills's point to one historical institution. The argument uses slavery as the clearest case of a wider structure.","4");
+question("The labor question","What does exclusion look like when the public world still needs your labor?","Mills makes the contradiction sharper: a person can be economically necessary without being treated as a full political author of the social order.","This question prepares the shift from race to the contract's assumptions about rational capacity.\n\n"+src("3-4"));
+
+section("V","Capacity becomes a gate to membership","Simplican's criticism asks whether the contract's ideal person is defined by a threshold of cognitive ability.\n\n"+src("4"));
+build("simplican","The contract assumes a certain kind of person",[
+  "Simplican argues that social-contract theorists imagine a contract among people who are free and equal, but also at or above a threshold of cognitive ability.",
+  "This means that autonomy, agency, and rationality are not only celebrated; they become tests for who can count as a full contracting person. People with intellectual disabilities are left outside that imagined community and treated as second-class members, if they are treated as members at all."
+],"Define the capacity contract as a membership rule: it decides whose judgment is recognized before the political order is even formed.","4");
+head("Three gates into the social contract",[
+  ["Gender","Who is allowed to make the agreement?"],
+  ["Race","Whose interests define the public order?"],
+  ["Capacity","Whose judgment counts as rational enough to belong?"]
+],"These are parallel questions, not three separate topics. Each asks which people are silently removed from the category of equal authors.\n\n"+src("3-4"));
+build("capacity-language","The language of rationality can reproduce exclusion",[
+  "Locke, as Simplican reads him, contrasts people with 'normal' capacities with people he labels 'idiots.'",
+  "The same language has historically been used to claim that women or racialized minorities lack the rational capacity required for politics. Feminist and racial activists often respond by insisting that women and racial minorities are rational, but Simplican asks whether that response leaves the capacity gate itself unquestioned."
+],"The strongest version of the criticism targets the standard, not only the people who are wrongly judged by it.","4");
+build("ignored-not-exploited","Cognitive exclusion can mean being ignored",[
+  "People excluded on the grounds of cognitive capacity are not necessarily brought into the public economy to be exploited.",
+  "Instead, they may be treated as irrelevant to the contract's authorship and simply ignored.",
+  "Simplican therefore describes this as an even deeper form of exclusion: the person is not only denied equal power but denied recognition as a political subject."
+],"Keep the contrast precise. Pateman and Mills emphasize subordination; Simplican adds exclusion through disregard.","4");
+quote("Justice can really mean 'just us'.","Charles Mills, The Racial Contract, quoted in the source material, p. 5","This is the argument's most memorable compression of the criticism. It names the gap between universal language and privileged membership.\n\n"+src("5","Mills quotation reproduced in the source material."));
+question("The deeper problem","What if the problem is not only who rules, but who counts as a chooser?","The three criticisms converge on the same structural question: who is imagined as a free and equal author before the social contract begins?","Use the question to transition from individual cases to the argument's broader verdict.\n\n"+src("4-5"));
+
+section("VI","The criticism reaches the theory's foundations","The argument pauses before deciding whether social-contract theory should be rejected or rebuilt.\n\n"+src("5"));
+build("foundational-pattern","The problem is hard to dismiss as an accident",[
+  "In the grand tradition of social-contract theory, it is difficult to find writings that explicitly include women, marginalized Black or brown people, or people who differ from the supposedly normal model of rationality.",
+  "That absence suggests a pattern: the group doing the theorizing can mistake its own social position for the universal human standpoint. The contract then appears to speak for everyone while quietly treating the privileged group as the measure of everyone."
+],"The claim is about a recurring structure of thought, not a charge that every theorist consciously intended oppression.","5");
+build("reject-or-correct","Two responses remain open",[
+  "One response is to reject the social-contract approach and begin political morality from a different starting point.",
+  "Another is to correct the contract by asking what it would look like if it became genuinely inclusive. The argument does not settle this choice here; it keeps the question open for later chapters."
+],"Do not turn the argument's hesitation into indecision. The open choice is itself part of the conclusion of this section.","5");
+build("universal-slip","The immediate lesson is a warning about universal language",[
+  "The point for now is to notice how easily a theory can privilege one group even when it begins from assumptions about universal freedom and equality.",
+  "A claim can sound universal while its picture of the person is narrower than the people who must live under the resulting order.",
+  "Radical criticism therefore asks every contract theory to reveal its hidden terms: who is included, who is excluded, and who benefits from the arrangement."
+],"Let this build gather the three critics into one diagnostic method before moving to the account's conclusion about political obligation.","5");
+question("The fork in the road","Does the criticism destroy social-contract theory - or force it to change?","The argument deliberately postpones a final answer. The remaining pages return to the account's larger question: whether any defense can establish a universal political obligation.","The shift is from the contract's inclusiveness to the state's claim that everyone must obey.\n\n"+src("5-6"));
+
+section("VII","The account's wider verdict: obligation is hard to universalize","The final pages return from the radical criticism to the account's broader survey of political obligation.\n\n"+src("6"));
+build("three-defenses","Three defenses fail to reach everyone",[
+  "Voluntaristic defenses in the contract tradition cannot explain the obligations of people who refuse to consent.",
+  "Utilitarian arguments may have unacceptable implications because they seem, in principle, to permit the sacrifice of innocent people. The fairness argument can succeed only if everyone accepts the benefits of the state, and the argument doubts that this condition is universal."
+],"The conclusion does not say that each argument is worthless. It says that each fails as a complete proof of universal obligation.","6");
+head("What survives, in limited form",[
+  ["Express consent","Some people, such as naturalized citizens or people in special positions of responsibility, do explicitly accept obligations."],
+  ["Fairness","Many people willingly accept state benefits, so compliance may be argued to be a fair price for them."],
+  ["Utility","If utilitarian reasoning is acceptable, the state may be entirely justified."],
+  ["Practical result","Even if no argument reaches everyone, a large proportion of people may still have political obligations." ]
+],"The conclusion is deliberately qualified: the failure of universal proof does not imply that no one has political obligations.\n\n"+src("6"));
+build("limited-obligation","A failed universal proof leaves a mixed population",[
+  "If some people escape political obligation, then the state cannot simply assume that every resident owes obedience for the same reason.",
+  "At the same time, most modern societies may still contain many people who do owe duties through consent, fairness, or another acceptable moral argument. The result is a mixed population: relatively few people may escape political obligations, but the state cannot honestly explain every obligation in one universal way."
+],"This is the bridge to the practical problem: how could a state administer a theory that does not classify everyone alike?","6");
+question("The practical problem","If some people are outside political obligation, can the state still treat everyone alike?","The state must either distinguish those who are obligated from those who are not, or enforce law as if political obligation were universal. The next section explores the pressure this creates.","Let the practical difficulty grow out of the theoretical result.\n\n"+src("6-7"));
+
+section("VIII","A theory can fail in principle and still govern in practice","The conclusion now tests what a state would do with the existence of political independents.\n\n"+src("6-8"));
+build("state-practice","The state has a problem it cannot easily administer",[
+  "No state will welcome the idea that some people living within its territory have no political obligations.",
+  "Trying to separate those who are obligated from those who are not would create immense practical difficulties.",
+  "Some people could exploit the uncertainty by pretending to belong to a group that escapes political obligation."
+],"The difficulty is administrative, but it also exposes a political temptation: when classification is hard, the state may simply treat everyone as bound.","6-7");
+build("universal-in-practice","In practice, the state may act as if obligation were universal",[
+  "Even a state that accepted the theoretical possibility of escape would probably ignore it in ordinary administration.",
+  "It might allow narrow exceptions for clearly defined groups, such as people who reject state assistance or people excused from compulsory military service.",
+  "But the argument concludes that no group will be able to avoid all political obligations in practice."
+],"The phrase 'in practice' matters. It marks the distance between a state's theory of authority and the way its officers enforce the law.","7");
+build("independents","Political independence does not erase moral duties",[
+  "Suppose a state really did accept that some residents had no political obligations. That would not give those people the right to harm anyone.",
+  "They would still have moral obligations, and on Locke's view every individual has a right to enforce the moral law even without government.",
+  "People who accept the state could therefore use its power to protect themselves from independents who threaten them."
+],"Separate political obligation from moral obligation. The argument's independents are not people with permission to do whatever they want.","7");
+duo("Legal authority and moral restraint are not the same",
+  {label:"What the state may lack",text:"Special authority to punish an independent person simply for breaking the state's law."},
+  {label:"What the state may retain",text:"A right to protect people from harm, using no more force than self-defence requires."},
+  "The diplomatic-immunity example makes this distinction concrete without making the independent person morally exempt.\n\n"+src("7"));
+build("diplomatic-immunity","Diplomatic immunity illustrates limited authority",[
+  "The argument compares political independents to diplomats who live in a state without being fully subject to its legal authority.",
+  "A diplomat who swings an axe in a shopping mall can still be disarmed by the police, because stopping an immediate threat is not the same as imposing legal punishment.",
+  "What the state may not do, without further authority, is go beyond self-defence and exercise ordinary legal punishment against the independent."
+],"Keep the example tied to the distinction: immunity limits punishment, not the protection of other people from immediate harm.","7");
+question("The remaining tension","Does legal authority disappear when moral obligations remain?","The argument's answer is partial: someone may lack a duty to obey the state's law while still being constrained by morality and by the state's right to protect others.","This prepares the final qualification: the state may still refuse to recognize the distinction.\n\n"+src("7-8"));
+build("illegitimate-enforcement","The state may enforce the law illegitimately",[
+  "No state would willingly accept that people living in its territory could escape political obligations altogether.",
+  "Diplomatic immunity is a special case regulated by international conventions, while ordinary law is generally enforced against everyone.",
+  "When a state enforces the law against people who lack political obligations, it may act illegitimately - but it will often do so with the approval of the vast majority of its citizens."
+],"End on the gap between legitimacy and public approval. A majority's support does not automatically supply the missing authority.","8");
+diagnostic("When a theory says 'everyone,' who has been left out?","Leave the question unresolved. It tests both halves of the argument: whether a state can justify obedience, and whether a universal contract can avoid reproducing the exclusions built into the society around it.\n\n"+src("1-8"));
+refs([
+  ["Source material","Justifying the State - Criticism of the Social Contract, source PDF, pp. 1-8."],
+  ["Primary text quoted","Plato, The Republic, 358e-359b, as quoted in the source material."],
+  ["Work discussed","Jean-Jacques Rousseau, Discourse on Inequality, as discussed in the source material."],
+  ["Work discussed","Jean-Jacques Rousseau, The Social Contract, as discussed in the source material."],
+  ["Work quoted and discussed","Carole Pateman, The Sexual Contract (1988), p. 11, as quoted in the source material."],
+  ["Work discussed","Charles Mills, The Racial Contract, as quoted and discussed in the source material."],
+  ["Work discussed","Stacy Clifford Simplican, The Capacity Contract, as discussed in the source material."
+]],"The references list only the source material and works explicitly quoted or discussed in it.\n\n"+src("1-8"));
+
+const deck=document.getElementById('deck');
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+function renderSlide(s,i){
+  const article=document.createElement('article');
+  article.className=`slide ${s.type}${s.type==='content'||s.type==='head'?' top':''}`;
+  article.dataset.index=i;
+  if(s.buildGroup) article.dataset.buildGroup=s.buildGroup;
+  let html='<div class="slide-inner">';
+  if(s.type==='cover') html+=`<h1 class="title">${esc(s.title)}</h1><p class="work">${esc(s.work)}</p><div class="course">${esc(s.course)}</div>`;
+  if(s.type==='section') html+=`<div class="eyebrow">${esc(s.eyebrow)}</div><h2 class="title">${esc(s.title)}</h2><div class="rule"></div>`;
+  if(s.type==='content') html+=`<h2 class="title">${esc(s.title)}</h2><div class="body">${s.paragraphs.map((p,j)=>`<p class="${j===s.paragraphs.length-1?'fresh':''}">${esc(p)}</p>`).join('')}</div>`;
+  if(s.type==='question'||s.type==='diagnostic') html+=`<div class="eyebrow">${esc(s.eyebrow)}</div><p class="prompt">${esc(s.prompt)}</p>${s.context?`<p class="context">${esc(s.context)}</p>`:''}`;
+  if(s.type==='quote') html+=`<blockquote>${esc(s.text)}</blockquote><cite>${esc(s.cite)}</cite>`;
+  if(s.type==='duo') html+=`<h2 class="title">${esc(s.title)}</h2><div class="duo-grid">${[s.left,s.right].map(x=>`<div class="duo-col"><h3>${esc(x.label)}</h3><p>${esc(x.text)}</p></div>`).join('')}</div>`;
+  if(s.type==='head') html+=`<h2 class="title">${esc(s.title)}</h2><div class="head-list">${s.items.map(x=>`<div class="head-item"><b>${esc(x[0])}</b><span>${esc(x[1])}</span></div>`).join('')}</div>`;
+  if(s.type==='refs') html+=`<h2 class="title">${esc(s.title)}</h2><div class="refs-list">${s.items.map(x=>`<div class="ref"><strong>${esc(x[0])}.</strong> ${esc(x[1])}</div>`).join('')}</div>`;
+  article.innerHTML=html+'</div>';
+  deck.appendChild(article);
+  return article;
+}
+const nodes=slides.map(renderSlide);
+let current=0;
+const counter=document.getElementById('counter');
+const progress=document.getElementById('progress');
+const notes=document.getElementById('notes');
+const notesBody=document.getElementById('notes-body');
+const overview=document.getElementById('overview');
+const overviewGrid=document.getElementById('overview-grid');
+function labelFor(s){return s.title||s.prompt||s.text||'Slide';}
+slides.forEach((s,i)=>{const b=document.createElement('button');b.className='overview-card';b.innerHTML=`<span class="num">${String(i+1).padStart(2,'0')} / ${slides.length}</span><span class="label">${esc(labelFor(s))}</span>`;b.addEventListener('click',()=>{closePanels();show(i)});overviewGrid.appendChild(b)});
+const cards=[...overviewGrid.children];
+function show(i){
+  current=Math.max(0,Math.min(slides.length-1,i));
+  nodes.forEach((n,j)=>n.classList.toggle('active',j===current));
+  cards.forEach((n,j)=>n.classList.toggle('current',j===current));
+  counter.textContent=`${current+1} / ${slides.length}`;
+  progress.style.width=`${((current+1)/slides.length)*100}%`;
+  notesBody.textContent=slides[current].notes||'No notes for this slide.';
+  document.title=`${current+1}/${slides.length} · Radical Criticism - The Social Contract`;
+}
+function openPanel(panel){closePanels();panel.classList.add('open')}
+function closePanels(){overview.classList.remove('open');notes.classList.remove('open')}
+function togglePanel(panel){panel.classList.contains('open')?closePanels():openPanel(panel)}
+function toggleFullscreen(){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen().catch(()=>{})}
+document.getElementById('fullscreen').addEventListener('click',toggleFullscreen);
+document.querySelectorAll('.close').forEach(b=>b.addEventListener('click',closePanels));
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){closePanels();return}
+  if(overview.classList.contains('open')||notes.classList.contains('open')) return;
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();show(current+1)}
+  else if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();show(current-1)}
+  else if(e.key.toLowerCase()==='o') togglePanel(overview);
+  else if(e.key.toLowerCase()==='n') togglePanel(notes);
+  else if(e.key.toLowerCase()==='f') toggleFullscreen();
+});
+let touchX=0,touchY=0;
+document.addEventListener('touchstart',e=>{touchX=e.changedTouches[0].screenX;touchY=e.changedTouches[0].screenY},{passive:true});
+document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].screenX-touchX,dy=e.changedTouches[0].screenY-touchY;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy))show(current+(dx<0?1:-1))},{passive:true});
+function fits(node){const inner=node.querySelector('.slide-inner');return inner.scrollHeight<=node.clientHeight*.82&&inner.scrollWidth<=node.clientWidth*.92}
+function fitNode(node,start=1){let f=start;node.classList.add('measuring');node.style.setProperty('--fit',f);while(f>.72&&!fits(node)){f-=.02;node.style.setProperty('--fit',f)}node.classList.remove('measuring');return f}
+function fitAll(){
+  nodes.forEach(n=>n.style.setProperty('--fit',1));
+  const groups={};nodes.forEach(n=>{if(n.dataset.buildGroup)(groups[n.dataset.buildGroup]??=[]).push(n)});
+  const grouped=new Set(Object.values(groups).flat());
+  Object.values(groups).forEach(group=>{const final=group[group.length-1];const f=fitNode(final);group.forEach(n=>n.style.setProperty('--fit',f))});
+  nodes.filter(n=>!grouped.has(n)).forEach(n=>fitNode(n));
+  show(current);
+}
+let resizeTimer;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(fitAll,120)});
+if(document.fonts?.ready)document.fonts.ready.then(fitAll);else fitAll();
+show(0);
+</script>
+</body>
+</html>
