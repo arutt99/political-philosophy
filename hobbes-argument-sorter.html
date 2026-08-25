@@ -1,0 +1,1181 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reconstruct Hobbes's Argument</title>
+  <style>
+    :root {
+      --ink: #152331;
+      --muted: #5e6b72;
+      --paper: #f7f4ec;
+      --paper-deep: #ede8dc;
+      --surface: #fffdf8;
+      --line: #d8d4c8;
+      --navy: #17354d;
+      --navy-dark: #0f2638;
+      --teal: #2b7c78;
+      --teal-soft: #e0f1ed;
+      --gold: #c58a3d;
+      --gold-soft: #f8eddc;
+      --green: #21664e;
+      --green-soft: #e6f3eb;
+      --red: #a13e3e;
+      --red-soft: #f8e8e5;
+      --shadow: 0 20px 50px rgba(15, 38, 56, .12);
+      --small-shadow: 0 7px 18px rgba(15, 38, 56, .09);
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --radius-sm: 10px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 8% 0%, rgba(43, 124, 120, .12), transparent 28rem),
+        radial-gradient(circle at 95% 12%, rgba(197, 138, 61, .12), transparent 26rem),
+        var(--paper);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+
+    button { font: inherit; }
+
+    button:focus-visible,
+    [draggable="true"]:focus-visible,
+    .drop-zone:focus-visible {
+      outline: 3px solid #4a9fd6;
+      outline-offset: 3px;
+    }
+
+    .app-shell {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 34px 0 56px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      color: #f8fbfb;
+      background: linear-gradient(130deg, var(--navy-dark), var(--navy));
+      border-radius: var(--radius-lg);
+      padding: clamp(26px, 5vw, 56px);
+      box-shadow: var(--shadow);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      right: -80px;
+      bottom: -150px;
+      border: 1px solid rgba(255, 255, 255, .18);
+      border-radius: 50%;
+      box-shadow: 0 0 0 32px rgba(255, 255, 255, .04), 0 0 0 64px rgba(255, 255, 255, .03);
+      pointer-events: none;
+    }
+
+    .hero-content { position: relative; z-index: 1; max-width: 770px; }
+
+    .eyebrow,
+    .panel-kicker {
+      margin: 0 0 10px;
+      color: var(--gold);
+      font-size: .74rem;
+      font-weight: 800;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      max-width: 700px;
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2.15rem, 5vw, 4.3rem);
+      font-weight: 500;
+      letter-spacing: -.035em;
+      line-height: 1.02;
+    }
+
+    .hero p {
+      max-width: 650px;
+      margin: 18px 0 0;
+      color: #dce8e8;
+      font-size: clamp(1rem, 1.7vw, 1.14rem);
+    }
+
+    .activity-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 24px;
+    }
+
+    .meta-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(255, 255, 255, .18);
+      border-radius: 999px;
+      padding: 7px 11px;
+      color: #e4efee;
+      background: rgba(255, 255, 255, .08);
+      font-size: .82rem;
+    }
+
+    .meta-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--gold);
+    }
+
+    .instructions {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 18px 28px;
+      align-items: center;
+      margin: 22px 0;
+      padding: 20px 24px;
+      border: 1px solid rgba(43, 124, 120, .28);
+      border-radius: var(--radius-md);
+      background: rgba(224, 241, 237, .65);
+    }
+
+    .instructions h2,
+    .panel-header h2 {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-weight: 500;
+      letter-spacing: -.02em;
+    }
+
+    .instructions h2 { font-size: 1.25rem; }
+
+    .instructions p {
+      margin: 5px 0 0;
+      color: #3f595c;
+      font-size: .94rem;
+    }
+
+    .instructions strong { color: var(--navy-dark); }
+
+    .instruction-icon {
+      display: grid;
+      place-items: center;
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      color: var(--navy);
+      background: var(--surface);
+      box-shadow: var(--small-shadow);
+      font-size: 1.45rem;
+    }
+
+    .status-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px 28px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      padding: 18px 20px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: rgba(255, 253, 248, .76);
+    }
+
+    .progress-copy { min-width: min(100%, 220px); }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 8px;
+      font-size: .87rem;
+      font-weight: 700;
+    }
+
+    .progress-label span:last-child {
+      color: var(--teal);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .progress-track {
+      width: min(390px, 100%);
+      height: 9px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #dfe6e2;
+    }
+
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--teal), #54a89a);
+      transition: width .25s ease;
+    }
+
+    .control-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      justify-content: flex-end;
+    }
+
+    .button {
+      cursor: pointer;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      padding: 10px 15px;
+      font-size: .86rem;
+      font-weight: 800;
+      transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+    }
+
+    .button:hover { transform: translateY(-1px); }
+
+    .button-primary {
+      color: #fff;
+      background: var(--teal);
+      box-shadow: 0 5px 12px rgba(43, 124, 120, .2);
+    }
+
+    .button-primary:hover { background: #236b68; }
+
+    .button-secondary {
+      color: var(--navy);
+      border-color: var(--line);
+      background: var(--surface);
+    }
+
+    .button-secondary:hover { background: #f2eee5; }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(280px, .82fr) minmax(0, 1.45fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .panel {
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: rgba(255, 253, 248, .9);
+      box-shadow: var(--small-shadow);
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 23px 23px 17px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .panel-header h2 { font-size: 1.55rem; }
+
+    .panel-note {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: .84rem;
+    }
+
+    .count-badge {
+      flex: 0 0 auto;
+      border-radius: 999px;
+      padding: 5px 9px;
+      color: var(--navy);
+      background: var(--gold-soft);
+      font-size: .76rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .card-bank,
+    .sequence-list {
+      list-style: none;
+      margin: 0;
+      padding: 18px;
+    }
+
+    .card-bank {
+      display: grid;
+      gap: 12px;
+      max-height: 680px;
+      overflow: auto;
+    }
+
+    .bank-empty,
+    .sequence-empty {
+      display: grid;
+      place-items: center;
+      min-height: 140px;
+      padding: 22px;
+      border: 1.5px dashed #b9c9c6;
+      border-radius: var(--radius-md);
+      color: var(--muted);
+      background: rgba(224, 241, 237, .25);
+      text-align: center;
+    }
+
+    .bank-empty strong,
+    .sequence-empty strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--navy);
+    }
+
+    .tile {
+      position: relative;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 12px;
+      align-items: start;
+      border: 1px solid #dedbd1;
+      border-radius: var(--radius-md);
+      padding: 14px;
+      color: var(--ink);
+      background: var(--surface);
+      box-shadow: 0 3px 8px rgba(15, 38, 56, .04);
+      transition: border-color .15s ease, background .15s ease, box-shadow .15s ease, transform .15s ease;
+    }
+
+    .tile:hover {
+      border-color: #9bbab5;
+      box-shadow: var(--small-shadow);
+    }
+
+    .tile.is-dragging { opacity: .48; transform: rotate(1deg); }
+
+    .tile.is-drag-over {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px rgba(43, 124, 120, .16);
+    }
+
+    .tile-marker {
+      display: grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 9px;
+      color: var(--navy);
+      background: var(--gold-soft);
+      font-size: .8rem;
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .tile-copy { min-width: 0; }
+
+    .tile-text {
+      display: block;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.02rem;
+      line-height: 1.32;
+    }
+
+    .tile-hint {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: .73rem;
+    }
+
+    .tile-action {
+      cursor: pointer;
+      margin-top: 10px;
+      border: 0;
+      padding: 0;
+      color: var(--teal);
+      background: transparent;
+      font-size: .77rem;
+      font-weight: 800;
+      text-decoration: underline;
+      text-decoration-color: rgba(43, 124, 120, .35);
+      text-underline-offset: 3px;
+    }
+
+    .tile-action:hover { color: var(--navy); }
+
+    .sequence-wrap { min-width: 0; }
+
+    .sequence-list {
+      display: grid;
+      gap: 10px;
+      min-height: 320px;
+      max-height: 760px;
+      overflow: auto;
+    }
+
+    .sequence-list.is-active-drop {
+      background: rgba(224, 241, 237, .3);
+    }
+
+    .sequence-card {
+      grid-template-columns: auto auto 1fr;
+      cursor: grab;
+      background: #fffefb;
+    }
+
+    .sequence-card:active { cursor: grabbing; }
+
+    .position-marker {
+      display: grid;
+      place-items: center;
+      width: 29px;
+      height: 29px;
+      border: 1px solid #cdd8d5;
+      border-radius: 50%;
+      color: var(--teal);
+      background: #f4faf8;
+      font-size: .75rem;
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .sequence-card .tile-copy { padding-right: 2px; }
+
+    .tile-tools {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      justify-content: flex-end;
+      grid-column: 2 / -1;
+      margin-top: 3px;
+    }
+
+    .move-button,
+    .return-button {
+      cursor: pointer;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 5px 8px;
+      color: var(--navy);
+      background: #faf8f1;
+      font-size: .72rem;
+      font-weight: 800;
+    }
+
+    .move-button:hover,
+    .return-button:hover { border-color: #9bbab5; background: var(--teal-soft); }
+
+    .move-button:disabled { cursor: not-allowed; opacity: .42; }
+
+    .return-button { color: var(--red); }
+
+    .sequence-card.is-correct {
+      border-color: #8bb9a2;
+      background: var(--green-soft);
+    }
+
+    .sequence-card.is-correct .position-marker {
+      border-color: #8bb9a2;
+      color: var(--green);
+      background: #f3fbf5;
+    }
+
+    .sequence-card.is-incorrect {
+      border-color: #d99a90;
+      background: var(--red-soft);
+    }
+
+    .sequence-card.is-incorrect .position-marker {
+      border-color: #d99a90;
+      color: var(--red);
+      background: #fff7f4;
+    }
+
+    .sequence-footer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 21px 20px;
+      border-top: 1px solid var(--line);
+    }
+
+    .drag-note {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: .77rem;
+    }
+
+    .drag-note span { color: var(--teal); font-size: 1.1rem; }
+
+    .feedback {
+      display: grid;
+      gap: 9px;
+      margin-top: 18px;
+      border: 1px solid #c6d5d2;
+      border-left: 5px solid var(--teal);
+      border-radius: var(--radius-md);
+      padding: 17px 20px;
+      color: #28484b;
+      background: rgba(224, 241, 237, .65);
+    }
+
+    .feedback[hidden] { display: none; }
+
+    .feedback.feedback-success {
+      border-color: #9fc8af;
+      border-left-color: var(--green);
+      color: #245740;
+      background: var(--green-soft);
+    }
+
+    .feedback.feedback-error {
+      border-color: #e0b4aa;
+      border-left-color: var(--red);
+      color: #743530;
+      background: var(--red-soft);
+    }
+
+    .feedback-title { font-weight: 900; }
+
+    .feedback-detail { margin: 0; font-size: .9rem; }
+
+    .wrong-positions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .wrong-positions li {
+      border-radius: 999px;
+      padding: 4px 8px;
+      color: var(--red);
+      background: rgba(255, 255, 255, .62);
+      font-size: .76rem;
+      font-weight: 800;
+    }
+
+    .footer-note {
+      margin: 22px 2px 0;
+      color: var(--muted);
+      font-size: .78rem;
+      text-align: center;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (max-width: 820px) {
+      .workspace { grid-template-columns: 1fr; }
+      .card-bank { max-height: none; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .sequence-list { max-height: none; }
+    }
+
+    @media (max-width: 560px) {
+      .app-shell { width: min(100% - 20px, 1180px); padding-top: 10px; }
+      .hero { border-radius: 18px; padding: 27px 22px 31px; }
+      .instructions { grid-template-columns: 1fr; padding: 17px 18px; }
+      .instruction-icon { display: none; }
+      .status-bar { align-items: stretch; padding: 15px; }
+      .progress-copy { width: 100%; }
+      .progress-track { width: 100%; }
+      .control-group { justify-content: stretch; }
+      .control-group .button { flex: 1 1 auto; }
+      .panel { border-radius: 18px; }
+      .panel-header { padding: 20px 17px 15px; }
+      .card-bank,
+      .sequence-list { padding: 13px; }
+      .card-bank { grid-template-columns: 1fr; }
+      .tile { padding: 12px; }
+      .sequence-footer { padding: 13px 17px 17px; }
+      .drag-note { width: 100%; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+    }
+
+    /* Minimal classroom layout: cards on the left, sequence on the right. */
+    .app-shell {
+      width: min(1240px, calc(100% - 40px));
+      padding: 30px 0 40px;
+    }
+
+    .hero,
+    .instructions,
+    .footer-note { display: none; }
+
+    .status-bar {
+      margin: 0 0 18px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .progress-copy { display: none; }
+
+    .control-group { gap: 8px; }
+
+    .workspace {
+      grid-template-columns: minmax(300px, .92fr) minmax(0, 1.08fr);
+      gap: 34px;
+    }
+
+    .panel {
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .panel-header {
+      align-items: center;
+      padding: 0 0 10px;
+      border: 0;
+    }
+
+    .panel-header h2 {
+      font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+      font-size: .84rem;
+      font-weight: 900;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .panel-kicker,
+    .panel-note { display: none; }
+
+    .count-badge {
+      padding: 3px 8px;
+      color: var(--muted);
+      background: transparent;
+      font-size: .72rem;
+      font-weight: 700;
+    }
+
+    .card-bank,
+    .sequence-list { padding: 0; }
+
+    .card-bank {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 10px;
+      max-height: none;
+      overflow: visible;
+    }
+
+    .tile {
+      border-color: #e0ddd4;
+      border-radius: 12px;
+      padding: 12px;
+      box-shadow: 0 4px 12px rgba(15, 38, 56, .06);
+    }
+
+    .tile:hover { transform: translateY(-1px); }
+
+    .tile-hint { display: none; }
+
+    .tile-marker,
+    .position-marker {
+      width: 26px;
+      height: 26px;
+      border-radius: 7px;
+      font-size: .7rem;
+    }
+
+    .tile-text { font-size: .96rem; }
+
+    .tile-action {
+      margin-top: 8px;
+      font-size: .73rem;
+    }
+
+    .sequence-list {
+      min-height: 460px;
+      max-height: none;
+      border: 1px dashed #b9c9c6;
+      border-radius: 14px;
+      padding: 10px;
+      background: rgba(255, 253, 248, .45);
+    }
+
+    .sequence-list.is-active-drop { background: rgba(224, 241, 237, .5); }
+
+    .sequence-card { grid-template-columns: auto auto 1fr; }
+
+    .sequence-card .tile-text { font-size: .93rem; }
+
+    .sequence-footer {
+      justify-content: flex-end;
+      padding: 10px 0 0;
+      border: 0;
+    }
+
+    .drag-note { display: none; }
+
+    .feedback { margin-top: 18px; }
+
+    @media (max-width: 820px) {
+      .app-shell { width: min(100% - 28px, 720px); }
+      .workspace { grid-template-columns: 1fr; gap: 24px; }
+      .card-bank { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .sequence-list { min-height: 260px; }
+    }
+
+    @media (max-width: 500px) {
+      .app-shell { width: min(100% - 20px, 460px); padding-top: 18px; }
+      .status-bar { justify-content: stretch; }
+      .control-group { width: 100%; }
+      .control-group .button { flex: 1 1 0; }
+      .card-bank { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app-shell" id="hobbes-activity">
+    <header class="hero">
+      <div class="hero-content">
+        <p class="eyebrow">Political philosophy · State of nature</p>
+        <h1>Reconstruct Hobbes's Argument</h1>
+        <p>Can you rebuild the chain of reasoning that moves from human desire to the need for a sovereign?</p>
+        <div class="activity-meta" aria-label="Activity details">
+          <span class="meta-chip"><span class="meta-dot" aria-hidden="true"></span>12 argument cards</span>
+          <span class="meta-chip"><span class="meta-dot" aria-hidden="true"></span>Drag or use keyboard controls</span>
+          <span class="meta-chip"><span class="meta-dot" aria-hidden="true"></span>Independent practice</span>
+        </div>
+      </div>
+    </header>
+
+    <section class="instructions" aria-labelledby="instructions-heading">
+      <div>
+        <h2 id="instructions-heading">Build the logic, one step at a time.</h2>
+        <p><strong>Drag</strong> cards into the argument, then reorder them until the sequence makes sense. On a keyboard or touch screen, use each card's <strong>Place in sequence</strong>, <strong>Move up</strong>, and <strong>Move down</strong> controls.</p>
+      </div>
+      <div class="instruction-icon" aria-hidden="true">→</div>
+    </section>
+
+    <section class="status-bar" aria-label="Activity progress and controls">
+      <div class="progress-copy">
+        <div class="progress-label">
+          <span>Argument assembled</span>
+          <span id="progress-text">0 of 12 placed</span>
+        </div>
+        <div class="progress-track" role="progressbar" aria-label="Argument assembly progress" aria-valuemin="0" aria-valuemax="12" aria-valuenow="0">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+      </div>
+      <div class="control-group">
+        <button class="button button-secondary" id="shuffle-button" type="button">Reset / Shuffle</button>
+        <button class="button button-primary" id="check-button" type="button">Check Answer</button>
+      </div>
+    </section>
+
+    <section class="workspace" aria-label="Hobbes argument activity">
+      <section class="panel" aria-labelledby="bank-heading">
+        <div class="panel-header">
+          <div>
+            <p class="panel-kicker">Step 1</p>
+            <h2 id="bank-heading">Cards</h2>
+            <p class="panel-note">Cards are shuffled each time.</p>
+          </div>
+          <span class="count-badge" id="bank-count">12 cards</span>
+        </div>
+        <ul class="card-bank" id="card-bank" aria-label="Unplaced argument cards"></ul>
+      </section>
+
+      <section class="panel sequence-wrap" aria-labelledby="sequence-heading">
+        <div class="panel-header">
+          <div>
+            <p class="panel-kicker">Step 2</p>
+            <h2 id="sequence-heading">Order</h2>
+            <p class="panel-note">Drop cards here in logical order.</p>
+          </div>
+          <span class="count-badge" id="sequence-count">0 / 12</span>
+        </div>
+        <ol class="sequence-list" id="sequence-list" aria-label="Your reconstructed argument" tabindex="0"></ol>
+        <div class="sequence-footer">
+          <span class="drag-note"><span aria-hidden="true">↕</span> Reorder placed cards by dragging or with the move controls.</span>
+        </div>
+      </section>
+    </section>
+
+    <section class="feedback" id="feedback" aria-live="polite" aria-atomic="true" hidden></section>
+    <p class="footer-note">The full correct sequence stays hidden after an incorrect attempt so you can keep reasoning.</p>
+    <p class="sr-only" id="keyboard-help">Each card is draggable. Keyboard and touch alternatives are available on every card.</p>
+  </main>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const cards = [
+        { id: 1, text: "People always have new wants and desires." },
+        { id: 2, text: "Hobbes calls the ongoing success of getting what we want “felicity.”" },
+        { id: 3, text: "Because our desires keep changing, we keep seeking more power and resources to satisfy future desires." },
+        { id: 4, text: "No one is completely safe from anyone else, because even a weaker person can kill or harm a stronger person." },
+        { id: 5, text: "People sometimes want the same things, but there is not enough for everyone to have what they want." },
+        { id: 6, text: "Because we cannot be sure what other people are planning, we become suspicious of them." },
+        { id: 7, text: "If I think someone might attack me, it can seem rational for me to attack first." },
+        { id: 8, text: "Hobbes says people come into conflict for three main reasons: gain, safety, and reputation." },
+        { id: 9, text: "When everyone is suspicious and prepared to fight, society becomes a “state of war,” even if people are not fighting all the time." },
+        { id: 10, text: "Reason tells people that peace would be better than living in constant fear." },
+        { id: 11, text: "But I cannot safely keep peaceful agreements unless I can trust that other people will keep them too." },
+        { id: 12, text: "A powerful government solves this problem by enforcing agreements and making people confident that others will obey the rules." }
+      ];
+
+      const correctOrder = cards.map(card => card.id);
+      const cardById = new Map(cards.map(card => [card.id, card]));
+      const bankEl = document.getElementById("card-bank");
+      const sequenceEl = document.getElementById("sequence-list");
+      const feedbackEl = document.getElementById("feedback");
+      const progressTextEl = document.getElementById("progress-text");
+      const progressFillEl = document.getElementById("progress-fill");
+      const bankCountEl = document.getElementById("bank-count");
+      const sequenceCountEl = document.getElementById("sequence-count");
+      const progressBarEl = document.querySelector(".progress-track");
+      const shuffleButton = document.getElementById("shuffle-button");
+      const checkButton = document.getElementById("check-button");
+
+      const state = {
+        bank: [],
+        sequence: [],
+        evaluation: null,
+        draggedId: null,
+        draggedFrom: null
+      };
+
+      function shuffle(items) {
+        const result = [...items];
+        for (let index = result.length - 1; index > 0; index -= 1) {
+          const swapIndex = Math.floor(Math.random() * (index + 1));
+          [result[index], result[swapIndex]] = [result[swapIndex], result[index]];
+        }
+        return result;
+      }
+
+      function shuffledCardIds() {
+        let result = shuffle(correctOrder);
+        while (result.join(",") === correctOrder.join(",")) {
+          result = shuffle(correctOrder);
+        }
+        return result;
+      }
+
+      function resetActivity() {
+        state.bank = shuffledCardIds();
+        state.sequence = [];
+        state.evaluation = null;
+        state.draggedId = null;
+        state.draggedFrom = null;
+        render();
+        feedbackEl.hidden = true;
+        feedbackEl.replaceChildren();
+      }
+
+      function makeButton(label, className, action, id, disabled = false) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = className;
+        button.textContent = label;
+        button.dataset.action = action;
+        button.dataset.id = String(id);
+        button.disabled = disabled;
+        return button;
+      }
+
+      function makeCard(id, inSequence, position) {
+        const card = cardById.get(id);
+        const item = document.createElement("li");
+        item.className = inSequence ? "tile sequence-card" : "tile bank-card";
+        item.draggable = true;
+        item.dataset.id = String(id);
+        item.dataset.source = inSequence ? "sequence" : "bank";
+        item.setAttribute("aria-describedby", "keyboard-help");
+
+        if (inSequence) {
+          const isCorrect = state.evaluation && state.evaluation.complete && state.evaluation.correctPositions.has(position);
+          const isIncorrect = state.evaluation && state.evaluation.complete && !state.evaluation.correctPositions.has(position);
+          if (isCorrect) item.classList.add("is-correct");
+          if (isIncorrect) item.classList.add("is-incorrect");
+          item.setAttribute("aria-label", `Position ${position + 1}: ${card.text}${isCorrect ? " Correct position." : isIncorrect ? " Needs reconsideration." : ""}`);
+        } else {
+          item.setAttribute("aria-label", `Card: ${card.text}`);
+        }
+
+        const marker = document.createElement("span");
+        marker.className = inSequence ? "position-marker" : "tile-marker";
+        marker.textContent = inSequence ? String(position + 1) : "✦";
+        marker.setAttribute("aria-hidden", "true");
+        item.appendChild(marker);
+
+        if (inSequence) {
+          const cardMarker = document.createElement("span");
+          cardMarker.className = "tile-marker";
+          cardMarker.textContent = "✦";
+          cardMarker.setAttribute("aria-hidden", "true");
+          item.appendChild(cardMarker);
+        }
+
+        const copy = document.createElement("div");
+        copy.className = "tile-copy";
+        const text = document.createElement("span");
+        text.className = "tile-text";
+        text.textContent = card.text;
+        copy.appendChild(text);
+
+        const hint = document.createElement("span");
+        hint.className = "tile-hint";
+        hint.textContent = inSequence ? "Drag to reposition · use controls below" : "Drag into your argument or use the button";
+        copy.appendChild(hint);
+
+        if (!inSequence) {
+          const placeButton = makeButton("Add →", "tile-action", "place", id);
+          placeButton.setAttribute("aria-label", `Add ${card.text} to the order`);
+          copy.appendChild(placeButton);
+        }
+
+        item.appendChild(copy);
+
+        if (inSequence) {
+          const tools = document.createElement("div");
+          tools.className = "tile-tools";
+          const upButton = makeButton("↑", "move-button", "up", id, position === 0);
+          const downButton = makeButton("↓", "move-button", "down", id, position === state.sequence.length - 1);
+          const returnButton = makeButton("Remove", "return-button", "return", id);
+          upButton.setAttribute("aria-label", `Move position ${position + 1} up`);
+          downButton.setAttribute("aria-label", `Move position ${position + 1} down`);
+          returnButton.setAttribute("aria-label", `Return ${card.text} to card bank`);
+          tools.append(upButton, downButton, returnButton);
+          item.appendChild(tools);
+        }
+
+        item.addEventListener("dragstart", handleDragStart);
+        item.addEventListener("dragend", handleDragEnd);
+        item.addEventListener("dragover", handleDragOverCard);
+        item.addEventListener("drop", handleDrop);
+        item.addEventListener("dragleave", () => item.classList.remove("is-drag-over"));
+        return item;
+      }
+
+      function renderBank() {
+        bankEl.replaceChildren();
+        if (state.bank.length === 0) {
+          const empty = document.createElement("li");
+          empty.className = "bank-empty";
+          empty.innerHTML = "<div><strong>All cards placed</strong><span>The argument is ready to check.</span></div>";
+          bankEl.appendChild(empty);
+          return;
+        }
+        state.bank.forEach(id => bankEl.appendChild(makeCard(id, false, 0)));
+      }
+
+      function renderSequence() {
+        sequenceEl.replaceChildren();
+        if (state.sequence.length === 0) {
+          const empty = document.createElement("li");
+          empty.className = "sequence-empty";
+          empty.innerHTML = "<div><strong>Start the chain here</strong><span>Drop a card into this space.</span></div>";
+          empty.addEventListener("dragover", handleDragOverZone);
+          empty.addEventListener("drop", handleDrop);
+          sequenceEl.appendChild(empty);
+          return;
+        }
+        state.sequence.forEach((id, index) => sequenceEl.appendChild(makeCard(id, true, index)));
+      }
+
+      function render() {
+        renderBank();
+        renderSequence();
+        const placed = state.sequence.length;
+        const percent = Math.round((placed / cards.length) * 100);
+        progressTextEl.textContent = `${placed} of ${cards.length} placed`;
+        progressFillEl.style.width = `${percent}%`;
+        progressBarEl.setAttribute("aria-valuenow", String(placed));
+        bankCountEl.textContent = `${state.bank.length} ${state.bank.length === 1 ? "card" : "cards"}`;
+        sequenceCountEl.textContent = `${placed} / ${cards.length}`;
+      }
+
+      function showProgressMessage() {
+        feedbackEl.hidden = false;
+        feedbackEl.className = "feedback";
+        feedbackEl.innerHTML = `<div class="feedback-title">Your workspace is ready.</div><p class="feedback-detail">Place all ${cards.length} cards to trigger an automatic check. You can also check at any time.</p>`;
+      }
+
+      function placeCard(id, targetIndex = state.sequence.length) {
+        const bankIndex = state.bank.indexOf(id);
+        if (bankIndex !== -1) state.bank.splice(bankIndex, 1);
+        const sequenceIndex = state.sequence.indexOf(id);
+        if (sequenceIndex !== -1) {
+          state.sequence.splice(sequenceIndex, 1);
+          if (sequenceIndex < targetIndex) targetIndex -= 1;
+        }
+        targetIndex = Math.max(0, Math.min(targetIndex, state.sequence.length));
+        state.sequence.splice(targetIndex, 0, id);
+        state.evaluation = null;
+        render();
+        if (state.sequence.length === cards.length) {
+          evaluate(true);
+        } else {
+          showAssemblyMessage();
+        }
+      }
+
+      function returnToBank(id) {
+        const index = state.sequence.indexOf(id);
+        if (index === -1) return;
+        state.sequence.splice(index, 1);
+        state.bank.push(id);
+        state.evaluation = null;
+        render();
+        showAssemblyMessage();
+      }
+
+      function moveCard(id, direction) {
+        const index = state.sequence.indexOf(id);
+        const nextIndex = index + direction;
+        if (index === -1 || nextIndex < 0 || nextIndex >= state.sequence.length) return;
+        [state.sequence[index], state.sequence[nextIndex]] = [state.sequence[nextIndex], state.sequence[index]];
+        state.evaluation = null;
+        render();
+        if (state.sequence.length === cards.length) evaluate(true);
+        else showAssemblyMessage();
+      }
+
+      function showAssemblyMessage() {
+        feedbackEl.hidden = true;
+        feedbackEl.className = "feedback";
+        feedbackEl.replaceChildren();
+      }
+
+      function evaluate(automatic = false) {
+        if (state.sequence.length !== cards.length) {
+          feedbackEl.hidden = false;
+          feedbackEl.className = "feedback feedback-error";
+          feedbackEl.innerHTML = `<div class="feedback-title">Almost ready to check.</div><p class="feedback-detail">Place all ${cards.length} cards first. There are ${cards.length - state.sequence.length} still in the card bank.</p>`;
+          return;
+        }
+
+        const correctPositions = new Set();
+        state.sequence.forEach((id, index) => {
+          if (id === correctOrder[index]) correctPositions.add(index);
+        });
+        state.evaluation = {
+          complete: true,
+          correctPositions,
+          allCorrect: correctPositions.size === cards.length
+        };
+        render();
+
+        if (state.evaluation.allCorrect) {
+          feedbackEl.className = "feedback feedback-success";
+          feedbackEl.hidden = false;
+          feedbackEl.innerHTML = `<div class="feedback-title">Fully correct — excellent reconstruction.</div><p class="feedback-detail">Every position is in the right place. You have traced Hobbes's movement from desire and power through insecurity, conflict, peace, and sovereign assurance.</p>`;
+          return;
+        }
+
+        const wrongPositions = state.sequence
+          .map((_, index) => index)
+          .filter(index => !correctPositions.has(index));
+        const automaticNote = automatic ? " The check ran automatically when you placed the final card." : "";
+        feedbackEl.className = "feedback feedback-error";
+        feedbackEl.hidden = false;
+        feedbackEl.innerHTML = `<div class="feedback-title">Not quite yet.${automaticNote}</div><p class="feedback-detail">${correctPositions.size} of ${cards.length} positions are correct. Reconsider the highlighted positions; the full sequence remains hidden.</p><ul class="wrong-positions" aria-label="Positions that need reconsideration">${wrongPositions.map(index => `<li>Position ${index + 1}</li>`).join("")}</ul>`;
+      }
+
+      function handleDragStart(event) {
+        const item = event.currentTarget;
+        state.draggedId = Number(item.dataset.id);
+        state.draggedFrom = item.dataset.source;
+        item.classList.add("is-dragging");
+        event.dataTransfer.effectAllowed = "move";
+        event.dataTransfer.setData("text/plain", String(state.draggedId));
+      }
+
+      function handleDragEnd(event) {
+        state.draggedId = null;
+        state.draggedFrom = null;
+        event.currentTarget.classList.remove("is-dragging");
+        sequenceEl.classList.remove("is-active-drop");
+        document.querySelectorAll(".is-drag-over").forEach(element => element.classList.remove("is-drag-over"));
+      }
+
+      function handleDragOverCard(event) {
+        event.preventDefault();
+        event.dataTransfer.dropEffect = "move";
+        const item = event.currentTarget;
+        if (item.dataset.source === "sequence" && Number(item.dataset.id) !== state.draggedId) {
+          item.classList.add("is-drag-over");
+        }
+        sequenceEl.classList.add("is-active-drop");
+      }
+
+      function handleDragOverZone(event) {
+        event.preventDefault();
+        event.dataTransfer.dropEffect = "move";
+        sequenceEl.classList.add("is-active-drop");
+      }
+
+      function handleDrop(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        const id = state.draggedId || Number(event.dataTransfer.getData("text/plain"));
+        if (!id) return;
+        const target = event.currentTarget.closest(".sequence-card");
+        const targetIndex = target ? state.sequence.indexOf(Number(target.dataset.id)) : state.sequence.length;
+        placeCard(id, targetIndex === -1 ? state.sequence.length : targetIndex);
+        document.querySelectorAll(".is-drag-over").forEach(element => element.classList.remove("is-drag-over"));
+        sequenceEl.classList.remove("is-active-drop");
+      }
+
+      bankEl.addEventListener("click", event => {
+        const button = event.target.closest("button[data-action]");
+        if (!button) return;
+        placeCard(Number(button.dataset.id));
+      });
+
+      sequenceEl.addEventListener("click", event => {
+        const button = event.target.closest("button[data-action]");
+        if (!button) return;
+        const id = Number(button.dataset.id);
+        if (button.dataset.action === "up") moveCard(id, -1);
+        if (button.dataset.action === "down") moveCard(id, 1);
+        if (button.dataset.action === "return") returnToBank(id);
+      });
+
+      sequenceEl.addEventListener("dragover", handleDragOverZone);
+      sequenceEl.addEventListener("drop", handleDrop);
+      sequenceEl.addEventListener("dragleave", event => {
+        if (event.target === sequenceEl) sequenceEl.classList.remove("is-active-drop");
+      });
+      shuffleButton.addEventListener("click", resetActivity);
+      checkButton.addEventListener("click", () => evaluate(false));
+
+      resetActivity();
+    })();
+  </script>
+</body>
+</html>
+
