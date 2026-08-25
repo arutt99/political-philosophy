@@ -232,6 +232,21 @@
       justify-content: flex-end;
     }
 
+    .check-counter {
+      display: inline-flex;
+      align-items: center;
+      min-height: 38px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 12px;
+      color: var(--muted);
+      background: rgba(255, 253, 248, .75);
+      font-size: .78rem;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
     .button {
       cursor: pointer;
       border: 1px solid transparent;
@@ -655,6 +670,7 @@
       .progress-track { width: 100%; }
       .control-group { justify-content: stretch; }
       .control-group .button { flex: 1 1 auto; }
+      .check-counter { flex: 1 1 100%; justify-content: center; }
       .panel { border-radius: 18px; }
       .panel-header { padding: 20px 17px 15px; }
       .card-bank,
@@ -825,6 +841,7 @@
       .status-bar { justify-content: stretch; }
       .control-group { width: 100%; }
       .control-group .button { flex: 1 1 0; }
+      .check-counter { flex: 1 1 100%; }
       .card-bank { grid-template-columns: 1fr; }
       .tile,
       .sequence-card { height: 132px; min-height: 132px; }
@@ -869,6 +886,7 @@
       <div class="control-group">
         <button class="button button-secondary" id="shuffle-button" type="button">Reset / Shuffle</button>
         <button class="button button-primary" id="check-button" type="button">Check Answer</button>
+        <span class="check-counter" id="check-counter" role="status" aria-live="polite">Checks used: 0 · 3 remaining</span>
       </div>
     </section>
 
@@ -937,14 +955,23 @@
       const progressBarEl = document.querySelector(".progress-track");
       const shuffleButton = document.getElementById("shuffle-button");
       const checkButton = document.getElementById("check-button");
+      const checkCounterEl = document.getElementById("check-counter");
 
       const state = {
         bank: [],
         sequence: [],
         evaluation: null,
         draggedId: null,
-        draggedFrom: null
+        draggedFrom: null,
+        checkCount: 0
       };
+
+      function updateCheckCount() {
+        const remaining = Math.max(0, 3 - state.checkCount);
+        checkCounterEl.textContent = state.checkCount < 3
+          ? `Checks used: ${state.checkCount} · ${remaining} remaining`
+          : `Checks used: ${state.checkCount} · Next check reveals the full flow`;
+      }
 
       function shuffle(items) {
         const result = [...items];
@@ -1096,6 +1123,7 @@
         progressBarEl.setAttribute("aria-valuenow", String(placed));
         bankCountEl.textContent = `${state.bank.length} ${state.bank.length === 1 ? "card" : "cards"}`;
         sequenceCountEl.textContent = `${placed} / ${cards.length}`;
+        updateCheckCount();
       }
 
       function placeCard(id, targetIndex = state.sequence.findIndex(cardId => cardId === null)) {
@@ -1145,6 +1173,19 @@
       }
 
       function evaluate() {
+        state.checkCount += 1;
+        updateCheckCount();
+
+        if (state.checkCount >= 4) {
+          try {
+            sessionStorage.setItem("hobbes-sorter-checks", String(state.checkCount));
+          } catch (error) {
+            // The visible counter is the source of truth if storage is unavailable.
+          }
+          window.location.href = "hobbes-argument-explanation.html";
+          return;
+        }
+
         const placed = state.sequence.filter(id => id !== null).length;
         if (placed !== cards.length) {
           feedbackEl.hidden = false;
