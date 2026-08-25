@@ -346,9 +346,11 @@
       border: 1px solid #dedbd1;
       border-radius: var(--radius-md);
       padding: 14px;
+      min-height: 112px;
       color: var(--ink);
       background: var(--surface);
       box-shadow: 0 3px 8px rgba(15, 38, 56, .04);
+      overflow: hidden;
       transition: border-color .15s ease, background .15s ease, box-shadow .15s ease, transform .15s ease;
     }
 
@@ -423,8 +425,53 @@
       background: rgba(224, 241, 237, .3);
     }
 
+    .sequence-slot {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 10px;
+      align-items: stretch;
+      min-height: 128px;
+      padding: 8px;
+      border: 1px dashed #c5d4d1;
+      border-radius: 12px;
+      background: rgba(255, 253, 248, .42);
+      transition: border-color .15s ease, background .15s ease, box-shadow .15s ease;
+    }
+
+    .sequence-slot.is-filled {
+      border-style: solid;
+      border-color: #d7dfdc;
+      background: rgba(255, 253, 248, .7);
+    }
+
+    .sequence-slot.is-drag-over {
+      border-color: var(--teal);
+      background: rgba(224, 241, 237, .7);
+      box-shadow: 0 0 0 3px rgba(43, 124, 120, .12);
+    }
+
+    .sequence-slot > .position-marker {
+      align-self: center;
+      width: 32px;
+      height: 32px;
+    }
+
+    .slot-placeholder {
+      display: grid;
+      place-items: center;
+      min-height: 112px;
+      border-radius: 9px;
+      color: var(--muted);
+      background: rgba(224, 241, 237, .25);
+      font-size: .86rem;
+      font-weight: 700;
+      text-align: center;
+    }
+
     .sequence-card {
-      grid-template-columns: auto auto 1fr;
+      grid-template-columns: 1fr;
+      width: 100%;
+      min-height: 112px;
       cursor: grab;
       background: #fffefb;
     }
@@ -445,7 +492,10 @@
       font-variant-numeric: tabular-nums;
     }
 
-    .sequence-card .tile-copy { padding-right: 2px; }
+    .sequence-card .tile-copy {
+      padding-right: 0;
+      padding-bottom: 25px;
+    }
 
     .tile-tools {
       display: flex;
@@ -453,8 +503,10 @@
       gap: 6px;
       align-items: center;
       justify-content: flex-end;
-      grid-column: 2 / -1;
-      margin-top: 3px;
+      position: absolute;
+      right: 10px;
+      bottom: 8px;
+      margin: 0;
     }
 
     .move-button,
@@ -682,7 +734,7 @@
     .card-bank {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-      gap: 10px;
+      gap: 28px 18px;
       max-height: none;
       overflow: visible;
     }
@@ -690,31 +742,35 @@
     .tile {
       border-color: #e0ddd4;
       border-radius: 12px;
-      padding: 12px;
+      min-height: 150px;
+      height: 150px;
+      padding: 14px;
       box-shadow: 0 4px 12px rgba(15, 38, 56, .06);
     }
 
     .tile:hover { transform: translateY(-1px); }
 
-    .tile-hint { display: none; }
-
-    .tile-marker,
-    .position-marker {
-      width: 26px;
-      height: 26px;
-      border-radius: 7px;
-      font-size: .7rem;
+    .bank-card {
+      grid-template-columns: 1fr;
+      transform: translate(var(--offset-x, 0px), var(--offset-y, 0px)) rotate(var(--rotation, 0deg));
     }
 
-    .tile-text { font-size: .96rem; }
+    .bank-card:hover {
+      transform: translate(var(--offset-x, 0px), calc(var(--offset-y, 0px) - 1px)) rotate(var(--rotation, 0deg));
+    }
 
-    .tile-action {
-      margin-top: 8px;
-      font-size: .73rem;
+    .tile-hint { display: none; }
+
+    .tile-marker { display: none; }
+
+    .tile-text {
+      font-size: 1.08rem;
+      line-height: 1.28;
     }
 
     .sequence-list {
-      min-height: 460px;
+      gap: 8px;
+      min-height: 0;
       max-height: none;
       border: 1px dashed #b9c9c6;
       border-radius: 14px;
@@ -722,11 +778,30 @@
       background: rgba(255, 253, 248, .45);
     }
 
-    .sequence-list.is-active-drop { background: rgba(224, 241, 237, .5); }
+    .sequence-slot {
+      min-height: 166px;
+      padding: 8px;
+    }
 
-    .sequence-card { grid-template-columns: auto auto 1fr; }
+    .sequence-slot > .position-marker {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-size: .76rem;
+    }
 
-    .sequence-card .tile-text { font-size: .93rem; }
+    .sequence-card {
+      grid-template-columns: 1fr;
+      height: 150px;
+      min-height: 150px;
+    }
+
+    .sequence-card .tile-text { font-size: 1.08rem; }
+
+    .slot-placeholder {
+      min-height: 150px;
+      font-size: .86rem;
+    }
 
     .sequence-footer {
       justify-content: flex-end;
@@ -751,6 +826,10 @@
       .control-group { width: 100%; }
       .control-group .button { flex: 1 1 0; }
       .card-bank { grid-template-columns: 1fr; }
+      .tile,
+      .sequence-card { height: 132px; min-height: 132px; }
+      .sequence-slot { min-height: 148px; }
+      .slot-placeholder { min-height: 132px; }
     }
   </style>
 </head>
@@ -772,7 +851,7 @@
     <section class="instructions" aria-labelledby="instructions-heading">
       <div>
         <h2 id="instructions-heading">Build the logic, one step at a time.</h2>
-        <p><strong>Drag</strong> cards into the argument, then reorder them until the sequence makes sense. On a keyboard or touch screen, use each card's <strong>Place in sequence</strong>, <strong>Move up</strong>, and <strong>Move down</strong> controls.</p>
+        <p><strong>Drag</strong> each card into the numbered position where it belongs. Cards already in the argument can also be moved with the <strong>Move up</strong> and <strong>Move down</strong> controls.</p>
       </div>
       <div class="instruction-icon" aria-hidden="true">→</div>
     </section>
@@ -824,7 +903,7 @@
 
     <section class="feedback" id="feedback" aria-live="polite" aria-atomic="true" hidden></section>
     <p class="footer-note">The full correct sequence stays hidden after an incorrect attempt so you can keep reasoning.</p>
-    <p class="sr-only" id="keyboard-help">Each card is draggable. Keyboard and touch alternatives are available on every card.</p>
+    <p class="sr-only" id="keyboard-help">Each card is draggable. Cards in the numbered argument also have move and remove controls.</p>
   </main>
 
   <script>
@@ -886,7 +965,7 @@
 
       function resetActivity() {
         state.bank = shuffledCardIds();
-        state.sequence = [];
+        state.sequence = Array(cards.length).fill(null);
         state.evaluation = null;
         state.draggedId = null;
         state.draggedFrom = null;
@@ -925,20 +1004,6 @@
           item.setAttribute("aria-label", `Card: ${card.text}`);
         }
 
-        const marker = document.createElement("span");
-        marker.className = inSequence ? "position-marker" : "tile-marker";
-        marker.textContent = inSequence ? String(position + 1) : "✦";
-        marker.setAttribute("aria-hidden", "true");
-        item.appendChild(marker);
-
-        if (inSequence) {
-          const cardMarker = document.createElement("span");
-          cardMarker.className = "tile-marker";
-          cardMarker.textContent = "✦";
-          cardMarker.setAttribute("aria-hidden", "true");
-          item.appendChild(cardMarker);
-        }
-
         const copy = document.createElement("div");
         copy.className = "tile-copy";
         const text = document.createElement("span");
@@ -946,18 +1011,13 @@
         text.textContent = card.text;
         copy.appendChild(text);
 
-        const hint = document.createElement("span");
-        hint.className = "tile-hint";
-        hint.textContent = inSequence ? "Drag to reposition · use controls below" : "Drag into your argument or use the button";
-        copy.appendChild(hint);
+        item.appendChild(copy);
 
         if (!inSequence) {
-          const placeButton = makeButton("Add →", "tile-action", "place", id);
-          placeButton.setAttribute("aria-label", `Add ${card.text} to the order`);
-          copy.appendChild(placeButton);
+          item.style.setProperty("--offset-x", `${Math.round(Math.random() * 12 - 6)}px`);
+          item.style.setProperty("--offset-y", `${Math.round(Math.random() * 14 - 7)}px`);
+          item.style.setProperty("--rotation", `${(Math.random() * 2.8 - 1.4).toFixed(2)}deg`);
         }
-
-        item.appendChild(copy);
 
         if (inSequence) {
           const tools = document.createElement("div");
@@ -974,9 +1034,11 @@
 
         item.addEventListener("dragstart", handleDragStart);
         item.addEventListener("dragend", handleDragEnd);
-        item.addEventListener("dragover", handleDragOverCard);
-        item.addEventListener("drop", handleDrop);
-        item.addEventListener("dragleave", () => item.classList.remove("is-drag-over"));
+        if (inSequence) {
+          item.addEventListener("dragover", handleDragOverCard);
+          item.addEventListener("drop", handleDrop);
+          item.addEventListener("dragleave", () => item.classList.remove("is-drag-over"));
+        }
         return item;
       }
 
@@ -994,22 +1056,40 @@
 
       function renderSequence() {
         sequenceEl.replaceChildren();
-        if (state.sequence.length === 0) {
-          const empty = document.createElement("li");
-          empty.className = "sequence-empty";
-          empty.innerHTML = "<div><strong>Start the chain here</strong><span>Drop a card into this space.</span></div>";
-          empty.addEventListener("dragover", handleDragOverZone);
-          empty.addEventListener("drop", handleDrop);
-          sequenceEl.appendChild(empty);
-          return;
-        }
-        state.sequence.forEach((id, index) => sequenceEl.appendChild(makeCard(id, true, index)));
+        state.sequence.forEach((id, index) => {
+          const slot = document.createElement("li");
+          slot.className = `sequence-slot${id !== null ? " is-filled" : ""}`;
+          slot.dataset.index = String(index);
+          slot.setAttribute("aria-label", `Position ${index + 1}${id === null ? ": empty drop slot" : ""}`);
+
+          const marker = document.createElement("span");
+          marker.className = "position-marker";
+          marker.textContent = String(index + 1);
+          marker.setAttribute("aria-hidden", "true");
+          slot.appendChild(marker);
+
+          if (id === null) {
+            const placeholder = document.createElement("div");
+            placeholder.className = "slot-placeholder";
+            placeholder.textContent = "Drop a card here";
+            slot.appendChild(placeholder);
+          } else {
+            slot.appendChild(makeCard(id, true, index));
+          }
+
+          slot.addEventListener("dragover", handleDragOverZone);
+          slot.addEventListener("drop", handleDrop);
+          slot.addEventListener("dragleave", event => {
+            if (!slot.contains(event.relatedTarget)) slot.classList.remove("is-drag-over");
+          });
+          sequenceEl.appendChild(slot);
+        });
       }
 
       function render() {
         renderBank();
         renderSequence();
-        const placed = state.sequence.length;
+        const placed = state.sequence.filter(id => id !== null).length;
         const percent = Math.round((placed / cards.length) * 100);
         progressTextEl.textContent = `${placed} of ${cards.length} placed`;
         progressFillEl.style.width = `${percent}%`;
@@ -1018,35 +1098,30 @@
         sequenceCountEl.textContent = `${placed} / ${cards.length}`;
       }
 
-      function showProgressMessage() {
-        feedbackEl.hidden = false;
-        feedbackEl.className = "feedback";
-        feedbackEl.innerHTML = `<div class="feedback-title">Your workspace is ready.</div><p class="feedback-detail">Place all ${cards.length} cards to trigger an automatic check. You can also check at any time.</p>`;
-      }
-
-      function placeCard(id, targetIndex = state.sequence.length) {
+      function placeCard(id, targetIndex = state.sequence.findIndex(cardId => cardId === null)) {
+        if (!cardById.has(id) || targetIndex < 0 || targetIndex >= cards.length) return;
         const bankIndex = state.bank.indexOf(id);
         if (bankIndex !== -1) state.bank.splice(bankIndex, 1);
+
         const sequenceIndex = state.sequence.indexOf(id);
-        if (sequenceIndex !== -1) {
-          state.sequence.splice(sequenceIndex, 1);
-          if (sequenceIndex < targetIndex) targetIndex -= 1;
+        const displacedId = state.sequence[targetIndex];
+
+        if (sequenceIndex !== -1 && sequenceIndex !== targetIndex) {
+          state.sequence[sequenceIndex] = displacedId;
+        } else if (sequenceIndex === -1 && displacedId !== null) {
+          state.bank.push(displacedId);
         }
-        targetIndex = Math.max(0, Math.min(targetIndex, state.sequence.length));
-        state.sequence.splice(targetIndex, 0, id);
+
+        state.sequence[targetIndex] = id;
         state.evaluation = null;
         render();
-        if (state.sequence.length === cards.length) {
-          evaluate(true);
-        } else {
-          showAssemblyMessage();
-        }
+        showAssemblyMessage();
       }
 
       function returnToBank(id) {
         const index = state.sequence.indexOf(id);
         if (index === -1) return;
-        state.sequence.splice(index, 1);
+        state.sequence[index] = null;
         state.bank.push(id);
         state.evaluation = null;
         render();
@@ -1056,12 +1131,11 @@
       function moveCard(id, direction) {
         const index = state.sequence.indexOf(id);
         const nextIndex = index + direction;
-        if (index === -1 || nextIndex < 0 || nextIndex >= state.sequence.length) return;
+        if (index === -1 || nextIndex < 0 || nextIndex >= cards.length) return;
         [state.sequence[index], state.sequence[nextIndex]] = [state.sequence[nextIndex], state.sequence[index]];
         state.evaluation = null;
         render();
-        if (state.sequence.length === cards.length) evaluate(true);
-        else showAssemblyMessage();
+        showAssemblyMessage();
       }
 
       function showAssemblyMessage() {
@@ -1070,11 +1144,12 @@
         feedbackEl.replaceChildren();
       }
 
-      function evaluate(automatic = false) {
-        if (state.sequence.length !== cards.length) {
+      function evaluate() {
+        const placed = state.sequence.filter(id => id !== null).length;
+        if (placed !== cards.length) {
           feedbackEl.hidden = false;
           feedbackEl.className = "feedback feedback-error";
-          feedbackEl.innerHTML = `<div class="feedback-title">Almost ready to check.</div><p class="feedback-detail">Place all ${cards.length} cards first. There are ${cards.length - state.sequence.length} still in the card bank.</p>`;
+          feedbackEl.innerHTML = `<div class="feedback-title">Almost ready to check.</div><p class="feedback-detail">Place all ${cards.length} cards first. There are ${cards.length - placed} still in the card bank.</p>`;
           return;
         }
 
@@ -1099,10 +1174,9 @@
         const wrongPositions = state.sequence
           .map((_, index) => index)
           .filter(index => !correctPositions.has(index));
-        const automaticNote = automatic ? " The check ran automatically when you placed the final card." : "";
         feedbackEl.className = "feedback feedback-error";
         feedbackEl.hidden = false;
-        feedbackEl.innerHTML = `<div class="feedback-title">Not quite yet.${automaticNote}</div><p class="feedback-detail">${correctPositions.size} of ${cards.length} positions are correct. Reconsider the highlighted positions; the full sequence remains hidden.</p><ul class="wrong-positions" aria-label="Positions that need reconsideration">${wrongPositions.map(index => `<li>Position ${index + 1}</li>`).join("")}</ul>`;
+        feedbackEl.innerHTML = `<div class="feedback-title">Not quite yet.</div><p class="feedback-detail">${correctPositions.size} of ${cards.length} positions are correct. Reconsider the highlighted positions; the full sequence remains hidden.</p><ul class="wrong-positions" aria-label="Positions that need reconsideration">${wrongPositions.map(index => `<li>Position ${index + 1}</li>`).join("")}</ul>`;
       }
 
       function handleDragStart(event) {
@@ -1126,15 +1200,19 @@
         event.preventDefault();
         event.dataTransfer.dropEffect = "move";
         const item = event.currentTarget;
-        if (item.dataset.source === "sequence" && Number(item.dataset.id) !== state.draggedId) {
+        const slot = item.closest(".sequence-slot");
+        if (Number(item.dataset.id) !== state.draggedId) {
           item.classList.add("is-drag-over");
         }
+        if (slot) slot.classList.add("is-drag-over");
         sequenceEl.classList.add("is-active-drop");
       }
 
       function handleDragOverZone(event) {
         event.preventDefault();
         event.dataTransfer.dropEffect = "move";
+        const slot = event.currentTarget.closest(".sequence-slot");
+        if (slot) slot.classList.add("is-drag-over");
         sequenceEl.classList.add("is-active-drop");
       }
 
@@ -1143,18 +1221,12 @@
         event.stopPropagation();
         const id = state.draggedId || Number(event.dataTransfer.getData("text/plain"));
         if (!id) return;
-        const target = event.currentTarget.closest(".sequence-card");
-        const targetIndex = target ? state.sequence.indexOf(Number(target.dataset.id)) : state.sequence.length;
-        placeCard(id, targetIndex === -1 ? state.sequence.length : targetIndex);
+        const slot = event.currentTarget.closest(".sequence-slot");
+        const targetIndex = slot ? Number(slot.dataset.index) : state.sequence.findIndex(cardId => cardId === null);
+        placeCard(id, targetIndex);
         document.querySelectorAll(".is-drag-over").forEach(element => element.classList.remove("is-drag-over"));
         sequenceEl.classList.remove("is-active-drop");
       }
-
-      bankEl.addEventListener("click", event => {
-        const button = event.target.closest("button[data-action]");
-        if (!button) return;
-        placeCard(Number(button.dataset.id));
-      });
 
       sequenceEl.addEventListener("click", event => {
         const button = event.target.closest("button[data-action]");
@@ -1171,11 +1243,10 @@
         if (event.target === sequenceEl) sequenceEl.classList.remove("is-active-drop");
       });
       shuffleButton.addEventListener("click", resetActivity);
-      checkButton.addEventListener("click", () => evaluate(false));
+      checkButton.addEventListener("click", evaluate);
 
       resetActivity();
     })();
   </script>
 </body>
 </html>
-
