@@ -172,6 +172,12 @@
       gap: .85rem;
     }
 
+    .card-wrap {
+      display: flex;
+      min-width: 0;
+      flex-direction: column;
+    }
+
     .card {
       display: flex;
       min-height: 142px;
@@ -217,6 +223,30 @@
 
     .card:hover .card-arrow, .card:focus-visible .card-arrow { transform: translateX(4px); }
 
+    .card-download {
+      margin-top: .45rem;
+      padding: .65rem .8rem;
+      border: 1px solid var(--line);
+      border-radius: 2px;
+      color: var(--muted);
+      background: rgba(26, 29, 38, .72);
+      cursor: pointer;
+      font: 500 .68rem/1.2 "IBM Plex Mono", monospace;
+      letter-spacing: .08em;
+      text-align: left;
+      text-transform: uppercase;
+      transition: border-color .18s ease, color .18s ease, background .18s ease;
+    }
+
+    .card-download:hover:not(:disabled), .card-download:focus-visible {
+      border-color: rgba(226, 191, 112, .7);
+      color: var(--gold-bright);
+      background: var(--panel-hover);
+      outline: none;
+    }
+
+    .card-download:disabled { cursor: wait; opacity: .7; }
+
     .empty {
       display: none;
       margin: 2rem 0;
@@ -244,7 +274,7 @@
   <main class="shell">
     <p class="eyebrow">Political Philosophy · Interactive Course Library</p>
     <h1>Think through the arguments.</h1>
-    <p class="intro">Choose a presentation or activity below. Each deck opens in its own full-screen, interactive page with keyboard, touch, overview, notes, and fullscreen controls.</p>
+    <p class="intro">Choose a presentation or activity below. Each deck opens in its own full-screen, interactive page with keyboard, touch, overview, notes, and fullscreen controls. Use the Download HTML button under any card to save a shareable copy.</p>
 
     <div class="rule"></div>
 
@@ -335,6 +365,95 @@
     const sections = [...document.querySelectorAll('.library-section')];
     const cards = [...document.querySelectorAll('.card')];
 
+    function safeFilename(title) {
+      const cleaned = String(title || 'presentation')
+        .replace(/\s*[·|].*$/, '')
+        .replace(/[^a-z0-9]+/gi, '-')
+        .replace(/^-+|-+$/g, '')
+        .toLowerCase();
+      return `${cleaned || 'presentation'}.html`;
+    }
+
+    async function fetchText(url) {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`Could not fetch ${url}`);
+      return response.text();
+    }
+
+    async function buildStandaloneHtml(card) {
+      const pageUrl = new URL(card.getAttribute('href'), document.baseURI);
+      const source = await fetchText(pageUrl.href);
+      const parsed = new DOMParser().parseFromString(source, 'text/html');
+
+      if (!parsed.documentElement) throw new Error('The presentation could not be parsed.');
+
+      const assets = [...parsed.querySelectorAll('link[rel="stylesheet"], script[src]')];
+      for (const asset of assets) {
+        const href = asset.getAttribute('href');
+        const src = asset.getAttribute('src');
+        const assetUrl = href || src;
+        if (!assetUrl || !/presentation-polish\.(css|js)(?:$|[?#])/i.test(assetUrl)) continue;
+
+        const content = await fetchText(new URL(assetUrl, pageUrl).href);
+        if (asset.tagName === 'LINK') {
+          const style = parsed.createElement('style');
+          style.setAttribute('data-standalone-source', assetUrl);
+          style.textContent = content;
+          asset.replaceWith(style);
+        } else {
+          const script = parsed.createElement('script');
+          script.setAttribute('data-standalone-source', assetUrl);
+          script.textContent = content;
+          asset.replaceWith(script);
+        }
+      }
+
+      return `<!doctype html>\n${parsed.documentElement.outerHTML}`;
+    }
+
+    function addDownloadButtons() {
+      cards.forEach(card => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'card-wrap';
+        card.parentNode.insertBefore(wrapper, card);
+        wrapper.appendChild(card);
+
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'card-download';
+        button.textContent = 'Download HTML';
+        button.setAttribute('aria-label', `Download ${card.querySelector('h3')?.textContent || 'presentation'} as HTML`);
+        button.addEventListener('click', async () => {
+          button.disabled = true;
+          button.textContent = 'Preparing…';
+          try {
+            const markup = await buildStandaloneHtml(card);
+            const blob = new Blob([markup], { type: 'text/html;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = safeFilename(card.querySelector('h3')?.textContent);
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+            button.textContent = 'Downloaded';
+          } catch (error) {
+            button.textContent = 'Download failed';
+            console.error('Could not create a standalone presentation file.', error);
+          } finally {
+            setTimeout(() => {
+              button.disabled = false;
+              button.textContent = 'Download HTML';
+            }, 1800);
+          }
+        });
+        wrapper.appendChild(button);
+      });
+    }
+
+    addDownloadButtons();
+
     function updateLibrary() {
       const query = search.value.trim().toLowerCase();
       const selected = filter.value;
@@ -346,6 +465,8 @@
         section.querySelectorAll('.card').forEach(card => {
           const matches = sectionVisible && (!query || `${card.textContent} ${card.dataset.search}`.toLowerCase().includes(query));
           card.hidden = !matches;
+          const wrapper = card.closest('.card-wrap');
+          if (wrapper) wrapper.hidden = !matches;
           if (matches) { visible += 1; sectionCards += 1; }
         });
         section.hidden = sectionCards === 0;
