@@ -963,7 +963,9 @@
         evaluation: null,
         draggedId: null,
         draggedFrom: null,
-        checkCount: 0
+        checkCount: 0,
+        autoScrollDirection: 0,
+        autoScrollFrame: null
       };
 
       function updateCheckCount() {
@@ -991,6 +993,7 @@
       }
 
       function resetActivity() {
+        stopAutoScroll();
         state.bank = shuffledCardIds();
         state.sequence = Array(cards.length).fill(null);
         state.evaluation = null;
@@ -1172,6 +1175,48 @@
         feedbackEl.replaceChildren();
       }
 
+      function stopAutoScroll() {
+        state.autoScrollDirection = 0;
+        if (state.autoScrollFrame !== null) {
+          cancelAnimationFrame(state.autoScrollFrame);
+          state.autoScrollFrame = null;
+        }
+      }
+
+      function runAutoScroll() {
+        if (state.draggedId === null || state.autoScrollDirection === 0) {
+          state.autoScrollFrame = null;
+          return;
+        }
+        window.scrollBy(0, state.autoScrollDirection);
+        state.autoScrollFrame = requestAnimationFrame(runAutoScroll);
+      }
+
+      function updateAutoScroll(event) {
+        if (state.draggedId === null) return;
+
+        const edgeSize = Math.min(120, Math.max(72, Math.round(window.innerHeight * .16)));
+        const distanceFromTop = event.clientY;
+        const distanceFromBottom = window.innerHeight - event.clientY;
+        let direction = 0;
+
+        if (distanceFromTop < edgeSize) {
+          direction = -Math.max(2, Math.ceil((edgeSize - distanceFromTop) / edgeSize * 12));
+        } else if (distanceFromBottom < edgeSize) {
+          direction = Math.max(2, Math.ceil((edgeSize - distanceFromBottom) / edgeSize * 12));
+        }
+
+        if (direction === 0) {
+          stopAutoScroll();
+          return;
+        }
+
+        state.autoScrollDirection = direction;
+        if (state.autoScrollFrame === null) {
+          state.autoScrollFrame = requestAnimationFrame(runAutoScroll);
+        }
+      }
+
       function evaluate() {
         state.checkCount += 1;
         updateCheckCount();
@@ -1230,6 +1275,7 @@
       }
 
       function handleDragEnd(event) {
+        stopAutoScroll();
         state.draggedId = null;
         state.draggedFrom = null;
         event.currentTarget.classList.remove("is-dragging");
@@ -1260,6 +1306,7 @@
       function handleDrop(event) {
         event.preventDefault();
         event.stopPropagation();
+        stopAutoScroll();
         const id = state.draggedId || Number(event.dataTransfer.getData("text/plain"));
         if (!id) return;
         const slot = event.currentTarget.closest(".sequence-slot");
@@ -1279,6 +1326,7 @@
       });
 
       sequenceEl.addEventListener("dragover", handleDragOverZone);
+      document.addEventListener("dragover", updateAutoScroll);
       sequenceEl.addEventListener("drop", handleDrop);
       sequenceEl.addEventListener("dragleave", event => {
         if (event.target === sequenceEl) sequenceEl.classList.remove("is-active-drop");
