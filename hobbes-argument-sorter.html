@@ -1161,14 +1161,7 @@
     <div id="sorter-view">
       <header class="hero">
       <div class="hero-content">
-        <p class="eyebrow">Political philosophy · State of nature</p>
-        <h1>Reconstruct Hobbes's Argument</h1>
-        <p>Can you rebuild the chain of reasoning that moves from human desire to the need for a sovereign?</p>
-        <div class="activity-meta" aria-label="Activity details">
-          <span class="meta-chip"><span class="meta-dot" aria-hidden="true"></span>12 argument cards</span>
-          <span class="meta-chip"><span class="meta-dot" aria-hidden="true"></span>Drag or use keyboard controls</span>
-          <span class="meta-chip"><span class="meta-dot" aria-hidden="true"></span>Independent practice</span>
-        </div>
+        <h1>Hobbes' State of Nature Argument</h1>
       </div>
       </header>
 
@@ -1615,6 +1608,7 @@
         progressBarEl.setAttribute("aria-valuenow", String(placed));
         bankCountEl.textContent = `${state.bank.length} ${state.bank.length === 1 ? "card" : "cards"}`;
         sequenceCountEl.textContent = `${placed} / ${cards.length}`;
+        checkButton.disabled = placed !== cards.length;
         updateCheckCount();
       }
 
@@ -1707,19 +1701,14 @@
       }
 
       function evaluate() {
+        const placed = state.sequence.filter(id => id !== null).length;
+        if (placed !== cards.length) return;
+
         state.checkCount += 1;
         updateCheckCount();
 
         if (state.checkCount >= 4) {
           showExplanation();
-          return;
-        }
-
-        const placed = state.sequence.filter(id => id !== null).length;
-        if (placed !== cards.length) {
-          feedbackEl.hidden = false;
-          feedbackEl.className = "feedback feedback-error";
-          feedbackEl.innerHTML = `<div class="feedback-title">Almost ready to check.</div><p class="feedback-detail">Place all ${cards.length} cards first. There are ${cards.length - placed} still in the card bank.</p>`;
           return;
         }
 
