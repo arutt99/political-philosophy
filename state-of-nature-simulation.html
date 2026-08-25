@@ -218,6 +218,80 @@
     padding-top:12px;
   }
 
+  /* ---------- Challenge slides ---------- */
+  .challenge-slide .event-body{
+    align-items:start;
+  }
+  .challenge-slide .scenario{
+    font-size:22px;
+    line-height:1.32;
+    margin-bottom:12px;
+  }
+  .challenge-slide blockquote{
+    margin-bottom:12px;
+    padding:8px 0 8px 20px;
+    font-size:21px;
+    line-height:1.32;
+  }
+  .challenge-slide blockquote .who{
+    font-size:15px;
+    margin-top:5px;
+  }
+  .challenge-copy{
+    font-size:23px;
+    line-height:1.35;
+    color:var(--text);
+    margin:0 0 16px 0;
+  }
+  .challenge-copy strong{
+    color:var(--accent);
+    font-family:Georgia,serif;
+  }
+  .challenge-slide ul.decide li{
+    font-size:23px;
+    line-height:1.35;
+    padding:10px 0 10px 30px;
+  }
+  .challenge-slide ul.decide li::before{
+    left:2px;
+    top:16px;
+    width:8px;
+    height:8px;
+  }
+  .challenge-slide .record-note{
+    font-size:18px;
+    margin-top:12px;
+    padding-top:10px;
+  }
+  #slide-e5 .event-body,
+  #slide-e6 .event-body{
+    margin-top:14px;
+  }
+  #slide-e5 .scenario,
+  #slide-e6 .scenario{
+    font-size:20px;
+    line-height:1.22;
+    margin-bottom:8px;
+  }
+  #slide-e5 blockquote,
+  #slide-e6 blockquote{
+    margin-bottom:8px;
+    padding:5px 0 5px 18px;
+    font-size:19px;
+    line-height:1.22;
+  }
+  #slide-e5 blockquote .who,
+  #slide-e6 blockquote .who{
+    font-size:13px;
+    margin-top:4px;
+  }
+  #slide-e5 .event-head h2{
+    font-size:44px;
+  }
+  #slide-e5 blockquote .who{
+    display:none;
+  }
+
   /* ---------- Final plan slides ---------- */
   .final-grid{
     display:grid;
@@ -344,10 +418,7 @@
 
   <!-- 1: TITLE -->
   <section class="slide active" id="slide-title">
-    <div class="lantern">◆</div>
-    <h1 class="title serif">Building a Society</h1>
-    <p class="subtitle">A state-of-nature simulation on property, authority, and the origins of the state</p>
-    <div class="meta">Six events. Your community must decide, each time, whether to create a new rule, a new office, or a new institution — and whether any of that adds up to a <em>state</em>.</div>
+    <h1 class="title serif">State of Nature Activity</h1>
   </section>
 
   <!-- 2: HOW TO RUN IT -->
@@ -374,132 +445,145 @@
     </div>
   </section>
 
-  <!-- EVENT 1 -->
-  <section class="slide" id="slide-e1">
+  <!-- CHALLENGE 1 -->
+  <section class="slide challenge-slide" id="slide-e1">
     <div class="event-head">
       <div class="event-num serif">1</div>
-      <h2>The private supply</h2>
+      <h2>The Unpopular Work</h2>
     </div>
     <div class="event-body">
       <div class="event-col">
-        <p class="scenario">The community discovers that one person secretly removed enough food for five people for one day.</p>
-        <blockquote>"No one owned the food. I found it and moved it. I am keeping it in case the rest of you make bad decisions."<span class="who">The person who took it</span></blockquote>
-        <div class="record-note">Record your decision before continuing.</div>
+        <p class="scenario">After several days, most people are doing the jobs your settlement needs. But one person repeatedly refuses the hardest and least pleasant work.</p>
+        <blockquote>“I never agreed that everyone has to work. If other people want to do those jobs, that’s their choice.”<span class="who">The person who refuses</span></blockquote>
+        <p class="scenario">They still eat the community’s food, use the tools, and sleep in the shared shelter. They are not violent and have not stolen anything.</p>
       </div>
       <div class="event-col">
-        <div class="decide-label">Decide</div>
-        <ul class="decide">
-          <li>Who owns a resource no one has claimed?</li>
-          <li>Who has the authority to judge and punish this person?</li>
-        </ul>
+        <div class="decide-label">Your challenge</div>
+        <p class="challenge-copy">Decide how your community will respond.</p>
+        <p class="challenge-copy">Can the group require this person to work? Can they lose access to shared resources? Or must everyone be allowed to decide for themselves?</p>
+        <div class="record-note">Record your decision in the Challenge Log.</div>
       </div>
     </div>
   </section>
 
-  <!-- EVENT 2 -->
-  <section class="slide" id="slide-e2">
+  <!-- CHALLENGE 2 -->
+  <section class="slide challenge-slide" id="slide-e2">
     <div class="event-head">
       <div class="event-num serif">2</div>
-      <h2>Competing land claims</h2>
+      <h2>Food Is Running Low</h2>
     </div>
     <div class="event-body">
       <div class="event-col">
-        <p class="scenario">Two members claim the same fertile plot beside the stream. Others worry that private ownership will restrict everyone's access to water.</p>
-        <blockquote>"I marked the land first, so it is mine."<span class="who">First claimant</span></blockquote>
-        <blockquote>"I cleared the land and began cultivating it, so it is mine."<span class="who">Second claimant</span></blockquote>
+        <p class="scenario">The settlement’s first attempt at gathering and hunting has gone badly. You now have much less food than expected.</p>
+        <p class="scenario">There is enough for everyone to survive <strong>if people accept smaller portions.</strong></p>
+        <p class="scenario">Late one evening, however, someone notices that several people have begun quietly hiding extra food for themselves. When confronted, they explain:</p>
+        <blockquote>“I don’t know whether everyone else will follow the rationing plan. I’m not risking my life by trusting them.”<span class="who">One of the people hiding food</span></blockquote>
+        <p class="scenario">Nobody knows how many other people may be doing the same thing.</p>
       </div>
       <div class="event-col">
-        <div class="decide-label">Decide</div>
-        <ul class="decide">
-          <li>What creates ownership of land — first possession, or labor?</li>
-          <li>Who has the authority to settle competing claims?</li>
-        </ul>
+        <div class="decide-label">Your challenge</div>
+        <p class="challenge-copy">Decide what your community will do.</p>
+        <p class="challenge-copy"><strong>Think carefully about whether the main problem is selfishness, fear, distrust, scarcity, or something else.</strong></p>
+        <div class="record-note">Record your decision in the Challenge Log.</div>
       </div>
     </div>
   </section>
 
-  <!-- EVENT 3 -->
-  <section class="slide" id="slide-e3">
+  <!-- CHALLENGE 3 -->
+  <section class="slide challenge-slide" id="slide-e3">
     <div class="event-head">
       <div class="event-num serif">3</div>
-      <h2>The expert who refuses</h2>
+      <h2>“This Land Is Mine”</h2>
     </div>
     <div class="event-body">
       <div class="event-col">
-        <p class="scenario">A member with deep agricultural knowledge believes the community's farming plan will fail. The majority votes for it anyway.</p>
-        <blockquote>"You may outvote me, but that does not make you correct. I will not help carry out a plan that I believe is dangerous."<span class="who">The expert</span></blockquote>
+        <p class="scenario">One member of the settlement has spent weeks clearing an unused piece of land, improving the soil, and planting crops.</p>
+        <p class="scenario">The crops are now beginning to grow.</p>
+        <blockquote>“I did the work. This land and everything it produces belong to me.”<span class="who">The farmer</span></blockquote>
+        <p class="scenario">Another group member objects:</p>
+        <blockquote>“The land was here before any of us arrived. You can’t just take part of it and make it yours.”<span class="who">Another group member</span></blockquote>
+        <p class="scenario">The farmer says that if they cannot keep a significant share of what they produce, they may stop doing the work.</p>
       </div>
       <div class="event-col">
-        <div class="decide-label">Decide</div>
-        <ul class="decide">
-          <li>Does expertise outweigh the majority's vote?</li>
-          <li>May the community compel the expert to cooperate?</li>
-        </ul>
+        <div class="decide-label">Your challenge</div>
+        <p class="challenge-copy">Decide whether this person has gained a special claim to the land or its crops.</p>
+        <p class="challenge-copy">If so, what makes the claim legitimate? If not, why should the person continue doing the extra work?</p>
+        <div class="record-note">Record your decision in the Challenge Log.</div>
       </div>
     </div>
   </section>
 
-  <!-- EVENT 4 -->
-  <section class="slide" id="slide-e4">
+  <!-- CHALLENGE 4 -->
+  <section class="slide challenge-slide" id="slide-e4">
     <div class="event-head">
       <div class="event-num serif">4</div>
-      <h2>The disputed theft</h2>
+      <h2>Everyone Thinks They Are Right</h2>
     </div>
     <div class="event-body">
       <div class="event-col">
-        <p class="scenario">A valuable knife disappears, then turns up among another person's belongings. Friends and relatives begin taking sides.</p>
-        <blockquote>"I did not steal it. Someone placed it there because they want me punished."<span class="who">The accused</span></blockquote>
-        <p class="scenario" style="font-size:26px;color:var(--text-dim);">The owner insists the knife's location proves guilt.</p>
+        <p class="scenario">Two people get into a serious dispute over a missing tool.</p>
+        <p class="scenario">One claims the other took it without permission. The accused person says the tool had been abandoned and that anyone was free to use it.</p>
+        <p class="scenario">Both are completely convinced that they are right.</p>
+        <p class="scenario">Their friends begin taking sides. Each side insists that the other side is lying or twisting the facts. The disagreement is becoming angry, but nobody has become violent.</p>
       </div>
       <div class="event-col">
-        <div class="decide-label">Decide</div>
-        <ul class="decide">
-          <li>Has guilt been established, and by what standard of evidence?</li>
-          <li>Who has the authority to investigate and judge — and must they be neutral?</li>
-        </ul>
+        <div class="decide-label">Your challenge</div>
+        <p class="challenge-copy">Decide who should judge the dispute and whether that decision must be accepted.</p>
+        <p class="challenge-copy">Can the people involved judge their own case? Should the whole community vote? Should a neutral person decide? What gives anyone the authority to make the final judgment?</p>
+        <div class="record-note">Record your decision in the Challenge Log.</div>
       </div>
     </div>
   </section>
 
-  <!-- EVENT 5 -->
-  <section class="slide" id="slide-e5">
+  <!-- CHALLENGE 5 -->
+  <section class="slide challenge-slide" id="slide-e5">
     <div class="event-head">
       <div class="event-num serif">5</div>
-      <h2>The neighboring settlement</h2>
+      <h2>The Settlement Begins to Divide</h2>
     </div>
     <div class="event-body">
       <div class="event-col">
-        <p class="scenario">Scouts find another settlement about ten kilometers away — more people, better tools. It has not attacked or threatened anyone.</p>
-        <blockquote>"If we wait until they attack, it will be too late. We need defenses, guards, and a leader who can act quickly."<span class="who">Pro-defense members</span></blockquote>
-        <blockquote>"Preparing for war may convince them we're hostile. Our fear could create the conflict we're trying to prevent."<span class="who">Skeptics</span></blockquote>
+        <p class="scenario">Several months have passed. Some people have become especially successful.</p>
+        <p class="scenario">A few are better hunters. Others control highly valued skills or productive land. Some people have accumulated more useful goods than others.</p>
+        <p class="scenario">People also begin caring more about <strong>who is respected, who is influential, and who has more than everyone else.</strong></p>
+        <p class="scenario">Arguments that once concerned survival now include comments such as:</p>
+        <blockquote>“Why should they have more than us?”<span class="who">One member</span></blockquote>
+        <blockquote>“I earned what I have.”<span class="who">Another member</span></blockquote>
+        <blockquote>“People listen to her because she thinks she’s better than everyone.”<span class="who">Another member</span></blockquote>
+        <blockquote>“Why should I keep helping people who contribute less?”<span class="who">Another member</span></blockquote>
+        <p class="scenario">Two loose factions are beginning to form.</p>
       </div>
       <div class="event-col">
-        <div class="decide-label">Decide</div>
-        <ul class="decide">
-          <li>Does the neighboring settlement pose a real threat?</li>
-          <li>How much individual freedom should be traded for collective security?</li>
-        </ul>
+        <div class="decide-label">Your challenge</div>
+        <p class="challenge-copy">Decide whether your community should change its rules because inequality, comparison, and status are beginning to affect how people treat one another.</p>
+        <p class="challenge-copy">Or are jealousy and resentment simply problems individuals need to control themselves?</p>
+        <div class="record-note">Record your decision in the Challenge Log.</div>
       </div>
     </div>
   </section>
 
-  <!-- EVENT 6 -->
-  <section class="slide" id="slide-e6">
+  <!-- CHALLENGE 6 -->
+  <section class="slide challenge-slide" id="slide-e6">
     <div class="event-head">
       <div class="event-num serif">6</div>
-      <h2>The group that wants to leave</h2>
+      <h2>The Group Refuses the Group</h2>
     </div>
     <div class="event-body">
       <div class="event-col">
-        <p class="scenario">Five members reject the community's rules and want to found a separate settlement. They intend to take a quarter of the food, several tools, seeds they helped collect, personal possessions, and access to part of the stream.</p>
-        <blockquote>"Losing these resources will endanger everyone who remains."<span class="who">The majority</span></blockquote>
+        <p class="scenario">A serious emergency develops. A dangerous storm is expected within two days, and the settlement needs everyone to help reinforce the shelter and move supplies.</p>
+        <p class="scenario">After debate, your community makes a decision about what everyone must do.</p>
+        <p class="scenario">Five people refuse.</p>
+        <blockquote>“You can make whatever rules you want. We never gave you the right to control us.”<span class="who">The five people who refuse</span></blockquote>
+        <p class="scenario">They intend to keep their share of the food and tools but will not follow the group’s emergency plan.</p>
+        <p class="scenario">Some members of the settlement now argue that rules are meaningless unless the community has the power to <strong>force people to obey them.</strong></p>
+        <p class="scenario">Others respond that the moment the group can force peaceful people to obey, the settlement has created exactly the kind of political power it originally did not have.</p>
       </div>
       <div class="event-col">
-        <div class="decide-label">Decide</div>
-        <ul class="decide">
-          <li>May members leave, and what may they take with them?</li>
-          <li>Can the majority stop them — and does that make the system truly voluntary?</li>
-        </ul>
+        <div class="decide-label">Your challenge</div>
+        <p class="challenge-copy">Decide what happens next.</p>
+        <p class="challenge-copy">May the community compel the five people to cooperate? If they continue to refuse, how far may the group go?</p>
+        <p class="challenge-copy"><strong>Then ask yourselves:</strong><br>Have you now created a government? If so, what made it necessary?</p>
+        <div class="record-note">Record your final decision in the Challenge Log.</div>
       </div>
     </div>
   </section>
