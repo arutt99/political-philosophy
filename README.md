@@ -16,7 +16,7 @@ The live address will be:
 https://YOUR-USERNAME.github.io/political-philosophy/
 ```
 
-The root `index.html` is the course library. Presentation files remain in `Presentations/`, and the shared `presentation-polish.css` and `presentation-polish.js` files must stay beside those presentation HTML files.
+The root `index.html` is the subject landing page. Choose **Political Philosophy** to open the existing course library; the library's presentation files remain in `Presentations/`, and the shared `presentation-polish.css` and `presentation-polish.js` files must stay beside those presentation HTML files. The Ethics page is ready for additional presentations.
 
 ## Editing
 

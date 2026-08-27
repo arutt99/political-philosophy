@@ -3,8 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Interactive political philosophy presentations and activities.">
-  <title>Political Philosophy — Course Library</title>
+  <meta name="description" content="Lecture presentations and interactive activities in political philosophy and ethics.">
+  <title>Lectures &amp; Presentations</title>
+  <script>
+    const requestedView = new URLSearchParams(window.location.search).get('view');
+    const view = ['political-philosophy', 'ethics'].includes(requestedView) ? requestedView : 'landing';
+    document.documentElement.dataset.view = view;
+    document.title = view === 'political-philosophy'
+      ? 'Political Philosophy — Course Library'
+      : view === 'ethics' ? 'Ethics — Coming Soon' : 'Lectures & Presentations';
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -268,10 +276,148 @@
       .toolbar { margin-bottom: 2.3rem; }
       select { flex: 1 1 100%; }
     }
+
+    .landing-view {
+      display: none;
+      min-height: 100vh;
+      width: min(1180px, calc(100% - 2.5rem));
+      margin: 0 auto;
+      padding: 3.25rem 0 5rem;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .landing-view h1 {
+      max-width: 850px;
+      font-size: clamp(3.8rem, 9vw, 8rem);
+    }
+
+    .landing-intro {
+      max-width: 610px;
+      margin: 1.6rem 0 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+
+    .subject-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+      margin-top: 3rem;
+    }
+
+    .subject-card {
+      display: flex;
+      min-height: 210px;
+      padding: 1.5rem;
+      border: 1px solid var(--line);
+      border-radius: 2px;
+      color: var(--text);
+      text-decoration: none;
+      background: linear-gradient(145deg, rgba(34, 38, 49, .9), rgba(26, 29, 38, .9));
+      box-shadow: 0 1px 0 rgba(255, 255, 255, .02) inset;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: border-color .18s ease, background .18s ease, transform .18s ease, box-shadow .18s ease;
+    }
+
+    .subject-card:hover, .subject-card:focus-visible {
+      border-color: rgba(226, 191, 112, .7);
+      outline: none;
+      background: var(--panel-hover);
+      box-shadow: var(--shadow);
+      transform: translateY(-4px);
+    }
+
+    .subject-card small {
+      color: var(--gold-bright);
+      font: 500 .7rem/1.2 "IBM Plex Mono", monospace;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .subject-card h2 {
+      margin: 1rem 0 0;
+      font-size: clamp(2.3rem, 5vw, 4.1rem);
+      font-weight: 600;
+      letter-spacing: -.035em;
+      line-height: .92;
+    }
+
+    .subject-card span {
+      align-self: flex-end;
+      color: var(--gold);
+      font: 1.35rem/1 "IBM Plex Mono", monospace;
+    }
+
+    .ethics-view {
+      display: none;
+      min-height: 100vh;
+    }
+
+    .ethics-view .empty-state {
+      max-width: 700px;
+      margin: 10vh 0 0;
+    }
+
+    .ethics-view h1 { margin: 0; }
+
+    .ethics-view p:not(.eyebrow) {
+      max-width: 560px;
+      margin: 1.5rem 0 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+
+    .home-link {
+      display: inline-block;
+      margin-bottom: 2.2rem;
+      color: var(--gold-bright);
+      font: 500 .72rem/1.2 "IBM Plex Mono", monospace;
+      letter-spacing: .08em;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .home-link:hover, .home-link:focus-visible { color: var(--text); }
+
+    html[data-view="landing"] #landing-view,
+    html[data-view="political-philosophy"] #library-view,
+    html[data-view="ethics"] #ethics-view {
+      display: flex;
+    }
+
+    @media (max-width: 620px) {
+      .landing-view { width: min(100% - 1.25rem, 1180px); padding-top: 2rem; }
+      .subject-grid { grid-template-columns: 1fr; margin-top: 2.3rem; }
+      .subject-card { min-height: 165px; }
+    }
   </style>
 </head>
 <body>
-  <main class="shell">
+  <main class="landing-view" id="landing-view">
+    <p class="eyebrow">Lectures · Presentations · Activities</p>
+    <h1>Choose a field of study.</h1>
+    <p class="landing-intro">Explore interactive lectures, presentations, and activities by subject.</p>
+    <div class="rule"></div>
+    <nav class="subject-grid" aria-label="Subjects">
+      <a class="subject-card" href="?view=political-philosophy">
+        <small>Course library</small>
+        <h2>Political Philosophy</h2>
+        <span aria-hidden="true">→</span>
+      </a>
+      <a class="subject-card" href="?view=ethics">
+        <small>Presentations coming soon</small>
+        <h2>Ethics</h2>
+        <span aria-hidden="true">→</span>
+      </a>
+    </nav>
+  </main>
+
+  <main class="shell library-view" id="library-view">
+    <a class="home-link" href="./index.html">← All subjects</a>
     <p class="eyebrow">Political Philosophy · Interactive Course Library</p>
     <h1>Think through the arguments.</h1>
     <p class="intro">Choose a presentation or activity below. Each deck opens in its own full-screen, interactive page with keyboard, touch, overview, notes, and fullscreen controls. Use the Download HTML button under any card to save a shareable copy.</p>
@@ -294,7 +440,7 @@
           <option value="activities">Activities</option>
         </select>
       </label>
-      <span class="count" id="count" aria-live="polite">25 resources</span>
+      <span class="count" id="count" aria-live="polite">26 resources</span>
     </div>
 
     <section class="library-section" data-section="foundations">
@@ -358,6 +504,15 @@
     <footer>
       Edit the HTML files to update a presentation. Once this folder is uploaded to GitHub Pages, committed changes will automatically update the live site.
     </footer>
+  </main>
+
+  <main class="shell ethics-view" id="ethics-view">
+    <a class="home-link" href="./index.html">← All subjects</a>
+    <div class="empty-state">
+      <p class="eyebrow">Ethics · Presentation Library</p>
+      <h1>Coming soon.</h1>
+      <p>This space is ready for your ethics lectures and presentations.</p>
+    </div>
   </main>
 
   <script>
@@ -481,6 +636,7 @@
 
     search.addEventListener('input', updateLibrary);
     filter.addEventListener('change', updateLibrary);
+    updateLibrary();
   </script>
 </body>
 </html>
