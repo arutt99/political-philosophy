@@ -383,10 +383,13 @@
 
     .home-link:hover, .home-link:focus-visible { color: var(--text); }
 
-    html[data-view="landing"] #landing-view,
+    html[data-view="landing"] #landing-view {
+      display: flex;
+    }
+
     html[data-view="political-philosophy"] #library-view,
     html[data-view="ethics"] #ethics-view {
-      display: flex;
+      display: block;
     }
 
     @media (max-width: 620px) {
