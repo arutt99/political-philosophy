@@ -9,381 +9,740 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#12141a;
-    --bg-2:#1a1d26;
-    --text:#efe7d6;
-    --vellum:#c9c2ae;
-    --gold:#c9a24b;
-    --gold-dim:#8a713a;
-    --border:rgba(239,231,214,0.14);
+    --bg:#102b23;
+    --bg-2:#173b2d;
+    --bg-3:#214a38;
+    --text:#f4f0df;
+    --muted:#c8d4bd;
+    --muted-dim:rgba(200,212,189,.58);
+    --sage:#91bd79;
+    --gold:#d6ad60;
+    --gold-dim:#92733f;
+    --clay:#b78658;
+    --border:rgba(231,239,215,.17);
     --fit:1;
   }
   *{box-sizing:border-box}
   html,body{width:100%;height:100%;margin:0;overflow:hidden;background:var(--bg);color:var(--text)}
   body{font-family:Inter,system-ui,sans-serif}
   button{font:inherit}
-  #deck{position:relative;width:100vw;height:100vh;background:radial-gradient(circle at 50% -20%,rgba(201,162,75,.065),transparent 44%),var(--bg)}
-  .slide{position:absolute;inset:0;display:none;align-items:center;justify-content:center;padding:7.2vh 7vw 8vh;text-align:center;overflow:hidden}
+  #deck{
+    position:relative;
+    width:100vw;
+    height:100vh;
+    background:
+      radial-gradient(ellipse at 16% 8%,rgba(145,189,121,.18),transparent 27%),
+      radial-gradient(ellipse at 91% 91%,rgba(214,173,96,.12),transparent 30%),
+      linear-gradient(145deg,#0b241c 0%,#102b23 52%,#263b2c 100%);
+  }
+  #deck::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    opacity:.34;
+    background:
+      radial-gradient(ellipse at 0 100%,transparent 0 49%,rgba(204,222,185,.25) 49.3% 49.55%,transparent 49.85%),
+      radial-gradient(ellipse at 100% 0,transparent 0 41%,rgba(204,222,185,.18) 41.25% 41.5%,transparent 41.8%);
+    background-size:18rem 18rem,23rem 23rem;
+    background-position:-7rem 20rem,12rem -7rem;
+  }
+  #deck::after{
+    content:"";
+    position:absolute;
+    left:-12vw;
+    top:21vh;
+    width:44vw;
+    height:25vw;
+    border:1px solid rgba(200,216,190,.12);
+    border-radius:50%;
+    transform:rotate(-24deg);
+    pointer-events:none;
+  }
+  .slide{
+    position:absolute;
+    inset:0;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:7.2vh 4vw 8vh;
+    text-align:center;
+    overflow:hidden;
+  }
   .slide.active,.slide.measuring{display:flex}
   .slide.measuring{visibility:hidden;pointer-events:none}
   .slide.top{align-items:flex-start;padding-top:8.5vh}
-  .slide-inner{width:min(980px,86vw);max-height:82vh;margin:auto;transform-origin:top center}
-  .slide.top .slide-inner{margin:0 auto}
-  .slide.duo .slide-inner{width:min(1140px,90vw)}
-  .eyebrow{margin:0 0 1.2rem;color:var(--gold);font:600 clamp(12px,1.12vw,17px)/1.3 "IBM Plex Mono",monospace;letter-spacing:.18em;text-transform:uppercase}
-  .title{margin:0;font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;letter-spacing:-.018em}
-  .cover .title{font-size:calc(clamp(58px,7.6vw,104px)*var(--fit));line-height:.96;max-width:12ch;margin-inline:auto}
-  .cover .work{font:500 calc(clamp(20px,2.15vw,31px)*var(--fit))/1.4 "Cormorant Garamond",Georgia,serif;color:var(--vellum);margin:1.5rem auto 0;max-width:36ch}
-  .cover .course{margin-top:2.4rem;color:var(--gold);font:500 calc(clamp(11px,1vw,15px)*var(--fit))/1.4 "IBM Plex Mono",monospace;letter-spacing:.14em;text-transform:uppercase}
-  .section .slide-inner{width:min(900px,86vw)}
-  .section .title{font-size:calc(clamp(48px,6.2vw,84px)*var(--fit));line-height:1.02}
-  .section .rule{width:52px;height:1px;background:var(--gold-dim);margin:1.8rem auto 0}
-  .content .title,.head .title,.duo .title{font-size:calc(clamp(38px,4.5vw,62px)*var(--fit));line-height:1.05;margin-bottom:1.6rem}
-  .content .body{font-family:"Cormorant Garamond",Georgia,serif;font-size:calc(clamp(25px,2.35vw,35px)*var(--fit));line-height:1.34;text-align:left}
-  .content .body p{
-    margin:0 0 1.05em -1.25rem;
-    padding:.08em .7em .08em 1rem;
-    border-left:3px solid transparent;
-    color:rgba(201,194,174,.52);
-    font-weight:600;
-    background:linear-gradient(90deg,rgba(201,162,75,0),rgba(201,162,75,0));
+  .slide-inner{
+    position:relative;
+    z-index:1;
+    width:min(1640px,90vw);
+    max-height:82vh;
+    margin:auto;
+    transform-origin:top center;
   }
-  .content .body p:last-child{margin-bottom:1.05em}
+  .slide.top .slide-inner{margin:0 auto}
+  .slide.duo .slide-inner{width:min(1760px,91.5vw)}
+  .eyebrow{
+    margin:0 0 1.2rem;
+    color:var(--gold);
+    font:600 clamp(12px,1.12vw,17px)/1.3 "IBM Plex Mono",monospace;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+  }
+  .title{
+    margin:0;
+    font-family:"Cormorant Garamond",Georgia,serif;
+    font-weight:600;
+    letter-spacing:-.018em;
+  }
+  .cover .slide-inner{
+    width:min(1640px,90vw);
+    padding:3rem 4rem 3.3rem;
+    background:linear-gradient(135deg,rgba(24,65,48,.78),rgba(19,45,35,.22));
+    border-top:1px solid rgba(200,216,190,.23);
+    border-bottom:4px solid rgba(214,173,96,.52);
+    border-radius:52% 8% 42% 10%;
+    box-shadow:0 20px 55px rgba(0,0,0,.23);
+  }
+  .cover .title{
+    font-size:calc(clamp(64px,7.15vw,116px)*var(--fit));
+    line-height:.96;
+    max-width:none;
+    letter-spacing:-.035em;
+  }
+  .cover .work{
+    font:500 calc(clamp(20px,2.15vw,31px)*var(--fit))/1.35 "Cormorant Garamond",Georgia,serif;
+    color:var(--muted);
+    margin:1.5rem auto 0;
+    max-width:40ch;
+  }
+  .cover .course{
+    display:inline-block;
+    margin-top:2.35rem;
+    padding:.5rem .8rem;
+    color:var(--gold);
+    background:rgba(214,173,96,.13);
+    border:1px solid rgba(214,173,96,.18);
+    border-radius:999px;
+    font:500 calc(clamp(11px,1vw,15px)*var(--fit))/1.4 "IBM Plex Mono",monospace;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+  }
+  .section .slide-inner{
+    width:min(1640px,90vw);
+    padding:2.5rem 3.4rem 2.8rem;
+    border-radius:1rem 5rem 1rem 5rem;
+    background:linear-gradient(105deg,rgba(145,189,121,.12),transparent 62%);
+  }
+  .section .title{
+    font-size:calc(clamp(52px,5.85vw,94px)*var(--fit));
+    line-height:1.02;
+    max-width:none;
+  }
+  .section .rule{
+    width:6.5rem;
+    height:4px;
+    margin:1.8rem auto 0;
+    border-radius:999px;
+    background:linear-gradient(90deg,var(--gold),var(--sage));
+  }
+  .content .title,.head .title,.duo .title{
+    font-size:calc(clamp(42px,4.75vw,74px)*var(--fit));
+    line-height:1.02;
+    max-width:none;
+    margin-bottom:1.35rem;
+    text-shadow:0 3px 18px rgba(0,0,0,.2);
+  }
+  .content .body{
+    font-family:"Cormorant Garamond",Georgia,serif;
+    font-size:calc(clamp(25px,2.35vw,35px)*var(--fit));
+    line-height:1.34;
+    text-align:left;
+  }
+  .content .body p{
+    margin:0 0 1.05em;
+    padding:.42em .85em .42em 1.2rem;
+    border-left:4px solid transparent;
+    border-radius:0 1rem 1rem 0;
+    color:var(--muted-dim);
+    font-weight:600;
+    background:rgba(145,189,121,.055);
+  }
+  .content .body p:nth-child(even){background:rgba(214,173,96,.035)}
   .content .body p.fresh{
     color:var(--text);
-    border-left-color:var(--gold);
-    background:linear-gradient(90deg,rgba(201,162,75,.15),rgba(201,162,75,0) 78%);
-    text-shadow:0 0 18px rgba(239,231,214,.08);
+    border-left-color:var(--sage);
+    background:linear-gradient(90deg,rgba(145,189,121,.2),rgba(214,173,96,.08),transparent 85%);
+    text-shadow:none;
   }
-  .question .slide-inner,.diagnostic .slide-inner{width:min(900px,86vw)}
-  .question .prompt,.diagnostic .prompt{margin:0;font-family:"Cormorant Garamond",Georgia,serif;font-size:calc(clamp(42px,5.2vw,72px)*var(--fit));line-height:1.08;font-weight:600;letter-spacing:-.015em}
-  .question .prompt::after,.diagnostic .prompt::after{content:"";display:block;width:42px;height:2px;background:var(--gold);margin:1.8rem auto 0}
-  .question .context{max-width:48ch;margin:1.35rem auto 0;color:var(--vellum);font:500 calc(clamp(18px,1.7vw,25px)*var(--fit))/1.4 "Cormorant Garamond",Georgia,serif}
-  .quote blockquote{margin:0 auto;max-width:26ch;font-family:"Cormorant Garamond",Georgia,serif;font-size:calc(clamp(39px,4.45vw,63px)*var(--fit));line-height:1.12;font-weight:500}
+  .question .slide-inner,.diagnostic .slide-inner{
+    width:min(1640px,90vw);
+    max-height:none;
+    padding:2.9rem 3.7rem 2.6rem;
+    background:linear-gradient(135deg,rgba(29,72,55,.82),rgba(35,57,42,.66));
+    border-top:1px solid rgba(200,216,190,.24);
+    border-bottom:4px solid rgba(214,173,96,.44);
+    border-radius:4.8rem 1rem 4.8rem 1rem;
+  }
+  .question .prompt,.diagnostic .prompt{
+    max-width:min(34ch,86vw);
+    margin:0 auto;
+    font-family:"Cormorant Garamond",Georgia,serif;
+    font-size:calc(clamp(42px,5.2vw,72px)*var(--fit));
+    line-height:1.08;
+    font-weight:600;
+    letter-spacing:-.015em;
+  }
+  .question .prompt::after,.diagnostic .prompt::after{
+    content:"";
+    display:block;
+    width:5.7rem;
+    height:4px;
+    margin:1.8rem auto 0;
+    border-radius:999px;
+    background:linear-gradient(90deg,var(--sage),var(--gold));
+  }
+  .question .context{
+    max-width:48ch;
+    margin:1.2rem auto 0;
+    color:var(--muted);
+    font:500 calc(clamp(18px,1.7vw,25px)*var(--fit))/1.4 "Cormorant Garamond",Georgia,serif;
+  }
+  .quote .slide-inner{
+    width:min(1640px,90vw);
+    padding:2.6rem 3.5rem 2.8rem;
+    background:rgba(20,59,44,.52);
+    border-top:1px solid rgba(200,216,190,.34);
+    border-bottom:4px solid rgba(214,173,96,.55);
+    border-radius:50% 50% 12% 12% / 7% 7% 3% 3%;
+  }
+  .quote blockquote{
+    margin:0 auto;
+    max-width:min(34ch,84vw);
+    font-family:"Cormorant Garamond",Georgia,serif;
+    font-size:calc(clamp(39px,4.45vw,63px)*var(--fit));
+    line-height:1.12;
+    font-weight:500;
+    font-style:italic;
+  }
   .quote blockquote::before{content:"“";color:var(--gold);margin-right:.08em}
   .quote blockquote::after{content:"”";color:var(--gold);margin-left:.08em}
-  .quote cite{display:block;margin-top:1.6rem;color:var(--vellum);font:500 calc(clamp(12px,1.15vw,17px)*var(--fit))/1.45 "IBM Plex Mono",monospace;font-style:normal}
-  .duo-grid{display:grid;grid-template-columns:1fr 1fr;gap:4.5rem;text-align:left;margin-top:1.5rem}
-  .duo-col{padding-top:1.1rem;border-top:1px solid var(--border)}
-  .duo-col h3{margin:0 0 .85rem;color:var(--gold);font:600 calc(clamp(13px,1.25vw,18px)*var(--fit))/1.3 "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase}
-  .duo-col p{margin:0;color:var(--text);font:500 calc(clamp(24px,2.15vw,33px)*var(--fit))/1.34 "Cormorant Garamond",Georgia,serif}
-  .head-list{display:grid;gap:1.15rem;text-align:left;margin-top:1.8rem}
-  .head-item{display:grid;grid-template-columns:9rem 1fr;gap:1.5rem;align-items:baseline;padding-top:1rem;border-top:1px solid var(--border)}
-  .head-item b{color:var(--gold);font:600 calc(clamp(12px,1.1vw,16px)*var(--fit))/1.3 "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase}
-  .head-item span{font:500 calc(clamp(23px,2.05vw,31px)*var(--fit))/1.3 "Cormorant Garamond",Georgia,serif}
-  .diagnostic .eyebrow{color:var(--vellum)}
-  .diagnostic .prompt{font-size:calc(clamp(52px,6.6vw,90px)*var(--fit))}
-  .refs .slide-inner{width:min(980px,86vw);text-align:left}
-  .refs .title{font-size:calc(clamp(40px,4.6vw,64px)*var(--fit));margin-bottom:1.7rem}
-  .refs-list{display:grid;gap:1.05rem}
-  .ref{padding-top:.95rem;border-top:1px solid var(--border);font:500 calc(clamp(18px,1.65vw,24px)*var(--fit))/1.38 "Cormorant Garamond",Georgia,serif;color:var(--vellum)}
-  .ref strong{color:var(--text);font-weight:600}
-  #progress{position:fixed;top:0;left:0;height:2px;width:0;background:var(--gold);z-index:30}
-  #nav-hint,#counter{position:fixed;bottom:18px;z-index:30;color:var(--vellum);font:500 12px/1.3 "IBM Plex Mono",monospace;letter-spacing:.08em}
-  #nav-hint{left:24px} #counter{right:24px}
-  #fullscreen{position:fixed;top:20px;right:22px;z-index:30;color:var(--vellum);background:transparent;border:1px solid var(--border);border-radius:3px;padding:8px 11px;cursor:pointer;font:500 11px/1 "IBM Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase}
-  #fullscreen:hover{color:var(--gold);border-color:var(--gold-dim)}
-  .panel{position:fixed;inset:4vh 4vw;z-index:60;display:none;background:rgba(18,20,26,.985);border:1px solid var(--border);overflow:auto}
-  .panel.open{display:block}
-  .panel-head{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;padding:18px 22px;background:var(--bg-2);border-bottom:1px solid var(--border);z-index:2}
-  .panel-head h2{margin:0;font:600 14px/1 "IBM Plex Mono",monospace;letter-spacing:.15em;text-transform:uppercase;color:var(--gold)}
-  .close{color:var(--text);background:transparent;border:1px solid var(--border);padding:7px 10px;cursor:pointer}
-  #overview-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;padding:20px}
-  .overview-card{min-height:126px;padding:16px;text-align:left;background:var(--bg-2);border:1px solid var(--border);color:var(--text);cursor:pointer}
-  .overview-card:hover,.overview-card.current{border-color:var(--gold-dim)}
-  .overview-card .num{display:block;color:var(--gold);font:500 11px/1.3 "IBM Plex Mono",monospace;margin-bottom:12px}
-  .overview-card .label{font:600 22px/1.1 "Cormorant Garamond",Georgia,serif}
-  #notes-body{padding:28px 34px;white-space:pre-wrap;color:var(--text);font:400 18px/1.62 Inter,sans-serif;max-width:900px}
-  @media (max-width:760px){
-    .slide{padding:9vh 8vw 10vh}.slide.top{padding-top:9.5vh}.slide-inner,.slide.duo .slide-inner{width:84vw}
-    .duo-grid{grid-template-columns:1fr;gap:1.5rem}.head-item{grid-template-columns:1fr;gap:.45rem}
-    #nav-hint{display:none}#fullscreen{top:12px;right:12px}.content .body{font-size:calc(clamp(22px,5.6vw,30px)*var(--fit))}
-    .duo-col p{font-size:calc(clamp(22px,5.3vw,29px)*var(--fit))}
+  .quote cite{
+    display:block;
+    margin-top:1.6rem;
+    color:#d1ddc0;
+    font:500 calc(clamp(12px,1.15vw,17px)*var(--fit))/1.45 "IBM Plex Mono",monospace;
+    font-style:normal;
   }
-  /* Rousseau: an organic, changing system that moves from nature toward social entanglement. */
-  :root{--bg:#153128;--bg-2:#1d4034;--text:#f1eee2;--vellum:#c8d2ba;--gold:#d4a65a;--gold-dim:#8d7240;--border:rgba(241,238,226,.17)}
-  #deck{background:
-    radial-gradient(ellipse at 18% 14%,rgba(137,185,118,.22),transparent 25%),
-    radial-gradient(ellipse at 88% 85%,rgba(212,166,90,.15),transparent 32%),
-    linear-gradient(150deg,#102b23,#153128 54%,#243629)}
-  #deck::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.3;background:radial-gradient(ellipse at 0 100%,transparent 0 52%,rgba(226,235,202,.30) 52.3% 52.55%,transparent 52.8%),radial-gradient(ellipse at 100% 0,transparent 0 44%,rgba(226,235,202,.22) 44.2% 44.45%,transparent 44.7%);background-size:17rem 17rem,21rem 21rem;background-position:-8rem 19rem,11rem -7rem}
-  #deck::after{content:"";position:absolute;left:-12vw;top:21vh;width:44vw;height:25vw;border:1px solid rgba(200,210,186,.12);border-radius:50%;transform:rotate(-24deg);pointer-events:none}
-  .slide-inner{position:relative;z-index:1}
-  .cover .slide-inner{padding:3rem 3.7rem;background:linear-gradient(135deg,rgba(24,61,47,.86),rgba(19,43,35,.45));border-radius:46% 6% 42% 8%;border:1px solid rgba(200,210,186,.23);box-shadow:0 20px 55px rgba(0,0,0,.25)}
-  .cover .title{max-width:10ch;letter-spacing:-.032em}
-  .cover .course{display:inline-block;padding:.5rem .8rem;background:rgba(212,166,90,.13);border-radius:999px}
-  .section .slide-inner{padding:2.3rem 3rem;border-radius:1rem 4.7rem 1rem 4.7rem;background:linear-gradient(105deg,rgba(137,185,118,.12),transparent 58%)}
-  .section .rule{height:4px;width:6.5rem;border-radius:999px;background:linear-gradient(90deg,var(--gold),#92bb78)}
-  .content .slide-inner,.head .slide-inner{max-width:min(1010px,87vw)}
-  .content .title,.head .title,.duo .title{margin-bottom:1.35rem;text-shadow:0 3px 18px rgba(0,0,0,.21)}
-  .content .body p{margin-left:0;padding:.42em .85em .42em 1.2rem;border-left-width:4px;border-radius:0 1rem 1rem 0;color:rgba(200,210,186,.58)}
-  .content .body p:nth-child(odd){background:rgba(146,187,120,.055)}
-  .content .body p.fresh{border-left-color:#92bb78;color:var(--text);background:linear-gradient(90deg,rgba(146,187,120,.20),rgba(212,166,90,.08),transparent 85%);text-shadow:none}
-  .question .slide-inner,.diagnostic .slide-inner{padding:2.7rem 3.2rem;background:linear-gradient(135deg,rgba(27,65,51,.93),rgba(35,54,41,.88));border-radius:3.5rem 1rem 3.5rem 1rem;border:1px solid rgba(200,210,186,.24)}
-  .question .prompt::after,.diagnostic .prompt::after{width:5.7rem;height:4px;border-radius:999px;background:linear-gradient(90deg,#92bb78,var(--gold))}
-  .quote .slide-inner{padding:2.2rem 3rem;max-width:min(960px,85vw);background:rgba(20,48,39,.6);border-radius:50% 50% 12% 12% / 7% 7% 3% 3%;border-top:1px solid rgba(200,210,186,.34);border-bottom:4px solid rgba(212,166,90,.55)}
-  .quote blockquote{font-style:italic}
-  .quote cite{color:#d1dcbe}
-  .duo-grid{gap:2.25rem}
-  .duo-col{min-height:15rem;padding:1.5rem 1.6rem;border:1px solid rgba(200,210,186,.2);border-radius:1.5rem 0 1.5rem 0;background:rgba(27,62,49,.55)}
-  .duo-col:nth-child(2){border-radius:0 1.5rem 0 1.5rem;background:rgba(64,75,44,.36)}
-  .duo-col h3{color:#d9bd77}
-  .head-list{gap:.85rem}
-  .head-item{grid-template-columns:11rem 1fr;padding:.85rem 1.1rem;border:1px solid rgba(200,210,186,.16);border-radius:0 1.25rem 0 1.25rem;background:rgba(19,49,39,.42)}
-  .head-item:nth-child(even){transform:translateX(1.2rem);background:rgba(146,187,120,.08)}
-  .head-item b{color:#d9bd77}
-  #progress{height:4px;background:linear-gradient(90deg,#92bb78,var(--gold))}
-  #fullscreen{border-radius:999px;background:rgba(19,49,39,.34);border-color:rgba(200,210,186,.26)}
-  .panel{background:rgba(18,46,37,.985)}
-  .panel-head{background:#1d4034}.overview-card{background:linear-gradient(145deg,#224b3c,#17362c);border-radius:1rem 0 1rem 0}
-  .overview-card:hover,.overview-card.current{border-color:#92bb78;box-shadow:0 8px 24px rgba(0,0,0,.18)}
-  @media (max-width:760px){.cover .slide-inner,.section .slide-inner,.question .slide-inner,.diagnostic .slide-inner,.quote .slide-inner{padding:1.7rem 1.5rem}.head-item:nth-child(even){transform:none}}
+  .duo-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:clamp(2.25rem,3.25vw,4rem);
+    margin-top:1.5rem;
+    text-align:left;
+  }
+  .duo-col{
+    min-height:13rem;
+    padding:1.35rem 1.4rem 1.1rem;
+    border-top:1px solid rgba(200,216,190,.26);
+    border-bottom:1px solid rgba(200,216,190,.1);
+    background:linear-gradient(110deg,rgba(145,189,121,.07),transparent 78%);
+  }
+  .duo-col:nth-child(2){background:linear-gradient(110deg,rgba(214,173,96,.06),transparent 78%)}
+  .duo-col h3{
+    margin:0 0 .85rem;
+    color:#d9bd77;
+    font:600 calc(clamp(13px,1.25vw,18px)*var(--fit))/1.3 "IBM Plex Mono",monospace;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+  }
+  .duo-col p{
+    margin:0;
+    color:var(--text);
+    font:500 calc(clamp(24px,2.15vw,33px)*var(--fit))/1.34 "Cormorant Garamond",Georgia,serif;
+  }
+  .head-list{
+    display:grid;
+    gap:.85rem;
+    margin-top:1.8rem;
+    text-align:left;
+  }
+  .head-item{
+    display:grid;
+    grid-template-columns:11rem 1fr;
+    gap:1.5rem;
+    align-items:baseline;
+    padding:.85rem 1.1rem;
+    border-top:1px solid rgba(200,216,190,.18);
+    background:rgba(19,58,43,.34);
+  }
+  .head-item b{
+    color:#d9bd77;
+    font:600 calc(clamp(12px,1.1vw,16px)*var(--fit))/1.3 "IBM Plex Mono",monospace;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+  }
+  .head-item span{
+    font:500 calc(clamp(23px,2.05vw,31px)*var(--fit))/1.3 "Cormorant Garamond",Georgia,serif;
+  }
+  .diagnostic .eyebrow{color:var(--muted)}
+  .diagnostic .prompt{font-size:calc(clamp(52px,6.6vw,90px)*var(--fit))}
+  .refs .slide-inner{width:min(1640px,90vw);text-align:left}
+  .refs .title{
+    font-size:calc(clamp(44px,4.9vw,76px)*var(--fit));
+    line-height:1.02;
+    max-width:none;
+    margin-bottom:1.7rem;
+  }
+  .refs-list{display:grid;gap:1.05rem}
+  .ref{
+    padding-top:.95rem;
+    border-top:1px solid rgba(200,216,190,.2);
+    color:var(--muted);
+    font:500 calc(clamp(18px,1.65vw,24px)*var(--fit))/1.38 "Cormorant Garamond",Georgia,serif;
+  }
+  .ref strong{color:var(--text);font-weight:600}
+  #progress{
+    position:fixed;
+    top:0;
+    left:0;
+    height:4px;
+    width:0;
+    z-index:30;
+    background:linear-gradient(90deg,var(--sage),var(--gold));
+  }
+  #nav-hint,#counter{
+    position:fixed;
+    bottom:18px;
+    z-index:30;
+    color:var(--muted);
+    font:500 12px/1.3 "IBM Plex Mono",monospace;
+    letter-spacing:.08em;
+  }
+  #nav-hint{left:24px}
+  #counter{right:24px}
+  #fullscreen{
+    position:fixed;
+    top:20px;
+    right:22px;
+    z-index:30;
+    color:var(--muted);
+    background:rgba(19,58,43,.34);
+    border:1px solid rgba(200,216,190,.26);
+    border-radius:999px;
+    padding:8px 11px;
+    cursor:pointer;
+    font:500 11px/1 "IBM Plex Mono",monospace;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+  #fullscreen:hover{color:var(--gold);border-color:var(--gold-dim)}
+  .panel{
+    position:fixed;
+    inset:4vh 4vw;
+    z-index:60;
+    display:none;
+    background:rgba(16,43,35,.985);
+    border:1px solid rgba(200,216,190,.2);
+    overflow:auto;
+  }
+  .panel.open{display:block}
+  .panel-head{
+    position:sticky;
+    top:0;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:18px 22px;
+    background:#173b2d;
+    border-bottom:1px solid rgba(200,216,190,.18);
+    z-index:2;
+  }
+  .panel-head h2{
+    margin:0;
+    color:var(--gold);
+    font:600 14px/1 "IBM Plex Mono",monospace;
+    letter-spacing:.15em;
+    text-transform:uppercase;
+  }
+  .close{
+    color:var(--text);
+    background:transparent;
+    border:1px solid rgba(200,216,190,.22);
+    padding:7px 10px;
+    cursor:pointer;
+  }
+  #overview-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:12px;
+    padding:20px;
+  }
+  .overview-card{
+    min-height:126px;
+    padding:16px;
+    text-align:left;
+    background:linear-gradient(145deg,#224b3c,#17362c);
+    border:1px solid rgba(200,216,190,.16);
+    border-radius:1rem 0 1rem 0;
+    color:var(--text);
+    cursor:pointer;
+  }
+  .overview-card:hover,.overview-card.current{
+    border-color:var(--sage);
+    box-shadow:0 8px 24px rgba(0,0,0,.18);
+  }
+  .overview-card .num{
+    display:block;
+    margin-bottom:12px;
+    color:var(--gold);
+    font:500 11px/1.3 "IBM Plex Mono",monospace;
+  }
+  .overview-card .label{font:600 22px/1.1 "Cormorant Garamond",Georgia,serif}
+  #notes-body{
+    max-width:1000px;
+    padding:28px 34px;
+    white-space:pre-wrap;
+    color:var(--text);
+    font:400 18px/1.62 Inter,sans-serif;
+  }
+  @media (max-width:760px){
+    .slide{padding:9vh 8vw 10vh}
+    .slide.top{padding-top:9.5vh}
+    .slide-inner,.slide.duo .slide-inner{width:84vw}
+    .cover .slide-inner,.section .slide-inner,.question .slide-inner,.diagnostic .slide-inner,.quote .slide-inner{padding:1.45rem 1.4rem 1.25rem}
+    .duo-grid{grid-template-columns:1fr;gap:1.5rem}
+    .duo-col{min-height:0}
+    .head-item{grid-template-columns:1fr;gap:.45rem}
+    .content .body{font-size:calc(clamp(22px,5.6vw,30px)*var(--fit))}
+    .content .body p{margin-bottom:.75em;padding:.25em .7em .25em 1rem}
+    .content .title,.head .title,.duo .title{margin-bottom:1rem}
+    .question .context{margin-top:.9rem}
+    .question .prompt::after,.diagnostic .prompt::after{margin-top:1.1rem}
+    .duo-col p{font-size:calc(clamp(22px,5.3vw,29px)*var(--fit))}
+    #nav-hint{display:none}
+    #fullscreen{top:12px;right:12px}
+  }
 </style>
 <link rel="stylesheet" href="presentation-polish.css">
 <script src="presentation-polish.js" defer></script>
 </head>
 <body>
 <div id="deck" aria-live="polite"></div>
-<div id="progress"></div>
+<div id="progress" aria-hidden="true"></div>
 <div id="nav-hint">ARROWS / SPACE · O OVERVIEW · N NOTES · F FULLSCREEN</div>
-<div id="counter">1 / 1</div>
-<button id="fullscreen" aria-label="Toggle fullscreen">Fullscreen</button>
+<div id="counter" aria-live="polite">1 / 1</div>
+<button id="fullscreen" type="button" aria-label="Toggle fullscreen">Fullscreen</button>
 
 <section id="overview" class="panel" aria-label="Slide overview">
-  <div class="panel-head"><h2>Overview</h2><button class="close" data-close="overview">Close</button></div>
+  <div class="panel-head"><h2>Overview</h2><button class="close" type="button" data-close="overview">Close</button></div>
   <div id="overview-grid"></div>
 </section>
 <aside id="notes" class="panel" aria-label="Speaker notes">
-  <div class="panel-head"><h2>Speaker notes</h2><button class="close" data-close="notes">Close</button></div>
+  <div class="panel-head"><h2>Speaker notes</h2><button class="close" type="button" data-close="notes">Close</button></div>
   <div id="notes-body"></div>
 </aside>
 
 <script>
 const slides=[];
-const src=(pages,extra="")=>"[Sources]\nSource material, “Rousseau,” source PDF, pp. "+pages+"."+(extra?"\n"+extra:"")+"\n[/Sources]";
+const src=(pages,extra)=>"[Sources]\nSource material, “Rousseau and the State of Nature,” assigned PDF, pp. "+pages+"."+((extra)?("\n"+extra):"")+"\n[/Sources]";
 const add=s=>slides.push(s);
 const cover=(title,work,course,notes)=>add({type:"cover",title,work,course,notes});
-const section=(roman,title,notes)=>add({type:"section",eyebrow:roman+". "+title.toUpperCase(),title,notes});
-const question=(eyebrow,prompt,context,notes)=>add({type:"question",eyebrow,prompt,context,notes});
-const quote=(text,cite,notes)=>add({type:"quote",text,cite,notes});
-const duo=(title,left,right,notes)=>add({type:"duo",title,left,right,notes});
-const head=(title,items,notes)=>add({type:"head",title,items,notes});
-const diagnostic=(prompt,notes)=>add({type:"diagnostic",eyebrow:"The Rousseau test",prompt,notes});
-const refs=(items,notes)=>add({type:"refs",title:"References",items,notes});
+const section=(roman,title,notes,pages)=>add({type:"section",eyebrow:roman+". "+title.toUpperCase(),title,notes:notes+"\n\n"+src(pages)});
+const question=(eyebrow,prompt,context,notes,pages)=>add({type:"question",eyebrow,prompt,context,notes:notes+"\n\n"+src(pages)});
+const quote=(text,cite,notes,pages,extra)=>add({type:"quote",text,cite,notes:notes+"\n\n"+src(pages,extra)});
+const duo=(title,left,right,notes,pages)=>add({type:"duo",title,left,right,notes:notes+"\n\n"+src(pages)});
+const head=(title,items,notes,pages)=>add({type:"head",title,items,notes:notes+"\n\n"+src(pages)});
+const diagnostic=(prompt,notes,pages)=>add({type:"diagnostic",eyebrow:"The Rousseau test",prompt,notes:notes+"\n\n"+src(pages)});
+const refs=(items,notes,pages)=>add({type:"refs",title:"References",items,notes:notes+"\n\n"+src(pages)});
 function build(id,title,paragraphs,notes,pages){
-  paragraphs.forEach((_,i)=>add({type:"content",title,paragraphs:paragraphs.slice(0,i+1),buildGroup:id,notes:notes+(i<paragraphs.length-1?"\n\nPause before revealing the next step.":"")+"\n\n"+src(pages)}));
+  paragraphs.forEach((_,i)=>{
+    add({
+      type:"content",
+      title,
+      paragraphs:paragraphs.slice(0,i+1),
+      buildGroup:id,
+      notes:notes+(i<paragraphs.length-1?"\n\nPause before revealing the next step.":"")+"\n\n"+src(pages)
+    });
+  });
 }
 
-cover("The State of Nature","Rousseau and the social invention of conflict","Political Philosophy","Begin with Rousseau’s reversal: war is not what civilization saves us from; it is something social development helps create.\n\n"+src("1-7"));
+cover(
+  "The State of Nature",
+  "Rousseau on freedom, pity, perfectibility, and the origins of inequality",
+  "Political Philosophy",
+  "Rousseau’s reversal sets the arc: war and domination are not simply what society restrains. They are also outcomes society can produce.\n\n"+src("1-23")
+);
 
-section("I","Who put civil man into the forest?","Introduce Rousseau’s methodological criticism before presenting his alternative picture.\n\n"+src("1"));
-build("projection","Rousseau changes the starting point",[
-  "Earlier state-of-nature theories describe people without government, but often leave familiar social desires - greed, pride, domination, and status - intact.",
-  "Rousseau argues that this projects civil man backward. Traits formed inside society are treated as if they belonged to human nature itself.",
-  "His state of nature is therefore a “probable conjecture”: a reasoned reconstruction that separates basic human capacities from motives produced by social life."
-],"Keep the method clear. Rousseau is not reporting an observed prehistoric society; he is testing which motives must be natural and which may be social products.","1");
-question("The starting question","If pride, rivalry, long-term ambition, and the need for approval are learned, what remains before society teaches them?","Rousseau must identify motives simple enough to be natural and strong enough to explain how solitary people behave.","Use the question to shift from methodological criticism to Rousseau’s two natural drives.\n\n"+src("1"));
+section("I","Inequality needs a history","Start with Rousseau’s distinction between natural difference and socially organized domination.","1-2");
+build("central-history","Rousseau asks how difference becomes domination",[
+  "The question behind the Second Discourse is not whether people differ. It is how modest differences in strength, health, or skill become durable differences in wealth, honor, authority, and power.",
+  "Rousseau calls the first kind natural or physical inequality. He calls the second moral or political inequality, because society recognizes some people as entitled to command while others must obey.",
+  "The central problem follows: how did possession become property, temporary cooperation become dependence, and force acquire the appearance of right?",
+  "A stronger person may overpower a weaker person once, but strength alone cannot create a permanent right to rule. Stable domination requires a social history of property, obedience, expectations, and law."
+],"Keep the opening distinction precise. Rousseau does not deny bodily differences; he asks how society turns them into durable hierarchy.","1-2");
+duo("Two kinds of inequality",
+  {label:"Natural or physical",text:"People differ in age, health, strength, intelligence, agility, and endurance. These differences can affect what someone can do on a particular occasion."},
+  {label:"Moral or political",text:"People differ in wealth, honor, rank, authority, and power. These differences last because institutions and expectations make them socially binding."},
+  "This comparison separates facts about bodies from social relationships that claim authority.","1-2");
+question("Where could “right” come from?","A temporary victory explains who wins now. It does not explain why others should continue to obey later.","Rousseau has separated force from durable authority. The next section asks what kind of history can expose the missing link.","Use this question to move from the problem of inequality to Rousseau’s method.","1-2");
 
-section("II","Pity restrains before morality commands","Present self-preservation and pity as independent natural motives, then distinguish pity from moral duty.\n\n"+src("1-3"));
-build("two-drives","Natural human beings have two basic drives",[
-  "Like Hobbes and Locke, Rousseau begins with self-preservation: living creatures naturally avoid hunger, pain, and death.",
-  "But self-preservation is not the whole story. Human beings also have pity, an immediate aversion to seeing another creature suffer.",
-  "Pity does not require calculation. It can move someone to help before that person weighs a rule, a duty, or a future reward.",
-  "Because another’s pain disturbs us, pity restrains attacks that self-interest alone might permit."
-],"Do not describe Rousseau as assuming unlimited benevolence. Pity is a restraint on harm, not a standing desire to serve everyone.","1-2");
-quote("It is pity that carries us without reflection to the assistance of those who we see suffer.","Rousseau, Discourse on the Origin of Inequality, p. 154","Let the phrase “without reflection” carry the distinction between feeling and moral judgment.\n\n"+src("2","Discourse on the Origin of Inequality, p. 154, as quoted in the source material."));
-build("pity-not-rights","Compassion is not a theory of rights",[
-  "Locke thinks people can recognize moral rights before government. Rousseau does not make that claim.",
-  "In the earliest state of nature, ideas such as law, right, virtue, and moral obligation have not yet developed.",
-  "Natural people avoid much harm because suffering repels them, not because they judge that harming another person violates a moral rule."
-],"Keep motive and morality separate. The action may look kind even though it is not guided by a concept of duty.","2-3");
-question("A limit appears","Can pity prevent war when helping another person threatens one’s own survival?","Rousseau has given natural human beings two motives. Scarcity can force self-preservation and compassion to pull in opposite directions.","The objection arises directly from the two-drive account and must be answered before the peaceful state of nature is credible.\n\n"+src("3"));
+section("II","Nature is a critical baseline","Explain why Rousseau’s state of nature is a philosophical construction rather than a literal history.","2-3");
+build("conjectural-method","The state of nature is a method, not a report",[
+  "Rousseau says we should begin by “setting aside all the facts” because reliable knowledge of the earliest human condition was unavailable to him and his contemporaries.",
+  "He constructs a conjectural history, meaning a hypothetical sequence that asks what human beings must have been like before particular social capacities developed.",
+  "The method starts with the complicated person found in civilized society and removes what society may have added: language, abstract reasoning, property, law, permanent families, reputation, and the desire for distinction.",
+  "The resulting story is not scientific prehistory. It is a counterfactual model that asks whether inequality, possessiveness, and status competition are historically conditioned rather than natural, necessary, or legitimate. Rousseau’s European and colonial categories still limit the model, so real peoples must not be treated as examples of Europe’s past."
+],"Keep “conjectural” concrete. Rousseau is building a model for comparison, not claiming to have observed the first human beings.","2-3");
+quote("setting aside all the facts","Rousseau, Second Discourse, Preface, as quoted in the assigned reading","Let the phrase sit briefly. The point is methodological limits, not permission to ignore evidence.","2","Primary work quoted in the argument: Jean-Jacques Rousseau, Discourse on the Origin and Foundations of Inequality Among Men.");
+head("What Rousseau refuses to assume",[
+  ["No backward projection","People outside government do not automatically understand property, contracts, justice, or long-term competition."],
+  ["No naturalized hierarchy","The fact that inequality is widespread does not prove that it is natural, necessary, or legitimate."],
+  ["No ethnographic shortcut","The pure natural human is a philosophical abstraction, not a portrait of any living Indigenous society."]
+],"These cautions keep the model from becoming a claim about actual peoples.","2-3");
+question("What is the model for?","Rousseau has stripped away familiar traits without claiming that any actual community lived this way.","The next comparison asks whether Hobbes and Locke have removed government while leaving social motives, rights, and expectations already in place.","The question marks the transition from method to philosophical opposition.","2-4");
 
-section("III","What happens when survival and pity collide?","State the scarcity objection at full strength before presenting Rousseau’s response.\n\n"+src("2-3"));
-build("scarcity","Compassion has a survival condition",[
-  "Rousseau says pity discourages a strong person from taking food from someone weak when food can be found somewhere else.",
-  "The qualification matters. Under grave scarcity, sparing another person may mean going hungry oneself.",
-  "Few creatures would place a stranger’s survival ahead of their own, so pity may fade precisely when conflict becomes most dangerous.",
-  "If scarcity becomes severe, natural people could enter war and also suffer from the pain they cause. Compassion alone does not guarantee peace."
-],"Present this as the argument’s strongest objection to pity as a sufficient restraint.","2-3");
-build("last-loaf","Constructed illustration: the last loaf",[
-  "After a storm, two isolated travelers find one loaf. Each believes it is the only food available before rescue.",
-  "Pity gives each a reason not to injure the other, while self-preservation gives each a reason not to surrender the loaf.",
-  "The case shows why Rousseau needs more than kindness. He must explain why such direct collisions would be unusual in the original condition."
-],"This is a constructed illustration, not an episode from Rousseau. It isolates the conflict between pity and self-preservation.","3");
-question("Rousseau’s escape route","What if natural people rarely meet, want very little, and can usually survive without taking from anyone else?","Rousseau reduces conflict by changing the social setting around desire: solitude and limited needs make competition exceptional.","The next section presents the structural reply, not a claim that pity becomes infinitely strong.\n\n"+src("3-4"));
+section("III","Rousseau starts before Hobbes and Locke","Set Rousseau’s account against the state-of-nature theories he thinks begin too late.","3-4");
+build("traditions-and-war","Hobbes and Locke already have social people",[
+  "Hobbes’s people desire scarce goods, fear one another, care about reputation, and compete for safety and glory. Without a common power, those motives generate a condition of war.",
+  "Locke’s people are more peaceful, but they already possess reason, natural rights, duties, family relationships, labor practices, property claims, and promises before government exists.",
+  "Rousseau’s objection is methodological: both theories remove government while leaving many products of social development in place. Aggressive rivalry also needs continuing interaction, useful obedience, and desires that reach beyond immediate survival.",
+  "Rousseau allows occasional violence under threat, injury, or immediate scarcity, but denies that it is a permanent condition of mutual hostility. Instead of rational knowledge of moral duties, he begins with self-preservation and reluctance to witness another sentient being’s suffering. Natural humans do not consciously formulate a law of nature."
+],"Keep the comparison fair. Rousseau’s criticism is about what each theory assumes, not a claim that Hobbes and Locke offer identical politics.","3-4");
+duo("Two theories Rousseau thinks begin too late",
+  {label:"Hobbes",text:"People already compare, distrust, fear future loss, and compete for reputation. War follows from those developed motives when no common power restrains them."},
+  {label:"Locke",text:"People already understand rights, duties, property, labor, family, and promises. Peace exists, but it is already morally and socially structured."},
+  "Use the matched structure to make Rousseau’s methodological objection visible.","3-4");
 
-section("IV","Solitude disarms Hobbes’s motives","Explain how rare contact, few desires, and little foresight remove the pressures that drive Hobbesian conflict.\n\n"+src("3-4"));
-build("solitary","The natural human being can survive alone",[
-  "Rousseau imagines the earliest human as solitary, with only occasional contact with others and no permanent family bond.",
-  "Nature equips this person for independent survival: strength, mobility, and simple habits reduce dependence on organized cooperation.",
-  "Natural desires are limited to food, sexual satisfaction, and sleep; natural fears center on hunger and pain.",
-  "When desires are few and encounters are rare, hunting or gathering is usually easier than fighting another person for goods."
-],"The point is not abundance in the abstract. Limited desire relative to available means lowers the frequency of collisions.","3-4");
-head("Social motives have not yet formed",[
-  ["No reputation","Without stable groups or developed language, other people’s opinions have little power over behavior."],
-  ["No accumulated power","Little foresight means no continuing project of collecting resources to satisfy distant future desires."],
-  ["No settled domination","Independent people who barely need one another have little reason or opportunity to establish lasting rule."]
-],"Each missing motive depends on social relationships or developed foresight that Rousseau refuses to assume at the beginning.\n\n"+src("4"));
-build("hobbes-defused","Hobbes’s three motives lose their force",[
-  "Gain is less attractive because natural people want little and can usually obtain what they need directly.",
-  "Safety creates less suspicion because solitary people rarely face one another and do not accumulate threatening stores of power.",
-  "Reputation cannot motivate attack when there is no settled public whose admiration or contempt shapes a person’s standing."
-],"Tie Rousseau’s anthropology directly to Hobbes’s motives for war: gain, safety, and reputation are defused or absent.","4");
-question("A peaceful emptiness","If natural people have no language, family, reputation, long-term plans, or moral ideas, what makes this life distinctively human?","Rousseau has explained peace by stripping away much of social life. The success of that answer creates a new problem: how could civilization ever begin?","Allow the unease to remain. The next section separates peace from human development.\n\n"+src("4-5"));
+section("IV","The natural human is independent","Describe the embodied, solitary, pre-moral human and the two natural passions that shape conduct.","5-7");
+build("pure-human","The first human is embodied and largely solitary",[
+  "Rousseau begins with hunger, thirst, fatigue, sexual desire, pain, fear, and the need for rest. Natural needs are limited, and the environment generally supplies ways to meet them, though injury, illness, old age, and death remain.",
+  "Natural humans are physically adaptable because they do not rely on specialized tools, institutions, or other people’s labor. Their lives require versatility more than organized expertise.",
+  "Solitude means that continuing association is unnecessary for basic survival. Encounters can occur, and a mother cares for a dependent child, but permanent households, inherited positions, and settled divisions of labor have not yet formed.",
+  "Natural self-love, or amour de soi, seeks preservation without comparison. Pity is a natural repugnance at another sentient being’s suffering, so self-concern can be restrained before moral reasoning begins."
+],"The natural human is not invulnerable. Independence means that basic survival does not depend on a continuing relation of command and obedience.","5-7");
+duo("Solitude is not hatred",
+  {label:"What Rousseau means",text:"People do not initially need continuing association to meet basic needs, so no one has a standing claim on another person’s labor."},
+  {label:"What he does not mean",text:"Natural humans do not actively hate company or live without any contact. Solitude is a condition of dependence, not an instinct against others."},
+  "This distinction prevents a peaceful condition from becoming a story about natural antisocial hatred.","5-6");
+question("Does pity need reason?","The reading presents a tension: pity appears as immediate in the Second Discourse, yet fuller compassion seems to require imagination.","The next section distinguishes natural openness from moral agency and explains why the same human capacities can support both freedom and servitude.","Use the question as an unresolved interpretive step, not as a general invitation to discussion.","5-7");
 
-section("V","Peace is not yet a human achievement","Confront the animal-like character of Rousseau’s natural human and the problem of transition.\n\n"+src("4-5"));
-duo("Rousseau’s first condition is both attractive and thin",
-  {label:"What it avoids",text:"There is no settled war, domination, status anxiety, corrupt dependence, or systematic desire to harm."},
-  {label:"What it lacks",text:"There is no language, durable family, industry, moral life, shared culture, or developed intelligence."},
-  "Do not romanticize the earliest state. Rousseau treats it as peaceful, but not as a fully realized human community.\n\n"+src("4-5"));
-build("change-problem","The peaceful condition seems unable to move",[
-  "A solitary person with few needs has little reason to invent institutions, seek recognition, or transform the world.",
-  "Rousseau admits that the transition is conjectural and could have occurred in many ways. The argument also notes tensions among his different descriptions.",
-  "His answer depends on two distinctively human capacities: free will and perfectibility, the open-ended ability to change and develop."
-],"Define perfectibility immediately. It does not mean inevitable moral improvement; it means a capacity for self-transformation.","5");
-question("The dangerous capacity","How can the ability to improve life become the source of both progress and misery?","Perfectibility lets people solve new problems, but each solution can alter their desires, relationships, and dependence on others.","This question introduces the causal sequence from tools to society.\n\n"+src("5"));
+section("V","Human freedom opens a dangerous future","Show how freedom and perfectibility make development possible without guaranteeing improvement.","6-9");
+build("freedom-perfectibility","Freedom is openness, not yet autonomy",[
+  "Humans differ from other animals because they can resist instinct and depart from a fixed pattern of behavior. Rousseau calls this natural freedom an openness to more than one response.",
+  "Perfectibility names the capacity to learn, adapt, preserve acquired abilities, and develop new faculties. It does not mean that history steadily moves toward moral improvement.",
+  "Freedom and perfectibility explain both achievement and corruption. The same openness that permits tools, language, morality, and political freedom also permits artificial needs, exploitation, and servitude.",
+  "Physical inequality exists in the pure state of nature, but it rarely becomes durable political inequality. Someone who can leave and survive independently is difficult to keep enslaved, because domination needs the person being dominated to remain, work, and obey."
+],"Define perfectibility as plasticity. It is a condition of human history, not a promise that history will end well.","6-8");
+duo("Natural goodness is not virtue",
+  {label:"Natural goodness",text:"A being with few needs, no desire to outrank others, little opportunity to dominate, and a spontaneous aversion to suffering is innocent rather than vicious."},
+  {label:"Moral virtue",text:"Virtue requires knowledge, reflective choice, and responsibility. Those capacities emerge later, so natural humans can be good without already being moral agents."},
+  "This distinction resolves the apparent contradiction between natural goodness and the absence of morality.","7");
+question("How does humanity leave nature?","Rousseau has described a peaceful but thin condition. Perfectibility now turns accidental pressures into a sequence of new capacities and new dependencies.","The next section follows tools, cooperation, language, families, and convenience as linked stages.","This question marks the move from anthropology to conjectural development.","8-10");
 
-section("VI","Perfectibility starts the trouble","Trace the first steps from environmental pressure to tools, intelligence, and cooperation.\n\n"+src("5-6"));
-build("perfectibility","A capacity becomes active under pressure",[
-  "Rousseau calls the earliest person “infant man”: wandering without industry, speech, settled home, war, or lasting ties.",
-  "Population growth can make simple subsistence harder, creating a practical problem that old habits no longer solve.",
-  "Instead of treating competition as the first response to scarcity, Rousseau emphasizes innovation: people devise tools that make work easier.",
-  "Tool-making awakens intelligence and pride because people begin to recognize their own skill and power over their surroundings."
-],"Keep the contrast with Hobbes explicit: scarcity first stimulates invention rather than immediate predation.","5");
-build("cooperation","Useful coordination creates new relationships",[
-  "Some tasks work better when several people coordinate, as in a temporary hunting party.",
-  "Cooperation begins from mutual interest: each person participates because acting together makes a shared task easier.",
-  "Repeated cooperation reveals the advantages of common shelters and more stable group living.",
-  "A solution to scarcity therefore changes the social world. People who once needed no one begin to organize their lives around one another."
-],"The argument turns when practical coordination becomes a durable habit rather than a temporary convenience.","5-6");
-question("The hidden cost of success","What happens when cooperation produces more than survival requires?","Tools and group living can conquer immediate scarcity. Their success creates leisure, convenience, and new forms of dependence.","The next section shows how abundance of conveniences creates a different kind of need.\n\n"+src("5-6"));
+section("VI","Social life begins through convenience","Trace the accidental, cumulative path from adaptation to language, families, and the intermediate “youth of the world.”","8-11");
+build("development","Accidents activate a cumulative history",[
+  "No original sin or innate drive to dominate forces humanity out of nature. Population changes, climate, disasters, migration, local scarcity, and chance discoveries create problems that old habits cannot solve.",
+  "Perfectibility lets people improvise. They make tools, alter hunting practices, construct shelters, and sometimes cooperate. Later generations imitate and transmit these solutions.",
+  "The process is not teleological. Each successful adaptation changes human capacities and creates new vulnerabilities, so development is not identical with moral progress.",
+  "Environmental obstacles and temporary cooperation develop the mind. Gestures, cries, passion, and repeated encounters gradually gain shared meaning, expanding memory and coordination. Huts and families then make attachment, leisure, and convenience possible. A convenience can become a need, while the “youth of the world” remains an intermediate stage before entrenched inequality."
+],"The sequence is conjectural and open-ended. Tools, cooperation, language, and early family life develop together rather than appearing in a single founding act.","8-11");
+quote("The genuine youth of the World","Rousseau, Second Discourse, Part II, as quoted in the assigned reading","Let the intermediate stage remain distinct from the pure state of nature. Rousseau praises developed social life before property hardens dependence.","11","Primary work quoted in the argument: Jean-Jacques Rousseau, Discourse on the Origin and Foundations of Inequality Among Men.");
+question("What changes when others become witnesses?","Stable contact has made affection and cooperation possible, but it has also made comparison possible.","The next section follows the new desire for recognition and asks whether it must become rivalry.","Use the question to pivot from material convenience to social psychology.","10-12");
 
-section("VII","Convenience becomes a chain","Explain the move from group life and affection to luxury, dependence, and corrupted needs.\n\n"+src("5-6"));
-build("family-feeling","Stable living changes emotion",[
-  "Common huts and repeated contact make durable households possible, and habits of shared life give rise to conjugal and parental love.",
-  "Compassion alone did not create the family. New living arrangements create the repeated relationships in which stronger attachments develop."
-],"The sequence matters: social conditions reshape feeling; the feelings are not simply carried intact from the first state of nature.","5-6");
-build("corrupted-needs","A luxury can become a need",[
-  "Cooperation and tools create leisure, allowing people to produce conveniences beyond food, shelter, and immediate safety.",
-  "At first, a convenience gives genuine pleasure because it makes life easier or more comfortable.",
-  "Once it becomes habitual, the pleasure fades while dependence remains. Losing the convenience now feels devastating.",
-  "Rousseau calls these corrupted needs: society trains people to experience deprivation where natural life once contained no lack."
-],"Define corruption as transformed dependence, not simply moral wickedness.\n\nConstructed analogy: a device may begin as optional, then become necessary for navigation, work, and social contact.","6");
-quote("This was the first yoke which, without thinking of it, they imposed on themselves.","Rousseau, Discourse on the Origin of Inequality, p. 164","Emphasize that the chain is self-imposed and initially appears as improvement.\n\n"+src("6","Discourse on the Origin of Inequality, p. 164, as quoted in the source material."));
-question("A new kind of scarcity","If losing a learned convenience feels unbearable, has progress reduced need - or multiplied it?","Rousseau’s next step is interpersonal. Once people live together, they do not only want objects; they begin to want standing in one another’s eyes.","Move from dependence on things to dependence on recognition.\n\n"+src("6"));
+section("VII","Recognition becomes rivalry","Explain amour-propre as the social passion that makes esteem, shame, and comparison politically important.","11-12");
+build("amour-propre","Amour-propre turns the self into a social question",[
+  "Amour-propre is self-esteem shaped by other people’s judgments. It makes a person care about rank, respect, admiration, and comparative worth, not only about whether basic needs are met.",
+  "Comparison makes esteem scarce. Everyone can have enough food, but not everyone can be superior. Another person’s success can therefore feel like one’s own diminishment.",
+  "When expected recognition fails, shame, resentment, humiliation, anger, envy, and revenge become possible. An injury can now signal contempt, not only physical harm."
+],"Define the term by contrast with amour de soi. The first asks whether one has enough; the second asks where one stands.","11-12");
+duo("Two forms of amour-propre",
+  {label:"Inflamed comparison",text:"The person seeks to be preferred. Recognition becomes a competition in which another person’s success threatens the self."},
+  {label:"Equal recognition",text:"The person seeks respect as someone of equal worth. Social self-consciousness remains, but it need not demand another person’s inferiority."},
+  "Rousseau’s later political and educational projects depend on redirecting social recognition rather than pretending it can disappear.","11-12");
 
-section("VIII","Comparison teaches us to wound","Show how language and public comparison convert ordinary injury into status conflict and revenge.\n\n"+src("6"));
-build("comparison","Living together makes status public",[
-  "As language and society develop, people can compare beauty, strength, skill, possessions, and talent.",
-  "Comparison creates pride when a person feels superior, shame when that person feels inferior, and envy when another receives admiration.",
-  "An injury now communicates more than physical damage. It can be interpreted as contempt - a public judgment that one person matters less.",
-  "Because status depends on others’ opinions, revenge becomes a way to answer humiliation and restore standing."
-],"Make the new causal mechanism explicit: stable social attention creates reputational stakes that did not exist in solitude.","6");
-quote("The genuine youth of the World.","Rousseau, Discourse on the Origin of Inequality, p. 167","Rousseau calls this intermediate stage the happiest and most stable: beyond animal simplicity but not yet consumed by property and inflamed pride.\n\n"+src("6","Discourse on the Origin of Inequality, p. 167, as quoted in the source material."));
-question("Why the happiest stage cannot last","Can a society organized around comparison remain equal once some people control more productive resources than others?","Status rivalry creates friction, but agriculture, metallurgy, and private property turn differences into durable dependence and power.","The next section identifies the material transformation that produces full-scale war.\n\n"+src("6"));
+section("VIII","Property manufactures the war it fears","Show how agriculture, metallurgy, specialization, and recognized property amplify small differences.","12-13");
+build("property-origins","Agriculture and metallurgy destroy easy independence",[
+  "Agriculture requires land to be occupied over time, future harvests to be anticipated, boundaries to be recognized, and labor to be coordinated. Metallurgy supplies tools that make cultivation more productive.",
+  "Specialization increases collective power, but it also makes each producer dependent on other people’s work. Someone who controls more tools, land, or stored goods can secure further advantages.",
+  "Poverty changes as well. It becomes dependence inside a social structure where other people control access to the resources needed for survival. Natural differences now accumulate through institutions.",
+  "Holding or occupying an object is temporary possession. Property is a recognized claim respected even when the owner is absent. The enclosure story dramatizes the shift: “This is mine” works only after people understand ownership, boundaries, obligation, and exclusion, and it becomes troubling when property controls resources needed for survival."
+],"Connect economic development to political power. The issue is not technology by itself, but the dependence created when access to necessities becomes unequal.","12-13");
+quote("This is mine","Rousseau, Second Discourse, Part II, as quoted in the assigned reading","The phrase is effective because property requires other people to accept or enforce the claim.","13","Primary work quoted in the argument: Jean-Jacques Rousseau, Discourse on the Origin and Foundations of Inequality Among Men.");
+question("What happens when property has no impartial authority?","Property has created valuable and unequal stakes, but no common power yet settles disputes.","The next section follows those stakes into a late state of war and the political proposal that claims to end it.","This is the bridge from material inequality to the fraudulent contract.","13-15");
 
-section("IX","Property manufactures a state of war","Trace the sequence from productive specialization to inequality, dependence, and violent conflict.\n\n"+src("6-7"));
-build("property","Production reorganizes social power",[
-  "Agriculture and metallurgy make settled production more effective, but they also divide work and make people increasingly dependent on one another.",
-  "Claims of private property give some people durable control over land, tools, products, and the labor needed to use them.",
-  "Unequal holdings create jealousy and insecurity: the rich fear losing what they possess, while the poor depend on resources controlled by others.",
-  "Rules of justice emerge alongside property, but the new order is already structured by unequal stakes and unequal power."
-],"Do not say that the first natural condition contained property rights. In this account, property and justice appear late in social development.","6");
-quote("Nascent society gave way to the most horrible state of war.","Rousseau, Discourse on the Origin of Inequality, pp. 171-172","The location of war is Rousseau’s reversal: it appears after social development, not at the original beginning.\n\n"+src("6-7","Discourse on the Origin of Inequality, pp. 171-172, as quoted in the source material."));
-build("war-sequence","War is the result, not the starting point",[
-  "Social comparison inflames pride, while property gives people valuable holdings to defend and material inequalities to resent.",
-  "The rich can use superior power to preserve their advantages; the poor can turn to seizure or banditry when ordinary dependence becomes intolerable.",
-  "Greed, ambition, revenge, and fear now stifle natural pity. Conflict becomes persistent because society has produced both the motives and the stakes of war."
-],"Make the causal conclusion explicit. Rousseau does not deny that humans can become violent; he denies that this violence reveals an unchanged original nature.","6-7");
-question("The political emergency","When social development creates a war that threatens everyone, who benefits most from the rules that promise peace?","Rousseau’s answer is unsettling: the proposal for equal law arises from the rich, whose property is most exposed to disorder.","This question moves from the origin of war to the political settlement built in response.\n\n"+src("7"));
+section("IX","Law can pacify and entrench inequality","Trace the late state of war, the fraudulent contract, and the stages by which institutions fix hierarchy.","13-15");
+build("fraudulent-contract","The state of war arrives late",[
+  "When property exists without an effective common authority, the wealthy have much to lose and the propertyless may see little reason to respect an order that excludes them from vital resources.",
+  "Robbery, retaliation, insecurity, and calculated aggression now resemble Hobbes’s state of war. Rousseau places this condition after property, social comparison, expanded desires, and economic interdependence have developed.",
+  "The rich propose common rules, courts, and public power in the language of peace and protection. The practical effect is to place collective force behind the existing distribution of resources.",
+  "People with little property accept because they urgently want security, but the agreement is formally common and substantively unequal. The poor surrender independence and gain obligations, while the rich gain enforceable property rights. Rousseau therefore separates peace from justice: public law can replace private violence while stabilizing the unequal relationships that produced the crisis."
+],"Rousseau’s reversal is now complete: war is a late social product, not the original condition.","13-14");
+duo("Two contracts in Rousseau’s story",
+  {label:"The fraudulent contract",text:"The Second Discourse explains how a deceptive pact can give unequal possession the appearance of legal right."},
+  {label:"The legitimate contract",text:"The Social Contract asks what principles could make political authority legitimate among free and equal citizens."},
+  "Do not collapse Rousseau’s diagnosis of unjust states into his later normative project.","14");
+head("Three stages of political inequality",[
+  ["Rich and poor","Property and law fix the distinction between those who possess and those who depend."],
+  ["Powerful and weak","Government and magistrates fix the distinction between those who command through office and those who must submit."],
+  ["Master and slave","When government becomes arbitrary rule, everyone’s security depends on a ruler’s will."]
+],"The sequence shows how a human convention can acquire the appearance of natural necessity.","15");
+question("Did law end domination?","The state has made conflict more predictable, but predictability may serve the people who already hold the most.","The next section asks what this order does to freedom, selfhood, and the balance between needs and powers.","Let the political achievement and the political failure remain together.","13-16");
 
-section("X","The state arrives wearing the mask of peace","Explain how civil society resolves disorder while stabilizing an unequal property order.\n\n"+src("7"));
-build("rich-project","Government answers a socially created crisis",[
-  "Under pressure from conflict, the rich propose common rules of justice, public laws, and government as a way to end insecurity.",
-  "The rules bind everyone in the language of equality, but their benefits are unequal because people with substantial property have the most to secure.",
-  "Civil society is therefore born as a response to war or near-war, yet it also protects the unequal arrangements that helped produce the conflict."
-],"Keep both functions visible: the state can make peace and can consolidate advantage at the same time.","7");
-duo("The same institution can be remedy and inheritance",
-  {label:"A remedy for disorder",text:"Common laws restrain fighting, stabilize expectations, and replace private force with a public settlement."},
-  {label:"An inheritance of inequality",text:"The settlement secures property created under unequal conditions and makes those advantages harder to challenge."},
-  "This tension prepares the diagnostic ending without resolving whether every possible political order must reproduce the first one.\n\n"+src("7"));
-diagnostic("Did society cure human violence - or teach us the desires that made violence necessary?","Let the question remain open. It distinguishes Rousseau from theories that treat conflict as the direct expression of fixed human nature.\n\n"+src("1-7"));
+section("X","Freedom must survive society","Explain freedom as nondependence, the divided social self, and Rousseau’s civic alternative.","15-18");
+build("lost-freedom","The deepest loss is freedom as nondependence",[
+  "Civilized people may possess more goods and technical power while having less control over their lives. Employers, patrons, landlords, officials, and social observers can become gatekeepers.",
+  "Economic inequality becomes political power when one person controls resources another needs and sets the terms of access. Power over things grows alongside subjection to persons.",
+  "Rousseau’s concern is therefore not only how much people have. Natural humans live close to their needs and powers, while social humans perform identities for others. Luxury and comparison can make desire outrun capacity.",
+  "A literal return to nature would abandon love, conscience, reason, virtue, and citizenship. The political task is civil and moral freedom under general laws that express the common interest of equals, with material limits against one person purchasing another."
+],"The essential test is discretion. Dependence becomes oppressive when another person can decide whether your necessities are available.","15-16");
+duo("More power over things, less freedom among persons",
+  {label:"Material gain",text:"Property, specialization, and law can increase production, storage, security, and technical power."},
+  {label:"Personal subjection",text:"The same system can make survival depend on pleasing people who control work, resources, status, or access."},
+  "Use the comparison to keep Rousseau’s criticism from becoming a simple complaint about wealth.","15-16");
+quote("No citizen should be wealthy enough to purchase another, and no citizen should be poor enough to be forced to sell himself","Rousseau, The Social Contract, II.11, as quoted in the assigned reading","This is the material condition Rousseau places beneath legal equality.","18","Primary work quoted in the argument: Jean-Jacques Rousseau, The Social Contract.");
+question("What would freedom look like after nature?","Rousseau has rejected both isolation and ordinary dependence.","The proposed answer is a social form of freedom, but it now faces the problem of forming people who can live it without treating others as masters or servants.","Use this as the transition to education and the limits of Rousseau’s own reconstruction.","17-19");
+
+section("XI","Education tests nonservile development","Show how Emile applies the genealogy to individual formation and exposes unresolved tensions.","18-21");
+build("emile","Emile tries to rebuild independence inside society",[
+  "Emile translates Rousseau’s history of the species into an individual life. A child begins with sensation, vulnerability, self-love, and developing powers, then gradually becomes aware of other people’s judgments.",
+  "Education should keep wants near capacities and ground learning in consequences tied to things rather than arbitrary personal commands. Dependence on physical necessity is impersonal.",
+  "Dependence on another person’s will encourages servility or tyranny. Education cannot make a child natural again, but it can cultivate pity, reason, conscience, and recognition that do not require treating other people as masters or servants.",
+  "The project remains unfinished. The pure state of nature works best as a counterfactual model rather than scientific prehistory, and Rousseau’s own tensions about pity, amour-propre, colonial categories, and gendered dependence make his method turn back on itself."
+],"The educational project preserves functional independence rather than attempting a literal escape from society.","18-19");
+duo("Two kinds of dependence",
+  {label:"Dependence on things",text:"A physical obstacle can frustrate a plan, but it does not flatter, humiliate, or intentionally dominate."},
+  {label:"Dependence on persons",text:"When another person controls what you need, the relationship can turn into servility, manipulation, or tyranny."},
+  "This distinction carries the state-of-nature baseline into social education.","19");
+head("What remains unresolved",[
+  ["History and model","The model can clarify a philosophical contrast without replacing empirical evidence."],
+  ["Natural feeling and reason","Elementary aversion to distress may precede reflective compassion, but Rousseau does not always separate them."],
+  ["Equal recognition","A free social order depends on whether esteem can avoid turning into a contest for superiority."]
+],"These tensions are part of the reading’s conclusion, not loose ends to hide.","19-21");
+question("Can a social person remain free?","Education gives one answer, but the answer stays provisional because the same capacities that make moral agency possible also expose people to dependence, comparison, and power.","The final section states what Rousseau’s genealogy changes in political philosophy and why nature remains a standard of critique.","Hold the question open until the diagnostic ending.","18-23");
+
+section("XII","Nature is a standard, not a destination","Close with the philosophical stakes, the conclusion of the genealogy, and the burden Rousseau places on political justification.","22-23");
+build("stakes-conclusion","Rousseau changes what political philosophy must ask",[
+  "Instead of treating preferences as fixed, Rousseau asks how institutions produce desires. Instead of measuring inequality only in wealth, he studies status, dependence, vulnerability, recognition, and power.",
+  "Domination can emerge without a single designer. Property rules, divisions of labor, competitive standards, and inherited advantages can combine into an oppressive structure while each person responds to immediate circumstances.",
+  "Rousseau’s conclusion is not that society should become pre-social. Institutions can also cultivate compassion, equal respect, civic agency, and freedom, so anyone who calls inequality natural or inevitable carries the burden of justification."
+],"Make the final move explicit: nature is a critical standard, not a political destination.","22-23");
+diagnostic("Can human beings become social without becoming dependent on one another’s private wills?","Return to the whole arc. Rousseau begins with independence, pity, and perfectibility, then asks whether social development can preserve freedom while making common life possible.","1-23");
 refs([
-  ["Source material","“Rousseau,” source PDF, pp. 1-7."],
-  ["Primary work quoted and discussed","Rousseau, Discourse on the Origin of Inequality (1755; Cambridge University Press, 1997), pages cited in the deck."]
-],"These are the only works used to reconstruct the visible argument.\n\n"+src("1-7"));
+  ["Assigned reading","“Rousseau and the State of Nature,” course PDF, pp. 1-23."],
+  ["Primary work quoted and discussed","Jean-Jacques Rousseau, Discourse on the Origin and Foundations of Inequality Among Men (Second Discourse, 1755)."],
+  ["Primary work quoted and discussed","Jean-Jacques Rousseau, The Social Contract (1762), especially I.6-8, II.1-4, and II.11."],
+  ["Primary work discussed","Jean-Jacques Rousseau, Emile (1762), Book II."]
+],"The deck uses only the assigned reading and the primary works it explicitly quotes or discusses.","1-23");
 
-const deck=document.getElementById('deck');
-const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+const deck=document.getElementById("deck");
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[c]));
 function renderSlide(s,i){
-  const article=document.createElement('article');
-  article.className=`slide ${s.type}${s.type==='content'||s.type==='head'?' top':''}`;
+  const article=document.createElement("article");
+  article.className="slide "+s.type+((s.type==="content"||s.type==="head")?" top":"");
   article.dataset.index=i;
+  article.setAttribute("aria-hidden",i===0?"false":"true");
   if(s.buildGroup) article.dataset.buildGroup=s.buildGroup;
-  let html='<div class="slide-inner">';
-  if(s.type==='cover') html+=`<h1 class="title">${esc(s.title)}</h1><p class="work">${esc(s.work)}</p><div class="course">${esc(s.course)}</div>`;
-  if(s.type==='section') html+=`<div class="eyebrow">${esc(s.eyebrow)}</div><h2 class="title">${esc(s.title)}</h2><div class="rule"></div>`;
-  if(s.type==='content') html+=`<h2 class="title">${esc(s.title)}</h2><div class="body">${s.paragraphs.map((p,j)=>`<p class="${j===s.paragraphs.length-1?'fresh':''}">${esc(p)}</p>`).join('')}</div>`;
-  if(s.type==='question'||s.type==='diagnostic') html+=`<div class="eyebrow">${esc(s.eyebrow)}</div><p class="prompt">${esc(s.prompt)}</p>${s.context?`<p class="context">${esc(s.context)}</p>`:''}`;
-  if(s.type==='quote') html+=`<blockquote>${esc(s.text)}</blockquote><cite>${esc(s.cite)}</cite>`;
-  if(s.type==='duo') html+=`<h2 class="title">${esc(s.title)}</h2><div class="duo-grid">${[s.left,s.right].map(x=>`<div class="duo-col"><h3>${esc(x.label)}</h3><p>${esc(x.text)}</p></div>`).join('')}</div>`;
-  if(s.type==='head') html+=`<h2 class="title">${esc(s.title)}</h2><div class="head-list">${s.items.map(x=>`<div class="head-item"><b>${esc(x[0])}</b><span>${esc(x[1])}</span></div>`).join('')}</div>`;
-  if(s.type==='refs') html+=`<h2 class="title">${esc(s.title)}</h2><div class="refs-list">${s.items.map(x=>`<div class="ref"><strong>${esc(x[0])}.</strong> ${esc(x[1])}</div>`).join('')}</div>`;
-  article.innerHTML=html+'</div>';
+  let html="<div class=\"slide-inner\">";
+  if(s.type==="cover") html+="<h1 class=\"title\">"+esc(s.title)+"</h1><p class=\"work\">"+esc(s.work)+"</p><div class=\"course\">"+esc(s.course)+"</div>";
+  if(s.type==="section") html+="<div class=\"eyebrow\">"+esc(s.eyebrow)+"</div><h2 class=\"title\">"+esc(s.title)+"</h2><div class=\"rule\" aria-hidden=\"true\"></div>";
+  if(s.type==="content") html+="<h2 class=\"title\">"+esc(s.title)+"</h2><div class=\"body\">"+s.paragraphs.map((p,j)=>"<p class=\""+(j===s.paragraphs.length-1?"fresh":"")+"\">"+esc(p)+"</p>").join("")+"</div>";
+  if(s.type==="question"||s.type==="diagnostic") html+="<div class=\"eyebrow\">"+esc(s.eyebrow)+"</div><p class=\"prompt\">"+esc(s.prompt)+"</p>"+(s.context?"<p class=\"context\">"+esc(s.context)+"</p>":"");
+  if(s.type==="quote") html+="<blockquote>"+esc(s.text)+"</blockquote><cite>"+esc(s.cite)+"</cite>";
+  if(s.type==="duo") html+="<h2 class=\"title\">"+esc(s.title)+"</h2><div class=\"duo-grid\">"+[s.left,s.right].map(x=>"<div class=\"duo-col\"><h3>"+esc(x.label)+"</h3><p>"+esc(x.text)+"</p></div>").join("")+"</div>";
+  if(s.type==="head") html+="<h2 class=\"title\">"+esc(s.title)+"</h2><div class=\"head-list\">"+s.items.map(x=>"<div class=\"head-item\"><b>"+esc(x[0])+"</b><span>"+esc(x[1])+"</span></div>").join("")+"</div>";
+  if(s.type==="refs") html+="<h2 class=\"title\">"+esc(s.title)+"</h2><div class=\"refs-list\">"+s.items.map(x=>"<div class=\"ref\"><strong>"+esc(x[0])+".</strong> "+esc(x[1])+"</div>").join("")+"</div>";
+  article.innerHTML=html+"</div>";
   deck.appendChild(article);
   return article;
 }
 const nodes=slides.map(renderSlide);
 let current=0;
-const counter=document.getElementById('counter');
-const progress=document.getElementById('progress');
-const notes=document.getElementById('notes');
-const notesBody=document.getElementById('notes-body');
-const overview=document.getElementById('overview');
-const overviewGrid=document.getElementById('overview-grid');
-function labelFor(s){return s.title||s.prompt||s.text||'Slide';}
-slides.forEach((s,i)=>{const b=document.createElement('button');b.className='overview-card';b.innerHTML=`<span class="num">${String(i+1).padStart(2,'0')} / ${slides.length}</span><span class="label">${esc(labelFor(s))}</span>`;b.addEventListener('click',()=>{closePanels();show(i)});overviewGrid.appendChild(b)});
+const counter=document.getElementById("counter");
+const progress=document.getElementById("progress");
+const notes=document.getElementById("notes");
+const notesBody=document.getElementById("notes-body");
+const overview=document.getElementById("overview");
+const overviewGrid=document.getElementById("overview-grid");
+const labelFor=s=>s.title||s.prompt||s.text||"Slide";
+slides.forEach((s,i)=>{
+  const b=document.createElement("button");
+  b.type="button";
+  b.className="overview-card";
+  b.setAttribute("aria-label","Go to slide "+(i+1)+": "+labelFor(s));
+  b.innerHTML="<span class=\"num\">"+String(i+1).padStart(2,"0")+" / "+slides.length+"</span><span class=\"label\">"+esc(labelFor(s))+"</span>";
+  b.addEventListener("click",()=>{closePanels();show(i)});
+  overviewGrid.appendChild(b);
+});
 const cards=[...overviewGrid.children];
 function show(i){
   current=Math.max(0,Math.min(slides.length-1,i));
-  nodes.forEach((n,j)=>n.classList.toggle('active',j===current));
-  cards.forEach((n,j)=>n.classList.toggle('current',j===current));
-  counter.textContent=`${current+1} / ${slides.length}`;
-  progress.style.width=`${((current+1)/slides.length)*100}%`;
-  notesBody.textContent=slides[current].notes||'No notes for this slide.';
-  document.title=`${current+1}/${slides.length} · Rousseau - The State of Nature`;
+  nodes.forEach((n,j)=>{
+    const active=j===current;
+    n.classList.toggle("active",active);
+    n.setAttribute("aria-hidden",active?"false":"true");
+  });
+  cards.forEach((n,j)=>n.classList.toggle("current",j===current));
+  counter.textContent=(current+1)+" / "+slides.length;
+  progress.style.width=(((current+1)/slides.length)*100)+"%";
+  notesBody.textContent=slides[current].notes||"No notes for this slide.";
+  document.title=(current+1)+"/"+slides.length+" · Rousseau - The State of Nature";
 }
-function openPanel(panel){closePanels();panel.classList.add('open')}
-function closePanels(){overview.classList.remove('open');notes.classList.remove('open')}
-function togglePanel(panel){panel.classList.contains('open')?closePanels():openPanel(panel)}
-function toggleFullscreen(){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen().catch(()=>{})}
-document.getElementById('fullscreen').addEventListener('click',toggleFullscreen);
-document.querySelectorAll('.close').forEach(b=>b.addEventListener('click',closePanels));
-document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){closePanels();return}
-  if(overview.classList.contains('open')||notes.classList.contains('open')) return;
-  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();show(current+1)}
-  else if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();show(current-1)}
-  else if(e.key.toLowerCase()==='o') togglePanel(overview);
-  else if(e.key.toLowerCase()==='n') togglePanel(notes);
-  else if(e.key.toLowerCase()==='f') toggleFullscreen();
+function openPanel(panel){closePanels();panel.classList.add("open")}
+function closePanels(){overview.classList.remove("open");notes.classList.remove("open")}
+function togglePanel(panel){panel.classList.contains("open")?closePanels():openPanel(panel)}
+function toggleFullscreen(){
+  if(document.fullscreenElement){document.exitFullscreen()}
+  else{document.documentElement.requestFullscreen().catch(()=>{})}
+}
+document.getElementById("fullscreen").addEventListener("click",toggleFullscreen);
+document.querySelectorAll(".close").forEach(b=>b.addEventListener("click",closePanels));
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"){closePanels();return}
+  if(overview.classList.contains("open")||notes.classList.contains("open")) return;
+  if(["ArrowRight","ArrowDown"," ","PageDown"].includes(e.key)){e.preventDefault();show(current+1)}
+  else if(["ArrowLeft","ArrowUp","PageUp"].includes(e.key)){e.preventDefault();show(current-1)}
+  else if(e.key.toLowerCase()==="o") togglePanel(overview);
+  else if(e.key.toLowerCase()==="n") togglePanel(notes);
+  else if(e.key.toLowerCase()==="f") toggleFullscreen();
 });
 let touchX=0,touchY=0;
-document.addEventListener('touchstart',e=>{touchX=e.changedTouches[0].screenX;touchY=e.changedTouches[0].screenY},{passive:true});
-document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].screenX-touchX,dy=e.changedTouches[0].screenY-touchY;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy))show(current+(dx<0?1:-1))},{passive:true});
-function fits(node){const inner=node.querySelector('.slide-inner');return inner.scrollHeight<=node.clientHeight*.82&&inner.scrollWidth<=node.clientWidth*.92}
-function fitNode(node,start=1){let f=start;node.classList.add('measuring');node.style.setProperty('--fit',f);while(f>.72&&!fits(node)){f-=.02;node.style.setProperty('--fit',f)}node.classList.remove('measuring');return f}
+document.addEventListener("touchstart",e=>{touchX=e.changedTouches[0].screenX;touchY=e.changedTouches[0].screenY},{passive:true});
+document.addEventListener("touchend",e=>{
+  const dx=e.changedTouches[0].screenX-touchX;
+  const dy=e.changedTouches[0].screenY-touchY;
+  if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)) show(current+(dx<0?1:-1));
+},{passive:true});
+function fits(node){
+  const inner=node.querySelector(".slide-inner");
+  return inner&&inner.scrollHeight<=node.clientHeight*.82&&inner.scrollWidth<=node.clientWidth*.92;
+}
+function fitNode(node,start){
+  let f=start||1;
+  node.classList.add("measuring");
+  node.style.setProperty("--fit",f);
+  while(f>.72&&!fits(node)){
+    f=Math.max(.72,f-.01);
+    node.style.setProperty("--fit",f.toFixed(3));
+  }
+  node.classList.remove("measuring");
+  return f;
+}
 function fitAll(){
-  nodes.forEach(n=>n.style.setProperty('--fit',1));
-  const groups={};nodes.forEach(n=>{if(n.dataset.buildGroup)(groups[n.dataset.buildGroup]??=[]).push(n)});
+  nodes.forEach(n=>n.style.setProperty("--fit",1));
+  const groups={};
+  nodes.forEach(n=>{if(n.dataset.buildGroup)(groups[n.dataset.buildGroup]||(groups[n.dataset.buildGroup]=[])).push(n)});
   const grouped=new Set(Object.values(groups).flat());
-  Object.values(groups).forEach(group=>{const final=group[group.length-1];const f=fitNode(final);group.forEach(n=>n.style.setProperty('--fit',f))});
-  nodes.filter(n=>!grouped.has(n)).forEach(n=>fitNode(n));
+  Object.values(groups).forEach(group=>{
+    const f=fitNode(group[group.length-1],1);
+    group.forEach(n=>n.style.setProperty("--fit",f));
+  });
+  nodes.filter(n=>!grouped.has(n)).forEach(n=>fitNode(n,1));
   show(current);
 }
-let resizeTimer;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(fitAll,120)});
-if(document.fonts?.ready)document.fonts.ready.then(fitAll);else fitAll();
+let resizeTimer;
+window.addEventListener("resize",()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(fitAll,160)});
+if(document.fonts&&document.fonts.ready) document.fonts.ready.then(fitAll); else fitAll();
 show(0);
 </script>
 </body>
