@@ -151,6 +151,8 @@
 
     .library-section { margin-top: 3rem; }
 
+    .library-view { padding-top: 2.25rem; }
+
     .section-heading {
       display: flex;
       align-items: baseline;
@@ -421,93 +423,97 @@
 
   <main class="shell library-view" id="library-view">
     <a class="home-link" href="./index.html">← All subjects</a>
-    <p class="eyebrow">Political Philosophy · Interactive Course Library</p>
-    <h1>Think through the arguments.</h1>
-    <p class="intro">Choose a presentation or activity below. Each deck opens in its own full-screen, interactive page with keyboard, touch, overview, notes, and fullscreen controls. Use the Download HTML button under any card to save a shareable copy.</p>
-
-    <div class="rule"></div>
-
     <div class="toolbar" aria-label="Library controls">
       <label class="search-wrap">
         <span class="sr-only">Search presentations</span>
         <input id="search" type="search" placeholder="Search by philosopher or topic…" autocomplete="off">
       </label>
       <label>
-        <span class="sr-only">Filter by section</span>
+        <span class="sr-only">Filter by module</span>
         <select id="section-filter">
-          <option value="all">All sections</option>
-          <option value="foundations">Foundations &amp; contract</option>
-          <option value="liberty">Liberty &amp; liberalism</option>
-          <option value="justice">Justice &amp; equality</option>
-          <option value="democracy">Democracy</option>
-          <option value="activities">Activities</option>
+          <option value="all">All modules</option>
+          <option value="introduction">Introduction</option>
+          <option value="module-1">1 · The State of Nature</option>
+          <option value="module-2">2 · Justifying the State</option>
+          <option value="module-3">3 · Who Should Rule?</option>
+          <option value="module-4">4 · The Place of Liberty</option>
+          <option value="module-5">5 · The Distribution of Property</option>
+          <option value="module-6">6 · Justice for Everyone, Everywhere?</option>
         </select>
       </label>
-      <span class="count" id="count" aria-live="polite">26 resources</span>
+      <span class="count" id="count" aria-live="polite">27 resources</span>
     </div>
 
-    <section class="library-section" data-section="foundations">
-      <div class="section-heading"><h2>Foundations &amp; contract</h2><span>01</span></div>
+    <section class="library-section" data-section="introduction">
+      <div class="section-heading"><h2>Introduction</h2><span>INTRO</span></div>
+      <div class="cards">
+        <a class="card" data-search="day 1 questions introduction" href="Day%201%20questions.html"><span class="card-type">Class activity</span><h3>Day 1 Questions</h3><span class="card-arrow">→</span></a>
+        <a class="card" data-search="day 1 case first questions introduction" href="Day%201%20questions%20-%20case%20first.html"><span class="card-type">Class activity</span><h3>Day 1 Questions — Case First</h3><span class="card-arrow">→</span></a>
+      </div>
+    </section>
+
+    <section class="library-section" data-section="module-1">
+      <div class="section-heading"><h2>1 The State of Nature</h2><span>01</span></div>
       <div class="cards">
         <a class="card" data-search="hobbes state nature" href="Presentations/State%20of%20Nature%20-%20Hobbes.html"><span class="card-type">Thomas Hobbes</span><h3>The State of Nature</h3><span class="card-arrow">→</span></a>
         <a class="card" data-search="locke state nature" href="Presentations/Locke%20-%20State%20of%20Nature.html"><span class="card-type">John Locke</span><h3>The State of Nature</h3><span class="card-arrow">→</span></a>
         <a class="card" data-search="locke state nature lecture notes" href="Presentations/Locke%20-%20State%20of%20Nature%20Notes.html"><span class="card-type">John Locke · Lecture notes</span><h3>The State of Nature</h3><span class="card-arrow">→</span></a>
-        <a class="card" data-search="locke social contract" href="Presentations/Locke%20-%20The%20Social%20Contract.html"><span class="card-type">John Locke</span><h3>The Social Contract</h3><span class="card-arrow">→</span></a>
-        <a class="card" data-search="locke property markets" href="Presentations/Locke%20-%20Property%20and%20Markets.html"><span class="card-type">John Locke</span><h3>Property &amp; Markets</h3><span class="card-arrow">→</span></a>
         <a class="card" data-search="rousseau state nature" href="Presentations/Rousseau%20-%20State%20of%20Nature.html"><span class="card-type">Jean-Jacques Rousseau</span><h3>The State of Nature</h3><span class="card-arrow">→</span></a>
-        <a class="card" data-search="rousseau general will" href="Presentations/Rousseau%20-%20The%20General%20Will.html"><span class="card-type">Jean-Jacques Rousseau</span><h3>The General Will</h3><span class="card-arrow">→</span></a>
-        <a class="card" data-search="social contract radical criticism" href="Presentations/Radical%20Criticism%20-%20The%20Social%20Contract.html"><span class="card-type">Criticism</span><h3>Radical Criticism of the Social Contract</h3><span class="card-arrow">→</span></a>
-      </div>
-    </section>
-
-    <section class="library-section" data-section="liberty">
-      <div class="section-heading"><h2>Liberty &amp; liberalism</h2><span>02</span></div>
-      <div class="cards">
-        <a class="card" data-search="bentham utilitarianism" href="Presentations/Jeremy%20Bentham%20-%20Utilitarianism.html"><span class="card-type">Jeremy Bentham</span><h3>Utilitarianism</h3><span class="card-arrow">→</span></a>
-        <a class="card" data-search="mill liberty" href="Presentations/John%20Stuart%20Mill%20-%20On%20Liberty.html"><span class="card-type">John Stuart Mill</span><h3>On Liberty</h3><span class="card-arrow">→</span></a>
-        <a class="card" data-search="mill justifying liberty" href="Presentations/John%20Stuart%20Mill%20-%20Justifying%20Liberty.html"><span class="card-type">John Stuart Mill</span><h3>Justifying Liberty</h3><span class="card-arrow">→</span></a>
-        <a class="card" data-search="liberalism problems" href="Presentations/Problems%20with%20Liberalism.html"><span class="card-type">Liberalism</span><h3>Problems with Liberalism</h3><span class="card-arrow">→</span></a>
-      </div>
-    </section>
-
-    <section class="library-section" data-section="justice">
-      <div class="section-heading"><h2>Justice &amp; equality</h2><span>03</span></div>
-      <div class="cards">
-        <a class="card" data-search="political philosophy distributive justice" href="Presentations/Political%20Philosophy%20-%20The%20Problem%20of%20Distributive%20Justice.html"><span class="card-type">Political Philosophy</span><h3>The Problem of Distributive Justice</h3><span class="card-arrow">→</span></a>
-        <a class="card" data-search="justice everyone" href="Presentations/Justice%20for%20Everyone.html"><span class="card-type">Justice</span><h3>Justice for Everyone</h3><span class="card-arrow">→</span></a>
-        <a class="card" data-search="justice everywhere" href="Presentations/Justice%20Everywhere.html"><span class="card-type">Justice</span><h3>Justice Everywhere</h3><span class="card-arrow">→</span></a>
-        <a class="card" data-search="rawls choosing justice" href="Presentations/Rawls%20-%20Choosing%20Justice.html"><span class="card-type">John Rawls</span><h3>Choosing Justice</h3><span class="card-arrow">→</span></a>
-        <a class="card" data-search="rawls critics" href="Presentations/Rawls%20-%20His%20Critics.html"><span class="card-type">John Rawls</span><h3>Rawls &amp; His Critics</h3><span class="card-arrow">→</span></a>
-        <a class="card" data-search="iris marion young injustice oppression" href="Presentations/Iris%20Marion%20Young%20-%20Injustice%20and%20Oppression.html"><span class="card-type">Iris Marion Young</span><h3>Injustice &amp; Oppression</h3><span class="card-arrow">→</span></a>
-      </div>
-    </section>
-
-    <section class="library-section" data-section="democracy">
-      <div class="section-heading"><h2>Democracy</h2><span>04</span></div>
-      <div class="cards">
-        <a class="card" data-search="plato democracy" href="Presentations/Plato%20-%20Against%20Democracy.html"><span class="card-type">Plato</span><h3>Against Democracy</h3><span class="card-arrow">→</span></a>
-        <a class="card" data-search="richard kraut plato democracy" href="Presentations/Richard%20Kraut%20-%20Plato%20against%20Democracy.html"><span class="card-type">Richard Kraut</span><h3>Plato Against Democracy</h3><span class="card-arrow">→</span></a>
-        <a class="card" data-search="mill representative democracy" href="Presentations/John%20Stuart%20Mill%20-%20Representative%20Democracy.html"><span class="card-type">John Stuart Mill</span><h3>Representative Democracy</h3><span class="card-arrow">→</span></a>
-      </div>
-    </section>
-
-    <section class="library-section" data-section="activities">
-      <div class="section-heading"><h2>Activities</h2><span>05</span></div>
-      <div class="cards">
-        <a class="card" data-search="day 1 questions" href="Day%201%20questions.html"><span class="card-type">Class activity</span><h3>Day 1 Questions</h3><span class="card-arrow">→</span></a>
-        <a class="card" data-search="day 1 case first questions" href="Day%201%20questions%20-%20case%20first.html"><span class="card-type">Class activity</span><h3>Day 1 Questions — Case First</h3><span class="card-arrow">→</span></a>
-        <a class="card" data-search="state nature simulation society" href="state-of-nature-simulation.html"><span class="card-type">Interactive simulation</span><h3>Building a Society</h3><span class="card-arrow">→</span></a>
+        <a class="card" data-search="state nature simulation building society" href="state-of-nature-simulation.html"><span class="card-type">Interactive simulation</span><h3>Building a Society</h3><span class="card-arrow">→</span></a>
         <a class="card" data-search="hobbes argument sorter state nature" href="hobbes-argument-sorter.html"><span class="card-type">Interactive activity</span><h3>Hobbes Argument Sorter</h3><span class="card-arrow">→</span></a>
         <a class="card" data-search="locke argument sorter state nature" href="locke-argument-sorter.html"><span class="card-type">Interactive activity</span><h3>Locke's State of Nature Argument</h3><span class="card-arrow">→</span></a>
         <a class="card" data-search="rousseau argument sorter state nature inequality property" href="rousseau-argument-sorter.html"><span class="card-type">Interactive activity</span><h3>Rousseau's State of Nature Argument</h3><span class="card-arrow">→</span></a>
       </div>
     </section>
 
-    <p class="empty" id="empty">No resources match that search.</p>
+    <section class="library-section" data-section="module-2">
+      <div class="section-heading"><h2>2 Justifying the State</h2><span>02</span></div>
+      <div class="cards">
+        <a class="card" data-search="locke social contract justify state" href="Presentations/Locke%20-%20The%20Social%20Contract.html"><span class="card-type">John Locke</span><h3>The Social Contract</h3><span class="card-arrow">→</span></a>
+        <a class="card" data-search="bentham utilitarianism justify state" href="Presentations/Jeremy%20Bentham%20-%20Utilitarianism.html"><span class="card-type">Jeremy Bentham</span><h3>Utilitarianism</h3><span class="card-arrow">→</span></a>
+        <a class="card" data-search="social contract radical criticism justify state" href="Presentations/Radical%20Criticism%20-%20The%20Social%20Contract.html"><span class="card-type">Criticism</span><h3>Radical Criticism of the Social Contract</h3><span class="card-arrow">→</span></a>
+      </div>
+    </section>
 
-    <footer>
-      Edit the HTML files to update a presentation. Once this folder is uploaded to GitHub Pages, committed changes will automatically update the live site.
-    </footer>
+    <section class="library-section" data-section="module-3">
+      <div class="section-heading"><h2>3 Who Should Rule?</h2><span>03</span></div>
+      <div class="cards">
+        <a class="card" data-search="plato democracy" href="Presentations/Plato%20-%20Against%20Democracy.html"><span class="card-type">Plato</span><h3>Against Democracy</h3><span class="card-arrow">→</span></a>
+        <a class="card" data-search="richard kraut plato democracy" href="Presentations/Richard%20Kraut%20-%20Plato%20against%20Democracy.html"><span class="card-type">Richard Kraut</span><h3>Plato Against Democracy</h3><span class="card-arrow">→</span></a>
+        <a class="card" data-search="rousseau general will democracy rule" href="Presentations/Rousseau%20-%20The%20General%20Will.html"><span class="card-type">Jean-Jacques Rousseau</span><h3>The General Will</h3><span class="card-arrow">→</span></a>
+        <a class="card" data-search="mill representative democracy" href="Presentations/John%20Stuart%20Mill%20-%20Representative%20Democracy.html"><span class="card-type">John Stuart Mill</span><h3>Representative Democracy</h3><span class="card-arrow">→</span></a>
+      </div>
+    </section>
+
+    <section class="library-section" data-section="module-4">
+      <div class="section-heading"><h2>4 The Place of Liberty</h2><span>04</span></div>
+      <div class="cards">
+        <a class="card" data-search="mill liberty place liberty" href="Presentations/John%20Stuart%20Mill%20-%20On%20Liberty.html"><span class="card-type">John Stuart Mill</span><h3>On Liberty</h3><span class="card-arrow">→</span></a>
+        <a class="card" data-search="mill justifying liberty principle" href="Presentations/John%20Stuart%20Mill%20-%20Justifying%20Liberty.html"><span class="card-type">John Stuart Mill</span><h3>Justifying Liberty</h3><span class="card-arrow">→</span></a>
+        <a class="card" data-search="liberalism problems place liberty" href="Presentations/Problems%20with%20Liberalism.html"><span class="card-type">Liberalism</span><h3>Problems with Liberalism</h3><span class="card-arrow">→</span></a>
+      </div>
+    </section>
+
+    <section class="library-section" data-section="module-5">
+      <div class="section-heading"><h2>5 The Distribution of Property</h2><span>05</span></div>
+      <div class="cards">
+        <a class="card" data-search="political philosophy distributive justice property" href="Presentations/Political%20Philosophy%20-%20The%20Problem%20of%20Distributive%20Justice.html"><span class="card-type">Political Philosophy</span><h3>The Problem of Distributive Justice</h3><span class="card-arrow">→</span></a>
+        <a class="card" data-search="locke property markets distribution property" href="Presentations/Locke%20-%20Property%20and%20Markets.html"><span class="card-type">John Locke</span><h3>Property &amp; Markets</h3><span class="card-arrow">→</span></a>
+        <a class="card" data-search="rawls choosing justice theory property" href="Presentations/Rawls%20-%20Choosing%20Justice.html"><span class="card-type">John Rawls</span><h3>Choosing Justice</h3><span class="card-arrow">→</span></a>
+        <a class="card" data-search="rawls critics theory property" href="Presentations/Rawls%20-%20His%20Critics.html"><span class="card-type">John Rawls</span><h3>Rawls &amp; His Critics</h3><span class="card-arrow">→</span></a>
+        <a class="card" data-search="iris marion young injustice oppression distribution property" href="Presentations/Iris%20Marion%20Young%20-%20Injustice%20and%20Oppression.html"><span class="card-type">Iris Marion Young</span><h3>Injustice &amp; Oppression</h3><span class="card-arrow">→</span></a>
+      </div>
+    </section>
+
+    <section class="library-section" data-section="module-6">
+      <div class="section-heading"><h2>6 Justice for Everyone, Everywhere?</h2><span>06</span></div>
+      <div class="cards">
+        <a class="card" data-search="justice everywhere global justice oversights" href="Presentations/Justice%20Everywhere.html"><span class="card-type">Justice</span><h3>Justice Everywhere</h3><span class="card-arrow">→</span></a>
+        <a class="card" data-search="justice everyone equality oppression" href="Presentations/Justice%20for%20Everyone.html"><span class="card-type">Justice</span><h3>Justice for Everyone</h3><span class="card-arrow">→</span></a>
+      </div>
+    </section>
+
+    <p class="empty" id="empty">No resources match that search.</p>
   </main>
 
   <main class="shell ethics-view" id="ethics-view">
