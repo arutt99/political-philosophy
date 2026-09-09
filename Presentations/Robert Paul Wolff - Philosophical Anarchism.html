@@ -1,0 +1,974 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Robert Paul Wolff - Philosophical Anarchism</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#12161a;
+      --bg-2:#1d2428;
+      --bg-3:#263036;
+      --text:#f4f0e5;
+      --muted:#b7b9ae;
+      --muted-dim:rgba(183,185,174,.62);
+      --acid:#d1ef5a;
+      --acid-dim:#8ea538;
+      --coral:#ff765e;
+      --cyan:#7ed8d2;
+      --rule:rgba(244,240,229,.18);
+      --border:rgba(244,240,229,.16);
+      --vellum:var(--muted);
+      --gold:var(--acid);
+      --gold-bright:var(--acid);
+      --fit:1;
+    }
+    *{box-sizing:border-box}
+    html,body{width:100%;height:100%;margin:0;overflow:hidden;background:var(--bg);color:var(--text)}
+    body{font-family:"Space Grotesk",system-ui,sans-serif}
+    button{font:inherit}
+    #deck{
+      position:relative;
+      width:100vw;
+      height:100vh;
+      overflow:hidden;
+      background:
+        radial-gradient(ellipse 45% 54% at 92% 3%,rgba(209,239,90,.13),transparent 70%),
+        radial-gradient(ellipse 40% 48% at 2% 100%,rgba(255,118,94,.10),transparent 72%),
+        linear-gradient(135deg,#101418 0%,#12161a 54%,#20292d 100%);
+    }
+    #deck::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      opacity:.66;
+      background:
+        linear-gradient(90deg,transparent 0 9.2vw,rgba(209,239,90,.25) 9.2vw calc(9.2vw + 1px),transparent calc(9.2vw + 1px)),
+        linear-gradient(90deg,transparent 0 72.5vw,rgba(126,216,210,.13) 72.5vw calc(72.5vw + 1px),transparent calc(72.5vw + 1px)),
+        repeating-linear-gradient(0deg,transparent 0 8.2vh,rgba(244,240,229,.026) 8.2vh calc(8.2vh + 1px));
+    }
+    #deck::after{
+      content:"";
+      position:absolute;
+      right:-11vw;
+      bottom:-25vh;
+      width:50vw;
+      height:50vw;
+      border:1px solid rgba(209,239,90,.18);
+      border-radius:50%;
+      box-shadow:0 0 0 7vw rgba(209,239,90,.025),0 0 0 14vw rgba(126,216,210,.018);
+      pointer-events:none;
+    }
+    .slide{
+      position:absolute;
+      inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:7.2vh 7vw 8vh;
+      text-align:left;
+      overflow:hidden;
+    }
+    .slide.active,.slide.measuring{display:flex}
+    .slide.measuring{visibility:hidden;pointer-events:none}
+    .slide.top{align-items:flex-start;padding-top:8.5vh}
+    .slide-inner{
+      position:relative;
+      z-index:1;
+      width:min(1080px,86vw);
+      max-height:82vh;
+      margin:auto;
+      transform-origin:top center;
+    }
+    .slide.top .slide-inner{margin:0 auto}
+    .eyebrow{
+      margin:0 0 1.2rem;
+      color:var(--acid);
+      font:700 calc(clamp(11px,1.02vw,15px)*var(--fit))/1.3 "Space Mono",monospace;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+    }
+    .title{
+      margin:0;
+      color:var(--text);
+      font-family:"Newsreader",Georgia,serif;
+      font-weight:600;
+      letter-spacing:-.025em;
+    }
+    .cover .slide-inner{
+      width:min(1260px,88vw);
+      display:grid;
+      grid-template-columns:minmax(0,1fr) minmax(160px,.23fr);
+      gap:4vw;
+      padding:4.1rem 0 3.7rem;
+      border-top:1px solid rgba(244,240,229,.34);
+      border-bottom:1px solid rgba(244,240,229,.16);
+      border-left:8px solid var(--acid);
+      padding-left:3.2rem;
+    }
+    .cover .title{
+      max-width:10ch;
+      font-size:calc(clamp(62px,8.2vw,128px)*var(--fit));
+      line-height:.89;
+    }
+    .cover .work{
+      max-width:34ch;
+      margin:1.8rem 0 0;
+      color:var(--muted);
+      font:500 calc(clamp(22px,2.1vw,31px)*var(--fit))/1.28 "Newsreader",Georgia,serif;
+    }
+    .cover .course{
+      margin-top:2.7rem;
+      color:var(--acid);
+      font:700 calc(clamp(11px,1vw,15px)*var(--fit))/1.4 "Space Mono",monospace;
+      letter-spacing:.13em;
+      text-transform:uppercase;
+    }
+    .cover-mark{
+      align-self:end;
+      color:var(--acid);
+      font:700 calc(clamp(48px,6vw,88px)*var(--fit))/.9 "Space Mono",monospace;
+      letter-spacing:-.09em;
+      text-align:right;
+    }
+    .cover-mark span{
+      display:block;
+      margin-top:1.2rem;
+      color:var(--muted-dim);
+      font-size:calc(clamp(10px,1vw,14px)*var(--fit));
+      line-height:1.35;
+      letter-spacing:.04em;
+      text-align:right;
+    }
+    .content .title,.duo .title,.steps .title,.flow .title,.compare .title,.unanimity .title,.rule-slide .title,.objection .title,.verdict .title,.closing .title{
+      max-width:18ch;
+      margin-bottom:1.55rem;
+      font-size:calc(clamp(42px,4.75vw,74px)*var(--fit));
+      line-height:1.01;
+    }
+    .lead{
+      max-width:54ch;
+      margin:0 0 1.55rem;
+      color:var(--muted);
+      font:500 calc(clamp(21px,1.72vw,27px)*var(--fit))/1.34 "Newsreader",Georgia,serif;
+    }
+    .body-copy{
+      color:var(--text);
+      font:500 calc(clamp(25px,2.15vw,34px)*var(--fit))/1.25 "Newsreader",Georgia,serif;
+    }
+    .body-copy p{margin:0 0 1rem}
+    .body-copy strong{color:var(--acid);font-weight:600}
+    .content-layout{
+      display:grid;
+      grid-template-columns:minmax(0,1.55fr) minmax(220px,.72fr);
+      gap:clamp(2.2rem,6vw,6rem);
+      align-items:start;
+    }
+    .side-note{
+      align-self:stretch;
+      padding:1.2rem 0 0 1.2rem;
+      border-left:2px solid var(--coral);
+      color:var(--muted);
+      font:600 calc(clamp(13px,1.12vw,17px)*var(--fit))/1.45 "Space Mono",monospace;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+    }
+    .side-note .big{
+      display:block;
+      margin:-.15rem 0 .8rem;
+      color:var(--coral);
+      font:700 calc(clamp(55px,6vw,90px)*var(--fit))/.9 "Space Mono",monospace;
+      letter-spacing:-.09em;
+    }
+    .takeaway{
+      max-width:66ch;
+      margin-top:1.9rem;
+      padding:.95rem 1.1rem;
+      border-left:4px solid var(--acid);
+      color:var(--text);
+      background:linear-gradient(90deg,rgba(209,239,90,.12),transparent 72%);
+      font:600 calc(clamp(16px,1.28vw,20px)*var(--fit))/1.38 "Space Grotesk",system-ui,sans-serif;
+    }
+    .duo-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:clamp(2rem,6vw,6rem);
+      margin-top:2.2rem;
+    }
+    .duo-col{
+      position:relative;
+      padding:1rem 0 0 1.35rem;
+      border-top:2px solid var(--acid-dim);
+      border-left:1px solid rgba(244,240,229,.24);
+    }
+    .duo-col:nth-child(2){border-top-color:var(--coral)}
+    .duo-col h3{
+      margin:0 0 .9rem;
+      color:var(--acid);
+      font:700 calc(clamp(14px,1.24vw,18px)*var(--fit))/1.25 "Space Mono",monospace;
+      letter-spacing:.1em;
+      text-transform:uppercase;
+    }
+    .duo-col:nth-child(2) h3{color:var(--coral)}
+    .duo-col p{
+      max-width:24ch;
+      margin:0;
+      color:var(--text);
+      font:500 calc(clamp(27px,2.25vw,36px)*var(--fit))/1.2 "Newsreader",Georgia,serif;
+    }
+    .steps .title{max-width:22ch}
+    .step-list{
+      display:grid;
+      gap:0;
+      margin-top:1.4rem;
+      border-top:1px solid var(--rule);
+    }
+    .step{
+      display:grid;
+      grid-template-columns:3.4rem minmax(0,1fr);
+      gap:1.2rem;
+      align-items:start;
+      padding:1rem 0 .95rem;
+      border-bottom:1px solid var(--rule);
+    }
+    .step-num{
+      color:var(--acid);
+      font:700 calc(clamp(18px,1.65vw,25px)*var(--fit))/1 "Space Mono",monospace;
+    }
+    .step p{
+      max-width:53ch;
+      margin:0;
+      color:var(--text);
+      font:500 calc(clamp(20px,1.75vw,28px)*var(--fit))/1.25 "Newsreader",Georgia,serif;
+    }
+    .flow .title{max-width:22ch}
+    .command-line{
+      display:flex;
+      align-items:center;
+      gap:0;
+      margin:2.2rem 0 1.9rem;
+      color:var(--text);
+      font:700 calc(clamp(21px,2.1vw,31px)*var(--fit))/1 "Space Mono",monospace;
+      letter-spacing:.03em;
+    }
+    .command-node{
+      padding:.75rem 1rem;
+      border:1px solid var(--rule);
+      background:rgba(29,36,40,.78);
+    }
+    .command-node.state{color:var(--acid);border-color:rgba(209,239,90,.5)}
+    .command-node.x{color:var(--coral);border-color:rgba(255,118,94,.55);font-size:1.32em}
+    .command-connector{
+      width:clamp(28px,6vw,92px);
+      height:1px;
+      background:var(--muted-dim);
+    }
+    .branch-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:clamp(1.3rem,4vw,4rem);
+    }
+    .branch{
+      padding:1.1rem 1.2rem 1.2rem;
+      border-top:3px solid var(--acid);
+      background:linear-gradient(105deg,rgba(209,239,90,.10),transparent 85%);
+    }
+    .branch:nth-child(2){
+      border-top-color:var(--coral);
+      background:linear-gradient(105deg,rgba(255,118,94,.10),transparent 85%);
+    }
+    .branch h3{
+      margin:0 0 .55rem;
+      color:var(--acid);
+      font:700 calc(clamp(12px,1.08vw,16px)*var(--fit))/1.3 "Space Mono",monospace;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+    .branch:nth-child(2) h3{color:var(--coral)}
+    .branch p{
+      max-width:30ch;
+      margin:0;
+      color:var(--text);
+      font:500 calc(clamp(22px,1.9vw,30px)*var(--fit))/1.25 "Newsreader",Georgia,serif;
+    }
+    .flow .takeaway{margin-top:1.7rem}
+    .compare .title{max-width:24ch}
+    .compare-list{
+      display:grid;
+      gap:0;
+      margin-top:1.8rem;
+      border-top:1px solid var(--rule);
+    }
+    .compare-row{
+      display:grid;
+      grid-template-columns:minmax(130px,.5fr) minmax(0,1.3fr);
+      gap:1.8rem;
+      padding:1rem 0;
+      border-bottom:1px solid var(--rule);
+    }
+    .compare-row h3{
+      margin:0;
+      color:var(--acid);
+      font:700 calc(clamp(13px,1.08vw,16px)*var(--fit))/1.25 "Space Mono",monospace;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+    .compare-row p{
+      max-width:53ch;
+      margin:0;
+      color:var(--text);
+      font:500 calc(clamp(20px,1.7vw,27px)*var(--fit))/1.28 "Newsreader",Georgia,serif;
+    }
+    .compare-row p strong{color:var(--coral);font-weight:600}
+    .unanimity .title{max-width:22ch}
+    .unanimity-layout{
+      display:grid;
+      grid-template-columns:minmax(260px,.72fr) minmax(0,1.3fr);
+      gap:clamp(2rem,6vw,6rem);
+      align-items:center;
+      margin-top:1.4rem;
+    }
+    .unanimity-number{
+      color:var(--acid);
+      font:700 calc(clamp(82px,12vw,174px)*var(--fit))/.82 "Space Mono",monospace;
+      letter-spacing:-.12em;
+    }
+    .unanimity-label{
+      margin-top:1rem;
+      color:var(--muted);
+      font:700 calc(clamp(12px,1.1vw,16px)*var(--fit))/1.3 "Space Mono",monospace;
+      letter-spacing:.1em;
+      text-transform:uppercase;
+    }
+    .unanimity-bar{
+      height:18px;
+      margin:0 0 1.5rem;
+      background:linear-gradient(90deg,var(--acid) 0 100%,rgba(244,240,229,.10) 100%);
+      box-shadow:0 0 18px rgba(209,239,90,.14);
+    }
+    .unanimity-copy p{
+      max-width:42ch;
+      margin:0 0 1rem;
+      color:var(--text);
+      font:500 calc(clamp(23px,2vw,32px)*var(--fit))/1.25 "Newsreader",Georgia,serif;
+    }
+    .unanimity-copy p:last-child{color:var(--muted)}
+    .rule-slide .title{max-width:25ch}
+    .rule-layout{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+      gap:clamp(2rem,6vw,6rem);
+      margin-top:2rem;
+    }
+    .rule-column{
+      padding-top:1rem;
+      border-top:3px solid var(--coral);
+    }
+    .rule-column:nth-child(2){border-top-color:var(--acid)}
+    .rule-column h3{
+      margin:0 0 .9rem;
+      color:var(--coral);
+      font:700 calc(clamp(13px,1.12vw,17px)*var(--fit))/1.3 "Space Mono",monospace;
+      letter-spacing:.1em;
+      text-transform:uppercase;
+    }
+    .rule-column:nth-child(2) h3{color:var(--acid)}
+    .rule-column p{
+      max-width:27ch;
+      margin:0 0 .8rem;
+      color:var(--text);
+      font:500 calc(clamp(24px,2vw,32px)*var(--fit))/1.23 "Newsreader",Georgia,serif;
+    }
+    .rule-column small{
+      display:block;
+      max-width:39ch;
+      color:var(--muted);
+      font:500 calc(clamp(14px,1.18vw,18px)*var(--fit))/1.4 "Space Grotesk",system-ui,sans-serif;
+    }
+    .rule-slide .takeaway{margin-top:1.8rem}
+    .objection .title{max-width:26ch}
+    .objection-grid{
+      display:grid;
+      grid-template-columns:minmax(210px,.7fr) minmax(0,1.3fr);
+      gap:clamp(2rem,6vw,6rem);
+      margin-top:1.7rem;
+    }
+    .objection-side{
+      padding-top:1rem;
+      border-top:3px solid var(--coral);
+    }
+    .objection-side:last-child{border-top-color:var(--acid)}
+    .objection-side h3{
+      margin:0 0 .9rem;
+      color:var(--coral);
+      font:700 calc(clamp(13px,1.12vw,17px)*var(--fit))/1.3 "Space Mono",monospace;
+      letter-spacing:.1em;
+      text-transform:uppercase;
+    }
+    .objection-side:last-child h3{color:var(--acid)}
+    .objection-side p{
+      max-width:39ch;
+      margin:0 0 1rem;
+      color:var(--text);
+      font:500 calc(clamp(22px,1.9vw,30px)*var(--fit))/1.24 "Newsreader",Georgia,serif;
+    }
+    .objection-side p:last-child{margin-bottom:0;color:var(--muted)}
+    .verdict .title{max-width:19ch}
+    .burden{
+      display:grid;
+      gap:1rem;
+      margin:1.8rem 0 1.6rem;
+    }
+    .burden-line{
+      display:grid;
+      grid-template-columns:minmax(160px,.4fr) minmax(0,1.6fr);
+      gap:1.5rem;
+      align-items:baseline;
+      padding:1rem 0;
+      border-top:1px solid var(--rule);
+    }
+    .burden-line:last-child{border-bottom:1px solid var(--rule)}
+    .burden-line span{
+      color:var(--muted);
+      font:700 calc(clamp(12px,1.08vw,16px)*var(--fit))/1.3 "Space Mono",monospace;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+    .burden-line strong{
+      color:var(--acid);
+      font:600 calc(clamp(27px,2.45vw,39px)*var(--fit))/1.12 "Newsreader",Georgia,serif;
+    }
+    .verdict-list{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:1.5rem;
+      margin-top:1.6rem;
+    }
+    .verdict-item{
+      padding-top:.85rem;
+      border-top:2px solid var(--acid-dim);
+    }
+    .verdict-item:nth-child(2){border-top-color:var(--coral)}
+    .verdict-item:nth-child(3){border-top-color:var(--cyan)}
+    .verdict-item b{
+      display:block;
+      margin-bottom:.55rem;
+      color:var(--muted);
+      font:700 calc(clamp(12px,1.08vw,16px)*var(--fit))/1.25 "Space Mono",monospace;
+      letter-spacing:.07em;
+      text-transform:uppercase;
+    }
+    .verdict-item p{
+      margin:0;
+      color:var(--text);
+      font:500 calc(clamp(20px,1.65vw,26px)*var(--fit))/1.25 "Newsreader",Georgia,serif;
+    }
+    .closing .title{max-width:24ch}
+    .closing-text{
+      max-width:43ch;
+      margin:1.4rem 0 2rem;
+      color:var(--text);
+      font:500 calc(clamp(28px,2.55vw,42px)*var(--fit))/1.18 "Newsreader",Georgia,serif;
+    }
+    .closing-text strong{color:var(--acid);font-weight:600}
+    .vocab{
+      display:flex;
+      flex-wrap:wrap;
+      gap:.65rem 1.3rem;
+      padding-top:1rem;
+      border-top:1px solid var(--rule);
+      color:var(--muted);
+      font:700 calc(clamp(11px,1vw,15px)*var(--fit))/1.3 "Space Mono",monospace;
+      letter-spacing:.07em;
+      text-transform:uppercase;
+    }
+    .vocab span::before{content:"/ ";color:var(--coral)}
+    #progress{
+      position:fixed;
+      top:0;
+      left:0;
+      z-index:30;
+      width:0;
+      height:4px;
+      background:linear-gradient(90deg,var(--coral),var(--acid));
+    }
+    #nav-hint,#counter{
+      position:fixed;
+      bottom:18px;
+      z-index:30;
+      color:var(--muted);
+      font:700 11px/1.3 "Space Mono",monospace;
+      letter-spacing:.07em;
+    }
+    #nav-hint{left:24px}
+    #counter{right:24px;color:var(--acid)}
+    #fullscreen{
+      position:fixed;
+      top:20px;
+      right:22px;
+      z-index:30;
+      padding:8px 11px;
+      color:var(--muted);
+      background:rgba(18,22,26,.35);
+      border:1px solid var(--border);
+      cursor:pointer;
+      font:700 11px/1 "Space Mono",monospace;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+    #fullscreen:hover{color:var(--acid);border-color:var(--acid-dim)}
+    .panel{
+      position:fixed;
+      inset:4vh 4vw;
+      z-index:60;
+      display:none;
+      overflow:auto;
+      background:rgba(18,22,26,.985);
+      border:1px solid var(--border);
+    }
+    .panel.open{display:block}
+    .panel-head{
+      position:sticky;
+      top:0;
+      z-index:2;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:18px 22px;
+      background:var(--bg-2);
+      border-bottom:1px solid var(--border);
+    }
+    .panel-head h2{
+      margin:0;
+      color:var(--acid);
+      font:700 14px/1 "Space Mono",monospace;
+      letter-spacing:.13em;
+      text-transform:uppercase;
+    }
+    .close{
+      padding:7px 10px;
+      color:var(--text);
+      background:transparent;
+      border:1px solid var(--border);
+      cursor:pointer;
+    }
+    #overview-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+      gap:12px;
+      padding:20px;
+    }
+    .overview-card{
+      min-height:126px;
+      padding:16px;
+      color:var(--text);
+      text-align:left;
+      background:linear-gradient(145deg,#273137,#182025);
+      border:1px solid var(--border);
+      cursor:pointer;
+    }
+    .overview-card:hover,.overview-card.current{
+      border-color:var(--acid);
+      box-shadow:0 8px 24px rgba(0,0,0,.22);
+    }
+    .overview-card .num{
+      display:block;
+      margin-bottom:12px;
+      color:var(--acid);
+      font:700 11px/1.3 "Space Mono",monospace;
+    }
+    .overview-card .label{
+      display:block;
+      color:var(--text);
+      font:600 22px/1.1 "Newsreader",Georgia,serif;
+    }
+    #notes-body{
+      max-width:920px;
+      padding:28px 34px;
+      color:var(--text);
+      white-space:pre-wrap;
+      font:400 17px/1.62 "Space Grotesk",system-ui,sans-serif;
+    }
+    @media (max-width:760px){
+      .slide{padding:9vh 8vw 10vh}
+      .slide.top{padding-top:9.5vh}
+      .slide-inner,.cover .slide-inner{width:84vw}
+      .cover .slide-inner{display:block;padding:2.2rem 0 2.2rem 1.35rem;border-left-width:5px}
+      .cover .title{font-size:calc(clamp(54px,14vw,88px)*var(--fit));max-width:9ch}
+      .cover-mark{margin-top:2rem;text-align:left;font-size:calc(clamp(40px,11vw,65px)*var(--fit))}
+      .cover-mark span{text-align:left}
+      .content-layout,.unanimity-layout,.objection-grid{grid-template-columns:1fr;gap:1.5rem}
+      .duo-grid,.branch-grid,.rule-layout{grid-template-columns:1fr;gap:1.5rem}
+      .verdict-list{grid-template-columns:1fr;gap:1rem}
+      .compare-row,.burden-line{grid-template-columns:1fr;gap:.45rem}
+      .command-line{flex-wrap:wrap}
+      .command-connector{width:1px;height:22px}
+      #nav-hint{display:none}
+      #fullscreen{top:12px;right:12px}
+      .content .title,.duo .title,.steps .title,.flow .title,.compare .title,.unanimity .title,.rule-slide .title,.objection .title,.verdict .title,.closing .title{max-width:none}
+    }
+  </style>
+  <link rel="stylesheet" href="presentation-polish.css">
+  <script src="presentation-polish.js" defer></script>
+</head>
+<body>
+  <div id="deck" aria-live="polite"></div>
+  <div id="progress"></div>
+  <div id="nav-hint">ARROWS / SPACE · O OVERVIEW · N NOTES · F FULLSCREEN</div>
+  <div id="counter">1 / 1</div>
+  <button id="fullscreen" type="button" aria-label="Toggle fullscreen">Fullscreen</button>
+
+  <section id="overview" class="panel" aria-label="Slide overview">
+    <div class="panel-head"><h2>Overview</h2><button class="close" type="button">Close</button></div>
+    <div id="overview-grid"></div>
+  </section>
+  <aside id="notes" class="panel" aria-label="Speaker notes">
+    <div class="panel-head"><h2>Speaker notes</h2><button class="close" type="button">Close</button></div>
+    <div id="notes-body"></div>
+  </aside>
+
+  <script>
+    const slides = [];
+    const source = "Source: supplied reading on Robert Paul Wolff's work on philosophical anarchism. Page references were not provided.";
+    const add = slide => slides.push(slide);
+    const withSource = (body, extra) => body + "\n\n" + source + (extra ? "\n" + extra : "");
+    const cover = (title, work, course, note) => add({type:"cover", title, work, course, note});
+    const duo = (kicker, title, columns, takeaway, note) => add({type:"duo", kicker, title, columns, takeaway, note});
+    const content = (kicker, title, lead, body, side, takeaway, note) => add({type:"content", kicker, title, lead, body, side, takeaway, note});
+    const steps = (kicker, title, items, takeaway, note) => add({type:"steps", kicker, title, items, takeaway, note});
+    const flow = (kicker, title, intro, branches, takeaway, note) => add({type:"flow", kicker, title, intro, branches, takeaway, note});
+    const compare = (kicker, title, rows, takeaway, note) => add({type:"compare", kicker, title, rows, takeaway, note});
+    const unanimity = (kicker, title, label, paragraphs, takeaway, note) => add({type:"unanimity", kicker, title, label, paragraphs, takeaway, note});
+    const ruleSlide = (kicker, title, columns, takeaway, note) => add({type:"rule-slide", kicker, title, columns, takeaway, note});
+    const objection = (kicker, title, left, right, takeaway, note) => add({type:"objection", kicker, title, left, right, takeaway, note});
+    const verdict = (kicker, title, burden, items, note) => add({type:"verdict", kicker, title, burden, items, note});
+    const closing = (kicker, title, text, vocabulary, note) => add({type:"closing", kicker, title, text, vocabulary, note});
+
+    cover(
+      "The Autonomous Person Against the State",
+      "Robert Paul Wolff on philosophical anarchism",
+      "Political Philosophy · State of Nature",
+      withSource("Open with the tension rather than with a definition of anarchism. Wolff begins from a familiar moral demand: a responsible adult must decide what to do for themselves.")
+    );
+
+    duo(
+      "01 / The conflict",
+      "The conflict begins with two duties",
+      [
+        {label:"Individual autonomy", text:"Each responsible adult must decide what morality requires and accept responsibility for the decision."},
+        {label:"Political authority", text:"The state claims a right to command, with a matching duty for citizens to obey because the state issued the command."}
+      ],
+      "Wolff argues that these claims cannot both be fully accepted.",
+      withSource("Make the two claims feel equally serious. Wolff is not comparing personal preference with government power. He is comparing a duty of moral authorship with a claimed duty of obedience.")
+    );
+
+    content(
+      "02 / Autonomy",
+      "Autonomy is moral authorship",
+      "Autonomy asks: what should I do after I have considered the reasons for myself?",
+      [
+        "It does not mean doing whatever one feels like doing.",
+        "Advice, expertise, and cooperation can all inform the decision.",
+        "The final responsibility remains with the person who acts. \"Someone told me to do it\" cannot completely excuse the action."
+      ],
+      {big:"I", text:"own the judgment"},
+      "The autonomous person can listen to others without handing over final moral responsibility.",
+      withSource("Keep autonomy separate from independence or stubbornness. The point is not that each person must think alone. The point is that no one else can fully take over the responsibility for one's action.")
+    );
+
+    compare(
+      "03 / Authority and power",
+      "Authority adds a special reason to obey",
+      [
+        {label:"Power", text:"A state can impose fines, imprisonment, or other penalties. Enforcement shows what the state can make happen."},
+        {label:"Authority", text:"A state claims a moral right to issue commands and a corresponding duty for citizens to obey because the command is law."},
+        {label:"The test", text:"A robber can force you to surrender your wallet without gaining a moral right to it. Force alone does not create authority."}
+      ],
+      "Wolff questions the state's legitimacy, not its ability to exercise power.",
+      withSource("This distinction does important work. If power were enough to establish authority, every successful act of coercion would also create a duty to comply. Wolff rejects that move.")
+    );
+
+    steps(
+      "04 / The argument",
+      "The argument is a conflict of final judgments",
+      [
+        ["01", "Every person has a fundamental duty to exercise moral autonomy."],
+        ["02", "Autonomy requires deciding for oneself what one ought to do."],
+        ["03", "An authoritative state claims that citizens must obey its laws because the state enacted them."],
+        ["04", "Accepting that claim gives the state the final word about what one ought to do."],
+        ["05", "A person cannot surrender final moral judgment without abandoning responsibility for the action."]
+      ],
+      "Wolff's conclusion is philosophical anarchism: no state possesses the general moral authority it claims.",
+      withSource("The conclusion is about general authority. Wolff is not saying that every law is bad or that every government action deserves resistance. He is saying that the state's status as a state cannot by itself settle what a person ought to do.")
+    );
+
+    flow(
+      "05 / The command test",
+      "A command cannot settle what is right",
+      "Suppose the government orders you to perform action X.",
+      [
+        {label:"You judge X right", text:"Do X because your own considered judgment says it is right. The command does not supply the decisive reason."},
+        {label:"You judge X wrong", text:"Obeying because it is the law means acting against your own considered judgment and handing responsibility to the state."}
+      ],
+      "In neither case does the command replace your moral reasoning.",
+      withSource("This is the central diagnostic. The same command cannot both preserve autonomy and function as an independent reason that settles the issue. Automatic obedience and automatic disobedience would each avoid the actual work of judgment.")
+    );
+
+    compare(
+      "06 / Democracy and consent",
+      "Democracy still leaves authority unproven",
+      [
+        {label:"Majority rule", text:"A 60 percent vote can produce a rule that 40 percent opposed. Participation does not automatically amount to consent."},
+        {label:"Representation", text:"Voting for a candidate does not authorize everything that representative later does. Government remains rule by some people over others."},
+        {label:"Residence", text:"Being born in a country, remaining there, or using public services rarely looks like explicit, voluntary agreement. Leaving can be enormously costly."}
+      ],
+      "A procedure may be useful or fair without creating an unconditional duty to obey every outcome.",
+      withSource("Do not dismiss democracy as worthless. Wolff's target is the inference from democratic procedure to moral authority. A fair method for making common decisions may still fall short of a general right to command.")
+    );
+
+    unanimity(
+      "07 / The exception",
+      "Unanimity is Wolff's narrow exception",
+      "100% agreement",
+      [
+        "A community could preserve autonomy if every person directly participated and freely agreed to every collective decision.",
+        "Each person would then obey a rule they personally endorsed rather than a command imposed by someone else.",
+        "The condition is extraordinarily demanding. In a large, diverse society, unanimous direct agreement could make ordinary government nearly impossible."
+      ],
+      "Wolff's exception shows what legitimate collective rule would require. Real states do not meet the condition.",
+      withSource("Unanimity matters because it keeps the argument precise. Wolff is not claiming that collective decisions are always incompatible with autonomy. He identifies one special case in which the conflict could disappear.")
+    );
+
+    ruleSlide(
+      "08 / What follows",
+      "The anarchist still evaluates every law",
+      [
+        {label:"Automatic obedience", text:"The law's existence is treated as the reason to comply. The state's command replaces personal judgment.", small:"Authority decides the case in advance."},
+        {label:"Autonomous judgment", text:"Each law is assessed on its own merits. Justice, safety, cooperation, or consequences can give someone reasons to obey.", small:"The person decides whether those reasons are sufficient."}
+      ],
+      "Automatic disobedience would be just as unthinking as automatic obedience. Wolff leaves the individual with the standing task of judgment.",
+      withSource("This is the practical meaning of philosophical anarchism. An anarchist might pay taxes, follow traffic rules, or obey criminal law. The reasons would concern the law's merits, not an unconditional duty to submit.")
+    );
+
+    content(
+      "09 / The strongest pressure",
+      "The strongest pressure comes from coordination",
+      "Traffic rules show why common rules can matter even when authority remains contested.",
+      [
+        "It matters less whether everyone independently selects the best side of the road than whether everyone follows the same convention.",
+        "Defenders of the state argue that law supplies this kind of coordination.",
+        "Wolff can accept the practical benefit while separating it from a general right to rule."
+      ],
+      {big:"1", text:"shared convention"},
+      "A law can be worth following because coordination makes life safer or easier. That reason does not automatically become a duty to obey every state command.",
+      withSource("Use the traffic example to press the distinction rather than to dismiss it. The objection is strong because complex societies depend on shared rules. Wolff's response is that usefulness and authority are different claims.")
+    );
+
+    objection(
+      "10 / Objection",
+      "Could autonomy authorize authority?",
+      {
+        label:"The pressure",
+        paragraphs:[
+          "People can make promises, sign contracts, and authorize institutions to decide certain matters.",
+          "Perhaps citizens can autonomously decide to treat a dependable legal system as binding, even when they disagree with a particular law."
+        ]
+      },
+      {
+        label:"Wolff's reply",
+        paragraphs:[
+          "Actual political systems rarely rest on explicit, voluntary, and unanimous authorization.",
+          "Voting, staying where one was born, or accepting public services does not obviously amount to free consent. The objection suggests that limited authority may be possible, but it does not establish a general duty for everyone."
+        ]
+      },
+      "Autonomy and authority may not be inherently incompatible. The harder question is whether real states have actually received the authorization they claim.",
+      withSource("Present this as a genuine pressure point, not a straw man. The distinction is between an authority a person deliberately grants for a limited purpose and an authority a state claims over everyone by default.")
+    );
+
+    objection(
+      "11 / Objection",
+      "Institutions may inform judgment without replacing it",
+      {
+        label:"The criticism",
+        paragraphs:[
+          "People can be ignorant, biased, impulsive, or selfish.",
+          "Shared institutions may sometimes make better decisions than isolated individuals."
+        ]
+      },
+      {
+        label:"Wolff's answer",
+        paragraphs:[
+          "Expertise can justify listening to others and cooperating with institutions.",
+          "It cannot eliminate personal responsibility. The person who acts still has to decide whether the institutional reason is sufficient."
+        ]
+      },
+      "The unresolved pressure is whether institutions can deserve limited authority precisely because individual judgment is unreliable.",
+      withSource("Wolff's position is demanding because it treats moral responsibility as unavoidable. The critic's reply is also demanding because it asks whether a person can remain responsible while allowing a trusted institution to settle some questions.")
+    );
+
+    verdict(
+      "12 / The burden of proof",
+      "Wolff reverses the burden of proof",
+      [
+        ["The inherited question", "Why is a citizen entitled to disobey?"],
+        ["Wolff's question", "Why is the state entitled to command?"]
+      ],
+      [
+        {label:"General duty", text:"No automatic moral duty to obey merely because the state is the state."},
+        {label:"Every law", text:"Must be evaluated on its own reasons and consequences."},
+        {label:"Every person", text:"Retains responsibility for deciding what to do."}
+      ],
+      withSource("End the argument by returning to the burden of proof. Wolff does not need to prove that all governments are harmful. He needs to show that a general right to command cannot coexist with the moral demand for autonomy.")
+    );
+
+    closing(
+      "13 / Carry the tension forward",
+      "A morally responsible person must retain final judgment",
+      "The state claims that some commands bind because they are commands. Wolff argues that this claim conflicts with the responsibility each person has for their own action. The resulting position is philosophical anarchism: common rules may still deserve compliance, but the state's authority can never do the moral thinking for us.",
+      ["autonomy","authority","power","consent","unanimity","coordination"],
+      withSource("Close with the precise claim. The reading leaves a live political problem: how can a society coordinate action without asking people to pretend that state commands settle morality? That question connects Wolff to the other state-of-nature readings.")
+    );
+
+    const esc = value => String(value == null ? "" : value).replace(/[&<>"']/g, char => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"
+    }[char]));
+    const renderParagraphs = paragraphs => paragraphs.map(paragraph => "<p>" + esc(paragraph) + "</p>").join("");
+    const renderSlide = (slide, index) => {
+      const article = document.createElement("article");
+      const topTypes = ["content","steps","flow","compare","unanimity","rule-slide","objection","verdict","closing"];
+      article.className = "slide " + slide.type + (topTypes.includes(slide.type) ? " top" : "");
+      article.dataset.index = String(index);
+      const kicker = slide.kicker ? "<div class=\"eyebrow\">" + esc(slide.kicker) + "</div>" : "";
+      let html = "<div class=\"slide-inner\">";
+
+      if (slide.type === "cover") {
+        html += "<div><div class=\"eyebrow\">Robert Paul Wolff / Philosophical anarchism</div><h1 class=\"title\">" + esc(slide.title) + "</h1><p class=\"work\">" + esc(slide.work) + "</p><div class=\"course\">" + esc(slide.course) + "</div></div><div class=\"cover-mark\" aria-hidden=\"true\">W<span>THE STATE<br>OF NATURE</span></div>";
+      }
+      if (slide.type === "duo") {
+        html += kicker + "<h2 class=\"title\">" + esc(slide.title) + "</h2><div class=\"duo-grid\">" + slide.columns.map(column => "<div class=\"duo-col\"><h3>" + esc(column.label) + "</h3><p>" + esc(column.text) + "</p></div>").join("") + "</div><div class=\"takeaway\">" + esc(slide.takeaway) + "</div>";
+      }
+      if (slide.type === "content") {
+        html += kicker + "<h2 class=\"title\">" + esc(slide.title) + "</h2><div class=\"content-layout\"><div><p class=\"lead\">" + esc(slide.lead) + "</p><div class=\"body-copy\">" + renderParagraphs(slide.body) + "</div></div><div class=\"side-note\"><span class=\"big\">" + esc(slide.side.big) + "</span>" + esc(slide.side.text) + "</div></div><div class=\"takeaway\">" + esc(slide.takeaway) + "</div>";
+      }
+      if (slide.type === "compare") {
+        html += kicker + "<h2 class=\"title\">" + esc(slide.title) + "</h2><div class=\"compare-list\">" + slide.rows.map(row => "<div class=\"compare-row\"><h3>" + esc(row.label) + "</h3><p>" + esc(row.text) + "</p></div>").join("") + "</div><div class=\"takeaway\">" + esc(slide.takeaway) + "</div>";
+      }
+      if (slide.type === "steps") {
+        html += kicker + "<h2 class=\"title\">" + esc(slide.title) + "</h2><div class=\"step-list\">" + slide.items.map(item => "<div class=\"step\"><div class=\"step-num\">" + esc(item[0]) + "</div><p>" + esc(item[1]) + "</p></div>").join("") + "</div><div class=\"takeaway\">" + esc(slide.takeaway) + "</div>";
+      }
+      if (slide.type === "flow") {
+        html += kicker + "<h2 class=\"title\">" + esc(slide.title) + "</h2><p class=\"lead\">" + esc(slide.intro) + "</p><div class=\"command-line\"><span class=\"command-node state\">STATE</span><span class=\"command-connector\"></span><span class=\"command-node\">COMMANDS</span><span class=\"command-connector\"></span><span class=\"command-node x\">X</span></div><div class=\"branch-grid\">" + slide.branches.map(branch => "<div class=\"branch\"><h3>" + esc(branch.label) + "</h3><p>" + esc(branch.text) + "</p></div>").join("") + "</div><div class=\"takeaway\">" + esc(slide.takeaway) + "</div>";
+      }
+      if (slide.type === "unanimity") {
+        html += kicker + "<h2 class=\"title\">" + esc(slide.title) + "</h2><div class=\"unanimity-layout\"><div><div class=\"unanimity-number\">100%</div><div class=\"unanimity-label\">" + esc(slide.label) + "</div></div><div class=\"unanimity-copy\"><div class=\"unanimity-bar\" aria-hidden=\"true\"></div>" + renderParagraphs(slide.paragraphs) + "</div></div><div class=\"takeaway\">" + esc(slide.takeaway) + "</div>";
+      }
+      if (slide.type === "rule-slide") {
+        html += kicker + "<h2 class=\"title\">" + esc(slide.title) + "</h2><div class=\"rule-layout\">" + slide.columns.map(column => "<div class=\"rule-column\"><h3>" + esc(column.label) + "</h3><p>" + esc(column.text) + "</p><small>" + esc(column.small) + "</small></div>").join("") + "</div><div class=\"takeaway\">" + esc(slide.takeaway) + "</div>";
+      }
+      if (slide.type === "objection") {
+        html += kicker + "<h2 class=\"title\">" + esc(slide.title) + "</h2><div class=\"objection-grid\"><div class=\"objection-side\"><h3>" + esc(slide.left.label) + "</h3>" + renderParagraphs(slide.left.paragraphs) + "</div><div class=\"objection-side\"><h3>" + esc(slide.right.label) + "</h3>" + renderParagraphs(slide.right.paragraphs) + "</div></div><div class=\"takeaway\">" + esc(slide.takeaway) + "</div>";
+      }
+      if (slide.type === "verdict") {
+        html += kicker + "<h2 class=\"title\">" + esc(slide.title) + "</h2><div class=\"burden\">" + slide.burden.map(item => "<div class=\"burden-line\"><span>" + esc(item[0]) + "</span><strong>" + esc(item[1]) + "</strong></div>").join("") + "</div><div class=\"verdict-list\">" + slide.items.map(item => "<div class=\"verdict-item\"><b>" + esc(item.label) + "</b><p>" + esc(item.text) + "</p></div>").join("") + "</div>";
+      }
+      if (slide.type === "closing") {
+        html += kicker + "<h2 class=\"title\">" + esc(slide.title) + "</h2><p class=\"closing-text\">" + esc(slide.text) + "</p><div class=\"vocab\">" + slide.vocabulary.map(word => "<span>" + esc(word) + "</span>").join("") + "</div>";
+      }
+      article.innerHTML = html + "</div>";
+      return article;
+    };
+
+    const deck = document.getElementById("deck");
+    const nodes = slides.map(renderSlide);
+    nodes.forEach(node => deck.appendChild(node));
+    let current = 0;
+    const counter = document.getElementById("counter");
+    const progress = document.getElementById("progress");
+    const notesPanel = document.getElementById("notes");
+    const notesBody = document.getElementById("notes-body");
+    const overview = document.getElementById("overview");
+    const overviewGrid = document.getElementById("overview-grid");
+    const labelFor = slide => slide.title || slide.work || "Slide";
+
+    slides.forEach((slide, index) => {
+      const card = document.createElement("button");
+      card.type = "button";
+      card.className = "overview-card";
+      card.innerHTML = "<span class=\"num\">" + String(index + 1).padStart(2, "0") + " / " + slides.length + "</span><span class=\"label\">" + esc(labelFor(slide)) + "</span>";
+      card.addEventListener("click", () => { closePanels(); show(index); });
+      overviewGrid.appendChild(card);
+    });
+    const cards = [...overviewGrid.children];
+
+    function show(index) {
+      current = Math.max(0, Math.min(slides.length - 1, index));
+      nodes.forEach((node, nodeIndex) => node.classList.toggle("active", nodeIndex === current));
+      cards.forEach((card, cardIndex) => card.classList.toggle("current", cardIndex === current));
+      counter.textContent = String(current + 1) + " / " + slides.length;
+      progress.style.width = String(((current + 1) / slides.length) * 100) + "%";
+      notesBody.textContent = slides[current].note || "No notes for this slide.";
+      document.title = String(current + 1) + "/" + slides.length + " · Robert Paul Wolff - Philosophical Anarchism";
+    }
+    function openPanel(panel) { closePanels(); panel.classList.add("open"); }
+    function closePanels() { overview.classList.remove("open"); notesPanel.classList.remove("open"); }
+    function togglePanel(panel) { panel.classList.contains("open") ? closePanels() : openPanel(panel); }
+    function toggleFullscreen() {
+      document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen().catch(() => {});
+    }
+
+    document.getElementById("fullscreen").addEventListener("click", toggleFullscreen);
+    document.querySelectorAll(".close").forEach(button => button.addEventListener("click", closePanels));
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") { closePanels(); return; }
+      if (overview.classList.contains("open") || notesPanel.classList.contains("open")) return;
+      if (["ArrowRight","ArrowDown"," ","PageDown"].includes(event.key)) { event.preventDefault(); show(current + 1); }
+      else if (["ArrowLeft","ArrowUp","PageUp"].includes(event.key)) { event.preventDefault(); show(current - 1); }
+      else if (event.key.toLowerCase() === "o") togglePanel(overview);
+      else if (event.key.toLowerCase() === "n") togglePanel(notesPanel);
+      else if (event.key.toLowerCase() === "f") toggleFullscreen();
+    });
+    let touchX = 0;
+    let touchY = 0;
+    document.addEventListener("touchstart", event => {
+      touchX = event.changedTouches[0].screenX;
+      touchY = event.changedTouches[0].screenY;
+    }, {passive:true});
+    document.addEventListener("touchend", event => {
+      const dx = event.changedTouches[0].screenX - touchX;
+      const dy = event.changedTouches[0].screenY - touchY;
+      if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)) show(current + (dx < 0 ? 1 : -1));
+    }, {passive:true});
+    function fits(node) {
+      const inner = node.querySelector(".slide-inner");
+      return inner && inner.scrollHeight <= node.clientHeight * .82 && inner.scrollWidth <= node.clientWidth * .92;
+    }
+    function fitNode(node, start) {
+      let fit = start == null ? 1 : start;
+      node.classList.add("measuring");
+      node.style.setProperty("--fit", fit);
+      while (fit > .72 && !fits(node)) {
+        fit = Math.max(.72, fit - .02);
+        node.style.setProperty("--fit", fit);
+      }
+      node.classList.remove("measuring");
+      return fit;
+    }
+    function fitAll() {
+      nodes.forEach(node => node.style.setProperty("--fit", 1));
+      nodes.forEach(node => fitNode(node));
+      show(current);
+    }
+    let resizeTimer;
+    window.addEventListener("resize", () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(fitAll, 120);
+    });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitAll); else fitAll();
+    show(0);
+  </script>
+</body>
+</html>
