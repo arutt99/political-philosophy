@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>State of Nature Wrapup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="presentation-polish.css">
+<style>
+  :root {
+    --paper: #f2f0f8;
+    --paper-deep: #e7e3f1;
+    --ink: #181a2c;
+    --muted: #66687d;
+    --accent: #7138c3;
+    --accent-soft: #d9cdf3;
+    --signal: #d94e78;
+    --signal-soft: #f1d2df;
+    --yellow: #e4ca4d;
+    --line: rgba(24, 26, 44, 0.18);
+    --line-strong: rgba(24, 26, 44, 0.33);
+    --fit: 1;
+    --preflight-bg: var(--paper);
+    --preflight-text: var(--ink);
+    --preflight-muted: var(--muted);
+    --preflight-accent: var(--accent);
+    --preflight-bright: var(--signal);
+    --preflight-line: var(--line);
+  }
+
+  * { box-sizing: border-box; }
+
+  html,
+  body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    background: var(--paper);
+    color: var(--ink);
+  }
+
+  body {
+    font-family: "Space Grotesk", Arial, sans-serif;
+  }
+
+  button { font: inherit; }
+
+  #deck {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background:
+      linear-gradient(90deg, rgba(113, 56, 195, 0.05) 1px, transparent 1px),
+      linear-gradient(rgba(113, 56, 195, 0.05) 1px, transparent 1px),
+      var(--paper);
+    background-size: 5.1rem 5.1rem;
+  }
+
+  #deck::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(116deg, transparent 0 68%, rgba(217, 78, 120, 0.09) 68% 68.3%, transparent 68.3%);
+  }
+
+  #deck::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 6.4vh;
+    height: 1px;
+    pointer-events: none;
+    background: linear-gradient(90deg, transparent 0 4vw, var(--accent) 4vw 28vw, transparent 28vw);
+    opacity: 0.46;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 7.5vh 6vw 9vh !important;
+    overflow: hidden;
+    text-align: left;
+  }
+
+  .slide.active,
+  .slide.measuring { display: flex; }
+
+  .slide.measuring {
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .slide::before {
+    content: attr(data-slide-number);
+    position: absolute;
+    left: 3.2vw;
+    top: 8.4vh;
+    color: var(--accent);
+    font: 500 clamp(0.7rem, 0.8vw, 0.95rem)/1 "DM Mono", monospace;
+    letter-spacing: 0.12em;
+    writing-mode: vertical-rl;
+    opacity: 0.9;
+  }
+
+  .slide-inner {
+    position: relative;
+    z-index: 1;
+    width: min(1200px, 88vw);
+    max-height: 82vh;
+    margin: auto;
+    transform-origin: top center;
+  }
+
+  .eyebrow,
+  .cover-kicker,
+  .slide-tag,
+  .label,
+  .meta,
+  .cover-index,
+  #nav-hint,
+  #counter,
+  #fullscreen {
+    font-family: "DM Mono", monospace;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .eyebrow,
+  .cover-kicker {
+    margin: 0 0 1.1rem;
+    color: var(--accent);
+    font-size: clamp(0.7rem, 0.86vw, 0.98rem);
+    line-height: 1.3;
+  }
+
+  .title {
+    margin: 0;
+    color: var(--ink);
+    font-family: "Fraunces", Georgia, serif;
+    font-weight: 600;
+    letter-spacing: -0.04em;
+  }
+
+  .content .title,
+  .compare .title,
+  .baseline .title,
+  .table .title,
+  .assumptions .title,
+  .timeline .title,
+  .today .title,
+  .problems .title,
+  .synthesis .title,
+  .closing .title {
+    max-width: 18ch;
+    margin-bottom: 0.8rem;
+    font-size: calc(clamp(2.6rem, 5.25vw, 5.45rem) * var(--fit)) !important;
+    line-height: 0.98 !important;
+  }
+
+  .title-rule {
+    width: min(19rem, 33vw);
+    height: 0.36rem;
+    margin: 1.35rem 0 1.8rem;
+    background: var(--accent);
+  }
+
+  .lead {
+    max-width: 27ch;
+    margin: 0 0 2rem;
+    color: var(--ink);
+    font-family: "Fraunces", Georgia, serif;
+    font-size: calc(clamp(1.65rem, 2.6vw, 2.65rem) * var(--fit));
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+  }
+
+  .supporting {
+    max-width: 62ch;
+    margin: 0;
+    color: var(--muted);
+    font-size: calc(clamp(1rem, 1.2vw, 1.28rem) * var(--fit));
+    line-height: 1.5;
+  }
+
+  .cover .slide-inner {
+    width: min(1100px, 86vw);
+    padding: 3rem 0 2.3rem;
+    border-top: 1px solid var(--line-strong);
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  .cover-kicker {
+    color: var(--signal);
+  }
+
+  .cover .title {
+    max-width: 8ch;
+    font-size: calc(clamp(5.2rem, 12vw, 11.2rem) * var(--fit)) !important;
+    line-height: 0.79 !important;
+  }
+
+  .cover .work {
+    max-width: 34ch;
+    margin: 2.1rem 0 0;
+    color: var(--muted);
+    font-family: "Fraunces", Georgia, serif;
+    font-size: calc(clamp(1.25rem, 2.1vw, 2rem) * var(--fit));
+    line-height: 1.22;
+  }
+
+  .cover-bottom {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 3rem;
+  }
+
+  .cover .course {
+    color: var(--accent);
+    font-size: calc(clamp(0.7rem, 0.9vw, 0.98rem) * var(--fit));
+    line-height: 1.4;
+  }
+
+  .cover-note {
+    max-width: 28ch;
+    color: var(--muted);
+    font-size: calc(clamp(0.8rem, 1vw, 1rem) * var(--fit));
+    line-height: 1.35;
+    text-align: right;
+  }
+
+  .cover-index {
+    position: absolute;
+    right: 0;
+    top: 1.2rem;
+    color: var(--signal);
+    font-size: clamp(0.78rem, 0.9vw, 1rem);
+  }
+
+  .row-list {
+    display: grid;
+    gap: 0;
+    max-width: 1050px;
+    margin-top: 0.8rem;
+    border-top: 1px solid var(--line-strong);
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 3.2rem minmax(10rem, 0.75fr) minmax(18rem, 1.7fr);
+    gap: 1.25rem;
+    align-items: baseline;
+    padding: 1rem 0 1.1rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .row .row-number {
+    color: var(--signal);
+    font: 500 0.9rem/1.25 "DM Mono", monospace;
+  }
+
+  .row h3 {
+    margin: 0;
+    color: var(--ink);
+    font-size: calc(clamp(1.1rem, 1.65vw, 1.55rem) * var(--fit));
+    line-height: 1.12;
+  }
+
+  .row p {
+    margin: 0;
+    color: var(--muted);
+    font-size: calc(clamp(1rem, 1.3vw, 1.35rem) * var(--fit));
+    line-height: 1.35;
+  }
+
+  .bottom-note {
+    max-width: 67ch;
+    margin: 1.45rem 0 0;
+    padding-left: 1rem;
+    border-left: 0.35rem solid var(--signal);
+    color: var(--ink);
+    font-family: "Fraunces", Georgia, serif;
+    font-size: calc(clamp(1.2rem, 1.75vw, 1.7rem) * var(--fit));
+    line-height: 1.2;
+  }
+
+  .compare-grid,
+  .baseline-grid,
+  .today-grid,
+  .problem-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+    margin-top: 1.4rem;
+    border-top: 1px solid var(--line-strong);
+  }
+
+  .compare-col,
+  .baseline-col,
+  .today-col,
+  .problem-col {
+    min-width: 0;
+    padding: 1.25rem 1.35rem 0 0;
+    border-right: 1px solid var(--line);
+  }
+
+  .compare-col + .compare-col,
+  .baseline-col + .baseline-col,
+  .today-col + .today-col,
+  .problem-col + .problem-col {
+    padding-left: 1.35rem;
+  }
+
+  .compare-col:last-child,
+  .baseline-col:last-child,
+  .today-col:last-child,
+  .problem-col:last-child { border-right: 0; }
+
+  .label {
+    display: block;
+    margin-bottom: 0.8rem;
+    color: var(--accent);
+    font-size: calc(clamp(0.72rem, 0.83vw, 0.95rem) * var(--fit));
+    line-height: 1.25;
+  }
+
+  .compare-col h3,
+  .baseline-col h3,
+  .today-col h3,
+  .problem-col h3 {
+    margin: 0 0 0.8rem;
+    color: var(--ink);
+    font-family: "Fraunces", Georgia, serif;
+    font-size: calc(clamp(1.65rem, 2.5vw, 2.55rem) * var(--fit));
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+  }
+
+  .compare-col p,
+  .today-col p,
+  .problem-col p {
+    margin: 0;
+    color: var(--muted);
+    font-size: calc(clamp(1rem, 1.35vw, 1.38rem) * var(--fit));
+    line-height: 1.38;
+  }
+
+  .compare-col .focus,
+  .today-col .focus,
+  .problem-col .focus {
+    margin-bottom: 0.75rem;
+    color: var(--ink);
+    font-size: calc(clamp(1.15rem, 1.65vw, 1.6rem) * var(--fit));
+    line-height: 1.1;
+  }
+
+  .baseline-pair {
+    padding: 0.9rem 0 0.85rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .baseline-pair:first-of-type { margin-top: 0.35rem; }
+
+  .meta {
+    display: block;
+    margin-bottom: 0.42rem;
+    color: var(--signal);
+    font-size: calc(clamp(0.67rem, 0.75vw, 0.82rem) * var(--fit));
+    line-height: 1.2;
+  }
+
+  .baseline-pair p {
+    margin: 0;
+    color: var(--muted);
+    font-size: calc(clamp(0.98rem, 1.22vw, 1.25rem) * var(--fit));
+    line-height: 1.35;
+  }
+
+  .baseline-summary {
+    max-width: 58ch;
+    margin: 1.55rem 0 0;
+    color: var(--ink);
+    font-family: "Fraunces", Georgia, serif;
+    font-size: calc(clamp(1.35rem, 2vw, 1.95rem) * var(--fit));
+    line-height: 1.14;
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+    margin-top: 1.15rem;
+    border-top: 1px solid var(--line-strong);
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  table {
+    width: 100%;
+    min-width: 900px;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+
+  th,
+  td {
+    padding: 0.8rem 0.9rem;
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+    text-align: left;
+  }
+
+  th:last-child,
+  td:last-child { border-right: 0; }
+
+  tr:last-child td { border-bottom: 0; }
+
+  th {
+    color: var(--accent);
+    font: 500 calc(clamp(0.7rem, 0.85vw, 0.94rem) * var(--fit))/1.2 "DM Mono", monospace;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  td {
+    color: var(--muted);
+    font-size: calc(clamp(0.92rem, 1.18vw, 1.18rem) * var(--fit));
+    line-height: 1.28;
+  }
+
+  td:first-child {
+    width: 13%;
+    color: var(--ink);
+    font-family: "Fraunces", Georgia, serif;
+    font-size: calc(clamp(1.2rem, 1.65vw, 1.6rem) * var(--fit));
+    font-weight: 600;
+  }
+
+  .table-note {
+    max-width: 72ch;
+    margin: 1.2rem 0 0;
+    color: var(--ink);
+    font-size: calc(clamp(1rem, 1.25vw, 1.22rem) * var(--fit));
+    line-height: 1.4;
+  }
+
+  .assumption-layout {
+    display: grid;
+    grid-template-columns: minmax(11rem, 0.7fr) minmax(0, 1.7fr);
+    gap: 2.6rem;
+    align-items: start;
+    margin-top: 1.55rem;
+  }
+
+  .assumption-stamp {
+    padding-top: 0.35rem;
+    color: var(--signal);
+    font: 500 calc(clamp(1rem, 1.3vw, 1.35rem) * var(--fit))/1.15 "DM Mono", monospace;
+    letter-spacing: 0.17em;
+    text-transform: uppercase;
+    writing-mode: vertical-rl;
+  }
+
+  .assumption-list {
+    border-top: 1px solid var(--line-strong);
+  }
+
+  .assumption-row {
+    display: grid;
+    grid-template-columns: minmax(13rem, 0.8fr) minmax(0, 1.4fr);
+    gap: 1.4rem;
+    padding: 1rem 0 1.1rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .assumption-row h3 {
+    margin: 0;
+    color: var(--ink);
+    font-family: "Fraunces", Georgia, serif;
+    font-size: calc(clamp(1.2rem, 1.75vw, 1.72rem) * var(--fit));
+    line-height: 1.08;
+  }
+
+  .assumption-row p {
+    margin: 0;
+    color: var(--muted);
+    font-size: calc(clamp(1rem, 1.28vw, 1.3rem) * var(--fit));
+    line-height: 1.35;
+  }
+
+  .timeline {
+    margin-top: 1.25rem;
+  }
+
+  .timeline-track {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+    margin-top: 0.8rem;
+    border-top: 0.34rem solid var(--accent);
+  }
+
+  .timeline-item {
+    position: relative;
+    padding: 1.35rem 1.35rem 0 0;
+  }
+
+  .timeline-item + .timeline-item {
+    padding-left: 1.35rem;
+    border-left: 1px solid var(--line);
+  }
+
+  .timeline-item::before {
+    content: "";
+    position: absolute;
+    top: -0.72rem;
+    left: 0;
+    width: 1rem;
+    height: 1rem;
+    border: 0.28rem solid var(--paper);
+    border-radius: 50%;
+    background: var(--signal);
+  }
+
+  .timeline-item + .timeline-item::before { left: -0.52rem; }
+
+  .timeline-item h3 {
+    margin: 0 0 0.75rem;
+    color: var(--ink);
+    font-family: "Fraunces", Georgia, serif;
+    font-size: calc(clamp(1.5rem, 2.25vw, 2.2rem) * var(--fit));
+    line-height: 0.98;
+  }
+
+  .timeline-item p {
+    margin: 0;
+    color: var(--muted);
+    font-size: calc(clamp(1rem, 1.27vw, 1.3rem) * var(--fit));
+    line-height: 1.38;
+  }
+
+  .timeline-note {
+    max-width: 65ch;
+    margin: 1.6rem 0 0;
+    padding-left: 1rem;
+    border-left: 0.35rem solid var(--yellow);
+    color: var(--ink);
+    font-family: "Fraunces", Georgia, serif;
+    font-size: calc(clamp(1.2rem, 1.8vw, 1.7rem) * var(--fit));
+    line-height: 1.15;
+  }
+
+  .today .slide-inner { width: min(1180px, 90vw); }
+
+  .today-grid { margin-top: 1.25rem; }
+
+  .today-col .case {
+    display: block;
+    margin-bottom: 0.8rem;
+    color: var(--signal);
+    font: 500 calc(clamp(0.7rem, 0.8vw, 0.9rem) * var(--fit))/1.2 "DM Mono", monospace;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .today-note {
+    max-width: 67ch;
+    margin: 1.35rem 0 0;
+    color: var(--ink);
+    font-size: calc(clamp(1.05rem, 1.45vw, 1.42rem) * var(--fit));
+    line-height: 1.4;
+  }
+
+  .problem-grid {
+    margin-top: 1.2rem;
+  }
+
+  .problem-col h3 { font-size: calc(clamp(1.75rem, 2.65vw, 2.6rem) * var(--fit)); }
+
+  .problem-col p { max-width: 24ch; }
+
+  .problem-note {
+    max-width: 65ch;
+    margin: 1.5rem 0 0;
+    color: var(--ink);
+    font-family: "Fraunces", Georgia, serif;
+    font-size: calc(clamp(1.25rem, 1.9vw, 1.85rem) * var(--fit));
+    line-height: 1.15;
+  }
+
+  .synthesis-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 2.5rem;
+    margin-top: 1.35rem;
+  }
+
+  .synthesis-col {
+    border-top: 0.34rem solid var(--accent);
+  }
+
+  .synthesis-col:last-child { border-top-color: var(--signal); }
+
+  .synthesis-col h3 {
+    margin: 0.9rem 0 0.9rem;
+    color: var(--ink);
+    font-family: "Fraunces", Georgia, serif;
+    font-size: calc(clamp(1.55rem, 2.35vw, 2.3rem) * var(--fit));
+    line-height: 1;
+  }
+
+  .synthesis-row {
+    display: grid;
+    grid-template-columns: 6.4rem minmax(0, 1fr);
+    gap: 1rem;
+    padding: 0.82rem 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .synthesis-row .label { margin: 0; color: var(--signal); }
+
+  .synthesis-row p {
+    margin: 0;
+    color: var(--muted);
+    font-size: calc(clamp(1rem, 1.3vw, 1.28rem) * var(--fit));
+    line-height: 1.34;
+  }
+
+  .synthesis-note {
+    max-width: 58ch;
+    margin: 1.4rem 0 0;
+    color: var(--ink);
+    font-family: "Fraunces", Georgia, serif;
+    font-size: calc(clamp(1.25rem, 1.95vw, 1.9rem) * var(--fit));
+    line-height: 1.13;
+  }
+
+  .closing .slide-inner {
+    width: min(1030px, 86vw);
+    padding: 2.9rem 0 2.2rem;
+    border-top: 1px solid var(--line-strong);
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  .closing .title {
+    max-width: none;
+    font-size: calc(clamp(3.2rem, 7vw, 7.3rem) * var(--fit)) !important;
+    line-height: 0.9 !important;
+  }
+
+  .closing-statement {
+    max-width: 23ch;
+    margin: 1.25rem 0 0;
+    color: var(--signal);
+    font-family: "Fraunces", Georgia, serif;
+    font-size: calc(clamp(2.1rem, 4.1vw, 4.2rem) * var(--fit));
+    line-height: 0.98;
+    letter-spacing: -0.04em;
+  }
+
+  .closing-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: 2.5rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .closing-check {
+    padding-top: 0.95rem;
+    border-top: 0.25rem solid var(--accent-soft);
+  }
+
+  .closing-check .label {
+    margin-bottom: 0.6rem;
+    color: var(--accent);
+  }
+
+  .closing-check p {
+    margin: 0;
+    color: var(--muted);
+    font-size: calc(clamp(0.95rem, 1.14vw, 1.14rem) * var(--fit));
+    line-height: 1.32;
+  }
+
+  .closing-note {
+    margin: 1.85rem 0 0;
+    color: var(--ink);
+    font-size: calc(clamp(1rem, 1.35vw, 1.3rem) * var(--fit));
+    line-height: 1.4;
+  }
+
+  #progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 30;
+    width: 0;
+    height: 0.34rem;
+    background: var(--signal);
+  }
+
+  #nav-hint,
+  #counter {
+    position: fixed;
+    bottom: 1.2rem;
+    z-index: 30;
+    color: var(--muted);
+    font-size: 0.68rem;
+    line-height: 1.2;
+  }
+
+  #nav-hint { left: 4vw; }
+  #counter { right: 4vw; color: var(--accent); }
+
+  #fullscreen {
+    position: fixed;
+    top: 1.2rem;
+    right: 4vw;
+    z-index: 30;
+    padding: 0.5rem 0.66rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 0;
+    color: var(--ink);
+    background: rgba(242, 240, 248, 0.78);
+    cursor: pointer;
+    font-size: 0.67rem;
+    line-height: 1;
+  }
+
+  #fullscreen:hover,
+  #fullscreen:focus-visible {
+    border-color: var(--accent);
+    color: var(--accent);
+    outline: none;
+  }
+
+  .panel {
+    position: fixed;
+    inset: 4vh 4vw;
+    z-index: 60;
+    display: none;
+    overflow: auto;
+    border: 1px solid var(--line-strong);
+    border-radius: 0;
+    background: rgba(242, 240, 248, 0.985);
+  }
+
+  .panel.open { display: block; }
+
+  .panel-head {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.1rem 1.3rem;
+    border-bottom: 1px solid var(--line);
+    background: var(--paper-deep);
+  }
+
+  .panel-head h2 {
+    margin: 0;
+    color: var(--accent);
+    font: 500 0.76rem/1 "DM Mono", monospace;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .close {
+    padding: 0.45rem 0.65rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 0;
+    color: var(--ink);
+    background: transparent;
+    cursor: pointer;
+    font: 500 0.68rem/1 "DM Mono", monospace;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  #overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 0;
+    padding: 1.25rem;
+  }
+
+  .overview-card {
+    min-height: 126px;
+    padding: 1rem;
+    border: 1px solid var(--line);
+    border-right: 0;
+    border-bottom: 0;
+    border-radius: 0;
+    color: var(--ink);
+    background: transparent;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .overview-card:nth-child(4n) { border-right: 1px solid var(--line); }
+  .overview-card:nth-last-child(-n + 4) { border-bottom: 1px solid var(--line); }
+  .overview-card:hover,
+  .overview-card.current {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+
+  .overview-card .num {
+    display: block;
+    margin-bottom: 0.72rem;
+    color: var(--signal);
+    font: 500 0.67rem/1.2 "DM Mono", monospace;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+  }
+
+  .overview-card .label {
+    display: block;
+    color: var(--ink);
+    font-family: "Fraunces", Georgia, serif;
+    font-size: 1.35rem;
+    line-height: 1.03;
+    letter-spacing: -0.02em;
+    text-transform: none;
+  }
+
+  #notes-body {
+    max-width: 920px;
+    padding: 2rem 2.3rem;
+    color: var(--ink);
+    font-size: 1rem;
+    line-height: 1.65;
+    white-space: pre-wrap;
+  }
+
+  /* Keep the shared review stage visually continuous with this deck. */
+  #preflight {
+    background: var(--paper) !important;
+    color: var(--ink) !important;
+  }
+
+  .preflight-title,
+  .preflight-card-label {
+    font-family: "Fraunces", Georgia, serif !important;
+    color: var(--ink) !important;
+  }
+
+  .preflight-subtitle,
+  .preflight-help,
+  .preflight-status,
+  .preflight-card-number {
+    color: var(--muted) !important;
+  }
+
+  .preflight-kicker,
+  .preflight-count {
+    color: var(--accent) !important;
+  }
+
+  .preflight-card {
+    border-color: var(--line) !important;
+    background: rgba(255, 255, 255, 0.45) !important;
+  }
+
+  .preflight-frame {
+    border-color: var(--line) !important;
+    background: var(--paper-deep) !important;
+  }
+
+  .preflight-enter {
+    color: #ffffff !important;
+    background: var(--accent) !important;
+    border-color: var(--accent) !important;
+  }
+
+  .preflight-back,
+  .preflight-reset,
+  .preflight-toggle {
+    color: var(--muted) !important;
+    border-color: var(--line-strong) !important;
+  }
+
+  @media (max-width: 760px) {
+    .slide {
+      align-items: flex-start;
+      padding: 10vh 9vw 11vh !important;
+    }
+
+    .slide::before { left: 3vw; top: 8vh; }
+    .slide-inner { width: 82vw; max-height: 80vh; }
+    #nav-hint { display: none; }
+    #fullscreen { top: 0.8rem; right: 8vw; }
+    .cover .slide-inner { padding-top: 2.2rem; }
+    .cover .title { font-size: calc(clamp(4.8rem, 19vw, 8rem) * var(--fit)) !important; }
+    .cover-bottom { align-items: flex-start; flex-direction: column; margin-top: 2.2rem; }
+    .cover-note { text-align: left; }
+    .row { grid-template-columns: 2.3rem 1fr; gap: 0.75rem; }
+    .row p { grid-column: 2; }
+    .compare-grid,
+    .baseline-grid,
+    .today-grid,
+    .problem-grid,
+    .timeline-track { grid-template-columns: 1fr; }
+    .compare-col,
+    .baseline-col,
+    .today-col,
+    .problem-col { padding: 1rem 0; border-right: 0; border-bottom: 1px solid var(--line); }
+    .compare-col + .compare-col,
+    .baseline-col + .baseline-col,
+    .today-col + .today-col,
+    .problem-col + .problem-col { padding-left: 0; }
+    .compare-col:last-child,
+    .baseline-col:last-child,
+    .today-col:last-child,
+    .problem-col:last-child { border-bottom: 0; }
+    .assumption-layout { grid-template-columns: 1fr; gap: 0.8rem; }
+    .assumption-stamp { writing-mode: initial; }
+    .assumption-row { grid-template-columns: 1fr; gap: 0.45rem; }
+    .timeline-track { border-top: 0; }
+    .timeline-item,
+    .timeline-item + .timeline-item { padding: 1.25rem 0 1rem 1.35rem; border-left: 0.34rem solid var(--accent); border-bottom: 1px solid var(--line); }
+    .timeline-item::before,
+    .timeline-item + .timeline-item::before { top: 1.45rem; left: -0.73rem; }
+    .synthesis-grid { grid-template-columns: 1fr; gap: 1.25rem; }
+    .closing-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+    #overview-grid { grid-template-columns: 1fr; }
+    .overview-card,
+    .overview-card:nth-child(4n) { border-right: 1px solid var(--line); }
+    .overview-card:nth-last-child(-n + 4) { border-bottom: 0; }
+    .overview-card:last-child { border-bottom: 1px solid var(--line); }
+  }
+</style>
+<script src="presentation-polish.js" defer></script>
+</head>
+<body>
+<div id="deck" aria-live="polite"></div>
+<div id="progress"></div>
+<div id="nav-hint">Arrows / space · O overview · N notes · F fullscreen</div>
+<div id="counter">1 / 12</div>
+<button id="fullscreen" aria-label="Toggle fullscreen">Fullscreen</button>
+<section id="overview" class="panel" aria-label="Slide overview">
+  <div class="panel-head"><h2>Overview</h2><button class="close" type="button">Close</button></div>
+  <div id="overview-grid"></div>
+</section>
+<aside id="notes" class="panel" aria-label="Speaker notes">
+  <div class="panel-head"><h2>Speaker notes</h2><button class="close" type="button">Close</button></div>
+  <div id="notes-body"></div>
+</aside>
+
+<script>
+  const source = (focus = '') =>
+    `All visible claims on this slide come from the user-supplied text “Why begin with the state of nature?”${focus ? ` Focus: ${focus}.` : '.'}`;
+
+  const slides = [
+    {
+      type: 'cover',
+      eyebrow: 'Political philosophy / wrap-up',
+      title: 'State of Nature',
+      work: 'Why begin here, and why Hobbes, Locke, and Rousseau begin somewhere different',
+      course: 'Hobbes · Locke · Rousseau',
+      note: 'A closing frame for the state-of-nature unit. The deck treats the state of nature as a method for testing political authority, then compares the different assumptions each thinker brings to that method.',
+      notes: source('the overall argument')
+    },
+    {
+      type: 'content',
+      eyebrow: 'The method',
+      title: 'The state of nature is a test of political authority',
+      lead: 'Suspend authority long enough to ask why anyone should accept it.',
+      items: [
+        ['01', 'Human beings without government', 'What would people be like without political authority?'],
+        ['02', 'The problems that appear', 'What insecurity, conflict, or dependence would arise?'],
+        ['03', 'The claims that remain', 'What rights or obligations would exist before government?'],
+        ['04', 'The case for authority', 'What, if anything, would make government worth accepting?']
+      ],
+      bottom: 'A government cannot justify government by pointing to its own existence.',
+      notes: source('why the method prevents circular reasoning')
+    },
+    {
+      type: 'compare',
+      eyebrow: 'Natural and social life',
+      title: 'Natural life and social life are different objects',
+      columns: [
+        {
+          label: 'Political authority removed',
+          title: 'Hobbes and Locke',
+          focus: 'Their people already live in a moral and social world.',
+          text: 'Hobbes keeps desire, fear, scarcity, competition, vulnerability, and the pursuit of power. Locke keeps reason, natural rights, God’s Law of Nature, and initially abundant land.'
+        },
+        {
+          label: 'Developed society removed',
+          title: 'Rousseau',
+          focus: 'His question reaches beneath political authority.',
+          text: 'Rousseau removes language, property, status competition, and social dependence from the starting point. The natural human has self-preservation, pity, few desires, solitude, and limited foresight.'
+        },
+        {
+          label: 'Why the distinction matters',
+          title: 'Different objects',
+          focus: 'The theories cannot be compared as though they erased the same world.',
+          text: 'Hobbes and Locke mainly ask what happens when political authority is absent. Rousseau asks what human beings are like before developed society has transformed them.'
+        }
+      ],
+      notes: source('what is natural and what is created by society')
+    },
+    {
+      type: 'compare',
+      eyebrow: 'The problem',
+      title: 'Each theory starts with a different problem',
+      columns: [
+        {
+          label: 'Hobbes',
+          title: 'Insecurity',
+          focus: 'People cannot safely trust one another.',
+          text: 'The political question is how people can escape fear and make peace enforceable.'
+        },
+        {
+          label: 'Locke',
+          title: 'Impartial judgment',
+          focus: 'People may recognize rights without a common judge.',
+          text: 'The political question is how to protect pre-existing rights more reliably, with impartial law and enforcement.'
+        },
+        {
+          label: 'Rousseau',
+          title: 'Dependence and inequality',
+          focus: 'Social development can create comparison, hierarchy, and conflict.',
+          text: 'The political question is whether government solves those problems or preserves the conditions that produced them.'
+        }
+      ],
+      notes: source('the problem government is supposed to solve')
+    },
+    {
+      type: 'baseline',
+      eyebrow: 'The baseline',
+      title: 'The baseline makes political institutions comparable',
+      columns: [
+        {
+          label: 'Hobbes',
+          title: 'Fear and insecurity',
+          pairs: [
+            ['What is gained', 'A way to make peace enforceable'],
+            ['The test', 'Can authority end constant readiness for violence?']
+          ]
+        },
+        {
+          label: 'Locke',
+          title: 'Rights without a judge',
+          pairs: [
+            ['What is gained', 'Impartial judgment and reliable enforcement'],
+            ['The test', 'Can government protect rights without violating them?']
+          ]
+        },
+        {
+          label: 'Rousseau',
+          title: 'Independence and inequality',
+          pairs: [
+            ['What is compared', 'Natural independence and civilized dependence'],
+            ['The test', 'Does political society solve conflict or preserve its cause?']
+          ]
+        }
+      ],
+      summary: 'The state of nature supplies the alternative against which government is judged. It shows what political society might secure, and what it might cost or reproduce.',
+      notes: source('the state of nature as a baseline for judging institutions')
+    },
+    {
+      type: 'table',
+      eyebrow: 'Comparison',
+      title: 'Different starting points under the same label',
+      intro: 'The phrase “state of nature” names a method. It does not name one shared scenario.',
+      rows: [
+        ['Hobbes', 'A common political power capable of enforcing rules', 'Desire, fear, scarcity, competition, vulnerability, and the pursuit of power', 'How can people escape insecurity and make peace enforceable?'],
+        ['Locke', 'Government and impartial public judges', 'Reason, natural rights, God’s Law of Nature, and initially abundant land', 'How can people protect pre-existing rights more reliably?'],
+        ['Rousseau', 'Developed society and social dependence', 'Self-preservation, pity, few desires, solitude, and limited foresight', 'How do property, comparison, inequality, and social development create conflict?']
+      ],
+      notes: source('the comparison table of what is removed, what remains, and the central question')
+    },
+    {
+      type: 'assumptions',
+      eyebrow: 'Hidden assumptions',
+      title: 'The disagreement begins before the answer',
+      rows: [
+        ['Hobbes', 'People already display desires for power, reputation, and future security.'],
+        ['Locke', 'People already recognize moral obligations and rights.'],
+        ['Rousseau', 'The natural human is solitary, has few needs, and has little interest in reputation.']
+      ],
+      note: 'They are not only disagreeing about the best government. They are beginning with different assumptions about what remains when government or society is removed.',
+      notes: source('why the thinkers are not imagining the same starting point')
+    },
+    {
+      type: 'timeline',
+      eyebrow: 'Historical pressure',
+      title: 'Historical circumstances made authority look like a problem',
+      items: [
+        ['Hobbes', 'English Civil War', 'Hobbes feared the violence that could follow the collapse of political authority.'],
+        ['Locke', 'Divine-right monarchy', 'Locke challenged theories that treated monarchy as naturally or divinely entitled to rule.'],
+        ['Rousseau', 'Property and comparison', 'Rousseau argued that property, comparison, and inequality could produce problems government claims to solve.']
+      ],
+      note: 'The method unsettles the assumption that existing political arrangements are natural, inevitable, or automatically legitimate.',
+      notes: source('why these thinkers cared so much about political authority')
+    },
+    {
+      type: 'today',
+      eyebrow: 'A modern application',
+      title: 'The framework still shapes policy arguments',
+      case: 'Crime and public safety',
+      columns: [
+        {
+          label: 'Hobbesian lens',
+          title: 'Fear and enforcement',
+          focus: 'Start with insecurity.',
+          text: 'Emphasize fear, deterrence, and the need for effective enforcement.'
+        },
+        {
+          label: 'Lockean lens',
+          title: 'Rights and procedure',
+          focus: 'Start with limits on power.',
+          text: 'Emphasize rights, impartial procedures, and limits on punishment.'
+        },
+        {
+          label: 'Rousseauian lens',
+          title: 'Inequality and dependence',
+          focus: 'Start with social conditions.',
+          text: 'Ask whether unequal power, dependence, and inequality help produce the conditions associated with crime.'
+        }
+      ],
+      note: 'A disagreement about policy can be a disagreement about human nature and about what kind of problem society is facing.',
+      notes: source('how state-of-nature assumptions shape modern political disagreements')
+    },
+    {
+      type: 'problems',
+      eyebrow: 'Three questions',
+      title: 'Security, justice, and inequality are different problems',
+      columns: [
+        ['Security', 'Can people safely trust one another?'],
+        ['Justice', 'Who judges, and how are rights enforced?'],
+        ['Inequality', 'Do institutions create dependence and protect advantage?']
+      ],
+      note: 'The framework separates problems that political arguments often blur together.',
+      notes: source('the distinction between security problems, justice problems, and inequality problems')
+    },
+    {
+      type: 'synthesis',
+      eyebrow: 'The institutional tension',
+      title: 'Institutions can solve one problem and create another',
+      leftTitle: 'What government can solve',
+      rightTitle: 'What government can also reproduce',
+      left: [
+        ['Reduce', 'Violence and insecurity'],
+        ['Protect', 'Rights through public rules'],
+        ['Create', 'Order and reliable enforcement']
+      ],
+      right: [
+        ['Protect', 'Inequality and the advantages of the powerful'],
+        ['Empower', 'Authorities to punish'],
+        ['Create', 'Dependence through social and political arrangements']
+      ],
+      note: 'A political institution can be both a solution to one problem and a source of another.',
+      notes: source('the final contrast between what government solves and what it may create or preserve')
+    },
+    {
+      type: 'closing',
+      eyebrow: 'The wrap-up',
+      title: 'Political authority still owes us a justification',
+      statement: 'Power is not its own reason.',
+      checks: [
+        ['Human nature', 'What kind of people do we assume?'],
+        ['The problem', 'What are institutions meant to solve?'],
+        ['Prior claims', 'What rights exist before government?'],
+        ['Legitimate power', 'What may government do to us?']
+      ],
+      note: 'That is why the state of nature remains at the heart of political philosophy.',
+      notes: source('why the state-of-nature question still matters today')
+    }
+  ];
+
+  const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  }[character]));
+
+  const deck = document.getElementById('deck');
+  const overview = document.getElementById('overview');
+  const notesPanel = document.getElementById('notes');
+  const notesBody = document.getElementById('notes-body');
+  const overviewGrid = document.getElementById('overview-grid');
+  const counter = document.getElementById('counter');
+  const progress = document.getElementById('progress');
+  let current = 0;
+
+  const pad = number => String(number).padStart(2, '0');
+
+  function header(slide) {
+    return `<div class="eyebrow">${esc(slide.eyebrow)}</div><h2 class="title">${esc(slide.title)}</h2><div class="title-rule"></div>`;
+  }
+
+  function renderSlide(slide, index) {
+    const node = document.createElement('section');
+    node.className = `slide ${slide.type}`;
+    node.dataset.index = String(index);
+    node.dataset.slideNumber = pad(index + 1);
+    node.setAttribute('aria-label', slide.title || slide.work || 'Untitled slide');
+    let html = '<div class="slide-inner">';
+
+    if (slide.type === 'cover') {
+      html += `
+        <div class="cover-kicker">${esc(slide.eyebrow)}</div>
+        <h1 class="title">${esc(slide.title)}</h1>
+        <p class="work">${esc(slide.work)}</p>
+        <div class="cover-bottom">
+          <div class="course">${esc(slide.course)}</div>
+          <div class="cover-note">A closing map of the method, the differences, and the stakes</div>
+        </div>
+        <div class="cover-index">H / L / R</div>`;
+    }
+
+    if (slide.type === 'content') {
+      html += header(slide);
+      html += `<p class="lead">${esc(slide.lead)}</p>`;
+      html += `<div class="row-list">${slide.items.map(row => `
+        <div class="row">
+          <div class="row-number">${esc(row[0])}</div>
+          <h3>${esc(row[1])}</h3>
+          <p>${esc(row[2])}</p>
+        </div>`).join('')}</div>`;
+      html += `<p class="bottom-note">${esc(slide.bottom)}</p>`;
+    }
+
+    if (slide.type === 'compare') {
+      html += header(slide);
+      html += `<div class="compare-grid">${slide.columns.map(column => `
+        <article class="compare-col">
+          <span class="label">${esc(column.label)}</span>
+          <h3>${esc(column.title)}</h3>
+          <p class="focus">${esc(column.focus)}</p>
+          <p>${esc(column.text)}</p>
+        </article>`).join('')}</div>`;
+    }
+
+    if (slide.type === 'baseline') {
+      html += header(slide);
+      html += `<div class="baseline-grid">${slide.columns.map(column => `
+        <article class="baseline-col">
+          <span class="label">${esc(column.label)}</span>
+          <h3>${esc(column.title)}</h3>
+          ${column.pairs.map(pair => `<div class="baseline-pair"><span class="meta">${esc(pair[0])}</span><p>${esc(pair[1])}</p></div>`).join('')}
+        </article>`).join('')}</div>`;
+      html += `<p class="baseline-summary">${esc(slide.summary)}</p>`;
+    }
+
+    if (slide.type === 'table') {
+      html += header(slide);
+      html += `<p class="supporting">${esc(slide.intro)}</p>`;
+      html += `<div class="table-wrap"><table><thead><tr><th>Thinker</th><th>What is removed</th><th>What remains</th><th>Central political question</th></tr></thead><tbody>${slide.rows.map(row => `<tr>${row.map(cell => `<td>${esc(cell)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+    }
+
+    if (slide.type === 'assumptions') {
+      html += header(slide);
+      html += `<div class="assumption-layout"><div class="assumption-stamp">Assumptions</div><div class="assumption-list">${slide.rows.map(row => `<div class="assumption-row"><h3>${esc(row[0])}</h3><p>${esc(row[1])}</p></div>`).join('')}</div></div>`;
+      html += `<p class="bottom-note">${esc(slide.note)}</p>`;
+    }
+
+    if (slide.type === 'timeline') {
+      html += header(slide);
+      html += `<div class="timeline"><div class="timeline-track">${slide.items.map(item => `<article class="timeline-item"><span class="label">${esc(item[0])}</span><h3>${esc(item[1])}</h3><p>${esc(item[2])}</p></article>`).join('')}</div></div>`;
+      html += `<p class="timeline-note">${esc(slide.note)}</p>`;
+    }
+
+    if (slide.type === 'today') {
+      html += header(slide);
+      html += `<span class="case">Case: ${esc(slide.case)}</span>`;
+      html += `<div class="today-grid">${slide.columns.map(column => `<article class="today-col"><span class="label">${esc(column.label)}</span><h3>${esc(column.title)}</h3><p class="focus">${esc(column.focus)}</p><p>${esc(column.text)}</p></article>`).join('')}</div>`;
+      html += `<p class="today-note">${esc(slide.note)}</p>`;
+    }
+
+    if (slide.type === 'problems') {
+      html += header(slide);
+      html += `<div class="problem-grid">${slide.columns.map(column => `<article class="problem-col"><span class="label">Political problem</span><h3>${esc(column[0])}</h3><p>${esc(column[1])}</p></article>`).join('')}</div>`;
+      html += `<p class="problem-note">${esc(slide.note)}</p>`;
+    }
+
+    if (slide.type === 'synthesis') {
+      html += header(slide);
+      html += `<div class="synthesis-grid">
+        <section class="synthesis-col"><h3>${esc(slide.leftTitle)}</h3>${slide.left.map(row => `<div class="synthesis-row"><span class="label">${esc(row[0])}</span><p>${esc(row[1])}</p></div>`).join('')}</section>
+        <section class="synthesis-col"><h3>${esc(slide.rightTitle)}</h3>${slide.right.map(row => `<div class="synthesis-row"><span class="label">${esc(row[0])}</span><p>${esc(row[1])}</p></div>`).join('')}</section>
+      </div>`;
+      html += `<p class="synthesis-note">${esc(slide.note)}</p>`;
+    }
+
+    if (slide.type === 'closing') {
+      html += `
+        <div class="eyebrow">${esc(slide.eyebrow)}</div>
+        <h2 class="title">${esc(slide.title)}</h2>
+        <div class="title-rule"></div>
+        <p class="closing-statement">${esc(slide.statement)}</p>
+        <div class="closing-grid">${slide.checks.map(check => `<div class="closing-check"><span class="label">${esc(check[0])}</span><p>${esc(check[1])}</p></div>`).join('')}</div>
+        <p class="closing-note">${esc(slide.note)}</p>`;
+    }
+
+    html += '</div>';
+    node.innerHTML = html;
+    deck.appendChild(node);
+    return node;
+  }
+
+  const nodes = slides.map(renderSlide);
+
+  function labelFor(slide) {
+    return slide.title || slide.work || slide.eyebrow || 'Untitled slide';
+  }
+
+  function renderOverview() {
+    overviewGrid.innerHTML = slides.map((slide, index) => `
+      <button class="overview-card${index === current ? ' current' : ''}" data-slide="${index}" type="button">
+        <span class="num">${pad(index + 1)} · ${esc(slide.type)}</span>
+        <span class="label">${esc(labelFor(slide))}</span>
+      </button>`).join('');
+    overviewGrid.querySelectorAll('[data-slide]').forEach(button => {
+      button.addEventListener('click', () => {
+        go(Number(button.dataset.slide));
+        closePanels();
+      });
+    });
+  }
+
+  function update() {
+    nodes.forEach((node, index) => node.classList.toggle('active', index === current));
+    counter.textContent = `${current + 1} / ${slides.length}`;
+    progress.style.width = `${((current + 1) / slides.length) * 100}%`;
+    notesBody.textContent = slides[current].notes || 'No notes for this slide.';
+    overviewGrid.querySelectorAll('.overview-card').forEach((button, index) => button.classList.toggle('current', index === current));
+  }
+
+  function go(index) {
+    current = Math.max(0, Math.min(slides.length - 1, index));
+    update();
+  }
+
+  window.go = go;
+
+  function closePanels() {
+    overview.classList.remove('open');
+    notesPanel.classList.remove('open');
+  }
+
+  function togglePanel(panel) {
+    const opening = !panel.classList.contains('open');
+    closePanels();
+    if (opening) panel.classList.add('open');
+  }
+
+  document.querySelectorAll('.close').forEach(button => button.addEventListener('click', closePanels));
+  document.getElementById('fullscreen').addEventListener('click', () => {
+    if (document.fullscreenElement) document.exitFullscreen();
+    else document.documentElement.requestFullscreen?.().catch(() => {});
+  });
+
+  window.addEventListener('keydown', event => {
+    if (event.key === 'Escape') { closePanels(); return; }
+    if (overview.classList.contains('open') || notesPanel.classList.contains('open')) return;
+    if (['ArrowRight', 'ArrowDown', ' ', 'PageDown'].includes(event.key)) {
+      event.preventDefault();
+      go(current + 1);
+    } else if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(event.key)) {
+      event.preventDefault();
+      go(current - 1);
+    } else if (event.key.toLowerCase() === 'o') togglePanel(overview);
+    else if (event.key.toLowerCase() === 'n') togglePanel(notesPanel);
+    else if (event.key.toLowerCase() === 'f') document.getElementById('fullscreen').click();
+  });
+
+  let touchX = 0;
+  window.addEventListener('touchstart', event => { touchX = event.changedTouches[0].screenX; }, { passive: true });
+  window.addEventListener('touchend', event => {
+    const dx = event.changedTouches[0].screenX - touchX;
+    if (Math.abs(dx) > 45) go(current + (dx < 0 ? 1 : -1));
+  }, { passive: true });
+
+  renderOverview();
+  update();
+</script>
+</body>
+</html>
