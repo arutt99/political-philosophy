@@ -121,7 +121,7 @@
 
 <script>
 const slides=[];
-const add=s=>slides.push(s);
+const add=s=>{if(s.type==="quote"||s.type==="question")return;slides.push(s);};
 const source=(pages,extra='')=>`[Sources]\nSource material, “The Problem of Distributive Justice,” source PDF, pp. ${pages}.${extra?`\n${extra}`:''}\n[/Sources]`;
 const cover=(title,work,course,notes)=>add({type:'cover',title,work,course,notes});
 const section=(roman,title,notes)=>add({type:'section',eyebrow:`${roman}. ${title.toUpperCase()}`,title,notes});

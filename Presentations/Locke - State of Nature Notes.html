@@ -72,7 +72,7 @@
 <script>
 const slides=[];
 const src=(section,extra='')=>`[Sources]\n“Locke on the State of Nature,” provided lecture notes, ${section}.${extra?`\n${extra}`:''}\n[/Sources]`;
-const add=s=>slides.push(s);
+const add=s=>{if(s.type==="quote"||s.type==="question")return;slides.push(s);};
 const cover=(title,work,course,notes)=>add({type:'cover',title,work,course,notes});
 const section=(roman,title,notes)=>add({type:'section',eyebrow:`${roman}. ${title.toUpperCase()}`,title,notes});
 const question=(eyebrow,prompt,context,notes)=>add({type:'question',eyebrow,prompt,context,notes});

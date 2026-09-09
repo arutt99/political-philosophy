@@ -111,7 +111,7 @@
 const slides=[];
 const src=(pages,extra='')=>`[Sources]\nSource material, “The Distribution of Property - Rawls and His Critics,” p. ${pages}.${extra?`\n${extra}`:''}\n[/Sources]`;
 const note=(pages,text='',extra='')=>`${text?`${text}\n\n`:''}${src(pages,extra)}`;
-const add=s=>slides.push(s);
+const add=s=>{if(s.type==="quote"||s.type==="question")return;slides.push(s);};
 const cover=(title,work,course,notes)=>add({type:'cover',title,work,course,notes});
 const section=(roman,title,notes)=>add({type:'section',eyebrow:`${roman}. ${title.toUpperCase()}`,title,notes});
 const question=(eyebrow,prompt,context,notes)=>add({type:'question',eyebrow,prompt,context,notes});

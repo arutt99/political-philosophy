@@ -101,7 +101,7 @@
 
   <script>
     const slides=[];
-    const add=slide=>slides.push(slide);
+    const add=slide=>{if(slide.type==="quote"||slide.type==="question")return;slides.push(slide);};
     const source=(section,extra='')=>`[Sources]\nSource material: “The Place of Liberty - Mill on Liberty,” ${section}.${extra?`\n${extra}`:''}\n[/Sources]`;
     const note=(text,section,extra='')=>`${text}\n\n${source(section,extra)}`;
     const cover=(title,work,course,notes)=>add({type:'cover',title,work,course,notes});

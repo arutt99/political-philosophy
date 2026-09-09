@@ -446,7 +446,7 @@
 <script>
 const slides=[];
 const src=(pages,extra)=>"[Sources]\nSource material, “Rousseau and the State of Nature,” assigned PDF, pp. "+pages+"."+((extra)?("\n"+extra):"")+"\n[/Sources]";
-const add=s=>slides.push(s);
+const add=s=>{if(s.type==="quote"||s.type==="question")return;slides.push(s);};
 const cover=(title,work,course,notes)=>add({type:"cover",title,work,course,notes});
 const section=(roman,title,notes,pages)=>add({type:"section",eyebrow:roman+". "+title.toUpperCase(),title,notes:notes+"\n\n"+src(pages)});
 const question=(eyebrow,prompt,context,notes,pages)=>add({type:"question",eyebrow,prompt,context,notes:notes+"\n\n"+src(pages)});
