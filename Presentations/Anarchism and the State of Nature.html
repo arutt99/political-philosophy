@@ -1,0 +1,804 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Anarchism and the State of Nature</title>
+  <link rel="stylesheet" href="presentation-polish.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --paper:#f4f0e7;
+      --paper-deep:#e8ded0;
+      --paper-warm:#efe4d5;
+      --ink:#202530;
+      --muted:#686762;
+      --blue:#2848d6;
+      --blue-deep:#1f338f;
+      --red:#d85d4d;
+      --yellow:#d5ab42;
+      --line:rgba(32,37,48,.2);
+      --soft-blue:rgba(40,72,214,.09);
+      --soft-red:rgba(216,93,77,.10);
+      --fit:1;
+    }
+    *{box-sizing:border-box}
+    html,body{width:100%;height:100%;margin:0;overflow:hidden;background:var(--paper);color:var(--ink)}
+    body{font-family:"Manrope",system-ui,sans-serif}
+    button{font:inherit}
+    #deck{
+      position:relative;
+      width:100vw;
+      height:100vh;
+      overflow:hidden;
+      background:
+        radial-gradient(circle at 93% 6%,rgba(216,93,77,.12),transparent 24%),
+        radial-gradient(circle at 6% 96%,rgba(40,72,214,.08),transparent 28%),
+        linear-gradient(135deg,var(--paper) 0%,#f7f3eb 56%,#eee3d4 100%);
+    }
+    #deck::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      opacity:.32;
+      background-image:
+        linear-gradient(90deg,rgba(32,37,48,.05) 1px,transparent 1px),
+        linear-gradient(0deg,rgba(32,37,48,.035) 1px,transparent 1px);
+      background-size:8vw 8vw;
+      mask-image:linear-gradient(90deg,black,transparent 82%);
+    }
+    #deck::after{
+      content:"";
+      position:absolute;
+      right:-18vw;
+      top:-18vw;
+      width:48vw;
+      height:48vw;
+      border:1px solid rgba(40,72,214,.18);
+      border-radius:50%;
+      box-shadow:0 0 0 7vw rgba(40,72,214,.035),0 0 0 14vw rgba(216,93,77,.03);
+      pointer-events:none;
+    }
+    .slide{
+      position:absolute;
+      inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:7vh 5vw 8vh;
+      text-align:left;
+      overflow:hidden;
+    }
+    .slide.active,.slide.measuring{display:flex}
+    .slide.measuring{visibility:hidden;pointer-events:none}
+    .slide.top{align-items:flex-start;padding-top:8vh}
+    .slide-inner{
+      position:relative;
+      z-index:1;
+      width:min(1320px,89vw);
+      max-height:82vh;
+      margin:auto;
+      transform-origin:top center;
+    }
+    .slide.top .slide-inner{margin:0 auto}
+    .eyebrow{
+      margin:0 0 1rem;
+      color:var(--blue);
+      font:500 calc(clamp(11px,1vw,15px)*var(--fit))/1.25 "DM Mono",monospace;
+      letter-spacing:.17em;
+      text-transform:uppercase;
+    }
+    .title{
+      margin:0;
+      color:var(--ink);
+      font-family:"Fraunces",Georgia,serif;
+      font-weight:600;
+      letter-spacing:-.035em;
+    }
+    .lead{
+      max-width:62ch;
+      margin:1.2rem 0 0;
+      color:var(--muted);
+      font:500 calc(clamp(20px,1.7vw,27px)*var(--fit))/1.34 "Manrope",system-ui,sans-serif;
+    }
+    .footnote{
+      margin:1.7rem 0 0;
+      max-width:74ch;
+      padding:.8rem 0 0 1rem;
+      border-left:3px solid var(--yellow);
+      color:var(--muted);
+      font:600 calc(clamp(14px,1.15vw,18px)*var(--fit))/1.4 "DM Mono",monospace;
+    }
+    .body-copy{
+      color:var(--ink);
+      font:500 calc(clamp(20px,1.72vw,28px)*var(--fit))/1.35 "Manrope",system-ui,sans-serif;
+    }
+    .body-copy p{margin:0 0 1rem}
+    .body-copy p:last-child{margin-bottom:0}
+    .body-copy strong{color:var(--blue-deep);font-weight:800}
+
+    /* Cover */
+    .cover{padding:5vh 5vw 7vh}
+    .cover .slide-inner{
+      width:min(1380px,90vw);
+      display:grid;
+      grid-template-columns:minmax(0,1fr) minmax(390px,.92fr);
+      gap:clamp(3rem,7vw,7rem);
+      align-items:center;
+    }
+    .cover-copy{
+      padding:1.8rem 0 2rem clamp(1.5rem,3vw,3.2rem);
+      border-left:12px solid var(--blue);
+    }
+    .cover .title{
+      max-width:9ch;
+      font-size:calc(clamp(64px,8vw,128px)*var(--fit));
+      line-height:.88;
+    }
+    .cover .work{
+      max-width:24ch;
+      margin:1.7rem 0 0;
+      color:var(--muted);
+      font:500 calc(clamp(21px,2vw,30px)*var(--fit))/1.25 "Fraunces",Georgia,serif;
+    }
+    .cover .course{
+      display:inline-block;
+      margin-top:2.25rem;
+      padding:.48rem .65rem;
+      border-top:1px solid var(--ink);
+      border-bottom:1px solid var(--ink);
+      color:var(--ink);
+      font:500 calc(clamp(11px,1vw,14px)*var(--fit))/1.35 "DM Mono",monospace;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+    }
+    .cover-art{
+      position:relative;
+      margin:0;
+      padding:.7rem;
+      background:var(--paper-warm);
+      border:1px solid rgba(32,37,48,.28);
+      border-radius:1rem 4.5rem 1rem 4.5rem;
+      box-shadow:15px 16px 0 rgba(216,93,77,.18);
+      transform:rotate(1.2deg);
+    }
+    .cover-art::before{
+      content:"";
+      position:absolute;
+      left:-1.2rem;
+      bottom:1.4rem;
+      width:2.4rem;
+      height:2.4rem;
+      background:var(--yellow);
+      z-index:-1;
+    }
+    .cover-art img{
+      display:block;
+      width:100%;
+      aspect-ratio:1.47;
+      object-fit:cover;
+      border-radius:.45rem 3.6rem .45rem 3.6rem;
+    }
+    .cover-art figcaption{
+      margin:.65rem .25rem .05rem;
+      color:var(--muted);
+      font:500 calc(clamp(10px,.85vw,13px)*var(--fit))/1.3 "DM Mono",monospace;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+    }
+
+    /* Shared slide titles */
+    .framing .title,.compare .title,.process .title,.feature .title,.sequence .title,
+    .dual .title,.sanctions .title,.authority .title,.scale .title,.table-slide .title,
+    .dilemma .title,.spectrum .title,.history .title,.strategies .title,.final .title,
+    .refs .title{
+      max-width:20ch;
+      font-size:calc(clamp(42px,5vw,79px)*var(--fit));
+      line-height:.97;
+    }
+    .framing .slide-inner,.compare .slide-inner,.process .slide-inner,.feature .slide-inner,
+    .sequence .slide-inner,.dual .slide-inner,.sanctions .slide-inner,.authority .slide-inner,
+    .scale .slide-inner,.table-slide .slide-inner,.dilemma .slide-inner,.spectrum .slide-inner,
+    .history .slide-inner,.strategies .slide-inner,.final .slide-inner,.refs .slide-inner{
+      padding-bottom:1rem;
+    }
+
+    /* Framing and comparisons */
+    .framing-grid{
+      display:grid;
+      grid-template-columns:1.08fr .92fr;
+      gap:clamp(2rem,7vw,7rem);
+      margin-top:2.4rem;
+    }
+    .framing-block{
+      padding:1.1rem 0 0 1.25rem;
+      border-top:2px solid var(--ink);
+      border-left:1px solid var(--line);
+    }
+    .framing-block:nth-child(2){border-top-color:var(--red)}
+    .framing-block h3,.compare-label,.process-step h3,.sanction h3,.authority-col h3,
+    .dilemma-option h3,.strategy-row h3,.question-label{
+      margin:0 0 .65rem;
+      color:var(--blue-deep);
+      font:800 calc(clamp(13px,1.2vw,18px)*var(--fit))/1.2 "DM Mono",monospace;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+    }
+    .framing-block:nth-child(2) h3,.dilemma-option:nth-child(2) h3{color:var(--red)}
+    .framing-block p{margin:0;max-width:30ch;color:var(--ink);font:500 calc(clamp(23px,2vw,31px)*var(--fit))/1.25 "Fraunces",Georgia,serif}
+    .compare-rows{margin-top:2rem;border-top:1px solid var(--line)}
+    .compare-row{
+      display:grid;
+      grid-template-columns:minmax(11rem,.55fr) minmax(0,1.35fr);
+      gap:2rem;
+      align-items:baseline;
+      padding:1.05rem 0;
+      border-bottom:1px solid var(--line);
+    }
+    .compare-row p{margin:0;color:var(--ink);font:500 calc(clamp(19px,1.58vw,25px)*var(--fit))/1.3 "Manrope",system-ui,sans-serif}
+
+    /* Steps */
+    .process .lead{max-width:56ch}
+    .process-list{margin-top:2rem;border-top:1px solid var(--line)}
+    .process-step{
+      display:grid;
+      grid-template-columns:3.8rem minmax(9rem,.48fr) minmax(0,1.25fr);
+      gap:1.4rem;
+      align-items:baseline;
+      padding:1rem 0;
+      border-bottom:1px solid var(--line);
+    }
+    .process-step .number,.sequence-row .number{
+      color:var(--red);
+      font:800 calc(clamp(28px,2.5vw,39px)*var(--fit))/1 "Fraunces",Georgia,serif;
+    }
+    .process-step h3{margin:0;color:var(--ink);letter-spacing:0;text-transform:none;font-family:"Fraunces",Georgia,serif;font-size:calc(clamp(22px,1.8vw,29px)*var(--fit));font-weight:600}
+    .process-step p{margin:0;color:var(--muted);font:500 calc(clamp(18px,1.4vw,23px)*var(--fit))/1.32 "Manrope",system-ui,sans-serif}
+
+    /* Feature slide */
+    .feature-grid{display:grid;grid-template-columns:.72fr 1.28fr;gap:clamp(2rem,8vw,8rem);align-items:end;margin-top:2.5rem}
+    .feature-word{color:var(--blue);font:800 calc(clamp(52px,8vw,122px)*var(--fit))/.78 "DM Mono",monospace;letter-spacing:-.1em;overflow-wrap:anywhere}
+    .feature-word small{display:block;margin-top:1.1rem;color:var(--red);font:800 calc(clamp(13px,1.1vw,17px)*var(--fit))/1.2 "DM Mono",monospace;letter-spacing:.08em;text-transform:uppercase}
+    .feature-copy{padding-top:1.25rem;border-top:2px solid var(--blue)}
+    .feature-copy p{margin:0 0 1.2rem;color:var(--ink);font:500 calc(clamp(23px,1.95vw,31px)*var(--fit))/1.25 "Fraunces",Georgia,serif}
+    .feature-copy p:last-child{margin-bottom:0}
+    .feature-callout{margin-top:1.25rem;padding:.8rem 0 .8rem 1rem;border-left:3px solid var(--yellow);color:var(--muted);font:700 calc(clamp(14px,1.15vw,18px)*var(--fit))/1.35 "DM Mono",monospace}
+
+    /* Sequence and dual slides */
+    .sequence .lead{max-width:52ch}
+    .sequence-row{display:grid;grid-template-columns:3.8rem minmax(12rem,.5fr) minmax(0,1.15fr);gap:1.4rem;align-items:baseline;padding:1rem 0;border-bottom:1px solid var(--line)}
+    .sequence-list{margin-top:2rem;border-top:1px solid var(--line)}
+    .sequence-row h3{margin:0;color:var(--ink);font:600 calc(clamp(23px,1.8vw,29px)*var(--fit))/1.2 "Fraunces",Georgia,serif}
+    .sequence-row p{margin:0;color:var(--muted);font:500 calc(clamp(18px,1.38vw,22px)*var(--fit))/1.32 "Manrope",system-ui,sans-serif}
+    .dual-grid,.authority-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,6vw,6rem);margin-top:2.3rem}
+    .dual-col,.authority-col{padding-top:1.15rem;border-top:2px solid var(--blue)}
+    .dual-col:nth-child(2),.authority-col:nth-child(2){border-top-color:var(--red)}
+    .dual-col h3,.authority-col h3{margin-bottom:.8rem}
+    .dual-col p,.authority-col p{margin:0 0 1rem;color:var(--ink);font:500 calc(clamp(22px,1.85vw,30px)*var(--fit))/1.26 "Fraunces",Georgia,serif}
+    .dual-col p:last-child,.authority-col p:last-child{margin-bottom:0}
+    .dual-callout{grid-column:1/-1;margin-top:-1.1rem;padding:1rem 1.15rem;border-left:5px solid var(--yellow);background:rgba(213,171,66,.1);color:var(--ink);font:700 calc(clamp(15px,1.25vw,20px)*var(--fit))/1.35 "DM Mono",monospace}
+
+    /* Social control */
+    .sanctions .lead{max-width:60ch}
+    .sanction-list{margin-top:2.1rem;border-top:1px solid var(--line)}
+    .sanction{display:grid;grid-template-columns:minmax(12rem,.48fr) minmax(0,1.45fr);gap:2rem;align-items:baseline;padding:1rem 0;border-bottom:1px solid var(--line)}
+    .sanction h3{margin:0;color:var(--red)}
+    .sanction p{margin:0;color:var(--ink);font:500 calc(clamp(20px,1.62vw,26px)*var(--fit))/1.28 "Fraunces",Georgia,serif}
+
+    /* Scale */
+    .scale-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(2rem,7vw,7rem);margin-top:2.2rem;align-items:start}
+    .scale-list{display:grid;grid-template-columns:1fr 1fr;column-gap:2rem;border-top:1px solid var(--line)}
+    .scale-item{padding:1rem 0;border-bottom:1px solid var(--line)}
+    .scale-item b{display:block;color:var(--blue-deep);font:800 calc(clamp(14px,1.1vw,17px)*var(--fit))/1.2 "DM Mono",monospace;letter-spacing:.06em;text-transform:uppercase}
+    .scale-item span{display:block;margin-top:.35rem;color:var(--ink);font:500 calc(clamp(20px,1.5vw,24px)*var(--fit))/1.25 "Fraunces",Georgia,serif}
+    .war-callout{padding:1.3rem 1.45rem;border:1px solid var(--line);border-left:8px solid var(--red);background:rgba(216,93,77,.08)}
+    .war-callout .big{display:block;margin-bottom:.75rem;color:var(--red);font:800 calc(clamp(43px,5.5vw,78px)*var(--fit))/.82 "Fraunces",Georgia,serif;letter-spacing:-.06em}
+    .war-callout p{margin:0;color:var(--ink);font:600 calc(clamp(16px,1.32vw,21px)*var(--fit))/1.4 "Manrope",system-ui,sans-serif}
+
+    /* Tables */
+    .table-lead{margin-top:1.1rem;max-width:62ch;color:var(--muted);font:500 calc(clamp(18px,1.45vw,23px)*var(--fit))/1.32 "Manrope",system-ui,sans-serif}
+    .comparison-table{width:100%;margin-top:1.65rem;border-collapse:collapse;font-size:calc(clamp(15px,1.22vw,19px)*var(--fit));line-height:1.32}
+    .comparison-table th,.comparison-table td{padding:.85rem .9rem;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+    .comparison-table thead th{color:var(--blue-deep);border-top:2px solid var(--ink);font:800 calc(clamp(12px,1.02vw,15px)*var(--fit))/1.2 "DM Mono",monospace;letter-spacing:.06em;text-transform:uppercase}
+    .comparison-table tbody th{width:23%;color:var(--ink);font:800 calc(clamp(15px,1.22vw,19px)*var(--fit))/1.25 "Manrope",system-ui,sans-serif}
+    .comparison-table tbody td{color:var(--ink);font:500 calc(clamp(15px,1.22vw,19px)*var(--fit))/1.32 "Manrope",system-ui,sans-serif}
+    .comparison-table tbody tr:nth-child(even){background:rgba(40,72,214,.045)}
+
+    /* Dilemma and spectrum */
+    .dilemma .lead{max-width:65ch}
+    .dilemma-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,6vw,6rem);margin-top:2.1rem}
+    .dilemma-option{padding:1.25rem 1.4rem 1.3rem;border-top:7px solid var(--blue);background:rgba(40,72,214,.07)}
+    .dilemma-option:nth-child(2){border-top-color:var(--red);background:rgba(216,93,77,.075)}
+    .dilemma-option h3{margin-bottom:.85rem}
+    .dilemma-option p{margin:0;color:var(--ink);font:500 calc(clamp(21px,1.72vw,28px)*var(--fit))/1.27 "Fraunces",Georgia,serif}
+    .dilemma-result{margin-top:1.6rem;padding:.9rem 1.1rem;border-bottom:1px solid var(--ink);border-top:1px solid var(--ink);color:var(--ink);font:700 calc(clamp(15px,1.25vw,20px)*var(--fit))/1.35 "DM Mono",monospace}
+    .spectrum .lead{max-width:65ch}
+    .spectrum-wrap{margin-top:2.2rem;padding:1.3rem 0 0}
+    .spectrum-line{position:relative;height:2px;background:var(--ink);margin:2.1rem 6% 0}
+    .spectrum-stop{position:absolute;top:0;transform:translate(-50%,-50%);width:1.2rem;height:1.2rem;border-radius:50%;background:var(--paper);border:4px solid var(--blue)}
+    .spectrum-stop:nth-child(2){left:50%;border-color:var(--yellow)}
+    .spectrum-stop:nth-child(3){left:100%;border-color:var(--red)}
+    .spectrum-labels{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2rem;margin-top:1.2rem}
+    .spectrum-label{padding-top:.8rem;border-top:1px solid var(--line)}
+    .spectrum-label:nth-child(2){text-align:center}
+    .spectrum-label:nth-child(3){text-align:right}
+    .spectrum-label b{display:block;color:var(--ink);font:800 calc(clamp(14px,1.18vw,18px)*var(--fit))/1.2 "DM Mono",monospace;letter-spacing:.05em;text-transform:uppercase}
+    .spectrum-label span{display:block;margin-top:.4rem;color:var(--muted);font:500 calc(clamp(17px,1.35vw,22px)*var(--fit))/1.28 "Fraunces",Georgia,serif}
+    .spectrum-note{margin-top:2rem;max-width:68ch;color:var(--muted);font:600 calc(clamp(14px,1.18vw,18px)*var(--fit))/1.4 "DM Mono",monospace}
+
+    /* History */
+    .history-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(360px,.95fr);gap:clamp(2.5rem,7vw,7rem);align-items:center;margin-top:1.5rem}
+    .history-copy .body-copy{max-width:52ch}
+    .history-points{margin-top:1.45rem;border-top:1px solid var(--line)}
+    .history-point{padding:.85rem 0;border-bottom:1px solid var(--line);color:var(--ink);font:600 calc(clamp(16px,1.32vw,21px)*var(--fit))/1.35 "Manrope",system-ui,sans-serif}
+    .history-point b{color:var(--blue-deep)}
+    .history-art{margin:0;padding:.65rem;background:var(--paper-warm);border:1px solid var(--line);border-radius:3.5rem .8rem 3.5rem .8rem;box-shadow:-12px 13px 0 rgba(40,72,214,.13);transform:rotate(-1deg)}
+    .history-art img{display:block;width:100%;aspect-ratio:1.3;object-fit:cover;border-radius:2.8rem .35rem 2.8rem .35rem}
+    .history-art figcaption{margin:.6rem .25rem .1rem;color:var(--muted);font:500 calc(clamp(10px,.85vw,13px)*var(--fit))/1.3 "DM Mono",monospace;letter-spacing:.04em;text-transform:uppercase}
+
+    /* Strategies and final */
+    .strategy-list{margin-top:2rem;border-top:2px solid var(--ink)}
+    .strategy-row{display:grid;grid-template-columns:minmax(12rem,.75fr) minmax(11rem,.8fr) minmax(0,1.2fr);gap:1.6rem;padding:1rem 0;border-bottom:1px solid var(--line);align-items:start}
+    .strategy-row h3{margin:0;color:var(--ink);font:600 calc(clamp(21px,1.65vw,27px)*var(--fit))/1.18 "Fraunces",Georgia,serif;letter-spacing:0;text-transform:none}
+    .strategy-row p{margin:0;color:var(--muted);font:500 calc(clamp(16px,1.3vw,21px)*var(--fit))/1.35 "Manrope",system-ui,sans-serif}
+    .strategy-row .strength{color:var(--blue-deep)}
+    .strategy-row .problem{color:var(--red)}
+    .final-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,6vw,6rem);margin-top:2.3rem}
+    .question-block{padding-top:1.1rem;border-top:2px solid var(--blue)}
+    .question-block:nth-child(2){border-top-color:var(--red)}
+    .question-label{margin-bottom:.7rem}
+    .question-block p{margin:0;color:var(--ink);font:500 calc(clamp(23px,1.92vw,31px)*var(--fit))/1.25 "Fraunces",Georgia,serif}
+    .final-takeaway{margin-top:2rem;padding:1rem 1.2rem;border-left:8px solid var(--yellow);background:rgba(213,171,66,.11);color:var(--ink);font:800 calc(clamp(17px,1.42vw,23px)*var(--fit))/1.35 "Manrope",system-ui,sans-serif}
+    .tension-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,7vw,7rem);margin-top:2.4rem}
+    .tension-col{padding-top:1rem;border-top:5px solid var(--blue)}
+    .tension-col:nth-child(2){border-top-color:var(--red)}
+    .tension-col h3{margin:0 0 .7rem;color:var(--ink);font:800 calc(clamp(14px,1.18vw,18px)*var(--fit))/1.2 "DM Mono",monospace;letter-spacing:.06em;text-transform:uppercase}
+    .tension-col p{margin:0;color:var(--ink);font:500 calc(clamp(25px,2.05vw,34px)*var(--fit))/1.2 "Fraunces",Georgia,serif}
+    .central-question{margin-top:2.1rem;max-width:29ch;color:var(--blue-deep);font:600 calc(clamp(28px,3vw,46px)*var(--fit))/1.08 "Fraunces",Georgia,serif}
+    .final-note{margin-top:1.3rem;color:var(--muted);font:600 calc(clamp(14px,1.12vw,18px)*var(--fit))/1.38 "DM Mono",monospace}
+    .refs .title{max-width:none}
+    .refs-list{margin-top:1.8rem;border-top:1px solid var(--line)}
+    .ref{padding:1rem 0;border-bottom:1px solid var(--line);color:var(--ink);font:500 calc(clamp(19px,1.5vw,24px)*var(--fit))/1.35 "Manrope",system-ui,sans-serif}
+    .ref strong{color:var(--blue-deep);font-weight:800}
+
+    #progress{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,var(--blue),var(--red));z-index:30}
+    #nav-hint,#counter{position:fixed;bottom:18px;z-index:30;color:var(--muted);font:500 11px/1.3 "DM Mono",monospace;letter-spacing:.08em}
+    #nav-hint{left:24px}#counter{right:24px}
+    #fullscreen{position:fixed;top:19px;right:22px;z-index:30;color:var(--ink);background:rgba(244,240,231,.72);border:1px solid var(--line);padding:8px 11px;cursor:pointer;font:500 11px/1 "DM Mono",monospace;letter-spacing:.08em;text-transform:uppercase}
+    #fullscreen:hover{color:var(--blue);border-color:var(--blue)}
+    .panel{position:fixed;inset:4vh 4vw;z-index:60;display:none;background:rgba(244,240,231,.98);border:1px solid var(--line);overflow:auto}
+    .panel.open{display:block}
+    .panel-head{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;padding:18px 22px;background:var(--paper-deep);border-bottom:1px solid var(--line);z-index:2}
+    .panel-head h2{margin:0;color:var(--blue-deep);font:800 14px/1 "DM Mono",monospace;letter-spacing:.12em;text-transform:uppercase}
+    .close{color:var(--ink);background:transparent;border:1px solid var(--line);padding:7px 10px;cursor:pointer}
+    #overview-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;padding:20px}
+    .overview-card{min-height:126px;padding:16px;text-align:left;background:rgba(232,222,208,.56);border:1px solid var(--line);color:var(--ink);cursor:pointer}
+    .overview-card:hover,.overview-card.current{border-color:var(--blue);box-shadow:inset 5px 0 var(--blue)}
+    .overview-card .num{display:block;color:var(--red);font:500 11px/1.3 "DM Mono",monospace;margin-bottom:12px}
+    .overview-card .label{display:block;font:600 22px/1.1 "Fraunces",Georgia,serif}
+    #notes-body{padding:28px 34px;white-space:pre-wrap;color:var(--ink);font:400 17px/1.62 "Manrope",system-ui,sans-serif;max-width:900px}
+    @media (max-width:760px){
+      .slide{padding:9vh 8vw 10vh}.slide.top{padding-top:9.5vh}.slide-inner{width:84vw}
+      .cover .slide-inner,.framing-grid,.feature-grid,.scale-grid,.history-grid{grid-template-columns:1fr;gap:1.9rem}
+      .cover-copy{padding-left:1.2rem;border-left-width:8px}.cover .title{max-width:10ch}.cover-art{max-width:620px;margin:0 auto}
+      .framing-grid,.dual-grid,.authority-grid,.dilemma-grid,.final-grid,.tension-grid{gap:1.5rem}
+      .process-step,.sequence-row,.sanction,.compare-row,.strategy-row{grid-template-columns:2.5rem 1fr;gap:.8rem}
+      .process-step p,.sequence-row p,.sanction p,.compare-row p,.strategy-row p{grid-column:2}
+      .process-step h3,.sequence-row h3,.sanction h3,.compare-label,.strategy-row h3{grid-column:2}
+      .scale-list{grid-template-columns:1fr}.spectrum-labels{gap:.8rem}.spectrum-label span{font-size:calc(15px*var(--fit))}
+      .comparison-table{font-size:calc(13px*var(--fit))}.comparison-table th,.comparison-table td{padding:.65rem .45rem}
+      #nav-hint{display:none}#fullscreen{top:12px;right:12px}.cover-art figcaption,.history-art figcaption{font-size:calc(10px*var(--fit))}
+    }
+  </style>
+  <script src="presentation-polish.js" defer></script>
+</head>
+<body>
+  <div id="deck" aria-live="polite"></div>
+  <div id="progress"></div>
+  <div id="nav-hint">ARROWS / SPACE · O OVERVIEW · N NOTES · F FULLSCREEN</div>
+  <div id="counter">1 / 1</div>
+  <button id="fullscreen" aria-label="Toggle fullscreen">Fullscreen</button>
+
+  <section id="overview" class="panel" aria-label="Slide overview">
+    <div class="panel-head"><h2>Overview</h2><button class="close" data-close="overview">Close</button></div>
+    <div id="overview-grid"></div>
+  </section>
+  <aside id="notes" class="panel" aria-label="Speaker notes">
+    <div class="panel-head"><h2>Speaker notes</h2><button class="close" data-close="notes">Close</button></div>
+    <div id="notes-body"></div>
+  </aside>
+
+  <script>
+    const sourceBasis = 'Provided notes: “Anarchism and the State of Nature — Comprehensive Notes.”';
+    const note = (section, body='', visual='') => `${body}${body && visual ? '\n\n' : ''}${visual}${body || visual ? '\n\n' : ''}[Sources]\n${sourceBasis}\nSection: ${section}.\n[/Sources]`;
+
+    const slides = [
+      {
+        type:'cover',
+        title:'Anarchism and the State of Nature',
+        work:'Can people organize peaceful, cooperative life without a sovereign state?',
+        course:'Political Philosophy · Module 1',
+        image:'assets/anarchism-cover.png',
+        alt:'Abstract screen-print collage of people working in loose groups across an open landscape',
+        notes:note('central question and basic idea','Open with the contrast: the state may protect people from conflict, but centralized power creates its own danger.','Visual: generated editorial illustration by OpenAI ImageGen, 2026. The image is abstract and is not documentary evidence.')
+      },
+      {
+        type:'framing',
+        eyebrow:'The question',
+        title:'Anarchism challenges the traditional state-of-nature conclusion',
+        lead:'Hobbes, Locke, and Rousseau disagree about human nature, but their arguments eventually converge on the need for political authority. Anarchists challenge that conclusion itself.',
+        columns:[
+          {label:'The traditional conclusion',text:'Without government, conflict or instability eventually makes authority necessary.'},
+          {label:'The anarchist challenge',text:'People may coordinate through voluntary cooperation, social norms, and institutions without a coercive sovereign.'}
+        ],
+        foot:'The central question is whether enough organization can exist without becoming a state.',
+        notes:note('central question of the reading','Use this slide to separate two claims: a state of nature may be difficult, and a state may still need justification.')
+      },
+      {
+        type:'compare',
+        eyebrow:'The basic idea',
+        title:'Anarchism rejects a sovereign state, not social life',
+        lead:'A sophisticated anarchist position can keep moral expectations, coordination, and expertise while rejecting centralized coercive government.',
+        rows:[
+          {label:'Rejects',text:'A state’s claim to monopolize legitimate political power.'},
+          {label:'Can retain',text:'Cooperation, morality, organization, social norms, and voluntary association.'},
+          {label:'Key distinction',text:'Voluntary cooperation is different from compulsory submission to a sovereign.'}
+        ],
+        notes:note('anarchism: the basic idea','The reading uses Kropotkin’s rejection of formal laws and judges to introduce the idea that social order need not depend on state enforcement.')
+      },
+      {
+        type:'process',
+        eyebrow:'Strategy 2',
+        title:'Godwin locates the stateless ideal in the future',
+        lead:'William Godwin ties anarchism to human perfectibility. Conflict is not a permanent fact if people can become more rational and cooperative.',
+        steps:[
+          {number:'01',title:'Human progress',text:'Moral and intellectual development can make people less aggressive.'},
+          {number:'02',title:'Greater cooperation',text:'More rational people can recognize that shared life does not require domination.'},
+          {number:'03',title:'Less need for coercion',text:'As cooperation becomes reliable, formal political restraint loses its purpose.'},
+          {number:'04',title:'A future without the state',text:'Godwin imagines stateless society as an achievement still ahead of humanity.'}
+        ],
+        foot:'Unlike Rousseau, Godwin looks forward rather than back to an original innocence.',
+        notes:note('William Godwin','Emphasize the difference between Godwin’s future-oriented optimism and Rousseau’s association of innocence with an earlier natural condition.')
+      },
+      {
+        type:'feature',
+        eyebrow:'Strategy 1',
+        title:'Kropotkin treats mutual aid as a source of fitness',
+        word:'MUTUAL AID',
+        wordNote:'Cooperation can be adaptive',
+        paragraphs:[
+          'Peter Kropotkin argues that cooperation appears throughout the animal world and can improve a group’s chances of survival.',
+          'Evolutionary success therefore need not mean constant individual competition. Groups able to cooperate may be the ones that endure.'
+        ],
+        callout:'Kropotkin’s move: the “fittest” can be a group that coordinates effectively, not only an individual that defeats its rivals.',
+        notes:note('Peter Kropotkin and mutual aid','Present mutual aid as an alternative to a simplistic reading of evolution as endless individual competition.')
+      },
+      {
+        type:'sequence',
+        eyebrow:'Cooperation without virtue',
+        title:'Cooperation can emerge from self-interest',
+        lead:'Anarchism does not have to assume that every person is morally perfect. Repeated interaction can make cooperation rational for people who still pursue their own interests.',
+        steps:[
+          {number:'01',title:'Future encounters matter',text:'People who expect to meet again have reason to protect a working relationship.'},
+          {number:'02',title:'Conflict becomes costly',text:'Fighting and theft invite retaliation and make everyone less secure.'},
+          {number:'03',title:'Agreements become useful',text:'Keeping promises makes behavior more predictable and makes long-term projects possible.'},
+          {number:'04',title:'Reciprocity can stabilize trust',text:'Helping others can encourage help in return, even without altruistic motives.'}
+        ],
+        foot:'This is one of the strongest anarchist arguments because it does not depend entirely on idealized human goodness.',
+        notes:note('cooperation does not require altruism','The slide condenses the repeated-interaction argument in the notes. Use the final line to mark why this strategy is attractive.')
+      },
+      {
+        type:'sequence',
+        eyebrow:'Hobbesian objection',
+        title:'The rotten apple problem makes cooperation fragile',
+        lead:'A few exploiters can change what everyone else believes about the safety of cooperation.',
+        steps:[
+          {number:'01',title:'Most people follow agreements',text:'A cooperative practice works when people expect others to honor it.'},
+          {number:'02',title:'Some people exploit the practice',text:'Cheats and aggressors take advantage of the trust that others extend.'},
+          {number:'03',title:'Fear spreads beyond the offenders',text:'People begin to suspect that cooperation leaves them exposed.'},
+          {number:'04',title:'Trust falls',text:'Once expectations change, even cooperative people may defect first to protect themselves.'},
+          {number:'05',title:'The practice unravels',text:'The anarchist must explain how cooperation survives cheating, aggression, and mistrust.'}
+        ],
+        notes:note('the Hobbesian objection and the rotten apple problem','The “rotten apple” is the notes’ image for how a small amount of antisocial behavior can damage a much larger cooperative system.')
+      },
+      {
+        type:'dual',
+        eyebrow:'A weaker response',
+        title:'The natural goodness argument faces a historical problem',
+        lead:'Some anarchists reply that states create the hierarchy, competition, and corruption they later claim to control.',
+        columns:[
+          {label:'The claim',paragraphs:['People are naturally cooperative.','Oppressive institutions corrupt them.','Removing the state could restore better relations.']},
+          {label:'The problem',paragraphs:['Greedy, cunning people would have to exist before the first oppressive state.','If pre-state aggression helped create government, the state cannot be the whole source of human corruption.']}
+        ],
+        callout:'The notes treat this strategy as too optimistic because it explains too little about antisocial behavior before government.',
+        notes:note('the natural goodness argument and its problem','Frame this as a logical problem, not as a claim that institutions never corrupt people.')
+      },
+      {
+        type:'sanctions',
+        eyebrow:'Strategy 3',
+        title:'A stateless society can still regulate behavior',
+        lead:'The strongest anarchist strategy separates state enforcement from social control. A community can shape conduct without police, courts, prisons, or a central government.',
+        sanctions:[
+          {label:'Reputation',text:'Repeatedly violating expectations can make future cooperation harder.'},
+          {label:'Public opinion',text:'Shared judgments can raise the social cost of antisocial conduct.'},
+          {label:'Gossip',text:'Information about conduct can travel through a community and warn others.'},
+          {label:'Ostracism',text:'A person may lose trust, status, opportunities, or membership.'}
+        ],
+        foot:'The anarchist rejects state coercion without rejecting every form of social regulation.',
+        notes:note('society without a state','Explain that informal sanctions regulate behavior through relationships and membership rather than through a centralized monopoly of force.')
+      },
+      {
+        type:'authority',
+        eyebrow:'Authority and knowledge',
+        title:'Expertise is authority without a right to rule',
+        lead:'Anarchism does not require rejecting every form of authority. It can accept voluntary deference to knowledge while rejecting political sovereignty.',
+        columns:[
+          {label:'Epistemic authority',paragraphs:['A skilled farmer may know how to cultivate food.','Others defer because the person has relevant knowledge and the advice is useful.']},
+          {label:'Political authority',paragraphs:['A state claims a right to command people within its territory.','It can impose rules and coercively enforce obedience.']}
+        ],
+        callout:'The distinction is between knowing what to do and having the right to make everyone else do it.',
+        notes:note('anarchism and the authority of experts','Keep the farmer example concrete. Voluntary expertise is not the same thing as a claim to political command.')
+      },
+      {
+        type:'scale',
+        eyebrow:'The scale problem',
+        title:'Large societies turn cooperation into a coordination problem',
+        lead:'An anarchist society cannot assume that every community stays small. Larger populations need ways to organize shared work and resolve conflict.',
+        items:[
+          {label:'Production',text:'Coordinate work that supplies common needs.'},
+          {label:'Communication',text:'Move information across distance and time.'},
+          {label:'Defense',text:'Respond to threats from outside the community.'},
+          {label:'Public projects',text:'Build and maintain things no one person can provide alone.'},
+          {label:'Resource distribution',text:'Decide how shared goods move through a population.'},
+          {label:'Conflict resolution',text:'Handle disputes before they become cycles of retaliation.'}
+        ],
+        warTitle:'War exposes the difficulty',
+        warText:'Even an anarchist society facing international conflict may need generals, discipline, and coordinated obedience.',
+        notes:note('large societies and the need for organization','The point is not that anarchism has no organization. The question is whether organization can exist without a sovereign state.')
+      },
+      {
+        type:'table-slide',
+        eyebrow:'Voluntariness',
+        title:'Voluntary institutions differ from a state by how power is held',
+        lead:'Anarchists use voluntariness to distinguish associations from government. The state claims jurisdiction over everyone in its territory.',
+        headers:['State','Voluntary anarchist association'],
+        rows:[
+          ['Political authority','Rejects sovereign political authority'],
+          ['Can impose rules coercively','Ideally depends on voluntary participation'],
+          ['People cannot simply leave its jurisdiction','Individuals can leave particular associations'],
+          ['Claims a monopoly of legitimate power','Allows multiple forms of organization']
+        ],
+        notes:note('voluntary institutions versus the state','The table preserves the comparison in the notes. “Ideally” matters because the voluntary character of an association is part of the anarchist proposal, not an automatic fact.')
+      },
+      {
+        type:'dilemma',
+        eyebrow:'The central dilemma',
+        title:'The anarchist dilemma begins with one noncooperative person',
+        lead:'Imagine a peaceful community with voluntary rules. One person begins stealing, attacking others, or sabotaging cooperation.',
+        options:[
+          {label:'Leave the person unrestrained',text:'If the community refuses to coerce, serious conflict may develop. The society risks sliding back toward the insecurity anarchism hoped to avoid.'},
+          {label:'Restrain the person',text:'If the community forcibly enforces its rules, it now has institutions, enforceable rules, and coercive authority.'}
+        ],
+        result:'The problem is not whether rules exist. It is who can enforce them, over whom, and with what right.',
+        notes:note('the central anarchist dilemma','Present both options as serious costs. The reading’s challenge is that non-enforcement risks conflict while enforcement risks state-like authority.')
+      },
+      {
+        type:'spectrum',
+        eyebrow:'The paradox of realism',
+        title:'The more realistic anarchism becomes, the more state-like it looks',
+        lead:'Practical solutions add rules, institutions, experts, coordination, and enforcement. Each solution also makes the system harder to distinguish from a limited state.',
+        labels:[
+          {label:'Pure voluntarism',text:'No coercion or central authority. Stability may be fragile.'},
+          {label:'Sophisticated anarchism',text:'Norms, institutions, expertise, coordination, and sanctions.'},
+          {label:'Limited liberal democracy',text:'Enforceable law and public authority with limited sovereignty.'}
+        ],
+        noteText:'The spectrum shows a tension, not a claim that every anarchist institution is identical to a state.',
+        notes:note('the paradox of realistic anarchism','Stress that the comparison concerns practical mechanisms of order. It does not erase the moral distinction anarchists draw between voluntary association and sovereign rule.')
+      },
+      {
+        type:'history',
+        eyebrow:'Historical evidence',
+        title:'Historical cases complicate the claim that centralization is inevitable',
+        lead:'David Graeber and David Wengrow argue that humans have created large populations capable of coexistence without extremely centralized political authority.',
+        image:'assets/anarchism-history.png',
+        alt:'Abstract screen-print landscape of settlements, waterways, and shared public work',
+        points:[
+          {label:'Examples in the notes',text:'Mesopotamia, the Indus Valley, Ukraine, and China.'},
+          {label:'The empirical question',text:'What forms of political organization have people actually created?'},
+          {label:'The limit',text:'Historical variety weakens the claim that centralized states are inevitable, but it does not by itself solve the enforcement problem.'}
+        ],
+        notes:note('Graeber and Wengrow: historical evidence','Use the image as an abstract visual only.','Visual: generated editorial illustration by OpenAI ImageGen, 2026. It is not a reconstruction of any specific site or society.')
+      },
+      {
+        type:'table-slide',
+        eyebrow:'The wider chapter',
+        title:'Hobbes, Locke, and Rousseau on the state of nature',
+        lead:'Their stories differ, but Locke and Rousseau still concede that the forces restraining conflict may not last forever.',
+        headers:['Thinker','Picture of human life','What delays conflict?','Political conclusion'],
+        rows:[
+          ['Hobbes','Desire, scarcity, insecurity, and competition','Nothing reliable without a sovereign','Government is needed to prevent war'],
+          ['Locke','Rational and morally constrained people','Natural law and relative abundance','Moral limits help, but government eventually becomes necessary'],
+          ['Rousseau','Relatively peaceful people with natural compassion','Pity and limited desires','Population and complexity eventually destabilize the condition']
+        ],
+        notes:note('Hobbes, Locke, and Rousseau in the overall chapter','Include Hobbes’s idea of felicity as the continuing satisfaction of desire when explaining the first row.')
+      },
+      {
+        type:'strategies',
+        eyebrow:'Exam summary',
+        title:'The three anarchist strategies differ in what they trust',
+        rows:[
+          {title:'1 · Cooperation evolves',strength:'Does not require everyone to be morally good.',problem:'Cheating, exploitation, and fear can unravel trust.'},
+          {title:'2 · Humans are naturally good',strength:'Explains corruption as a product of oppressive institutions.',problem:'Cannot explain how the first oppressive states arose.'},
+          {title:'3 · Organization without a state',strength:'Accepts norms, expertise, coordination, and voluntary institutions.',problem:'Enforcement can become a new form of sovereignty.'}
+        ],
+        foot:'The notes treat the third strategy as the most plausible, while also treating its enforcement problem as unresolved.',
+        notes:note('the three anarchist strategies','This is the study summary. The third strategy is strongest because it accepts practical organization without immediately accepting a sovereign state.')
+      },
+      {
+        type:'final',
+        eyebrow:'Why anarchism still matters',
+        title:'Anarchism keeps the justification of the state open',
+        lead:'Showing that stateless life has serious costs does not automatically prove that centralized government is justified.',
+        questions:[
+          {label:'Question 1',text:'Does stateless existence have serious problems? The notes suggest yes: a completely unstructured society is unlikely to sustain long-term human flourishing.'},
+          {label:'Question 2',text:'Does a state solve those problems without creating equally serious ones? Anarchism keeps this second question open.'}
+        ],
+        takeaway:'The state may be useful. Political philosophy must still explain why the people who hold centralized power have the right to rule.',
+        notes:note('why anarchism still matters','Close the argument cautiously. The author doubts that a genuine state of nature can flourish indefinitely, but does not treat that conclusion as a complete defense of any particular state.')
+      },
+      {
+        type:'final',
+        eyebrow:'Final conclusion',
+        title:'The central tension is the amount of authority a shared life requires',
+        tensions:[
+          {label:'Too little authority',text:'Conflict, exploitation, insecurity, and the collapse of trust.'},
+          {label:'Too much authority',text:'Domination, state overreach, and the danger of concentrating power.'}
+        ],
+        central:'How much organization and coercion can a shared life require before it becomes a state?',
+        finalNote:'Cautious conclusion: a completely unstructured state of nature probably cannot sustain long-term flourishing. That still leaves the state with a burden of justification.',
+        notes:note('final conclusion and key philosophical tension','Leave the audience with the distinction between usefulness and legitimacy. Anarchism asks the state to justify not only what it prevents, but also what it authorizes.')
+      },
+      {
+        type:'refs',
+        eyebrow:'Source basis',
+        title:'Notes and visuals used in this presentation',
+        items:[
+          {label:'Source notes',text:'“Anarchism and the State of Nature — Comprehensive Notes,” provided for this presentation.'},
+          {label:'Thinkers discussed',text:'Thomas Hobbes, John Locke, Jean-Jacques Rousseau, William Godwin, Peter Kropotkin, David Graeber, and David Wengrow.'},
+          {label:'Visuals',text:'Two abstract editorial illustrations generated with OpenAI ImageGen in 2026. They are decorative and are not presented as documentary or archaeological evidence.'}
+        ],
+        notes:note('source basis','All visible philosophical claims in this deck are grounded in the provided notes. The deck does not add outside factual sources.')
+      }
+    ];
+
+    const deck = document.getElementById('deck');
+    const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[character]));
+    const para = items => items.map(item => `<p>${esc(item)}</p>`).join('');
+
+    function renderSlide(slide,index){
+      const article = document.createElement('article');
+      article.className = `slide ${slide.type}${slide.type === 'cover' ? '' : ' top'}`;
+      article.dataset.index = String(index);
+      let content = '';
+
+      if(slide.type === 'cover'){
+        content = `<div class="cover-copy"><p class="eyebrow">Political philosophy · module 1</p><h1 class="title">${esc(slide.title)}</h1><p class="work">${esc(slide.work)}</p><div class="course">${esc(slide.course)}</div></div><figure class="cover-art"><img src="${esc(slide.image)}" alt="${esc(slide.alt)}"><figcaption>Cooperation, authority, and the open question of rule</figcaption></figure>`;
+      }
+      if(slide.type === 'framing'){
+        content = `<p class="eyebrow">${esc(slide.eyebrow)}</p><h2 class="title">${esc(slide.title)}</h2><p class="lead">${esc(slide.lead)}</p><div class="framing-grid">${slide.columns.map(column => `<div class="framing-block"><h3>${esc(column.label)}</h3><p>${esc(column.text)}</p></div>`).join('')}</div><p class="footnote">${esc(slide.foot)}</p>`;
+      }
+      if(slide.type === 'compare'){
+        content = `<p class="eyebrow">${esc(slide.eyebrow)}</p><h2 class="title">${esc(slide.title)}</h2><p class="lead">${esc(slide.lead)}</p><div class="compare-rows">${slide.rows.map(row => `<div class="compare-row"><div class="compare-label">${esc(row.label)}</div><p>${esc(row.text)}</p></div>`).join('')}</div>`;
+      }
+      if(slide.type === 'process' || slide.type === 'sequence'){
+        const listClass = slide.type === 'process' ? 'process-list' : 'sequence-list';
+        const stepClass = slide.type === 'process' ? 'process-step' : 'sequence-row';
+        content = `<p class="eyebrow">${esc(slide.eyebrow)}</p><h2 class="title">${esc(slide.title)}</h2><p class="lead">${esc(slide.lead)}</p><div class="${listClass}">${slide.steps.map(step => `<div class="${stepClass}"><div class="number">${esc(step.number)}</div><h3>${esc(step.title)}</h3><p>${esc(step.text)}</p></div>`).join('')}</div>${slide.foot ? `<p class="footnote">${esc(slide.foot)}</p>` : ''}`;
+      }
+      if(slide.type === 'feature'){
+        content = `<p class="eyebrow">${esc(slide.eyebrow)}</p><h2 class="title">${esc(slide.title)}</h2><div class="feature-grid"><div class="feature-word">${esc(slide.word)}<small>${esc(slide.wordNote)}</small></div><div class="feature-copy">${para(slide.paragraphs)}<div class="feature-callout">${esc(slide.callout)}</div></div></div>`;
+      }
+      if(slide.type === 'dual' || slide.type === 'authority'){
+        const gridClass = slide.type === 'dual' ? 'dual-grid' : 'authority-grid';
+        const colClass = slide.type === 'dual' ? 'dual-col' : 'authority-col';
+        content = `<p class="eyebrow">${esc(slide.eyebrow)}</p><h2 class="title">${esc(slide.title)}</h2><p class="lead">${esc(slide.lead)}</p><div class="${gridClass}">${slide.columns.map(column => `<div class="${colClass}"><h3>${esc(column.label)}</h3>${para(column.paragraphs)}</div>`).join('')}${slide.callout ? `<div class="dual-callout">${esc(slide.callout)}</div>` : ''}</div>`;
+      }
+      if(slide.type === 'sanctions'){
+        content = `<p class="eyebrow">${esc(slide.eyebrow)}</p><h2 class="title">${esc(slide.title)}</h2><p class="lead">${esc(slide.lead)}</p><div class="sanction-list">${slide.sanctions.map(item => `<div class="sanction"><h3>${esc(item.label)}</h3><p>${esc(item.text)}</p></div>`).join('')}</div><p class="footnote">${esc(slide.foot)}</p>`;
+      }
+      if(slide.type === 'scale'){
+        content = `<p class="eyebrow">${esc(slide.eyebrow)}</p><h2 class="title">${esc(slide.title)}</h2><p class="lead">${esc(slide.lead)}</p><div class="scale-grid"><div class="scale-list">${slide.items.map(item => `<div class="scale-item"><b>${esc(item.label)}</b><span>${esc(item.text)}</span></div>`).join('')}</div><div class="war-callout"><span class="big">${esc(slide.warTitle)}</span><p>${esc(slide.warText)}</p></div></div>`;
+      }
+      if(slide.type === 'table-slide'){
+        content = `<p class="eyebrow">${esc(slide.eyebrow)}</p><h2 class="title">${esc(slide.title)}</h2><p class="table-lead">${esc(slide.lead)}</p><table class="comparison-table"><thead><tr><th scope="col">${esc(slide.type === 'table-slide' && slide.headers.length === 2 ? 'State' : slide.headers[0])}</th>${slide.headers.slice(slide.headers.length === 2 ? 0 : 1).map(header => `<th scope="col">${esc(header)}</th>`).join('')}</tr></thead><tbody>${slide.rows.map(row => `<tr><th scope="row">${esc(row[0])}</th>${row.slice(1).map(cell => `<td>${esc(cell)}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+        if(slide.headers.length === 2){
+          content = `<p class="eyebrow">${esc(slide.eyebrow)}</p><h2 class="title">${esc(slide.title)}</h2><p class="table-lead">${esc(slide.lead)}</p><table class="comparison-table"><thead><tr>${slide.headers.map(header => `<th scope="col">${esc(header)}</th>`).join('')}</tr></thead><tbody>${slide.rows.map(row => `<tr><th scope="row">${esc(row[0])}</th><td>${esc(row[1])}</td></tr>`).join('')}</tbody></table>`;
+        } else {
+          content = `<p class="eyebrow">${esc(slide.eyebrow)}</p><h2 class="title">${esc(slide.title)}</h2><p class="table-lead">${esc(slide.lead)}</p><table class="comparison-table"><thead><tr>${slide.headers.map(header => `<th scope="col">${esc(header)}</th>`).join('')}</tr></thead><tbody>${slide.rows.map(row => `<tr>${row.map((cell,cellIndex) => cellIndex === 0 ? `<th scope="row">${esc(cell)}</th>` : `<td>${esc(cell)}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+        }
+      }
+      if(slide.type === 'dilemma'){
+        content = `<p class="eyebrow">${esc(slide.eyebrow)}</p><h2 class="title">${esc(slide.title)}</h2><p class="lead">${esc(slide.lead)}</p><div class="dilemma-grid">${slide.options.map(option => `<div class="dilemma-option"><h3>${esc(option.label)}</h3><p>${esc(option.text)}</p></div>`).join('')}</div><div class="dilemma-result">${esc(slide.result)}</div>`;
+      }
+      if(slide.type === 'spectrum'){
+        content = `<p class="eyebrow">${esc(slide.eyebrow)}</p><h2 class="title">${esc(slide.title)}</h2><p class="lead">${esc(slide.lead)}</p><div class="spectrum-wrap"><div class="spectrum-line"><span class="spectrum-stop" style="left:0"></span><span class="spectrum-stop"></span><span class="spectrum-stop"></span></div><div class="spectrum-labels">${slide.labels.map(label => `<div class="spectrum-label"><b>${esc(label.label)}</b><span>${esc(label.text)}</span></div>`).join('')}</div><p class="spectrum-note">${esc(slide.noteText)}</p></div>`;
+      }
+      if(slide.type === 'history'){
+        content = `<p class="eyebrow">${esc(slide.eyebrow)}</p><h2 class="title">${esc(slide.title)}</h2><div class="history-grid"><div class="history-copy"><p class="lead">${esc(slide.lead)}</p><div class="history-points">${slide.points.map(point => `<div class="history-point"><b>${esc(point.label)}:</b> ${esc(point.text)}</div>`).join('')}</div></div><figure class="history-art"><img src="${esc(slide.image)}" alt="${esc(slide.alt)}"><figcaption>Large-scale coordination without one command center</figcaption></figure></div>`;
+      }
+      if(slide.type === 'strategies'){
+        content = `<p class="eyebrow">${esc(slide.eyebrow)}</p><h2 class="title">${esc(slide.title)}</h2><div class="strategy-list">${slide.rows.map(row => `<div class="strategy-row"><h3>${esc(row.title)}</h3><p class="strength">${esc(row.strength)}</p><p class="problem">${esc(row.problem)}</p></div>`).join('')}</div><p class="footnote">${esc(slide.foot)}</p>`;
+      }
+      if(slide.type === 'final'){
+        if(slide.questions){
+          content = `<p class="eyebrow">${esc(slide.eyebrow)}</p><h2 class="title">${esc(slide.title)}</h2><p class="lead">${esc(slide.lead)}</p><div class="final-grid">${slide.questions.map(question => `<div class="question-block"><div class="question-label">${esc(question.label)}</div><p>${esc(question.text)}</p></div>`).join('')}</div><div class="final-takeaway">${esc(slide.takeaway)}</div>`;
+        } else {
+          content = `<p class="eyebrow">${esc(slide.eyebrow)}</p><h2 class="title">${esc(slide.title)}</h2><div class="tension-grid">${slide.tensions.map(tension => `<div class="tension-col"><h3>${esc(tension.label)}</h3><p>${esc(tension.text)}</p></div>`).join('')}</div><div class="central-question">${esc(slide.central)}</div><p class="final-note">${esc(slide.finalNote)}</p>`;
+        }
+      }
+      if(slide.type === 'refs'){
+        content = `<p class="eyebrow">${esc(slide.eyebrow)}</p><h2 class="title">${esc(slide.title)}</h2><div class="refs-list">${slide.items.map(item => `<div class="ref"><strong>${esc(item.label)}.</strong> ${esc(item.text)}</div>`).join('')}</div>`;
+      }
+
+      article.innerHTML = `<div class="slide-inner">${content}</div>`;
+      deck.appendChild(article);
+      return article;
+    }
+
+    const nodes = slides.map(renderSlide);
+    const counter = document.getElementById('counter');
+    const progress = document.getElementById('progress');
+    const notesPanel = document.getElementById('notes');
+    const notesBody = document.getElementById('notes-body');
+    const overview = document.getElementById('overview');
+    const overviewGrid = document.getElementById('overview-grid');
+    const cards = slides.map((slide,index) => {
+      const button = document.createElement('button');
+      button.className = 'overview-card';
+      button.innerHTML = `<span class="num">${String(index+1).padStart(2,'0')} / ${slides.length}</span><span class="label">${esc(slide.title)}</span>`;
+      button.addEventListener('click',()=>{closePanels();show(index)});
+      overviewGrid.appendChild(button);
+      return button;
+    });
+
+    let current = 0;
+    function show(index){
+      current = Math.max(0,Math.min(slides.length-1,index));
+      nodes.forEach((node,nodeIndex)=>node.classList.toggle('active',nodeIndex===current));
+      cards.forEach((card,cardIndex)=>card.classList.toggle('current',cardIndex===current));
+      counter.textContent = `${current+1} / ${slides.length}`;
+      progress.style.width = `${((current+1)/slides.length)*100}%`;
+      notesBody.textContent = slides[current].notes || 'No notes for this slide.';
+      document.title = `${current+1}/${slides.length} · Anarchism and the State of Nature`;
+    }
+    window.show = show;
+    function closePanels(){overview.classList.remove('open');notesPanel.classList.remove('open')}
+    function togglePanel(panel){panel.classList.contains('open') ? closePanels() : (closePanels(),panel.classList.add('open'))}
+    function toggleFullscreen(){document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen().catch(()=>{})}
+    document.getElementById('fullscreen').addEventListener('click',toggleFullscreen);
+    document.querySelectorAll('.close').forEach(button=>button.addEventListener('click',closePanels));
+    document.addEventListener('keydown',event=>{
+      if(event.key==='Escape'){closePanels();return}
+      if(overview.classList.contains('open') || notesPanel.classList.contains('open')) return;
+      if(['ArrowRight','ArrowDown',' ','PageDown'].includes(event.key)){event.preventDefault();show(current+1)}
+      else if(['ArrowLeft','ArrowUp','PageUp'].includes(event.key)){event.preventDefault();show(current-1)}
+      else if(event.key.toLowerCase()==='o') togglePanel(overview)
+      else if(event.key.toLowerCase()==='n') togglePanel(notesPanel)
+      else if(event.key.toLowerCase()==='f') toggleFullscreen()
+    });
+    let touchX=0,touchY=0;
+    document.addEventListener('touchstart',event=>{touchX=event.changedTouches[0].screenX;touchY=event.changedTouches[0].screenY},{passive:true});
+    document.addEventListener('touchend',event=>{const dx=event.changedTouches[0].screenX-touchX,dy=event.changedTouches[0].screenY-touchY;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy))show(current+(dx<0?1:-1))},{passive:true});
+    function fits(node){const inner=node.querySelector('.slide-inner');return inner.scrollHeight<=node.clientHeight*.82&&inner.scrollWidth<=node.clientWidth*.92}
+    function fitNode(node,start=1){let fit=start;node.classList.add('measuring');node.style.setProperty('--fit',fit);while(fit>.72&&!fits(node)){fit=Math.max(.72,fit-.02);node.style.setProperty('--fit',fit.toFixed(3))}node.classList.remove('measuring');return fit}
+    function fitAll(){nodes.forEach(node=>node.style.setProperty('--fit',1));nodes.forEach(node=>fitNode(node));show(current)}
+    let resizeTimer;
+    window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(fitAll,120)});
+    if(document.fonts?.ready) document.fonts.ready.then(fitAll); else fitAll();
+    show(0);
+  </script>
+</body>
+</html>
