@@ -11,7 +11,7 @@
     document.documentElement.dataset.view = view;
     document.title = view === 'political-philosophy'
       ? 'Political Philosophy — Course Library'
-      : view === 'ethics' ? 'Ethics — Coming Soon' : 'Lectures & Presentations';
+      : view === 'ethics' ? 'Ethics — Presentation Library' : 'Lectures & Presentations';
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -151,7 +151,7 @@
 
     .library-section { margin-top: 3rem; }
 
-    .library-view { padding-top: 2.25rem; }
+    .library-view { display: none; padding-top: 2.25rem; }
 
     .section-heading {
       display: flex;
@@ -414,7 +414,7 @@
         <span aria-hidden="true">→</span>
       </a>
       <a class="subject-card" href="?view=ethics">
-        <small>Presentations coming soon</small>
+        <small>1 presentation available</small>
         <h2>Ethics</h2>
         <span aria-hidden="true">→</span>
       </a>
@@ -522,11 +522,18 @@
 
   <main class="shell ethics-view" id="ethics-view">
     <a class="home-link" href="./index.html">← All subjects</a>
-    <div class="empty-state">
+    <div class="ethics-heading">
       <p class="eyebrow">Ethics · Presentation Library</p>
-      <h1>Coming soon.</h1>
-      <p>This space is ready for your ethics lectures and presentations.</p>
+      <h1>Ethics</h1>
+      <p>Start with a Socratic roadmap through ethical theory and the contemporary cases that put those theories under pressure.</p>
     </div>
+    <section class="library-section" data-section="ethics-overview">
+      <div class="section-heading"><h2>Ethical Theory</h2><span>01</span></div>
+      <div class="cards">
+        <a class="card" data-search="ethics theory contemporary issues socratic moral reasoning utilitarianism kant natural law rights virtue care relativism euthanasia abortion animals environment justice war poverty" href="Presentations/Ethics%20-%20Theory%20and%20Contemporary%20Issues.html"><span class="card-type">Barbara MacKinnon · Andrew Fiala · Socratic seminar</span><h3>What Makes a Moral Judgment Defensible?</h3><span class="card-arrow">→</span></a>
+      </div>
+    </section>
+    <p class="ethics-source-note">Based on Barbara MacKinnon and Andrew Fiala, <em>Ethics: Theory and Contemporary Issues</em>, 9th ed. (Cengage Learning, 2018).</p>
   </main>
 
   <script>
@@ -534,7 +541,7 @@
     const filter = document.getElementById('section-filter');
     const count = document.getElementById('count');
     const empty = document.getElementById('empty');
-    const sections = [...document.querySelectorAll('.library-section')];
+    const sections = [...document.querySelectorAll('#library-view .library-section')];
     const cards = [...document.querySelectorAll('.card')];
 
     function safeFilename(title) {

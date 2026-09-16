@@ -1,0 +1,1205 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A Socratic presentation on ethical reasoning, ethical theory, and contemporary issues based on MacKinnon and Fiala.">
+  <title>What Makes a Moral Judgment Defensible?</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="presentation-polish.css">
+  <style>
+    :root {
+      --bg: #f1ece2;
+      --paper: #fbf8f2;
+      --ink: #202036;
+      --muted: #666274;
+      --accent: #e4604c;
+      --accent-2: #4257d6;
+      --accent-3: #d5a83f;
+      --line: rgba(32, 32, 54, .2);
+      --card: rgba(251, 248, 242, .82);
+      --fit: 1;
+      --text: var(--ink);
+      --preflight-bg: var(--bg);
+      --preflight-text: var(--ink);
+      --preflight-muted: var(--muted);
+      --preflight-accent: var(--accent-2);
+      --preflight-bright: var(--accent);
+      --preflight-line: rgba(32, 32, 54, .18);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--ink);
+    }
+
+    body {
+      font-family: "DM Sans", Inter, system-ui, sans-serif;
+    }
+
+    button { font: inherit; }
+
+    #deck {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background:
+        linear-gradient(125deg, rgba(66, 87, 214, .08), transparent 38%),
+        radial-gradient(ellipse 42% 70% at 100% 100%, rgba(228, 96, 76, .18), transparent 68%),
+        linear-gradient(145deg, #f8f4ec 0%, var(--bg) 57%, #e9e1d3 100%);
+    }
+
+    #deck::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: .46;
+      background:
+        linear-gradient(90deg, rgba(32, 32, 54, .05) 1px, transparent 1px),
+        linear-gradient(rgba(32, 32, 54, .04) 1px, transparent 1px);
+      background-size: 7vw 7vw;
+      mask-image: linear-gradient(135deg, black, transparent 72%);
+    }
+
+    #deck::after {
+      content: "";
+      position: absolute;
+      right: -9vw;
+      bottom: -21vw;
+      width: 43vw;
+      height: 43vw;
+      border: 1px solid rgba(66, 87, 214, .3);
+      border-radius: 50%;
+      box-shadow: 0 0 0 2.2vw rgba(228, 96, 76, .08), 0 0 0 5.5vw rgba(66, 87, 214, .06);
+      pointer-events: none;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 7.5vh 6.5vw 8vh;
+      overflow: hidden;
+      text-align: left;
+    }
+
+    .slide.active,
+    .slide.measuring { display: flex; }
+
+    .slide.measuring {
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .slide.top {
+      align-items: flex-start;
+      padding-top: 7vh;
+    }
+
+    .slide-inner {
+      position: relative;
+      z-index: 1;
+      width: min(1360px, 89vw);
+      max-height: 82vh;
+      margin: auto;
+      transform-origin: top center;
+    }
+
+    .eyebrow {
+      margin: 0 0 1.05rem;
+      color: var(--accent-2);
+      font: 600 clamp(12px, 1.05vw, 17px)/1.25 "IBM Plex Mono", monospace;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .title {
+      margin: 0;
+      color: var(--ink);
+      font-family: "DM Serif Display", Georgia, serif;
+      font-weight: 400;
+      letter-spacing: -.035em;
+    }
+
+    .cover .slide-inner {
+      width: min(1240px, 86vw);
+      padding: 3.5rem 4rem 3.15rem;
+      border: 2px solid var(--ink);
+      background: var(--paper);
+      box-shadow: 1rem 1rem 0 var(--accent);
+    }
+
+    .cover .slide-inner::before {
+      content: "ETHICS / 01";
+      position: absolute;
+      top: 1.25rem;
+      right: 1.45rem;
+      color: var(--accent-2);
+      font: 600 clamp(11px, .9vw, 14px)/1 "IBM Plex Mono", monospace;
+      letter-spacing: .12em;
+    }
+
+    .cover .title {
+      max-width: 12ch;
+      font-size: calc(clamp(58px, 7.4vw, 116px) * var(--fit));
+      line-height: .88;
+      white-space: pre-line;
+    }
+
+    .cover .work {
+      max-width: 35ch;
+      margin: 1.7rem 0 0;
+      color: var(--muted);
+      font: 500 calc(clamp(21px, 2.1vw, 32px) * var(--fit))/1.28 "DM Sans", sans-serif;
+    }
+
+    .cover .course {
+      display: inline-block;
+      margin-top: 2.35rem;
+      padding: .62rem .85rem;
+      border: 1px solid rgba(66, 87, 214, .5);
+      color: var(--accent-2);
+      font: 600 calc(clamp(11px, .92vw, 15px) * var(--fit))/1.2 "IBM Plex Mono", monospace;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .section .slide-inner {
+      width: min(1120px, 84vw);
+      padding: 2.6rem 3.1rem 2.8rem;
+      border-left: 13px solid var(--accent);
+      background: linear-gradient(90deg, rgba(228, 96, 76, .14), rgba(251, 248, 242, .42) 70%, transparent);
+    }
+
+    .section .title {
+      max-width: 12ch;
+      font-size: calc(clamp(54px, 6vw, 94px) * var(--fit));
+      line-height: .96;
+    }
+
+    .section .rule {
+      width: 8.5rem;
+      height: 5px;
+      margin-top: 2rem;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    }
+
+    .content .title,
+    .split .title,
+    .lenses .title,
+    .process .title,
+    .case .title,
+    .head .title,
+    .refs .title {
+      max-width: none;
+      padding-bottom: .75rem;
+      border-bottom: 2px solid var(--line);
+      font-size: calc(clamp(43px, 4.55vw, 72px) * var(--fit));
+      line-height: .98;
+    }
+
+    .content .title,
+    .split .title,
+    .lenses .title,
+    .process .title,
+    .case .title,
+    .head .title { margin-bottom: 1.4rem; }
+
+    .content .body {
+      max-width: 49ch;
+      color: var(--ink);
+      font: 500 calc(clamp(24px, 2.25vw, 34px) * var(--fit))/1.25 "DM Sans", sans-serif;
+    }
+
+    .content .body p {
+      margin: 0 0 1rem;
+      padding: .12em .8em .12em 1rem;
+      border-left: 5px solid rgba(66, 87, 214, .34);
+      background: linear-gradient(90deg, rgba(66, 87, 214, .055), transparent 90%);
+    }
+
+    .content .body p:last-child {
+      margin-bottom: 0;
+      border-left-color: var(--accent);
+      background: linear-gradient(90deg, rgba(228, 96, 76, .16), transparent 90%);
+    }
+
+    .argument-flow {
+      display: flex;
+      align-items: stretch;
+      gap: .75rem;
+      max-width: 1120px;
+      margin-top: 2.2rem;
+    }
+
+    .argument-flow .flow-node {
+      flex: 1;
+      min-height: 6.6rem;
+      padding: 1rem 1.1rem;
+      border: 1px solid var(--line);
+      border-top: 7px solid var(--accent-2);
+      background: var(--card);
+    }
+
+    .argument-flow .flow-node:nth-child(3) { border-top-color: var(--accent); }
+
+    .flow-node strong {
+      display: block;
+      margin-bottom: .5rem;
+      color: var(--accent-2);
+      font: 600 clamp(12px, 1.05vw, 16px)/1.2 "IBM Plex Mono", monospace;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .flow-node span {
+      display: block;
+      font: 600 calc(clamp(19px, 1.6vw, 25px) * var(--fit))/1.15 "DM Sans", sans-serif;
+    }
+
+    .argument-flow .flow-arrow {
+      align-self: center;
+      flex: 0 0 auto;
+      color: var(--accent);
+      font: 2rem/1 "IBM Plex Mono", monospace;
+    }
+
+    .balance {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      max-width: 1150px;
+      margin-top: 2rem;
+    }
+
+    .balance .balance-node {
+      flex: 1;
+      padding: 1.2rem 1.3rem;
+      border: 1px solid var(--line);
+      background: var(--card);
+      font: 600 calc(clamp(19px, 1.7vw, 27px) * var(--fit))/1.15 "DM Sans", sans-serif;
+      text-align: center;
+    }
+
+    .balance .balance-node:first-child { border-color: rgba(66, 87, 214, .5); }
+    .balance .balance-node:last-child { border-color: rgba(228, 96, 76, .65); }
+
+    .balance .balance-arrow {
+      color: var(--accent);
+      font: 2.1rem/1 "IBM Plex Mono", monospace;
+    }
+
+    .split .slide-inner,
+    .lenses .slide-inner,
+    .process .slide-inner,
+    .case .slide-inner,
+    .head .slide-inner { width: min(1480px, 91vw); }
+
+    .split-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.2rem;
+    }
+
+    .split-card {
+      min-height: 16rem;
+      padding: 1.55rem 1.7rem 1.65rem;
+      border: 1px solid var(--line);
+      border-top: 9px solid var(--accent-2);
+      background: var(--card);
+    }
+
+    .split-card:nth-child(even) {
+      border-top-color: var(--accent);
+      background: rgba(255, 249, 241, .76);
+    }
+
+    .split-card h3 {
+      margin: 0 0 .85rem;
+      color: var(--accent-2);
+      font: 600 calc(clamp(15px, 1.35vw, 21px) * var(--fit))/1.2 "IBM Plex Mono", monospace;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .split-card:nth-child(even) h3 { color: var(--accent); }
+
+    .split-card p {
+      margin: 0;
+      color: var(--ink);
+      font: 500 calc(clamp(24px, 2.1vw, 33px) * var(--fit))/1.2 "DM Sans", sans-serif;
+    }
+
+    .lenses .title { margin-bottom: 1.35rem; }
+
+    .lens-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: .8rem;
+    }
+
+    .lens {
+      min-height: 14.5rem;
+      padding: 1.1rem 1.05rem 1.25rem;
+      border: 1px solid var(--line);
+      border-top: 8px solid var(--accent-2);
+      background: var(--card);
+    }
+
+    .lens:nth-child(2) { border-top-color: var(--accent); }
+    .lens:nth-child(3) { border-top-color: var(--accent-3); }
+    .lens:nth-child(4) { border-top-color: #6c4fb2; }
+    .lens:nth-child(5) { border-top-color: #2f8e86; }
+
+    .lens .lens-tag {
+      display: block;
+      margin-bottom: .85rem;
+      color: var(--muted);
+      font: 600 clamp(11px, .9vw, 14px)/1.2 "IBM Plex Mono", monospace;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .lens h3 {
+      margin: 0 0 .65rem;
+      color: var(--ink);
+      font: 400 calc(clamp(24px, 2vw, 31px) * var(--fit))/1 "DM Serif Display", Georgia, serif;
+    }
+
+    .lens p {
+      margin: 0;
+      color: var(--muted);
+      font: 500 calc(clamp(16px, 1.3vw, 20px) * var(--fit))/1.25 "DM Sans", sans-serif;
+    }
+
+    .process .title { margin-bottom: 1.6rem; }
+
+    .process-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .process-step {
+      position: relative;
+      min-height: 12.5rem;
+      padding: 1.2rem 1.2rem 1.3rem;
+      border: 1px solid var(--line);
+      background: var(--card);
+    }
+
+    .process-step::after {
+      content: "→";
+      position: absolute;
+      top: 50%;
+      right: -1.05rem;
+      z-index: 2;
+      color: var(--accent);
+      font: 1.8rem/1 "IBM Plex Mono", monospace;
+      transform: translateY(-50%);
+    }
+
+    .process-step:last-child::after { content: ""; }
+
+    .process-number {
+      display: block;
+      margin-bottom: 1.15rem;
+      color: var(--accent-2);
+      font: 600 calc(clamp(12px, .95vw, 15px) * var(--fit))/1 "IBM Plex Mono", monospace;
+      letter-spacing: .1em;
+    }
+
+    .process-step h3 {
+      margin: 0 0 .6rem;
+      color: var(--ink);
+      font: 400 calc(clamp(26px, 2.25vw, 36px) * var(--fit))/1 "DM Serif Display", Georgia, serif;
+    }
+
+    .process-step p {
+      margin: 0;
+      color: var(--muted);
+      font: 500 calc(clamp(17px, 1.4vw, 22px) * var(--fit))/1.25 "DM Sans", sans-serif;
+    }
+
+    .case .title { margin-bottom: 1.1rem; }
+
+    .case-lead {
+      max-width: 58ch;
+      margin: 0 0 1.35rem;
+      color: var(--ink);
+      font: 500 calc(clamp(21px, 1.8vw, 28px) * var(--fit))/1.24 "DM Sans", sans-serif;
+    }
+
+    .case-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: .85rem;
+    }
+
+    .case-card {
+      min-height: 10.2rem;
+      padding: 1.15rem 1.2rem 1.25rem;
+      border-left: 6px solid var(--accent-2);
+      background: var(--card);
+    }
+
+    .case-card:nth-child(2) { border-left-color: var(--accent); }
+    .case-card:nth-child(3) { border-left-color: var(--accent-3); }
+
+    .case-card h3 {
+      margin: 0 0 .5rem;
+      color: var(--ink);
+      font: 600 calc(clamp(13px, 1.05vw, 17px) * var(--fit))/1.2 "IBM Plex Mono", monospace;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .case-card p {
+      margin: 0;
+      color: var(--muted);
+      font: 500 calc(clamp(17px, 1.45vw, 23px) * var(--fit))/1.23 "DM Sans", sans-serif;
+    }
+
+    .head .title { margin-bottom: 1.5rem; }
+
+    .head-list {
+      display: grid;
+      gap: .75rem;
+    }
+
+    .head-item {
+      display: grid;
+      grid-template-columns: 13rem 1fr;
+      gap: 1.25rem;
+      align-items: baseline;
+      padding: 1rem 1.1rem;
+      border-left: 6px solid var(--accent-2);
+      background: var(--card);
+    }
+
+    .head-item:nth-child(even) {
+      border-left-color: var(--accent);
+      background: rgba(255, 249, 241, .76);
+    }
+
+    .head-item b {
+      color: var(--accent-2);
+      font: 600 calc(clamp(13px, 1.05vw, 17px) * var(--fit))/1.2 "IBM Plex Mono", monospace;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+
+    .head-item:nth-child(even) b { color: var(--accent); }
+
+    .head-item span {
+      color: var(--ink);
+      font: 500 calc(clamp(22px, 1.85vw, 29px) * var(--fit))/1.22 "DM Sans", sans-serif;
+    }
+
+    .question .slide-inner,
+    .diagnostic .slide-inner {
+      width: min(1180px, 84vw);
+      padding: 4rem 4.6rem 4.25rem;
+      border: 2px solid var(--accent);
+      border-left: 14px solid var(--accent);
+      background: var(--ink);
+      box-shadow: 1rem 1rem 0 var(--accent-2);
+      text-align: center;
+    }
+
+    .question .eyebrow,
+    .diagnostic .eyebrow { color: var(--accent-3); }
+
+    .question .prompt,
+    .diagnostic .prompt {
+      margin: 0 auto;
+      color: var(--paper);
+      font: 400 calc(clamp(46px, 5.35vw, 84px) * var(--fit))/.98 "DM Serif Display", Georgia, serif;
+      letter-spacing: -.025em;
+    }
+
+    .question .prompt::after,
+    .diagnostic .prompt::after {
+      content: "";
+      display: block;
+      width: 7rem;
+      height: 5px;
+      margin: 1.9rem auto 0;
+      background: linear-gradient(90deg, var(--accent), var(--accent-3));
+    }
+
+    .question .context {
+      max-width: 46ch;
+      margin: 1.5rem auto 0;
+      color: #e2dce0;
+      font: 500 calc(clamp(18px, 1.55vw, 24px) * var(--fit))/1.35 "DM Sans", sans-serif;
+    }
+
+    .diagnostic .slide-inner { border-color: var(--accent-2); }
+    .diagnostic .prompt { font-size: calc(clamp(50px, 6.1vw, 96px) * var(--fit)); }
+
+    .refs .slide-inner { width: min(1160px, 86vw); }
+    .refs .title { margin-bottom: 1.55rem; }
+
+    .refs-list {
+      display: grid;
+      gap: .8rem;
+    }
+
+    .ref {
+      padding-top: .8rem;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font: 500 calc(clamp(18px, 1.4vw, 22px) * var(--fit))/1.3 "DM Sans", sans-serif;
+    }
+
+    .ref strong { color: var(--ink); }
+
+    #progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 30;
+      width: 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--accent-2), var(--accent));
+    }
+
+    #nav-hint, #counter {
+      position: fixed;
+      bottom: 17px;
+      z-index: 30;
+      color: var(--muted);
+      font: 600 11px/1.2 "IBM Plex Mono", monospace;
+      letter-spacing: .08em;
+    }
+
+    #nav-hint { left: 24px; }
+    #counter { right: 24px; }
+
+    #fullscreen {
+      position: fixed;
+      top: 18px;
+      right: 20px;
+      z-index: 30;
+      padding: 8px 11px;
+      border: 1px solid rgba(32, 32, 54, .28);
+      color: var(--muted);
+      background: rgba(251, 248, 242, .52);
+      cursor: pointer;
+      font: 600 11px/1 "IBM Plex Mono", monospace;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    #fullscreen:hover,
+    #fullscreen:focus-visible {
+      border-color: var(--accent-2);
+      color: var(--accent-2);
+      outline: none;
+    }
+
+    .panel {
+      position: fixed;
+      inset: 4vh 4vw;
+      z-index: 60;
+      display: none;
+      overflow: auto;
+      border: 1px solid var(--line);
+      background: rgba(251, 248, 242, .985);
+    }
+
+    .panel.open { display: block; }
+
+    .panel-head {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 17px 22px;
+      border-bottom: 1px solid var(--line);
+      background: var(--paper);
+    }
+
+    .panel-head h2 {
+      margin: 0;
+      color: var(--accent-2);
+      font: 600 13px/1 "IBM Plex Mono", monospace;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .close {
+      padding: 7px 10px;
+      border: 1px solid var(--line);
+      color: var(--ink);
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .close:hover,
+    .close:focus-visible { border-color: var(--accent); outline: none; }
+
+    #overview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      padding: 20px;
+    }
+
+    .overview-card {
+      min-height: 126px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      color: var(--ink);
+      background: rgba(255, 249, 241, .82);
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .overview-card:hover,
+    .overview-card.current {
+      border-color: var(--accent-2);
+      box-shadow: inset 5px 0 var(--accent);
+      outline: none;
+    }
+
+    .overview-card .num {
+      display: block;
+      margin-bottom: 12px;
+      color: var(--accent-2);
+      font: 600 11px/1.2 "IBM Plex Mono", monospace;
+    }
+
+    .overview-card .label {
+      display: block;
+      color: var(--ink);
+      font: 400 22px/1.05 "DM Serif Display", Georgia, serif;
+    }
+
+    #notes-body {
+      max-width: 970px;
+      padding: 28px 34px;
+      color: var(--ink);
+      font: 400 17px/1.62 "DM Sans", sans-serif;
+      white-space: pre-wrap;
+    }
+
+    @media (max-width: 900px) {
+      .lens-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .lens { min-height: 12rem; }
+      .case-grid { grid-template-columns: 1fr; }
+      .case-card { min-height: auto; }
+      .process-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .process-step:nth-child(2)::after { content: ""; }
+      .process-step:nth-child(3)::after { content: "→"; }
+    }
+
+    @media (max-width: 760px) {
+      .slide { padding: 9vh 8vw 10vh; }
+      .slide.top { padding-top: 9.5vh; }
+      .slide-inner,
+      .split .slide-inner,
+      .lenses .slide-inner,
+      .process .slide-inner,
+      .case .slide-inner,
+      .head .slide-inner { width: 84vw; }
+      .cover .slide-inner,
+      .section .slide-inner,
+      .question .slide-inner,
+      .diagnostic .slide-inner { padding: 1.8rem 1.55rem; }
+      .split-grid,
+      .process-grid { grid-template-columns: 1fr; }
+      .lens-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; }
+      .lens { min-height: 0; padding: .75rem .7rem .85rem; }
+      .lens .lens-tag { margin-bottom: .45rem; font-size: 10px; }
+      .lens h3 { margin-bottom: .4rem; font-size: calc(clamp(20px, 5vw, 25px) * var(--fit)); }
+      .lens p { font-size: calc(clamp(15px, 3.8vw, 18px) * var(--fit)); line-height: 1.18; }
+      .process-step { min-height: 0; padding: .8rem .9rem .9rem; }
+      .process-number { margin-bottom: .45rem; }
+      .process-step h3 { margin-bottom: .35rem; font-size: calc(clamp(23px, 6.2vw, 29px) * var(--fit)); }
+      .process-step p { font-size: calc(clamp(16px, 4.2vw, 20px) * var(--fit)); }
+      .process-step::after { content: "↓"; top: auto; right: auto; bottom: -1.2rem; left: 50%; transform: translateX(-50%); }
+      .process-step:nth-child(2)::after,
+      .process-step:nth-child(3)::after { content: "↓"; }
+      .process-step:last-child::after { content: ""; }
+      .head-item { grid-template-columns: 1fr; gap: .45rem; }
+      .argument-flow,
+      .balance { align-items: stretch; flex-direction: column; }
+      .argument-flow .flow-node { min-height: 0; padding: .7rem .8rem; }
+      .argument-flow .flow-node strong { margin-bottom: .3rem; font-size: 10px; }
+      .argument-flow .flow-node span { font-size: calc(clamp(15px, 4vw, 18px) * var(--fit)); }
+      .argument-flow .flow-arrow { font-size: 1.5rem; }
+      .argument-flow .flow-arrow,
+      .balance .balance-arrow { align-self: center; transform: rotate(90deg); }
+      .question .slide-inner,
+      .diagnostic .slide-inner { width: 84vw; }
+      #nav-hint { display: none; }
+      #fullscreen { top: 12px; right: 12px; }
+    }
+  </style>
+  <script src="presentation-polish.js" defer></script>
+</head>
+<body data-library-view="ethics">
+  <div id="deck" aria-live="polite"></div>
+  <div id="progress" aria-hidden="true"></div>
+  <div id="nav-hint">ARROWS / SPACE · O OVERVIEW · N NOTES · F FULLSCREEN</div>
+  <div id="counter" aria-live="polite">1 / 1</div>
+  <button id="fullscreen" type="button">Fullscreen</button>
+
+  <section id="overview" class="panel" aria-label="Slide overview">
+    <div class="panel-head"><h2>Slide overview</h2><button class="close" type="button">Close</button></div>
+    <div id="overview-grid"></div>
+  </section>
+
+  <aside id="notes" class="panel" aria-label="Speaker notes">
+    <div class="panel-head"><h2>Speaker notes</h2><button class="close" type="button">Close</button></div>
+    <div id="notes-body"></div>
+  </aside>
+
+  <script>
+    const book = 'Barbara MacKinnon and Andrew Fiala, Ethics: Theory and Contemporary Issues, 9th ed. (Cengage Learning, 2018)';
+    const source = pages => `[Sources]\n${book}; ${pages}.\n[/Sources]`;
+    const note = (body, pages) => `${body}\n\n${source(pages)}`;
+
+    const slides = [
+      {
+        type: 'cover',
+        title: 'What makes a\nmoral judgment defensible?',
+        work: 'A Socratic roadmap through Ethics: Theory and Contemporary Issues',
+        course: 'Ethics / MacKinnon + Fiala / ninth edition',
+        notes: note('Introduce the deck as an overview of the reading rather than a chapter-by-chapter replacement. The through-line is the book\'s opening problem: disagreement about value is not solved by repeating a verdict; it requires reasons, theories, and testing in concrete cases.', 'Preface, pp. ix-x; Part One, pp. 1-198; selected issue chapters, pp. 199-592')
+      },
+      {
+        type: 'section',
+        eyebrow: 'I. Ethics begins where assertion ends',
+        title: 'Ethics begins where assertion ends',
+        notes: note('Open with the practical problem of moral disagreement. The first movement establishes why the reading treats ethical reasoning as a critical enterprise.', 'pp. 1-13')
+      },
+      {
+        type: 'content',
+        title: 'A moral verdict needs a reason behind it',
+        paragraphs: [
+          'Applied questions - abortion, euthanasia, war, animals, poverty - put values into conflict.',
+          'Saying “that is wrong” repeats the verdict; it does not explain why the verdict should bind anyone.',
+          'Ethical inquiry asks for reasons that can be examined, challenged, and improved.'
+        ],
+        notes: note('The book begins with familiar controversies because they expose the difference between having a conviction and supporting it. Stress that ethical reasoning is not just finding a louder way to state an opinion.', 'pp. 1-3')
+      },
+      {
+        type: 'content',
+        title: 'Facts inform moral judgment; they do not replace it',
+        paragraphs: [
+          'A descriptive claim says what is the case: what an action does, who is affected, or how often it happens.',
+          'A normative judgment evaluates: right or wrong, good or bad, permissible or unjust. Facts about consequences can matter greatly, but a further premise is needed to connect the fact to an ought.'
+        ],
+        diagram: 'fact-bridge',
+        notes: note('Use the reading\'s contrast between empirical or descriptive claims and evaluative or normative judgments. Do not imply that facts are morally irrelevant; the point is that facts need to be interpreted through a value or principle.', 'pp. 3-6')
+      },
+      {
+        type: 'process',
+        title: 'Make the argument visible before you defend it',
+        steps: [
+          ['01', 'Claim', 'What should be done?'],
+          ['02', 'Facts', 'What is happening, and who is affected?'],
+          ['03', 'Principle', 'Why does that matter morally?'],
+          ['04', 'Judgment', 'What follows - and what could defeat it?']
+        ],
+        notes: note('This is a classroom synthesis of the reading\'s discussion of ethical reasoning and arguments. Ask students to notice where a controversial argument moves from a description to a value judgment, and whether the missing bridge is explicit.', 'pp. 7-13')
+      },
+      {
+        type: 'question',
+        eyebrow: 'Pause 01 · The gap between is and ought',
+        prompt: 'If facts do not carry their own moral verdict, what makes a reason count as ethical?',
+        context: 'Name one premise a controversial judgment would still need after the relevant facts are on the table.',
+        notes: note('Pause for 60-90 seconds of silent writing, then invite pairs to identify a factual premise and a value premise in a familiar controversy. Follow-ups: Which fact would change your mind? What value turns the fact into a reason? Listen for a circular restatement of the conclusion. The next movement introduces competing ways to supply the moral bridge.', 'pp. 3-10')
+      },
+      {
+        type: 'section',
+        eyebrow: 'II. Theories are different answer-machines',
+        title: 'Theories are different answer-machines',
+        notes: note('Transition from the need for reasons to the different standards ethical theories use to decide which reasons matter most.', 'pp. 11-13; chs. 5-9, pp. 93-198')
+      },
+      {
+        type: 'lenses',
+        title: 'The book keeps changing the question',
+        lenses: [
+          ['Consequences', 'What results?', 'Which option produces the most overall well-being?'],
+          ['Duty', 'What rule?', 'Could the principle of this action be willed for everyone?'],
+          ['Rights & nature', 'What is owed?', 'What do dignity, human nature, or basic rights limit?'],
+          ['Character', 'Who am I becoming?', 'What habits and practical wisdom express a good life?'],
+          ['Care', 'Who is connected?', 'What do attention, dependence, and responsibility require?']
+        ],
+        notes: note('Present these as different questions, not as five labels for the same answer. The reading explicitly distinguishes consequentialist and nonconsequentialist approaches, then develops utilitarianism, deontology, natural law and rights, virtue ethics, and feminist thought or care ethics.', 'pp. 11-13; chs. 5-9, pp. 93-198')
+      },
+      {
+        type: 'content',
+        title: 'Utilitarianism counts everyone, then compares outcomes',
+        paragraphs: [
+          'Actions and policies are assessed by their likely or actual effects on overall happiness, interests, or well-being.',
+          'Each affected person counts; the aim is the greatest net good, not the advantage of the decision-maker.',
+          'The pressure point is familiar: if enough benefit appears to follow, an otherwise objectionable act can look permissible.'
+        ],
+        diagram: 'balance',
+        notes: note('Explain the equal-consideration feature before the controversial cases. The reading distinguishes utilitarianism from egoism by making the sum of affected interests, not the agent\'s own interest, the object of assessment. Mention that act and rule versions try to manage the theory\'s practical and intuitive costs.', 'pp. 95-105, 107-112')
+      },
+      {
+        type: 'split',
+        title: 'Kant asks what we do to people, not only what follows',
+        columns: [
+          ['Test of universality', 'Could the maxim of my action be willed as a rule for everyone? Moral worth cannot depend only on whether this particular act happens to produce a useful result.'],
+          ['Test of humanity', 'Does the action respect each person as an end, never merely as a tool? Autonomy and dignity place limits on what may be done for a larger outcome.']
+        ],
+        notes: note('Keep Kant\'s view distinct from a simple rule of being nice. The categorical imperative asks whether a maxim can have universal validity and whether humanity is treated as an end. The textbook uses research ethics, promises, suicide, and duties to illustrate the difference between duty and inclination.', 'pp. 115-124, 126-137')
+      },
+      {
+        type: 'split',
+        title: 'Natural law and rights search for limits beyond preference',
+        columns: [
+          ['Natural law', 'Human good is connected to human nature, its capacities, and the ends those capacities make possible. The challenge is explaining which account of “natural” supplies the moral norm.'],
+          ['Natural rights', 'Life, liberty, property, and related claims mark what other people and institutions must not violate. The challenge is showing why these rights are universal and how they are known.']
+        ],
+        notes: note('Natural law is not the same as a scientific description of nature. The reading presents it as a teleological account of human capacities and ends, while the natural-rights tradition gives political form to claims about equal human standing. Flag the continuing question of how an is becomes an ought.', 'pp. 140-147, 149-154')
+      },
+      {
+        type: 'split',
+        title: 'Virtue and care widen the picture of a moral life',
+        columns: [
+          ['Virtue', 'Ask which habits, dispositions, and forms of practical wisdom let a person flourish. Aristotle\'s mean is responsive to the situation, not a numerical midpoint.'],
+          ['Care', 'Ask who is dependent, what relationships require, and whether attention and responsibility have been ignored. Feminist ethics also asks how power shapes the supposedly private sphere.']
+        ],
+        notes: note('Virtue ethics changes the unit of evaluation from isolated acts to character and a life of flourishing. Care ethics challenges the assumption that impartiality and autonomy exhaust moral experience, while the chapter also warns against turning care into a fixed gender stereotype.', 'pp. 156-161, 174-181, 184-198')
+      },
+      {
+        type: 'question',
+        eyebrow: 'Pause 02 · What should carry the weight?',
+        prompt: 'Which feature should have the final word when consequences, rights, character, and care pull apart?',
+        context: 'Choose one case from the reading and defend the lens you would start with - including the cost of starting there.',
+        notes: note('Have pairs choose one issue - torture, euthanasia, abortion, or animal experimentation - and state which lens they privilege. Require each pair to name what its preferred lens risks overlooking. Follow-ups: Is the cost a flaw, a trade-off, or a reason to combine theories? The next movement asks whether disagreement itself undermines objectivity.', 'chs. 5-9, pp. 93-198; selected issue chapters, pp. 199-592')
+      },
+      {
+        type: 'section',
+        eyebrow: 'III. Disagreement tests our standards',
+        title: 'Disagreement tests our standards',
+        notes: note('Move from theories to the metaethical problem of pluralism, relativism, and the possibility of shared moral criticism.', 'chs. 2-4, pp. 20-92')
+      },
+      {
+        type: 'split',
+        title: 'A global ethics needs pluralism and a basis for criticism',
+        columns: [
+          ['Pluralism', 'Religions and cultures contain real differences, including disagreement within traditions. Humility and open-mindedness matter when moral language crosses contexts.'],
+          ['Universal aspiration', 'The reading asks whether human dignity, freedom, and equal rights can guide judgment across those differences without simply imposing one culture\'s authority.']
+        ],
+        notes: note('Chapter 2 places religious diversity beside the aspiration to universal human rights and toleration. Avoid presenting global agreement as already achieved; the point is that a global ethical perspective has to explain how common standards could coexist with deep difference.', 'pp. 20-32, 35-42')
+      },
+      {
+        type: 'content',
+        title: 'Relativism separates a fact about disagreement from a claim about truth',
+        paragraphs: [
+          'Descriptive relativism says people and cultures disagree about values.',
+          'Metaethical relativism says moral truth itself depends on an individual or culture - or that no objective values exist.',
+          'Tolerance is a possible moral commitment; it does not automatically follow from relativism.'
+        ],
+        notes: note('Make the distinction slowly. The book treats cultural difference as an empirical fact, then asks whether that fact justifies the stronger conclusion that there are no objective moral truths. The contrast between relativism and tolerance is an important hinge for discussion.', 'pp. 44-53, 55-67')
+      },
+      {
+        type: 'content',
+        title: 'Self-interest can explain cooperation without settling morality',
+        paragraphs: [
+          'Psychological egoism asks whether every motive is ultimately self-interested; ethical egoism asks whether people ought to pursue their own interests.',
+          'Altruism and reciprocal cooperation complicate a simple picture of selfishness.',
+          'Social-contract reasoning asks how self-interested people can create rules that make shared life safer - but agreement alone may not explain justice.'
+        ],
+        notes: note('Separate the descriptive question about motivation from the normative question about what people ought to do. The chapter connects egoism and altruism to the social contract and to the problem of how cooperation can emerge when interests conflict.', 'pp. 68-92')
+      },
+      {
+        type: 'question',
+        eyebrow: 'Pause 03 · The status of disagreement',
+        prompt: 'Does persistent moral disagreement show that there is no truth - or that our reasons remain unfinished?',
+        context: 'Keep “people disagree” separate from the stronger metaethical conclusion. What would count as progress in an argument?',
+        notes: note('Ask students to write two sentences: one describing disagreement, one making a claim about what disagreement proves. Then invite examples of tolerance that do not depend on saying every moral view is equally true. Follow-ups: Can a culture be criticized from within? Can a universal claim remain open to correction?', 'pp. 44-67')
+      },
+      {
+        type: 'section',
+        eyebrow: 'IV. Cases expose hidden commitments',
+        title: 'Cases expose hidden commitments',
+        notes: note('The issue chapters put the theories under pressure. The goal here is not to list every issue but to show how the same reasoning questions recur in different domains.', 'Part Two, pp. 199-592')
+      },
+      {
+        type: 'case',
+        title: 'Euthanasia forces several moral dimensions into one decision',
+        lead: 'A patient requests assistance to end unbearable suffering. How voluntariness, intention, action and inaction, and the meaning of a humane death affect the judgment is part of the moral problem.',
+        tensions: [
+          ['Consequences', 'Relief of suffering, alongside possible harms to trust or vulnerable people.'],
+          ['Duty / rights', 'Autonomy and consent alongside a possible prohibition on killing or using persons.'],
+          ['Care / character', 'Compassion, responsibility, and the relationship between patient and caregiver.']
+        ],
+        notes: note('Do not ask students to vote immediately. First ask them to identify which feature of the case each moral lens treats as decisive. The chapter distinguishes voluntary, nonvoluntary, and involuntary euthanasia; active and passive forms; and physician-assisted suicide.', 'pp. 199-228')
+      },
+      {
+        type: 'case',
+        title: 'Abortion shifts the argument from choice to moral status',
+        lead: 'The issue chapter places arguments about reproductive freedom beside arguments about the moral standing of the fetus. The disagreement is partly about which question must be answered first.',
+        tensions: [
+          ['Choice and rights', 'Bodily autonomy, privacy, and equal citizenship.'],
+          ['Consequences', 'Effects on the pregnant person, a future child, family, and society.'],
+          ['Moral status', 'What makes a being someone whose interests or rights must be protected?']
+        ],
+        notes: note('Use the case to show why the order of questions matters. A rights-first argument and a moral-status-first argument may use the same facts but give them different significance. Keep the slide exploratory; the reading presents competing arguments rather than one automatic procedure.', 'pp. 231-276')
+      },
+      {
+        type: 'case',
+        title: 'The moral circle can expand - and become harder to draw',
+        lead: 'Animal ethics and environmental ethics ask whether moral consideration should track human membership, sentience, inherent value, ecosystems, or the interests of future people.',
+        tensions: [
+          ['Animals', 'Equal consideration for suffering versus rights or inherent value.'],
+          ['Environment', 'Human-centered value versus ecological value and the limits of the commons.'],
+          ['Future people', 'Present choice versus harms no one can yet contest.']
+        ],
+        notes: note('Connect Singer, Regan, environmental justice, deep ecology, and global-justice questions without collapsing them into one position. Ask who is included in the moral community, then ask whether inclusion alone tells us how to weigh competing claims.', 'pp. 417-456, 457-489, 560-592')
+      },
+      {
+        type: 'case',
+        title: 'Institutions turn private judgments into public burdens',
+        lead: 'Punishment, war, and global poverty make the distribution of harm and responsibility unavoidable.',
+        tensions: [
+          ['Security', 'Deterrence, order, and prevention of future harm.'],
+          ['Desert / rights', 'Proportionality, responsibility, and limits on what may be done.'],
+          ['Justice', 'Why should risks and resources fall where they do, across borders and generations?']
+        ],
+        notes: note('Use this as a synthesis of the institutional cases. Punishment and war test deterrence, retribution, discrimination, proportionality, and humane limits; global justice tests self-interest, rights, aid, inequality, and the reach of moral obligation.', 'pp. 344-374, 375-416, 528-559, 560-592')
+      },
+      {
+        type: 'question',
+        eyebrow: 'Pause 04 · When theories collide with intuition',
+        prompt: 'When a theory’s answer violates a strong moral intuition, what should change first: the intuition, the theory, or the way we described the case?',
+        context: 'Use one issue chapter as a test. Give a reason for treating the conflict as a revision rather than a contradiction.',
+        notes: note('Give groups one case slide and ask them to locate the conflict precisely: is a premise false, a fact missing, a value being ranked differently, or an intuition carrying an unexamined assumption? Neutral follow-ups: What would the other side say? What evidence would matter? The final movement turns this into a repeatable method.', 'Part Two, pp. 199-592')
+      },
+      {
+        type: 'section',
+        eyebrow: 'V. A Socratic method for judgment',
+        title: 'A Socratic method for judgment',
+        notes: note('The reading gives theories and arguments, not a single formula that settles every case. Close by turning its distinctions into a practice of revisable judgment.', 'pp. 1-13, 93-198')
+      },
+      {
+        type: 'process',
+        title: 'A defensible judgment is an argument under pressure',
+        steps: [
+          ['01', 'Reconstruct', 'State the claim and the strongest reasons for it.'],
+          ['02', 'Clarify', 'Separate facts, values, motives, acts, and consequences.'],
+          ['03', 'Stress-test', 'Ask what happens to outsiders, dependents, dissenters, and future people.'],
+          ['04', 'Revise', 'Keep what survives; name the cost of what does not.']
+        ],
+        notes: note('This is an original teaching synthesis of the book\'s recurring moves: distinguish descriptive from normative claims, compare theories, attend to motives and consequences, examine rights and character, and apply principles to concrete cases. It is not a quotation or an additional theory.', 'pp. 1-13; chs. 5-9, pp. 93-198')
+      },
+      {
+        type: 'head',
+        title: 'Four questions to carry into any case',
+        items: [
+          ['Scope', 'Who counts, and who has been left out?'],
+          ['Ground', 'Is the decisive reason a consequence, duty, right, virtue, or relationship?'],
+          ['Power', 'Who chooses, who bears the cost, and who can challenge the decision?'],
+          ['Reversibility', 'What evidence or argument would make us revise?']
+        ],
+        notes: note('Use this as a final toolkit, not an answer key. Invite students to add a fifth question from the reading. Good candidates include: What is natural here? What is the strongest opposing argument? Does this rule treat persons as ends? What would care require?', 'pp. 1-13, 20-67, 68-92, 93-198; selected issue chapters, pp. 199-592')
+      },
+      {
+        type: 'diagnostic',
+        eyebrow: 'Final question · The Socratic test',
+        prompt: 'Can we make a moral judgment that is principled enough to defend and humble enough to revise?',
+        context: 'What would you need to hear before changing your mind?',
+        notes: note('End with a one-minute write. Ask students to name both a principle they are prepared to defend and a condition that would make them revise it. The purpose is not to dissolve conviction into relativism; it is to make conviction answerable to reasons.', 'pp. 1-13; Part One, pp. 93-198; Part Two, pp. 199-592')
+      },
+      {
+        type: 'refs',
+        title: 'References and scope',
+        items: [
+          ['Primary reading', 'Barbara MacKinnon and Andrew Fiala, Ethics: Theory and Contemporary Issues, 9th ed. (Cengage Learning, 2018).'],
+          ['Theory covered', 'Part One: Ethical Theory, chapters 1-9, pp. 1-198.'],
+          ['Cases sampled', 'Part Two: Ethical Issues, with examples from euthanasia, abortion, economic justice, punishment, environmental ethics, animal ethics, biotechnology, violence and war, and global justice, pp. 199-592.'],
+          ['Presentation method', 'Discussion questions and the four-step judgment process are an original synthesis for classroom use. The deck contains no standalone quotation or epigraph slides.'],
+          ['Visuals', 'Original CSS diagrams and editorial layout; no external images or uncredited visual assets.']
+        ],
+        notes: note('The deck is an overview and a discussion scaffold. Return to the assigned chapter or reading selection for full arguments, qualifications, empirical detail, and the complete bibliography.', 'Preface, pp. ix-x; Part One, pp. 1-198; Part Two, pp. 199-592')
+      }
+    ];
+
+    const deck = document.getElementById('deck');
+    const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#039;'
+    }[character]));
+
+    const renderDiagram = diagram => {
+      if (diagram === 'fact-bridge') {
+        return `<div class="argument-flow" role="img" aria-label="Descriptive facts require a normative principle before yielding an ethical judgment"><div class="flow-node"><strong>Descriptive</strong><span>What is happening?</span></div><div class="flow-arrow" aria-hidden="true">→</div><div class="flow-node"><strong>Normative bridge</strong><span>Why does it matter?</span></div><div class="flow-arrow" aria-hidden="true">→</div><div class="flow-node"><strong>Judgment</strong><span>What ought we do?</span></div></div>`;
+      }
+      if (diagram === 'balance') {
+        return `<div class="balance" role="img" aria-label="Utilitarian reasoning compares the interests of everyone affected to estimate net well-being"><div class="balance-node">Interests of everyone affected</div><div class="balance-arrow" aria-hidden="true">→</div><div class="balance-node">Net well-being</div></div>`;
+      }
+      return '';
+    };
+
+    function renderSlide(slide, index) {
+      const node = document.createElement('article');
+      node.className = `slide ${slide.type}${['content', 'split', 'lenses', 'process', 'case', 'head'].includes(slide.type) ? ' top' : ''}`;
+      node.dataset.index = String(index);
+      node.setAttribute('aria-label', `Slide ${index + 1}: ${slide.title || slide.prompt || 'Untitled'}`);
+      let html = '<div class="slide-inner">';
+
+      if (slide.type === 'cover') {
+        html += `<h1 class="title">${esc(slide.title)}</h1><p class="work">${esc(slide.work)}</p><div class="course">${esc(slide.course)}</div>`;
+      }
+      if (slide.type === 'section') {
+        html += `<div class="eyebrow">${esc(slide.eyebrow)}</div><h2 class="title">${esc(slide.title)}</h2><div class="rule" aria-hidden="true"></div>`;
+      }
+      if (slide.type === 'content') {
+        html += `<h2 class="title">${esc(slide.title)}</h2><div class="body">${slide.paragraphs.map(paragraph => `<p>${esc(paragraph)}</p>`).join('')}</div>${renderDiagram(slide.diagram)}`;
+      }
+      if (slide.type === 'lenses') {
+        html += `<h2 class="title">${esc(slide.title)}</h2><div class="lens-grid">${slide.lenses.map(lens => `<article class="lens"><span class="lens-tag">${esc(lens[0])}</span><h3>${esc(lens[1])}</h3><p>${esc(lens[2])}</p></article>`).join('')}</div>`;
+      }
+      if (slide.type === 'split') {
+        html += `<h2 class="title">${esc(slide.title)}</h2><div class="split-grid">${slide.columns.map(column => `<article class="split-card"><h3>${esc(column[0])}</h3><p>${esc(column[1])}</p></article>`).join('')}</div>`;
+      }
+      if (slide.type === 'process') {
+        html += `<h2 class="title">${esc(slide.title)}</h2><div class="process-grid" role="list">${slide.steps.map(step => `<article class="process-step" role="listitem"><span class="process-number">${esc(step[0])}</span><h3>${esc(step[1])}</h3><p>${esc(step[2])}</p></article>`).join('')}</div>`;
+      }
+      if (slide.type === 'case') {
+        html += `<h2 class="title">${esc(slide.title)}</h2><p class="case-lead">${esc(slide.lead)}</p><div class="case-grid" role="list">${slide.tensions.map(tension => `<article class="case-card" role="listitem"><h3>${esc(tension[0])}</h3><p>${esc(tension[1])}</p></article>`).join('')}</div>`;
+      }
+      if (slide.type === 'head') {
+        html += `<h2 class="title">${esc(slide.title)}</h2><div class="head-list" role="list">${slide.items.map(item => `<div class="head-item" role="listitem"><b>${esc(item[0])}</b><span>${esc(item[1])}</span></div>`).join('')}</div>`;
+      }
+      if (slide.type === 'question' || slide.type === 'diagnostic') {
+        html += `<div class="eyebrow">${esc(slide.eyebrow)}</div><p class="prompt">${esc(slide.prompt)}</p>${slide.context ? `<p class="context">${esc(slide.context)}</p>` : ''}`;
+      }
+      if (slide.type === 'refs') {
+        html += `<h2 class="title">${esc(slide.title)}</h2><div class="refs-list">${slide.items.map(item => `<div class="ref"><strong>${esc(item[0])}.</strong> ${esc(item[1])}</div>`).join('')}</div>`;
+      }
+
+      node.innerHTML = `${html}</div>`;
+      deck.appendChild(node);
+      return node;
+    }
+
+    const nodes = slides.map(renderSlide);
+    const counter = document.getElementById('counter');
+    const progress = document.getElementById('progress');
+    const notes = document.getElementById('notes');
+    const notesBody = document.getElementById('notes-body');
+    const overview = document.getElementById('overview');
+    const overviewGrid = document.getElementById('overview-grid');
+    const cards = slides.map((slide, index) => {
+      const card = document.createElement('button');
+      card.type = 'button';
+      card.className = 'overview-card';
+      card.innerHTML = `<span class="num">${String(index + 1).padStart(2, '0')} / ${slides.length}</span><span class="label">${esc(slide.title || slide.prompt || 'Slide')}</span>`;
+      card.addEventListener('click', () => { closePanels(); show(index); });
+      overviewGrid.appendChild(card);
+      return card;
+    });
+
+    let current = 0;
+
+    function show(index) {
+      current = Math.max(0, Math.min(slides.length - 1, index));
+      nodes.forEach((node, nodeIndex) => node.classList.toggle('active', nodeIndex === current));
+      cards.forEach((card, cardIndex) => card.classList.toggle('current', cardIndex === current));
+      counter.textContent = `${current + 1} / ${slides.length}`;
+      progress.style.width = `${((current + 1) / slides.length) * 100}%`;
+      notesBody.textContent = slides[current].notes || 'No notes for this slide.';
+      document.title = `${current + 1}/${slides.length} · ${slides[0].title.replace(/\n/g, ' ')}`;
+    }
+
+    function closePanels() {
+      overview.classList.remove('open');
+      notes.classList.remove('open');
+    }
+
+    function togglePanel(panel) {
+      const isOpen = panel.classList.contains('open');
+      closePanels();
+      if (!isOpen) panel.classList.add('open');
+    }
+
+    function toggleFullscreen() {
+      if (document.fullscreenElement) document.exitFullscreen();
+      else document.documentElement.requestFullscreen?.().catch(() => {});
+    }
+
+    document.getElementById('fullscreen').addEventListener('click', toggleFullscreen);
+    document.querySelectorAll('.close').forEach(button => button.addEventListener('click', closePanels));
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') { closePanels(); return; }
+      if (overview.classList.contains('open') || notes.classList.contains('open')) return;
+      if (['ArrowRight', 'ArrowDown', ' ', 'PageDown'].includes(event.key)) { event.preventDefault(); show(current + 1); }
+      else if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(event.key)) { event.preventDefault(); show(current - 1); }
+      else if (event.key.toLowerCase() === 'o') togglePanel(overview);
+      else if (event.key.toLowerCase() === 'n') togglePanel(notes);
+      else if (event.key.toLowerCase() === 'f') toggleFullscreen();
+    });
+
+    let touchX = 0;
+    let touchY = 0;
+    document.addEventListener('touchstart', event => {
+      touchX = event.changedTouches[0].screenX;
+      touchY = event.changedTouches[0].screenY;
+    }, { passive: true });
+    document.addEventListener('touchend', event => {
+      const dx = event.changedTouches[0].screenX - touchX;
+      const dy = event.changedTouches[0].screenY - touchY;
+      if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)) show(current + (dx < 0 ? 1 : -1));
+    }, { passive: true });
+
+    function fits(node) {
+      const inner = node.querySelector('.slide-inner');
+      return inner.scrollHeight <= node.clientHeight * .82 && inner.scrollWidth <= node.clientWidth * .92;
+    }
+
+    function fitNode(node, start = 1) {
+      let fit = start;
+      node.classList.add('measuring');
+      node.style.setProperty('--fit', fit);
+      while (fit > .72 && !fits(node)) {
+        fit = Math.max(.72, fit - .01);
+        node.style.setProperty('--fit', fit.toFixed(3));
+      }
+      node.classList.remove('measuring');
+    }
+
+    function fitAll() {
+      nodes.forEach(node => { node.style.setProperty('--fit', 1); fitNode(node); });
+      show(current);
+    }
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(fitAll, 160);
+    });
+
+    if (document.fonts?.ready) document.fonts.ready.then(fitAll);
+    else fitAll();
+    show(0);
+  </script>
+</body>
+</html>

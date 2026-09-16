@@ -87,10 +87,12 @@
     overlay.setAttribute('role', 'dialog');
     overlay.setAttribute('aria-modal', 'true');
     overlay.setAttribute('aria-labelledby', 'preflight-title');
+    const libraryView = document.body?.dataset.libraryView || 'political-philosophy';
+    const libraryHref = `../index.html?view=${encodeURIComponent(libraryView)}`;
     overlay.innerHTML = `
       <div class="preflight-shell">
         <div class="preflight-topbar">
-          <a class="preflight-back" href="../index.html?view=political-philosophy">← Back to library</a>
+          <a class="preflight-back" href="${libraryHref}">← Back to library</a>
           <span class="preflight-kicker">Before you present</span>
         </div>
         <div class="preflight-heading">
