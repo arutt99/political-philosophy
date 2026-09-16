@@ -1,0 +1,1521 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A Socratic presentation on utilitarianism, John Stuart Mill, and the moral cost of calculation based on the assigned reading.">
+  <title>Utilitarianism: Happiness, Rules, and the Cost of Calculation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="presentation-polish.css">
+  <script src="presentation-polish.js" defer></script>
+  <style>
+    :root {
+      --bg: #171532;
+      --bg-deep: #0d0c20;
+      --paper: #f5f3ff;
+      --ink: #f7f5ff;
+      --muted: #c6c0dc;
+      --accent: #d8ff56;
+      --accent-2: #a982ff;
+      --accent-3: #ff5c9c;
+      --line: rgba(245, 243, 255, .2);
+      --soft-line: rgba(216, 255, 86, .32);
+      --panel: rgba(31, 28, 67, .9);
+      --fit: 1;
+      --text: var(--ink);
+      --preflight-bg: var(--bg);
+      --preflight-text: var(--ink);
+      --preflight-muted: var(--muted);
+      --preflight-accent: var(--accent-2);
+      --preflight-bright: var(--accent);
+      --preflight-line: var(--line);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--ink);
+    }
+
+    body {
+      font-family: "Space Grotesk", Inter, system-ui, sans-serif;
+    }
+
+    button { font: inherit; }
+
+    #deck {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse 48% 70% at 100% 100%, rgba(169, 130, 255, .2), transparent 66%),
+        radial-gradient(ellipse 42% 52% at 0% 0%, rgba(216, 255, 86, .09), transparent 68%),
+        linear-gradient(135deg, #1c1941 0%, var(--bg) 52%, #11102a 100%);
+    }
+
+    #deck::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: .32;
+      background:
+        linear-gradient(90deg, rgba(245, 243, 255, .06) 1px, transparent 1px),
+        linear-gradient(rgba(245, 243, 255, .04) 1px, transparent 1px);
+      background-size: 7vw 7vw;
+      mask-image: linear-gradient(135deg, black, transparent 75%);
+    }
+
+    #deck::after {
+      content: "";
+      position: absolute;
+      right: -11vw;
+      bottom: -28vw;
+      width: 52vw;
+      height: 52vw;
+      border: 1px solid rgba(216, 255, 86, .25);
+      border-radius: 50%;
+      box-shadow:
+        0 0 0 3vw rgba(216, 255, 86, .045),
+        0 0 0 8vw rgba(169, 130, 255, .07);
+      pointer-events: none;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 7.5vh 5.5vw 10vh;
+      overflow: hidden;
+      text-align: left;
+    }
+
+    .slide.active,
+    .slide.measuring { display: flex; }
+
+    .slide.measuring {
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .slide.top {
+      align-items: flex-start;
+      padding-top: 6.5vh;
+    }
+
+    .slide-inner {
+      position: relative;
+      z-index: 1;
+      width: min(1500px, 89vw);
+      max-height: 82vh;
+      margin: auto;
+      transform-origin: top center;
+    }
+
+    .eyebrow {
+      margin: 0 0 1rem;
+      color: var(--accent);
+      font: 600 clamp(12px, 1vw, 17px)/1.2 "IBM Plex Mono", monospace;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+
+    .title {
+      margin: 0;
+      color: var(--ink);
+      font-family: "Space Grotesk", Inter, system-ui, sans-serif;
+      font-weight: 600;
+      letter-spacing: -.045em;
+    }
+
+    .cover .slide-inner {
+      width: min(1320px, 86vw);
+      padding: 3.6rem 4.2rem 3.5rem;
+      border: 1px solid rgba(216, 255, 86, .62);
+      border-left: 10px solid var(--accent);
+      background: rgba(20, 18, 54, .84);
+      box-shadow: 1rem 1rem 0 rgba(255, 92, 156, .72);
+    }
+
+    .cover .slide-inner::before {
+      content: "ETHICS / 02";
+      position: absolute;
+      top: 1.4rem;
+      right: 1.65rem;
+      color: var(--accent-2);
+      font: 600 clamp(11px, .86vw, 15px)/1 "IBM Plex Mono", monospace;
+      letter-spacing: .13em;
+    }
+
+    .cover .title {
+      max-width: 13ch;
+      font-size: calc(clamp(68px, 9vw, 148px) * var(--fit));
+      line-height: .9;
+    }
+
+    .cover .work {
+      max-width: 35ch;
+      margin: 1.8rem 0 0;
+      color: var(--muted);
+      font: 500 calc(clamp(22px, 2.1vw, 34px) * var(--fit))/1.25 "Space Grotesk", sans-serif;
+    }
+
+    .cover .course {
+      display: inline-block;
+      margin-top: 2.5rem;
+      padding: .65rem .85rem;
+      border: 1px solid rgba(169, 130, 255, .64);
+      color: var(--accent-2);
+      font: 600 calc(clamp(11px, .9vw, 15px) * var(--fit))/1.2 "IBM Plex Mono", monospace;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .section .slide-inner {
+      width: min(1180px, 84vw);
+      padding: 2.6rem 3.1rem 2.85rem;
+      border-top: 1px solid var(--accent);
+      border-bottom: 1px solid rgba(245, 243, 255, .22);
+      background: linear-gradient(90deg, rgba(169, 130, 255, .18), transparent 75%);
+    }
+
+    .section .title {
+      max-width: 13ch;
+      font-size: calc(clamp(58px, 6.6vw, 104px) * var(--fit));
+      line-height: .95;
+    }
+
+    .content .slide-inner,
+    .flow .slide-inner,
+    .measure .slide-inner,
+    .comparison .slide-inner,
+    .case .slide-inner,
+    .process .slide-inner,
+    .refs .slide-inner {
+      width: min(1640px, 91vw);
+    }
+
+    .content .title,
+    .flow .title,
+    .measure .title,
+    .comparison .title,
+    .case .title,
+    .process .title,
+    .refs .title {
+      max-width: none;
+      font-size: calc(clamp(44px, 4.9vw, 78px) * var(--fit));
+      line-height: 1;
+    }
+
+    .body {
+      max-width: 1000px;
+      margin-top: 1.65rem;
+    }
+
+    .body p,
+    .lead {
+      max-width: 48ch;
+      margin: 0 0 1rem;
+      color: var(--muted);
+      font-size: calc(clamp(22px, 2.25vw, 34px) * var(--fit));
+      line-height: 1.28;
+    }
+
+    .body p:last-child { margin-bottom: 0; }
+
+    .lead {
+      max-width: 56ch;
+      margin-top: 1.25rem;
+    }
+
+    .accent-word {
+      color: var(--accent);
+    }
+
+    .scope-diagram,
+    .logic-diagram,
+    .equation,
+    .scope-measure,
+    .range-map,
+    .quality-axis,
+    .means-board,
+    .integrity-board,
+    .practice-loop,
+    .proof-chain {
+      margin-top: 2.35rem;
+    }
+
+    .scope-diagram {
+      display: grid;
+      grid-template-columns: minmax(140px, 1fr) minmax(80px, .25fr) minmax(220px, 1.5fr) minmax(80px, .25fr) minmax(140px, 1fr);
+      align-items: center;
+      width: min(1220px, 100%);
+      padding: 1.4rem 0;
+      border-top: 1px solid var(--soft-line);
+      border-bottom: 1px solid var(--soft-line);
+    }
+
+    .scope-node,
+    .logic-step,
+    .equation-cell,
+    .measure-chip,
+    .range-point,
+    .means-column,
+    .integrity-column,
+    .loop-step,
+    .proof-node {
+      min-width: 0;
+    }
+
+    .scope-node {
+      padding: .8rem;
+      text-align: center;
+    }
+
+    .scope-node strong,
+    .logic-step strong,
+    .equation-cell strong,
+    .measure-chip strong,
+    .range-point strong,
+    .means-column strong,
+    .integrity-column strong,
+    .loop-step strong,
+    .proof-node strong {
+      display: block;
+      color: var(--ink);
+      font-size: calc(clamp(18px, 1.55vw, 26px) * var(--fit));
+      line-height: 1.08;
+    }
+
+    .scope-node span,
+    .logic-step span,
+    .equation-cell span,
+    .measure-chip span,
+    .range-point span,
+    .means-column span,
+    .integrity-column span,
+    .loop-step span,
+    .proof-node span {
+      display: block;
+      margin-top: .42rem;
+      color: var(--muted);
+      font-size: calc(clamp(14px, 1.12vw, 19px) * var(--fit));
+      line-height: 1.28;
+    }
+
+    .scope-node.emphasis {
+      padding: 1.2rem .9rem;
+      border: 1px solid var(--accent-2);
+      background: rgba(169, 130, 255, .14);
+    }
+
+    .scope-node.emphasis strong { color: var(--accent); }
+
+    .scope-connector,
+    .logic-rule,
+    .proof-rule {
+      display: block;
+      height: 1px;
+      background: var(--accent-2);
+    }
+
+    .logic-diagram {
+      display: grid;
+      grid-template-columns: 1fr 9vw 1fr 9vw 1fr;
+      align-items: center;
+      width: min(1150px, 100%);
+      padding: 1.55rem 0;
+      border-top: 1px solid rgba(245, 243, 255, .3);
+      border-bottom: 1px solid rgba(245, 243, 255, .3);
+    }
+
+    .logic-step {
+      padding: 1rem 1.2rem;
+      border-left: 4px solid var(--accent);
+      background: rgba(31, 28, 67, .75);
+    }
+
+    .logic-step.muted { border-left-color: rgba(245, 243, 255, .35); }
+    .logic-step:last-child { border-left-color: var(--accent-3); }
+
+    .logic-step em {
+      display: block;
+      margin-top: .45rem;
+      color: var(--muted);
+      font-size: calc(clamp(13px, 1.05vw, 18px) * var(--fit));
+      font-style: normal;
+      line-height: 1.3;
+    }
+
+    .equation {
+      display: grid;
+      grid-template-columns: 1fr 80px 1fr 80px 1fr;
+      align-items: center;
+      width: min(1320px, 100%);
+      padding: 1.3rem 0;
+      border-top: 1px solid var(--soft-line);
+      border-bottom: 1px solid var(--soft-line);
+    }
+
+    .equation-cell {
+      padding: .7rem .9rem;
+      text-align: center;
+    }
+
+    .equation-cell strong { color: var(--accent); }
+    .equation-mark {
+      color: var(--accent-3);
+      font: 600 calc(clamp(11px, .9vw, 15px) * var(--fit))/1.1 "IBM Plex Mono", monospace;
+      letter-spacing: .08em;
+      text-align: center;
+    }
+
+    .scope-measure {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem 2rem;
+      width: min(1100px, 100%);
+    }
+
+    .measure-chip {
+      padding: .95rem 1.1rem;
+      border-left: 3px solid var(--accent-2);
+      background: rgba(31, 28, 67, .72);
+    }
+
+    .measure-chip strong { color: var(--accent); }
+
+    .range-map {
+      position: relative;
+      width: min(1300px, 100%);
+      padding: 2.2rem 1rem 1rem;
+    }
+
+    .range-axis {
+      position: absolute;
+      top: 2.7rem;
+      left: 5%;
+      right: 5%;
+      height: 1px;
+      background: linear-gradient(90deg, var(--accent-2), var(--accent), var(--accent-3));
+    }
+
+    .range-points {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.2rem;
+    }
+
+    .range-point {
+      position: relative;
+      padding-top: 1.3rem;
+      text-align: center;
+    }
+
+    .range-point::before {
+      content: "";
+      position: absolute;
+      top: .2rem;
+      left: 50%;
+      width: .85rem;
+      height: .85rem;
+      border: 3px solid var(--bg);
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent);
+      transform: translateX(-50%);
+    }
+
+    .range-point:nth-child(2)::before { background: var(--accent-2); box-shadow: 0 0 0 1px var(--accent-2); }
+    .range-point:nth-child(3)::before { background: var(--accent-3); box-shadow: 0 0 0 1px var(--accent-3); }
+    .range-point strong { font-size: calc(clamp(17px, 1.4vw, 24px) * var(--fit)); }
+
+    .measure .measure-note,
+    .comparison .compare-footer,
+    .case .case-note,
+    .process .process-note {
+      max-width: 70ch;
+      margin: 1.55rem 0 0;
+      color: var(--muted);
+      font-size: calc(clamp(16px, 1.35vw, 22px) * var(--fit));
+      line-height: 1.35;
+    }
+
+    .measure-board {
+      width: min(1320px, 100%);
+      margin-top: 2rem;
+      border-top: 1px solid rgba(245, 243, 255, .32);
+    }
+
+    .measure-row {
+      display: grid;
+      grid-template-columns: minmax(125px, .6fr) 1fr;
+      gap: 1.4rem;
+      align-items: baseline;
+      padding: .8rem 0;
+      border-bottom: 1px solid rgba(245, 243, 255, .18);
+    }
+
+    .measure-row strong {
+      color: var(--accent);
+      font-size: calc(clamp(17px, 1.45vw, 24px) * var(--fit));
+    }
+
+    .measure-row span {
+      color: var(--muted);
+      font-size: calc(clamp(18px, 1.65vw, 27px) * var(--fit));
+      line-height: 1.22;
+    }
+
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(1.5rem, 4vw, 5rem);
+      width: min(1360px, 100%);
+      margin-top: 2rem;
+    }
+
+    .comparison-side {
+      min-height: 230px;
+      padding: 1.25rem 1.35rem 1.15rem;
+      border-top: 5px solid var(--accent-2);
+      background: rgba(31, 28, 67, .74);
+    }
+
+    .comparison-side:last-child { border-top-color: var(--accent); }
+
+    .comparison-label,
+    .case-label,
+    .process-number {
+      color: var(--accent-2);
+      font: 600 calc(clamp(12px, .95vw, 16px) * var(--fit))/1.2 "IBM Plex Mono", monospace;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .comparison-side:last-child .comparison-label { color: var(--accent); }
+
+    .comparison-side h3 {
+      margin: .75rem 0 .7rem;
+      color: var(--ink);
+      font-size: calc(clamp(26px, 2.4vw, 42px) * var(--fit));
+      line-height: 1;
+    }
+
+    .comparison-side p {
+      max-width: 40ch;
+      margin: 0;
+      color: var(--muted);
+      font-size: calc(clamp(18px, 1.7vw, 27px) * var(--fit));
+      line-height: 1.3;
+    }
+
+    .quality-axis {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr 1fr;
+      align-items: center;
+      width: min(1250px, 100%);
+    }
+
+    .quality-end,
+    .quality-center {
+      padding: .85rem;
+      text-align: center;
+    }
+
+    .quality-end {
+      border: 1px solid rgba(245, 243, 255, .22);
+      color: var(--muted);
+      font-size: calc(clamp(16px, 1.45vw, 23px) * var(--fit));
+    }
+
+    .quality-center {
+      border-top: 5px solid var(--accent);
+      border-bottom: 5px solid var(--accent);
+      background: rgba(216, 255, 86, .08);
+    }
+
+    .quality-center strong {
+      display: block;
+      color: var(--accent);
+      font-size: calc(clamp(21px, 1.95vw, 32px) * var(--fit));
+    }
+
+    .quality-center span {
+      display: block;
+      margin-top: .35rem;
+      color: var(--muted);
+      font-size: calc(clamp(15px, 1.2vw, 20px) * var(--fit));
+    }
+
+    .case-lead {
+      max-width: 55ch;
+      margin: 1.2rem 0 0;
+      color: var(--muted);
+      font-size: calc(clamp(20px, 1.95vw, 30px) * var(--fit));
+      line-height: 1.3;
+    }
+
+    .trolley-board {
+      width: min(1330px, 100%);
+      margin-top: 1.7rem;
+      padding: 1rem 0 0;
+      border-top: 1px solid rgba(245, 243, 255, .32);
+    }
+
+    .trolley-intro {
+      color: var(--accent);
+      font: 600 calc(clamp(15px, 1.25vw, 21px) * var(--fit))/1.25 "IBM Plex Mono", monospace;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .trolley-cases {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(1.5rem, 4vw, 5rem);
+      margin-top: 1rem;
+    }
+
+    .trolley-case {
+      padding: 1.1rem 1.25rem 1.2rem;
+      border-left: 4px solid var(--accent-2);
+      background: rgba(31, 28, 67, .74);
+    }
+
+    .trolley-case:last-child { border-left-color: var(--accent-3); }
+    .trolley-case h3 { margin: .55rem 0 .8rem; font-size: calc(clamp(25px, 2.1vw, 36px) * var(--fit)); }
+
+    .route {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: .75rem;
+      align-items: center;
+      margin-bottom: .8rem;
+    }
+
+    .route strong { color: var(--ink); font-size: calc(clamp(18px, 1.55vw, 25px) * var(--fit)); }
+
+    .route-line {
+      height: 8px;
+      background: linear-gradient(90deg, var(--accent-2), var(--accent-3));
+    }
+
+    .trolley-case p {
+      margin: 0;
+      color: var(--muted);
+      font-size: calc(clamp(17px, 1.5vw, 24px) * var(--fit));
+      line-height: 1.28;
+    }
+
+    .means-board,
+    .integrity-board {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(1.25rem, 3vw, 4rem);
+      width: min(1250px, 100%);
+    }
+
+    .means-column,
+    .integrity-column {
+      padding: 1.1rem 1.25rem;
+      border-top: 4px solid var(--accent-3);
+      background: rgba(31, 28, 67, .74);
+    }
+
+    .means-column:last-child,
+    .integrity-column:last-child { border-top-color: var(--accent-2); }
+
+    .means-column strong,
+    .integrity-column strong { color: var(--accent); }
+
+    .distribution-board {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(1.25rem, 4vw, 4rem);
+      width: min(1050px, 100%);
+      margin-top: 2rem;
+    }
+
+    .distribution-choice {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 1.2rem;
+      align-items: center;
+      padding: 1rem 1.2rem;
+      border: 1px solid rgba(245, 243, 255, .22);
+      background: rgba(31, 28, 67, .72);
+    }
+
+    .distribution-choice strong {
+      color: var(--accent-2);
+      font: 600 calc(clamp(13px, 1vw, 17px) * var(--fit))/1.2 "IBM Plex Mono", monospace;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .distribution-choice .total {
+      display: block;
+      color: var(--accent);
+      font-size: calc(clamp(52px, 5.2vw, 82px) * var(--fit));
+      font-weight: 600;
+      line-height: .9;
+    }
+
+    .distribution-choice span:last-child {
+      display: block;
+      margin-top: .4rem;
+      color: var(--muted);
+      font-size: calc(clamp(16px, 1.35vw, 22px) * var(--fit));
+    }
+
+    .process-list {
+      width: min(1290px, 100%);
+      margin-top: 1.7rem;
+      border-top: 1px solid rgba(245, 243, 255, .3);
+    }
+
+    .process-item {
+      display: grid;
+      grid-template-columns: minmax(70px, .16fr) minmax(130px, .35fr) 1fr;
+      gap: 1.2rem;
+      align-items: baseline;
+      padding: .85rem 0;
+      border-bottom: 1px solid rgba(245, 243, 255, .18);
+    }
+
+    .process-number { color: var(--accent); }
+    .process-item h3 { margin: 0; color: var(--ink); font-size: calc(clamp(24px, 2vw, 34px) * var(--fit)); }
+    .process-item p { margin: 0; color: var(--muted); font-size: calc(clamp(18px, 1.55vw, 25px) * var(--fit)); line-height: 1.25; }
+
+    .loop-board {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      align-items: stretch;
+      width: min(1260px, 100%);
+      margin-top: 2rem;
+      border-top: 1px solid var(--accent-2);
+      border-bottom: 1px solid var(--accent-2);
+    }
+
+    .loop-step {
+      padding: 1.05rem 1rem;
+      border-right: 1px solid rgba(245, 243, 255, .2);
+    }
+
+    .loop-step:last-child { border-right: 0; }
+    .loop-step strong { color: var(--accent); }
+
+    .proof-chain {
+      display: grid;
+      grid-template-columns: 1fr 7vw 1fr 7vw 1fr;
+      align-items: center;
+      width: min(1240px, 100%);
+    }
+
+    .proof-node {
+      padding: 1.1rem 1rem;
+      border: 1px solid rgba(245, 243, 255, .26);
+      background: rgba(31, 28, 67, .72);
+      text-align: center;
+    }
+
+    .proof-node strong { color: var(--ink); }
+    .proof-node:last-child { border-color: var(--accent); }
+    .proof-node:last-child strong { color: var(--accent); }
+
+    .proof-challenge {
+      width: min(760px, 100%);
+      margin: 1.4rem 0 0;
+      padding: .75rem 1rem;
+      border-left: 4px solid var(--accent-3);
+      color: var(--ink);
+      background: rgba(255, 92, 156, .12);
+      font-size: calc(clamp(17px, 1.45vw, 24px) * var(--fit));
+    }
+
+    .question,
+    .diagnostic {
+      background:
+        linear-gradient(135deg, rgba(169, 130, 255, .14), transparent 55%),
+        radial-gradient(circle at 92% 14%, rgba(216, 255, 86, .12), transparent 28rem),
+        var(--bg);
+    }
+
+    .question .slide-inner,
+    .diagnostic .slide-inner {
+      width: min(1420px, 87vw);
+      padding: 2.5rem 3.1rem 2.9rem;
+      border-top: 1px solid var(--accent);
+      border-bottom: 1px solid rgba(245, 243, 255, .28);
+    }
+
+    .question .slide-inner::after,
+    .diagnostic .slide-inner::after {
+      content: "";
+      position: absolute;
+      right: 1.4rem;
+      bottom: 1.5rem;
+      width: 7rem;
+      height: 7rem;
+      border: 1px solid rgba(255, 92, 156, .55);
+      border-radius: 50%;
+      box-shadow: 0 0 0 1.2rem rgba(255, 92, 156, .06), 0 0 0 2.4rem rgba(169, 130, 255, .06);
+      pointer-events: none;
+    }
+
+    .question .prompt,
+    .diagnostic .prompt {
+      position: relative;
+      z-index: 1;
+      max-width: 27ch;
+      margin: 0;
+      color: var(--ink);
+      font-size: calc(clamp(48px, 6.25vw, 106px) * var(--fit));
+      font-weight: 600;
+      letter-spacing: -.045em;
+      line-height: .99;
+    }
+
+    .question .prompt::after,
+    .diagnostic .prompt::after {
+      content: "";
+      display: block;
+      width: 5.5rem;
+      height: .32rem;
+      margin-top: 1.75rem;
+      background: var(--accent-3);
+    }
+
+    .question .context,
+    .diagnostic .context {
+      max-width: 62ch;
+      margin: 1.65rem 0 0;
+      color: var(--muted);
+      font-size: calc(clamp(18px, 1.65vw, 27px) * var(--fit));
+      line-height: 1.35;
+    }
+
+    .refs .refs-list {
+      width: min(1200px, 100%);
+      margin-top: 1.7rem;
+      border-top: 1px solid rgba(245, 243, 255, .32);
+    }
+
+    .ref {
+      display: grid;
+      grid-template-columns: minmax(145px, .3fr) 1fr;
+      gap: 1.4rem;
+      padding: .9rem 0;
+      border-bottom: 1px solid rgba(245, 243, 255, .18);
+      color: var(--muted);
+      font-size: calc(clamp(16px, 1.35vw, 22px) * var(--fit));
+      line-height: 1.3;
+    }
+
+    .ref strong { color: var(--accent); }
+
+    #progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 35;
+      height: 4px;
+      background: rgba(245, 243, 255, .13);
+    }
+
+    #progress span {
+      display: block;
+      width: 0;
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent-3));
+      transition: width .2s ease;
+    }
+
+    #nav-hint,
+    #counter {
+      position: fixed;
+      bottom: 18px;
+      z-index: 30;
+      color: var(--muted);
+      font: 500 12px/1.3 "IBM Plex Mono", monospace;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    #nav-hint { left: 24px; }
+    #counter { right: 24px; }
+
+    #presentation-controls {
+      position: fixed;
+      bottom: 12px;
+      left: 50%;
+      z-index: 31;
+      display: flex;
+      gap: .45rem;
+      transform: translateX(-50%);
+    }
+
+    #presentation-controls button {
+      min-width: 2.5rem;
+      padding: .55rem .7rem;
+      border: 1px solid rgba(245, 243, 255, .24);
+      border-radius: 2px;
+      color: var(--muted);
+      background: rgba(13, 12, 32, .75);
+      cursor: pointer;
+      font: 500 .67rem/1.1 "IBM Plex Mono", monospace;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      transition: border-color .18s ease, color .18s ease, background .18s ease, transform .18s ease;
+    }
+
+    #presentation-controls button:hover,
+    #presentation-controls button:focus-visible {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(31, 28, 67, .94);
+      outline: none;
+      transform: translateY(-2px);
+    }
+
+    #presentation-controls button:disabled { cursor: not-allowed; opacity: .38; transform: none; }
+
+    .panel {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      display: none;
+      overflow-y: auto;
+      color: var(--ink);
+      background: rgba(13, 12, 32, .98);
+    }
+
+    .panel.open { display: block; }
+
+    .panel-head {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.1rem 1.4rem;
+      border-bottom: 1px solid rgba(245, 243, 255, .2);
+      background: rgba(13, 12, 32, .96);
+    }
+
+    .panel-head h2 {
+      margin: 0;
+      color: var(--accent);
+      font: 600 1rem/1.2 "IBM Plex Mono", monospace;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .panel-head button {
+      padding: .55rem .75rem;
+      border: 1px solid rgba(245, 243, 255, .22);
+      color: var(--muted);
+      background: transparent;
+      cursor: pointer;
+      font: 500 .68rem/1.2 "IBM Plex Mono", monospace;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .panel-head button:hover,
+    .panel-head button:focus-visible { border-color: var(--accent); color: var(--accent); outline: none; }
+
+    #overview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 12px;
+      padding: 20px;
+    }
+
+    .overview-card {
+      min-height: 132px;
+      padding: 16px;
+      border: 1px solid rgba(245, 243, 255, .18);
+      color: var(--ink);
+      background: rgba(31, 28, 67, .82);
+      cursor: pointer;
+      text-align: left;
+      transition: border-color .18s ease, transform .18s ease;
+    }
+
+    .overview-card:hover,
+    .overview-card:focus-visible,
+    .overview-card.current {
+      border-color: var(--accent);
+      outline: none;
+      transform: translateY(-2px);
+    }
+
+    .overview-card .num {
+      display: block;
+      margin-bottom: 12px;
+      color: var(--accent-2);
+      font: 500 11px/1.3 "IBM Plex Mono", monospace;
+    }
+
+    .overview-card .label {
+      display: block;
+      color: var(--ink);
+      font: 600 20px/1.08 "Space Grotesk", sans-serif;
+    }
+
+    #notes-body {
+      max-width: 1000px;
+      padding: 28px 34px 4rem;
+      white-space: pre-wrap;
+      color: var(--muted);
+      font: 400 18px/1.62 "Space Grotesk", sans-serif;
+    }
+
+    @media (max-width: 760px) {
+      .slide { padding-inline: 1.25rem; }
+      .slide-inner,
+      .cover .slide-inner,
+      .section .slide-inner,
+      .question .slide-inner,
+      .diagnostic .slide-inner { width: 100%; }
+      .cover .slide-inner,
+      .section .slide-inner,
+      .question .slide-inner,
+      .diagnostic .slide-inner { padding: 1.8rem 1.25rem 2rem; }
+      .scope-diagram,
+      .logic-diagram,
+      .equation,
+      .proof-chain { grid-template-columns: 1fr; gap: .55rem; }
+      .scope-connector,
+      .logic-rule,
+      .proof-rule { width: 4rem; margin: 0 auto; }
+      .scope-node, .logic-step, .equation-cell, .proof-node { text-align: left; }
+      .scope-node.emphasis { text-align: center; }
+      .scope-measure,
+      .comparison-grid,
+      .trolley-cases,
+      .means-board,
+      .integrity-board,
+      .distribution-board { grid-template-columns: 1fr; }
+      .range-points,
+      .loop-board { grid-template-columns: 1fr; }
+      .range-axis { top: 1.5rem; bottom: 1.5rem; left: 1rem; right: auto; width: 1px; height: auto; background: linear-gradient(180deg, var(--accent-2), var(--accent), var(--accent-3)); }
+      .range-point { padding: .6rem 0 .6rem 2.25rem; text-align: left; }
+      .range-point::before { top: 50%; left: .55rem; transform: translateY(-50%); }
+      .loop-step { border-right: 0; border-bottom: 1px solid rgba(245, 243, 255, .2); }
+      .loop-step:last-child { border-bottom: 0; }
+      .process-item,
+      .ref { grid-template-columns: 1fr; gap: .35rem; }
+      #nav-hint { display: none; }
+      #counter { right: 12px; bottom: 64px; }
+      #presentation-controls { left: 12px; right: 12px; justify-content: center; transform: none; }
+    }
+  </style>
+</head>
+<body data-library-view="ethics">
+  <div id="deck" aria-live="polite"></div>
+  <div id="progress" aria-hidden="true"><span></span></div>
+  <div id="nav-hint">Arrows / Space · O overview · N notes · F fullscreen</div>
+  <div id="counter" aria-live="polite">1 / 28</div>
+
+  <nav id="presentation-controls" aria-label="Presentation controls">
+    <button id="previous" type="button" aria-label="Previous slide">Prev</button>
+    <button id="next" type="button" aria-label="Next slide">Next</button>
+    <button id="overview-button" type="button" aria-label="Open slide overview">Overview</button>
+    <button id="notes-button" type="button" aria-label="Open speaker notes">Notes</button>
+    <button id="fullscreen" type="button" aria-label="Toggle fullscreen">Fullscreen</button>
+  </nav>
+
+  <section id="overview" class="panel" aria-label="Slide overview">
+    <div class="panel-head"><h2>Overview</h2><button class="close" type="button">Close</button></div>
+    <div id="overview-grid"></div>
+  </section>
+
+  <aside id="notes" class="panel" aria-label="Speaker notes">
+    <div class="panel-head"><h2>Speaker notes</h2><button class="close" type="button">Close</button></div>
+    <div id="notes-body"></div>
+  </aside>
+
+  <script>
+    const note = (facilitation, pages) => `${facilitation}\n\nReading: Util.pdf, scan page(s) ${pages}. The printed textbook pages are 93-105.`;
+
+    const slides = [
+      {
+        type: 'cover',
+        title: 'Utilitarianism',
+        work: 'Happiness, consequences, rules, and the cost of calculation',
+        course: 'Intro to Ethics / Chapter 5 reading',
+        notes: note('Open with the reading\'s central promise: moral reasoning can compare the effects of actions and policies by asking what happens to everyone affected. Preview the question running through the deck: can a theory maximize happiness without turning persons, rights, and integrity into costs on a ledger?', '1-13')
+      },
+      {
+        type: 'section',
+        eyebrow: 'I / The promise and the problem',
+        title: 'The promise and the problem',
+        notes: note('The opening pages frame utilitarianism as a way to think about population, consumption, speed limits, and torture. The examples matter because they move the theory from an abstract slogan to decisions that distribute freedom, safety, suffering, and risk.', '1-3')
+      },
+      {
+        type: 'content',
+        title: 'The theory starts with everyone\'s welfare',
+        paragraphs: [
+          'A utilitarian point of view asks which choice produces the greatest overall happiness or well-being. The relevant unit is the group of people affected, not the chooser alone.',
+          'That universal scope lets the theory evaluate everyday choices, social programs, and government policy with the same basic question: what happens to the total welfare of everyone involved?'
+        ],
+        visual: 'scope',
+        notes: note('Introduce the universal standard before introducing any calculation. Emphasize that “everyone” includes people who are distant, less powerful, or easy to ignore. Later slides will complicate what counts as welfare and how it can be compared.', '1-3')
+      },
+      {
+        type: 'flow',
+        title: 'Moral judgment follows consequences',
+        lead: 'Utilitarians normally evaluate the results of an action or practice, rather than treating the motive or act itself as decisive.',
+        visual: 'logic',
+        notes: note('The reading contrasts utilitarian reasoning with views that treat the nature of an act or the motive behind it as morally decisive. Use the suicide-barrier example to show that building a barrier is neither good nor bad in isolation; its moral status depends on what the barrier does.', '3-4')
+      },
+      {
+        type: 'content',
+        title: 'Policy becomes a moral question when private costs spread',
+        paragraphs: [
+          'Speed limits may frustrate drivers while reducing accidents and improving safety for more people.',
+          'Population policy raises a harder conflict: restrictions may be defended by effects on general welfare while violating a person\'s basic freedom to reproduce.',
+          'The torture case sharpens the stakes. Immediate lives saved may compete with harms to victims, truth, law, and public trust.'
+        ],
+        visual: 'range',
+        notes: note('Ask students to notice how the examples grow more difficult. Speed limits distribute small costs for broad safety. Population policy puts a basic right in conflict with social consequences. Torture asks whether urgent benefits can justify a practice that appears wrong in itself.', '1-3')
+      },
+      {
+        type: 'question',
+        eyebrow: 'Pause 01 / Scope and coercion',
+        prompt: 'When a policy limits one person\'s choice to improve everyone\'s welfare, what must a utilitarian explain?',
+        context: 'Use one example from the previous slides. Name the people who gain, the people who bear the cost, and the consequences that might be easy to overlook.',
+        notes: note('Give students one minute to write before discussion. Invite them to separate the immediate benefit from the full set of affected interests. Follow-ups: Which cost is easiest to hide? Does a rights violation count only as a bad consequence, or does it have a different status? The next section makes the utilitarian standard more precise.', '1-3')
+      },
+      {
+        type: 'section',
+        eyebrow: 'II / The principle of utility',
+        title: 'The principle of utility',
+        notes: note('The reading now states the theory directly. Keep the standard simple for one slide, then show why applying it requires choices about whose interests count and how happiness can be compared.', '3-5')
+      },
+      {
+        type: 'content',
+        title: 'The principle of utility compares likely effects',
+        paragraphs: [
+          'The basic principle says right action promotes happiness and wrong action produces the reverse. A choice matters morally because of what it brings about.',
+          'Utility is not a license to count only personal benefit. The reading presents it as a universal standard: everyone affected receives consideration.'
+        ],
+        visual: 'equation',
+        notes: note('Distinguish utilitarianism from egoism. Both are consequentialist in the broad sense, but utilitarianism asks about the effects on all affected persons. Stress that “happiness” will not remain a single, obvious quantity.', '3-5')
+      },
+      {
+        type: 'content',
+        title: 'Equal consideration leaves the measure open',
+        paragraphs: [
+          'The reading treats pleasure and pain as central, then widens the vocabulary to interests, preferences, and human well-being. A person\'s desire may conflict with longer-term interests.',
+          'Bentham extends concern beyond human beings. The question is whether a being can suffer or have interests, not whether it belongs to a preferred group.'
+        ],
+        visual: 'scope-measure',
+        notes: note('Use the slide to separate two questions: who is included in moral consideration, and what kind of good or harm the theory measures. Mention the reading\'s connection to Peter Singer and the thought that interests can matter even when pleasure is not the best description.', '3-4')
+      },
+      {
+        type: 'measure',
+        title: 'Calculation turns moral judgment into a set of estimates',
+        lead: 'For each available alternative, utilitarian reasoning asks how much good and harm it is likely to produce.',
+        rows: [
+          ['Scope', 'Everyone affected by the action or practice'],
+          ['Intensity', 'How strong the pleasure, pain, benefit, or harm is'],
+          ['Duration', 'How long the experience lasts'],
+          ['Fruitfulness', 'What future experiences the choice makes more or less possible'],
+          ['Likelihood', 'How probable the predicted result is']
+        ],
+        foot: 'The reading uses units to make comparisons visible while acknowledging that real cases resist exact arithmetic.',
+        notes: note('Walk through the variables with the Act A and Act B examples. Intensity can favor intense pleasure for fewer people. Duration can favor a benefit that lasts longer. Fruitfulness asks about later capacities and consequences. Likelihood turns a hoped-for result into an expected-value estimate.', '5-8')
+      },
+      {
+        type: 'question',
+        eyebrow: 'Pause 02 / Counting and distribution',
+        prompt: 'If all interests count equally, should the best option maximize total happiness even when it benefits fewer people?',
+        context: 'Use the examples of intensity, duration, and the reading\'s comparison between 200 units for one person and 150 units shared by three.',
+        notes: note('Ask groups to defend a position with one variable from the reading. Then ask what the arithmetic leaves out. A response may prioritize the total, the number of people, the distribution, or a limit on what may be done to one person. The next section asks whether even the units themselves can be ranked.', '5-9')
+      },
+      {
+        type: 'section',
+        eyebrow: 'III / Quantity and quality',
+        title: 'Quantity and quality',
+        notes: note('Bentham and Mill share the greatest-happiness aim but disagree about the kind of comparison that aim requires. This is a hinge between calculating more pleasure and asking what makes a pleasure better.', '8-10')
+      },
+      {
+        type: 'comparison',
+        title: 'Bentham counts quantity while Mill ranks quality',
+        left: {
+          label: 'Bentham / Quantity',
+          title: 'Amount',
+          body: 'More pleasure is better, measured by how much, for how many, how intense, how long, how fruitful, and how likely. A simple pleasure can match a refined one if the quantity matches.'
+        },
+        right: {
+          label: 'Mill / Quality',
+          title: 'Kind',
+          body: 'Higher pleasures involve human capacities such as understanding, achievement, and aesthetic or intellectual activity. Experienced judges may prefer a richer life even when it contains more frustration.'
+        },
+        foot: 'Shared premise: pleasure or happiness is the good the theory aims to produce.',
+        notes: note('Present this as a disagreement within utilitarianism, not as a choice between utilitarianism and a different moral theory. Bentham wants a common quantity. Mill agrees that more happiness is better but adds a qualitative ranking tied to the capacities exercised by different pleasures.', '8-10')
+      },
+      {
+        type: 'content',
+        title: 'Mill\'s defense raises a question about value',
+        paragraphs: [
+          'Mill argues that people familiar with both kinds of pleasure tend to prefer the higher ones. That preference is meant to show more than taste: it points toward a difference in quality.',
+          'But the reading leaves a live objection. Does the fact that people desire happiness prove that happiness is good, or does it only describe what people want?'
+        ],
+        visual: 'quality',
+        notes: note('Explain the experienced-judge idea without presenting it as a settled proof. The reading uses the comparison between a human life and an animal life to argue that people who know both kinds of experience generally prefer the richer human possibilities. Ask whether preference can establish objective value.', '8-10')
+      },
+      {
+        type: 'question',
+        eyebrow: 'Pause 03 / What makes a pleasure better?',
+        prompt: 'Would a life with less pleasure but richer intellectual activity be better? What would make that more than a preference?',
+        context: 'Use Mill\'s experienced-judge idea, then test whether preference can establish an objective ranking of pleasures.',
+        notes: note('Let students answer from the reading before asking whether they agree. Follow-ups: Must a higher pleasure be more intense? Can a person prefer a richer activity while still choosing food, rest, or entertainment? What would count as evidence that quality is real?', '8-10')
+      },
+      {
+        type: 'section',
+        eyebrow: 'IV / Where the theory strains',
+        title: 'Where the theory strains',
+        notes: note('The reading now tests utilitarianism against cases where outcome counting feels morally incomplete. Keep the arithmetic visible, then ask what the arithmetic cannot capture on its own.', '9-11')
+      },
+      {
+        type: 'case',
+        title: 'The trolley problem exposes the cost of pure outcome counting',
+        lead: 'In both familiar cases, a runaway train threatens five people. One response pulls a switch and diverts it toward one person. Another pushes one person from a bridge to stop the train.',
+        cases: [
+          { label: 'Case A / Switch', title: 'Divert the train', body: 'The result is one death instead of five. The intervention changes the track.' },
+          { label: 'Case B / Bridge', title: 'Push one person', body: 'The result is also one death instead of five. The intervention uses a person as the stopping point.' }
+        ],
+        foot: 'The numbers match. Many people judge the cases differently.',
+        notes: note('Do not ask students to vote before they identify the difference they are responding to. The reading uses the cases to show a conflict between act utilitarian arithmetic and ordinary moral reactions about action, intention, and using a person as a means. Psychological reactions do not by themselves settle what we ought to do.', '10-11')
+      },
+      {
+        type: 'content',
+        title: 'Consequences can defend means that rights resist',
+        paragraphs: [
+          'Torture can look permissible if immediate lives saved are the only relevant effects. The reading\'s example shows why that reasoning collides with a prohibition on torture and with the moral status of the victim.',
+          'A utilitarian response can count wider consequences: false confessions, damaged alliances, weakened law, and normalized cruelty. The challenge remains deciding how much weight to give those effects.'
+        ],
+        visual: 'means',
+        notes: note('Return to the torture example without treating it as a policy recommendation. The philosophical issue is whether consequences alone can explain the wrongness of torture, or whether the utilitarian must translate rights and prohibitions into predicted harms. Invite students to distinguish immediate and institutional effects.', '2-3, 10-11')
+      },
+      {
+        type: 'content',
+        title: 'Universal calculation puts personal integrity under pressure',
+        paragraphs: [
+          'A strict universal standard gives no extra weight to your happiness, your children, or your projects simply because they are yours. Critics say that demand makes personal commitments look morally suspect.',
+          'A utilitarian reply is possible: supporting the people and projects closest to us may produce better results because we know how to help them and can sustain the work.'
+        ],
+        visual: 'integrity',
+        notes: note('Present the objection fairly. The reading says utilitarianism cannot privilege our own happiness or projects just because they belong to us, then offers a possible response based on effectiveness: we may be better positioned to promote good for those close to us. Ask whether that reply protects integrity or merely explains it away.', '9-10')
+      },
+      {
+        type: 'content',
+        title: 'A larger total can hide a distribution problem',
+        paragraphs: [
+          'The reading compares one option that produces 200 units of happiness for one person with another that produces 150 units shared by three people.',
+          'Maximizing the total favors the first option. Giving the number of people more weight favors the second. The theory must explain why one form of distribution should matter more than the other.'
+        ],
+        visual: 'distribution',
+        notes: note('Use this as a clean example of the difference between total happiness and the number of people who receive it. The reading notes that many interpretations of Mill give preference to overall maximization, but the distribution question remains philosophically important.', '9-10')
+      },
+      {
+        type: 'question',
+        eyebrow: 'Pause 04 / Intuition under pressure',
+        prompt: 'What should change when the utilitarian result conflicts with a strong moral intuition: the intuition, the calculation, or the description of the case?',
+        context: 'Test your answer with the trolley or torture example. Identify the premise or consequence that carries the conflict.',
+        notes: note('Ask groups to locate the conflict precisely. Is a premise false? Is a consequence missing? Is an intuition tracking a value the calculation has not represented? Neutral follow-ups: What would the other side say? Would the same response hold in a repeated practice? The next section compares action-by-action and rule-based reasoning.', '2-3, 9-11')
+      },
+      {
+        type: 'section',
+        eyebrow: 'V / Acts, rules, and proof',
+        title: 'Acts, rules, and proof',
+        notes: note('The final movement turns from pressure points to two ways utilitarians refine the theory. Act and rule versions change the object of evaluation. Mill\'s proof changes the argument for why happiness should count as the good.', '11-13')
+      },
+      {
+        type: 'comparison',
+        title: 'Act and rule utilitarianism judge different units',
+        left: {
+          label: 'Act utilitarianism',
+          title: 'This action',
+          body: 'Judge the consequences of this action in this situation. Breaking a promise can be right if this instance produces the better result.'
+        },
+        right: {
+          label: 'Rule utilitarianism',
+          title: 'This practice',
+          body: 'Judge the consequences of people following a rule in similar circumstances. Keeping promises may matter because trust makes shared life work.'
+        },
+        foot: 'Both remain consequentialist. They disagree about what should be evaluated.',
+        notes: note('Use the promise example. Act reasoning asks about the dinner with Ken. Rule reasoning asks what would happen if people generally broke promises in similar circumstances. Make clear that a rule is not a deontological exception to consequentialism; the rule earns authority from the results of the practice.', '11-12')
+      },
+      {
+        type: 'content',
+        title: 'Rule reasoning protects trust across repeated cases',
+        paragraphs: [
+          'A rule utilitarian asks which general practice would produce better results when people rely on it. “Never break promises” may be too rigid. “Keep promises unless serious harm follows” may preserve trust while allowing exceptions.',
+          'The rule itself still earns its authority from consequences. Consistency matters because people build plans and relationships around expected behavior.'
+        ],
+        visual: 'practice',
+        notes: note('Invite students to propose a promise-keeping rule and test it across repeated cases. Ask what kind of exception preserves trust and what kind destroys the practice. Keep the focus on the reading\'s method: evaluate a practice by the consequences of people following it.', '12')
+      },
+      {
+        type: 'content',
+        title: 'Mill\'s proof moves from desire to value',
+        paragraphs: [
+          'Mill compares happiness with the visible or audible: the evidence that something is desirable is that people desire it. He then treats happiness as the only thing desired for its own sake.',
+          'Critics can challenge the move. Being desired may show what people want without proving what they ought to want. The reading presents this as a dispute about whether ethics can move from facts about desire to a moral standard.'
+        ],
+        visual: 'proof',
+        notes: note('Reconstruct the argument before evaluating it. Mill says that desire is the evidence available for desirability, then generalizes from people desiring happiness to happiness being the good. Ask students to distinguish the empirical claim about what people desire from the normative claim about what people ought to pursue.', '13')
+      },
+      {
+        type: 'process',
+        title: 'A defensible utilitarian judgment keeps the hard parts visible',
+        steps: [
+          ['01', 'Scope', 'Count every affected interest, including people who are distant, vulnerable, or easy to ignore.'],
+          ['02', 'Effects', 'Separate immediate results from long-term and institutional consequences.'],
+          ['03', 'Measure', 'State how intensity, duration, fruitfulness, likelihood, quality, and distribution matter.'],
+          ['04', 'Cost', 'Name the rights, relationships, integrity, or moral intuitions the calculation puts under pressure.']
+        ],
+        foot: 'This four-part checklist is an original classroom synthesis of the reading, not an additional theory.',
+        notes: note('Use this slide as a method for writing or discussion, not as a formula that guarantees one answer. Ask students to add a fifth question from the reading. Possible additions include: What practice would this create? What would a person who knows both pleasures choose? What would count as evidence against my prediction?', '1-13')
+      },
+      {
+        type: 'diagnostic',
+        eyebrow: 'Final question / The limit of maximization',
+        prompt: 'What, if anything, may a utilitarian refuse to sacrifice for a larger total of happiness?',
+        context: 'Give a position and one reason. Then name the point at which your own reasoning would need revision.',
+        notes: note('End with a one-minute write. Ask students to name one limit they think utilitarianism must recognize, or explain why no limit is needed. Then ask what evidence or consequence would make them revise. The aim is a defensible judgment that remains answerable to reasons.', '1-13')
+      },
+      {
+        type: 'refs',
+        title: 'References and scope',
+        items: [
+          ['Primary reading', 'Util.pdf, chapter 5 excerpt “Utilitarianism and John Stuart Mill,” Cengage Learning, 2018, scan pages 1-13, printed pages 93-105.'],
+          ['Concepts covered', 'The principle of utility, hedonism and Epicureanism, pleasure and pain, intensity, duration, fruitfulness, likelihood, quantity and quality, act and rule utilitarianism, the trolley problem, personal integrity, and Mill\'s proof.'],
+          ['Presentation method', 'Discussion questions and the four-part judgment checklist are an original classroom synthesis. The deck uses no standalone quotation or epigraph slides.'],
+          ['Reading boundary', 'The deck paraphrases the assigned excerpt. Return to the reading for its full examples, qualifications, citations, and the complete selection from Mill\'s Utilitarianism.']
+        ],
+        notes: note('Close by reminding students that the deck is a discussion scaffold, not a substitute for rereading the chapter. The question slides are intentionally open and do not announce a correct answer.', '1-13')
+      }
+    ];
+
+    const deck = document.getElementById('deck');
+    const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#039;'
+    }[character]));
+
+    const renderVisual = visual => {
+      if (visual === 'scope') {
+        return `<div class="scope-diagram" role="img" aria-label="A utilitarian judgment considers an action, the interests of everyone affected, and the total result"><div class="scope-node"><strong>One choice</strong><span>Action or policy</span></div><span class="scope-connector" aria-hidden="true"></span><div class="scope-node emphasis"><strong>Everyone affected</strong><span>Equal consideration</span></div><span class="scope-connector" aria-hidden="true"></span><div class="scope-node"><strong>Overall result</strong><span>Happiness or well-being</span></div></div>`;
+      }
+      if (visual === 'logic') {
+        return `<div class="logic-diagram" role="img" aria-label="Utilitarian reasoning shifts attention from motive to act to consequences and judgment"><div class="logic-step muted"><strong>Motive</strong><em>May explain why someone acts</em></div><span class="logic-rule" aria-hidden="true"></span><div class="logic-step"><strong>Act or practice</strong><em>What someone does</em></div><span class="logic-rule" aria-hidden="true"></span><div class="logic-step"><strong>Consequences</strong><em>What the choice brings about</em></div></div>`;
+      }
+      if (visual === 'equation') {
+        return `<div class="equation" role="img" aria-label="Compare the likely benefits and harms of alternative A and alternative B, then identify the result with greater net utility"><div class="equation-cell"><strong>Alternative A</strong><span>Likely benefits and harms</span></div><div class="equation-mark" aria-hidden="true">VERSUS</div><div class="equation-cell"><strong>Alternative B</strong><span>Likely benefits and harms</span></div><div class="equation-mark" aria-hidden="true">THEN</div><div class="equation-cell"><strong>Net utility</strong><span>Which result is better overall?</span></div></div>`;
+      }
+      if (visual === 'scope-measure') {
+        return `<div class="scope-measure" role="img" aria-label="Utilitarianism asks who counts and what kinds of interests or experiences matter"><div class="measure-chip"><strong>Who counts?</strong><span>All affected persons, plus beings whose suffering or interests matter</span></div><div class="measure-chip"><strong>What matters?</strong><span>Pleasure, pain, interests, preferences, and well-being</span></div></div>`;
+      }
+      if (visual === 'range') {
+        return `<div class="range-map" role="img" aria-label="Examples of utilitarian reasoning range from speed limits to population policy to torture"><span class="range-axis" aria-hidden="true"></span><div class="range-points"><div class="range-point"><strong>Speed limits</strong><span>Small limits on choice for wider safety</span></div><div class="range-point"><strong>Population policy</strong><span>General welfare against reproductive freedom</span></div><div class="range-point"><strong>Torture</strong><span>Urgent lives saved against rights and public trust</span></div></div></div>`;
+      }
+      if (visual === 'quality') {
+        return `<div class="quality-axis" role="img" aria-label="Mill distinguishes lower and higher pleasures by their quality, not only their amount"><div class="quality-end">Sensory satisfaction</div><div class="quality-center"><strong>Higher pleasures</strong><span>Understanding, achievement, aesthetic and intellectual activity</span></div><div class="quality-end">More complex human capacities</div></div>`;
+      }
+      if (visual === 'means') {
+        return `<div class="means-board" role="img" aria-label="Utilitarian reasoning weighs immediate benefits against wider institutional and moral costs"><div class="means-column"><strong>Immediate outcome</strong><span>Lives possibly saved in the emergency</span></div><div class="means-column"><strong>Wider cost</strong><span>False confessions, damaged alliances, weakened law, and normalized cruelty</span></div></div>`;
+      }
+      if (visual === 'integrity') {
+        return `<div class="integrity-board" role="img" aria-label="Personal integrity sits between a universal calculation and commitments to people and projects close to us"><div class="integrity-column"><strong>Universal standard</strong><span>No extra weight for my happiness or my projects simply because they are mine</span></div><div class="integrity-column"><strong>Practical reply</strong><span>Close relationships and projects may be effective places to promote better results</span></div></div>`;
+      }
+      if (visual === 'distribution') {
+        return `<div class="distribution-board" role="img" aria-label="One option produces 200 units of happiness for one person and another produces 150 units shared by three people"><div class="distribution-choice"><strong>Choice A</strong><div><span class="total">200</span><span>units for one person</span></div></div><div class="distribution-choice"><strong>Choice B</strong><div><span class="total">150</span><span>units shared by three people</span></div></div></div>`;
+      }
+      if (visual === 'practice') {
+        return `<div class="loop-board" role="img" aria-label="Rule utilitarianism evaluates promise keeping as a repeated practice that supports trust, plans, and welfare"><div class="loop-step"><strong>Promise</strong><span>A person makes a commitment</span></div><div class="loop-step"><strong>Trust</strong><span>Others can rely on the commitment</span></div><div class="loop-step"><strong>Plans</strong><span>People coordinate their lives</span></div><div class="loop-step"><strong>Welfare</strong><span>Shared life becomes more secure</span></div></div>`;
+      }
+      if (visual === 'proof') {
+        return `<div class="proof-chain" role="img" aria-label="Mill's argument moves from people desiring happiness to happiness being desirable to happiness being good"><div class="proof-node"><strong>People desire happiness</strong><span>Empirical claim</span></div><span class="proof-rule" aria-hidden="true"></span><div class="proof-node"><strong>Happiness is desirable</strong><span>Claim about value</span></div><span class="proof-rule" aria-hidden="true"></span><div class="proof-node"><strong>Happiness is good</strong><span>Normative conclusion</span></div></div><p class="proof-challenge">Question for the argument: does being desired establish what ought to be desired?</p>`;
+      }
+      return '';
+    };
+
+    function renderSlide(slide, index) {
+      const topTypes = ['content', 'flow', 'measure', 'comparison', 'case', 'process', 'refs'];
+      const node = document.createElement('article');
+      node.className = `slide ${slide.type}${topTypes.includes(slide.type) ? ' top' : ''}`;
+      node.dataset.index = String(index);
+      node.setAttribute('aria-label', `Slide ${index + 1}: ${slide.title || slide.prompt || 'Untitled'}`);
+      let html = '<div class="slide-inner">';
+
+      if (slide.type === 'cover') {
+        html += `<h1 class="title">${esc(slide.title)}</h1><p class="work">${esc(slide.work)}</p><div class="course">${esc(slide.course)}</div>`;
+      }
+      if (slide.type === 'section') {
+        html += `<div class="eyebrow">${esc(slide.eyebrow)}</div><h2 class="title">${esc(slide.title)}</h2>`;
+      }
+      if (slide.type === 'content') {
+        html += `<h2 class="title">${esc(slide.title)}</h2><div class="body">${slide.paragraphs.map(paragraph => `<p>${esc(paragraph)}</p>`).join('')}</div>${renderVisual(slide.visual)}`;
+      }
+      if (slide.type === 'flow') {
+        html += `<h2 class="title">${esc(slide.title)}</h2><p class="lead">${esc(slide.lead)}</p>${renderVisual(slide.visual)}`;
+      }
+      if (slide.type === 'measure') {
+        html += `<h2 class="title">${esc(slide.title)}</h2><p class="lead">${esc(slide.lead)}</p><div class="measure-board">${slide.rows.map(row => `<div class="measure-row"><strong>${esc(row[0])}</strong><span>${esc(row[1])}</span></div>`).join('')}</div><p class="measure-note">${esc(slide.foot)}</p>`;
+      }
+      if (slide.type === 'comparison') {
+        html += `<h2 class="title">${esc(slide.title)}</h2><div class="comparison-grid"><section class="comparison-side"><div class="comparison-label">${esc(slide.left.label)}</div><h3>${esc(slide.left.title)}</h3><p>${esc(slide.left.body)}</p></section><section class="comparison-side"><div class="comparison-label">${esc(slide.right.label)}</div><h3>${esc(slide.right.title)}</h3><p>${esc(slide.right.body)}</p></section></div><p class="compare-footer">${esc(slide.foot)}</p>`;
+      }
+      if (slide.type === 'case') {
+        html += `<h2 class="title">${esc(slide.title)}</h2><p class="case-lead">${esc(slide.lead)}</p><div class="trolley-board"><div class="trolley-intro">Same arithmetic: five lives versus one</div><div class="trolley-cases">${slide.cases.map(item => `<article class="trolley-case"><div class="case-label">${esc(item.label)}</div><h3>${esc(item.title)}</h3><div class="route"><strong>5</strong><span class="route-line" aria-hidden="true"></span><strong>1</strong></div><p>${esc(item.body)}</p></article>`).join('')}</div><p class="case-note">${esc(slide.foot)}</p></div>`;
+      }
+      if (slide.type === 'process') {
+        html += `<h2 class="title">${esc(slide.title)}</h2><div class="process-list">${slide.steps.map(step => `<div class="process-item"><span class="process-number">${esc(step[0])}</span><h3>${esc(step[1])}</h3><p>${esc(step[2])}</p></div>`).join('')}</div><p class="process-note">${esc(slide.foot)}</p>`;
+      }
+      if (slide.type === 'question' || slide.type === 'diagnostic') {
+        html += `<div class="eyebrow">${esc(slide.eyebrow)}</div><p class="prompt">${esc(slide.prompt)}</p><p class="context">${esc(slide.context)}</p>`;
+      }
+      if (slide.type === 'refs') {
+        html += `<h2 class="title">${esc(slide.title)}</h2><div class="refs-list">${slide.items.map(item => `<div class="ref"><strong>${esc(item[0])}</strong><span>${esc(item[1])}</span></div>`).join('')}</div>`;
+      }
+
+      node.innerHTML = `${html}</div>`;
+      deck.appendChild(node);
+      return node;
+    }
+
+    const nodes = slides.map(renderSlide);
+    const counter = document.getElementById('counter');
+    const progress = document.querySelector('#progress span');
+    const notes = document.getElementById('notes');
+    const notesBody = document.getElementById('notes-body');
+    const overview = document.getElementById('overview');
+    const overviewGrid = document.getElementById('overview-grid');
+    const cards = slides.map((slide, index) => {
+      const card = document.createElement('button');
+      card.type = 'button';
+      card.className = 'overview-card';
+      card.innerHTML = `<span class="num">${String(index + 1).padStart(2, '0')} / ${slides.length}</span><span class="label">${esc(slide.title || slide.prompt || 'Slide')}</span>`;
+      card.addEventListener('click', () => { closePanels(); show(index); });
+      overviewGrid.appendChild(card);
+      return card;
+    });
+
+    let current = 0;
+
+    function show(index) {
+      current = Math.max(0, Math.min(slides.length - 1, index));
+      nodes.forEach((node, nodeIndex) => node.classList.toggle('active', nodeIndex === current));
+      cards.forEach((card, cardIndex) => card.classList.toggle('current', cardIndex === current));
+      counter.textContent = `${current + 1} / ${slides.length}`;
+      progress.style.width = `${((current + 1) / slides.length) * 100}%`;
+      notesBody.textContent = slides[current].notes || 'No notes for this slide.';
+      document.getElementById('previous').disabled = current === 0;
+      document.getElementById('next').disabled = current === slides.length - 1;
+      document.title = `${current + 1}/${slides.length} · Utilitarianism`;
+    }
+
+    window.show = show;
+
+    function closePanels() {
+      overview.classList.remove('open');
+      notes.classList.remove('open');
+    }
+
+    function togglePanel(panel) {
+      const isOpen = panel.classList.contains('open');
+      closePanels();
+      if (!isOpen) panel.classList.add('open');
+    }
+
+    function toggleFullscreen() {
+      if (document.fullscreenElement) document.exitFullscreen();
+      else document.documentElement.requestFullscreen?.().catch(() => {});
+    }
+
+    document.getElementById('previous').addEventListener('click', () => show(current - 1));
+    document.getElementById('next').addEventListener('click', () => show(current + 1));
+    document.getElementById('overview-button').addEventListener('click', () => togglePanel(overview));
+    document.getElementById('notes-button').addEventListener('click', () => togglePanel(notes));
+    document.getElementById('fullscreen').addEventListener('click', toggleFullscreen);
+    document.querySelectorAll('.close').forEach(button => button.addEventListener('click', closePanels));
+
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') { closePanels(); return; }
+      if (overview.classList.contains('open') || notes.classList.contains('open')) return;
+      if (['ArrowRight', 'ArrowDown', ' ', 'PageDown'].includes(event.key)) { event.preventDefault(); show(current + 1); }
+      else if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(event.key)) { event.preventDefault(); show(current - 1); }
+      else if (event.key.toLowerCase() === 'o') togglePanel(overview);
+      else if (event.key.toLowerCase() === 'n') togglePanel(notes);
+      else if (event.key.toLowerCase() === 'f') toggleFullscreen();
+    });
+
+    let touchX = 0;
+    let touchY = 0;
+    document.addEventListener('touchstart', event => {
+      touchX = event.changedTouches[0].screenX;
+      touchY = event.changedTouches[0].screenY;
+    }, { passive: true });
+    document.addEventListener('touchend', event => {
+      const dx = event.changedTouches[0].screenX - touchX;
+      const dy = event.changedTouches[0].screenY - touchY;
+      if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)) show(current + (dx < 0 ? 1 : -1));
+    }, { passive: true });
+
+    function fits(node) {
+      const inner = node.querySelector('.slide-inner');
+      return inner && inner.scrollHeight <= node.clientHeight * .82 && inner.scrollWidth <= node.clientWidth * .92;
+    }
+
+    function fitNode(node, start = 1) {
+      let fit = start;
+      node.classList.add('measuring');
+      node.style.setProperty('--fit', fit);
+      while (fit > .72 && !fits(node)) {
+        fit = Math.max(.72, fit - .01);
+        node.style.setProperty('--fit', fit.toFixed(3));
+      }
+      node.classList.remove('measuring');
+    }
+
+    function fitAll() {
+      nodes.forEach(node => { node.style.setProperty('--fit', 1); fitNode(node); });
+      show(current);
+    }
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(fitAll, 160);
+    });
+
+    if (document.fonts?.ready) document.fonts.ready.then(fitAll);
+    else fitAll();
+    fitAll();
+  </script>
+</body>
+</html>
