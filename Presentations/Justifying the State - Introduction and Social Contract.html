@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="An introduction to justifying the state and the social-contract account of political obligation.">
+<title>Justifying the State · Introduction and Social Contract</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="presentation-polish.css">
+<style>
+  :root {
+    --paper: #f3ecdf;
+    --paper-deep: #e7dccb;
+    --ink: #171818;
+    --muted: #5e5b55;
+    --red: #8b281e;
+    --red-dark: #661b15;
+    --blue: #305775;
+    --line: rgba(23, 24, 24, 0.2);
+    --line-strong: rgba(23, 24, 24, 0.46);
+    --fit: 1;
+    --preflight-bg: var(--paper);
+    --preflight-text: var(--ink);
+    --preflight-muted: var(--muted);
+    --preflight-accent: var(--red);
+    --preflight-bright: var(--blue);
+    --preflight-line: var(--line);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+  body {
+    color: var(--ink);
+    background: var(--paper);
+    font-family: "Archivo Narrow", Arial, sans-serif;
+  }
+  button { font: inherit; }
+
+  #deck {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 82% 8%, rgba(139, 40, 30, 0.055), transparent 30%),
+      linear-gradient(90deg, transparent 0 3.8vw, rgba(23, 24, 24, 0.09) 3.8vw 3.88vw, transparent 3.88vw),
+      var(--paper);
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 6.5vh 5.7vw 8.2vh !important;
+    overflow: hidden;
+  }
+  .slide.active, .slide.measuring { display: flex; }
+  .slide.measuring { visibility: hidden; pointer-events: none; }
+  .slide-inner {
+    position: relative;
+    z-index: 2;
+    width: min(1540px, 88vw);
+    max-height: 82vh;
+    margin: auto;
+    transform-origin: top center;
+  }
+  .slide::after {
+    content: attr(data-slide-number);
+    position: absolute;
+    right: 2.5vw;
+    bottom: 2.2vh;
+    color: var(--muted);
+    font: 600 0.72rem/1 "JetBrains Mono", monospace;
+    letter-spacing: 0.12em;
+  }
+
+  .kicker, .eyebrow, .label, .meta, .course, #nav-hint, #counter, #fullscreen {
+    font-family: "JetBrains Mono", monospace;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+  }
+  .kicker, .eyebrow {
+    margin: 0 0 1rem;
+    color: var(--red);
+    font-size: calc(clamp(0.72rem, 0.86vw, 1rem) * var(--fit));
+    font-weight: 600;
+  }
+  .title {
+    margin: 0;
+    color: var(--ink);
+    font-family: "DM Serif Display", Georgia, serif;
+    font-weight: 400;
+    letter-spacing: -0.035em;
+  }
+  .standard .title, .compare .title, .image-copy .title, .sequence .title, .synthesis .title, .refs .title {
+    max-width: 18ch;
+    font-size: calc(clamp(2.9rem, 5vw, 5.3rem) * var(--fit)) !important;
+    line-height: 0.98 !important;
+  }
+  .title-rule {
+    width: min(10rem, 15vw);
+    height: 0.28rem;
+    margin: 1.2rem 0 1.6rem;
+    background: var(--red);
+  }
+  .lead {
+    max-width: 31ch;
+    margin: 0;
+    color: var(--ink);
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: calc(clamp(1.7rem, 2.45vw, 2.8rem) * var(--fit));
+    line-height: 1.16;
+  }
+  .supporting {
+    max-width: 65ch;
+    margin: 1.15rem 0 0;
+    color: var(--muted);
+    font-size: calc(clamp(1.05rem, 1.35vw, 1.48rem) * var(--fit));
+    line-height: 1.46;
+  }
+  .bottom-line {
+    margin: 1.5rem 0 0;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line-strong);
+    color: var(--red-dark);
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: calc(clamp(1.3rem, 1.85vw, 2rem) * var(--fit));
+    line-height: 1.25;
+  }
+
+  .cover {
+    align-items: stretch;
+    justify-content: stretch;
+    padding: 0 !important;
+    background: #e9dfcf;
+  }
+  .cover .slide-inner { width: 100vw !important; max-width: none !important; height: 100vh; max-height: none; }
+  .cover-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .cover-copy {
+    position: absolute;
+    left: 6vw;
+    top: 12vh;
+    width: min(46vw, 770px);
+    padding: 2.2rem 2.45rem 2.3rem;
+    background: rgba(243, 236, 223, 0.94);
+    border-top: 7px solid var(--red);
+    box-shadow: 18px 20px 0 rgba(23, 24, 24, 0.09);
+  }
+  .cover .title {
+    max-width: 8ch;
+    font-size: calc(clamp(4.8rem, 8.9vw, 9.5rem) * var(--fit)) !important;
+    line-height: 0.82 !important;
+  }
+  .cover .work {
+    max-width: 31ch;
+    margin: 1.35rem 0 0;
+    color: var(--muted);
+    font-size: calc(clamp(1.35rem, 2vw, 2.1rem) * var(--fit));
+    line-height: 1.24;
+  }
+  .cover .course { margin-top: 2.2rem; color: var(--blue); font-size: 0.78rem; font-weight: 600; }
+  .cover::after { color: rgba(243, 236, 223, 0.8); }
+
+  .section {
+    color: var(--paper);
+    background: var(--red-dark);
+  }
+  .section::before {
+    content: "";
+    position: absolute;
+    left: 6vw;
+    top: 11vh;
+    bottom: 11vh;
+    width: 1px;
+    background: rgba(243, 236, 223, 0.36);
+  }
+  .section .slide-inner { width: min(1240px, 82vw); padding-left: 4vw; }
+  .section .eyebrow { color: #d9af9b; }
+  .section .title {
+    max-width: 11ch;
+    color: var(--paper);
+    font-size: calc(clamp(4.5rem, 8vw, 9rem) * var(--fit)) !important;
+    line-height: 0.9 !important;
+  }
+  .section .section-lead {
+    max-width: 46ch;
+    margin: 2rem 0 0;
+    color: #e4d8c7;
+    font-size: calc(clamp(1.2rem, 1.7vw, 1.8rem) * var(--fit));
+    line-height: 1.42;
+  }
+  .section::after { color: rgba(243, 236, 223, 0.6); }
+
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr;
+    gap: clamp(1.8rem, 3.3vw, 4rem);
+    align-items: stretch;
+    margin-top: 1.5rem;
+  }
+  .compare-divider { background: var(--line-strong); }
+  .compare-col { padding: 1rem 0 0; }
+  .compare-col .label { color: var(--blue); font-size: 0.78rem; font-weight: 600; }
+  .compare-col h3 {
+    margin: 0.75rem 0 0.8rem;
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: calc(clamp(1.95rem, 2.65vw, 3rem) * var(--fit));
+    font-weight: 400;
+    line-height: 1.04;
+  }
+  .compare-col p {
+    margin: 0;
+    color: var(--muted);
+    font-size: calc(clamp(1.08rem, 1.38vw, 1.5rem) * var(--fit));
+    line-height: 1.42;
+  }
+  .compare-col .result { margin-top: 1.1rem; padding-top: 0.9rem; border-top: 1px solid var(--line); color: var(--ink); }
+
+  .statement-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(18rem, 0.9fr);
+    gap: clamp(2.5rem, 5vw, 6rem);
+    align-items: end;
+  }
+  .statement {
+    margin: 0;
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: calc(clamp(2.4rem, 4.3vw, 4.8rem) * var(--fit));
+    line-height: 1.03;
+  }
+  .statement em { color: var(--red); font-style: italic; }
+  .side-note { padding-left: 1.4rem; border-left: 5px solid var(--blue); }
+  .side-note .label { color: var(--blue); font-size: 0.76rem; font-weight: 600; }
+  .side-note p { margin: 0.65rem 0 0; font-size: calc(clamp(1.15rem, 1.6vw, 1.72rem) * var(--fit)); line-height: 1.38; }
+
+  .row-list { margin-top: 1.4rem; border-top: 1px solid var(--line-strong); }
+  .row {
+    display: grid;
+    grid-template-columns: 3.3rem minmax(12rem, 0.72fr) minmax(20rem, 1.6fr);
+    gap: 1.3rem;
+    align-items: baseline;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .row .num { color: var(--red); font: 600 0.8rem/1 "JetBrains Mono", monospace; }
+  .row h3 { margin: 0; font: 400 calc(clamp(1.35rem, 1.75vw, 1.9rem) * var(--fit))/1.15 "DM Serif Display", Georgia, serif; }
+  .row p { margin: 0; color: var(--muted); font-size: calc(clamp(1rem, 1.25vw, 1.38rem) * var(--fit)); line-height: 1.38; }
+
+  .image-copy .slide-inner { width: min(1640px, 91vw); }
+  .image-copy-grid {
+    display: grid;
+    grid-template-columns: minmax(22rem, 0.86fr) minmax(30rem, 1.3fr);
+    gap: clamp(2rem, 4vw, 4.8rem);
+    align-items: center;
+  }
+  .image-copy.reverse .image-copy-grid { grid-template-columns: minmax(30rem, 1.3fr) minmax(22rem, 0.86fr); }
+  .image-frame { position: relative; height: min(64vh, 610px); overflow: hidden; border: 1px solid var(--line-strong); }
+  .image-frame img { width: 100%; height: 100%; object-fit: cover; }
+  .image-copy.reverse .image-frame { order: 1; }
+  .image-copy.reverse .copy { order: 2; }
+  .image-copy .copy .title { max-width: 11ch; }
+  .image-copy .copy p { margin: 1.25rem 0 0; color: var(--muted); font-size: calc(clamp(1.1rem, 1.45vw, 1.55rem) * var(--fit)); line-height: 1.45; }
+  .image-copy .copy .bottom-line { color: var(--red-dark); }
+
+  .sequence-list { display: grid; gap: 0; margin-top: 1.5rem; border-top: 1px solid var(--line-strong); }
+  .sequence-item {
+    display: grid;
+    grid-template-columns: 4rem minmax(14rem, 0.85fr) minmax(20rem, 1.55fr);
+    gap: 1.5rem;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .sequence-item .num { color: var(--paper); background: var(--red); width: 2.3rem; height: 2.3rem; display: grid; place-items: center; font: 600 0.75rem/1 "JetBrains Mono", monospace; }
+  .sequence-item h3 { margin: 0; font: 400 calc(clamp(1.4rem, 1.9vw, 2.1rem) * var(--fit))/1.1 "DM Serif Display", Georgia, serif; }
+  .sequence-item p { margin: 0; color: var(--muted); font-size: calc(clamp(1rem, 1.28vw, 1.4rem) * var(--fit)); line-height: 1.38; }
+
+  .synthesis .slide-inner { width: min(1460px, 88vw); }
+  .synthesis-band {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    margin-top: 1.7rem;
+    border-top: 1px solid var(--line-strong);
+    border-bottom: 1px solid var(--line-strong);
+  }
+  .synthesis-step { min-height: 15rem; padding: 1.25rem 1.35rem 1.4rem 0; border-right: 1px solid var(--line); }
+  .synthesis-step + .synthesis-step { padding-left: 1.35rem; }
+  .synthesis-step:last-child { border-right: 0; }
+  .synthesis-step .num { color: var(--red); font: 600 0.77rem/1 "JetBrains Mono", monospace; }
+  .synthesis-step h3 { margin: 1rem 0 0.75rem; font: 400 calc(clamp(1.4rem, 1.85vw, 2rem) * var(--fit))/1.12 "DM Serif Display", Georgia, serif; }
+  .synthesis-step p { margin: 0; color: var(--muted); font-size: calc(clamp(0.98rem, 1.18vw, 1.3rem) * var(--fit)); line-height: 1.4; }
+
+  .refs .slide-inner { width: min(1320px, 86vw); }
+  .refs-list { margin-top: 1.5rem; border-top: 1px solid var(--line-strong); }
+  .ref { display: grid; grid-template-columns: 13rem 1fr; gap: 1.5rem; padding: 0.85rem 0; border-bottom: 1px solid var(--line); }
+  .ref strong { color: var(--red); font: 600 0.75rem/1.35 "JetBrains Mono", monospace; letter-spacing: 0.08em; text-transform: uppercase; }
+  .ref span { color: var(--muted); font-size: calc(clamp(1rem, 1.25vw, 1.38rem) * var(--fit)); line-height: 1.38; }
+
+  #progress { position: fixed; left: 0; top: 0; z-index: 40; width: 0; height: 4px; background: var(--red); }
+  #nav-hint, #counter { position: fixed; z-index: 40; bottom: 17px; color: var(--muted); font-size: 10px; }
+  #nav-hint { left: 5.8vw; }
+  #counter { right: 5.8vw; }
+  #fullscreen { position: fixed; right: 2.2vw; top: 2.2vh; z-index: 40; padding: 0.55rem 0.7rem; color: var(--ink); background: rgba(243, 236, 223, 0.84); border: 1px solid var(--line-strong); cursor: pointer; font-size: 10px; }
+  .panel { position: fixed; inset: 4vh 4vw; z-index: 60; display: none; overflow: auto; color: var(--ink); background: rgba(243, 236, 223, 0.985); border: 1px solid var(--line-strong); }
+  .panel.open { display: block; }
+  .panel-head { position: sticky; top: 0; z-index: 2; display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.3rem; background: var(--paper-deep); border-bottom: 1px solid var(--line); }
+  .panel-head h2 { margin: 0; color: var(--red); font: 600 0.8rem/1 "JetBrains Mono", monospace; letter-spacing: 0.11em; text-transform: uppercase; }
+  .close { padding: 0.45rem 0.65rem; color: var(--ink); background: transparent; border: 1px solid var(--line-strong); cursor: pointer; }
+  #overview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; padding: 20px; }
+  .overview-card { min-height: 136px; padding: 1rem; color: var(--ink); background: transparent; border: 1px solid var(--line); text-align: left; cursor: pointer; }
+  .overview-card.current, .overview-card:hover { border-color: var(--red); background: rgba(139, 40, 30, 0.05); }
+  .overview-card .num { display: block; margin-bottom: 0.9rem; color: var(--red); font: 600 0.68rem/1 "JetBrains Mono", monospace; }
+  .overview-card .label { font: 400 1.45rem/1.1 "DM Serif Display", Georgia, serif; text-transform: none; letter-spacing: 0; }
+  #notes-body { max-width: 980px; padding: 2rem 2.4rem; white-space: pre-wrap; font-size: 1.1rem; line-height: 1.62; }
+
+  @media (max-width: 820px) {
+    .slide { padding: 8vh 8vw 10vh !important; }
+    .slide-inner { width: 84vw; }
+    .cover-copy { left: 7vw; top: 11vh; width: 82vw; }
+    .compare-grid, .statement-layout, .image-copy-grid, .image-copy.reverse .image-copy-grid { grid-template-columns: 1fr; }
+    .compare-divider { height: 1px; }
+    .image-frame { height: 31vh; }
+    .image-copy.reverse .image-frame, .image-copy.reverse .copy { order: initial; }
+    .row, .sequence-item { grid-template-columns: 2.7rem 1fr; }
+    .row p, .sequence-item p { grid-column: 2; }
+    .synthesis-band { grid-template-columns: 1fr 1fr; }
+    .synthesis-step:nth-child(2) { border-right: 0; }
+    .synthesis-step:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+    .ref { grid-template-columns: 1fr; gap: 0.35rem; }
+    #nav-hint { display: none; }
+  }
+</style>
+<script src="presentation-polish.js" defer></script>
+</head>
+<body>
+<div id="deck" aria-live="polite"></div>
+<div id="progress"></div>
+<div id="nav-hint">ARROWS / SPACE · O OVERVIEW · N NOTES · F FULLSCREEN</div>
+<div id="counter">1 / 1</div>
+<button id="fullscreen" type="button" aria-label="Toggle fullscreen">Fullscreen</button>
+
+<section id="overview" class="panel" aria-label="Slide overview">
+  <div class="panel-head"><h2>Overview</h2><button class="close" type="button">Close</button></div>
+  <div id="overview-grid"></div>
+</section>
+<aside id="notes" class="panel" aria-label="Speaker notes">
+  <div class="panel-head"><h2>Speaker notes</h2><button class="close" type="button">Close</button></div>
+  <div id="notes-body"></div>
+</aside>
+
+<script>
+const source = (pages, extra = "") =>
+  `[Sources]\nSource material, “01a Justifying the State - Intro,” source PDF, pp. ${pages}.` +
+  (extra ? `\n${extra}` : "") + `\n[/Sources]`;
+
+const slides = [
+  {
+    type: "cover",
+    eyebrow: "Political Philosophy · Unit 2",
+    title: "Justifying the State",
+    work: "Political obligation and the social contract",
+    course: "From a reason to want order to a reason to obey",
+    image: "assets/justifying-state-cover.png",
+    notes: `Introduce the unit’s change in focus. Earlier state-of-nature arguments asked what political society solves. This reading asks what could give a state the moral right to rule.\n\n${source("1–20", "Cover visual: original editorial illustration generated for this presentation.")}`
+  },
+  {
+    type: "section",
+    eyebrow: "Introduction",
+    title: "The question after the state of nature",
+    lead: "The earlier thought experiments supplied a baseline. This unit asks what could give political power moral authority.",
+    notes: `Keep the transition explicit. The state of nature remains useful, but it now supports a different inquiry about legitimacy and political obligation.\n\n${source("1–3, 14", "Course context: State of Nature Wrapup presentation.")}`
+  },
+  {
+    type: "compare",
+    eyebrow: "Two methods",
+    title: "State of nature and state justification",
+    columns: [
+      {
+        label: "State of nature",
+        heading: "A counterfactual baseline",
+        text: "Remove political authority, and sometimes developed society, to identify the problems that appear and the rights that remain.",
+        result: "Result: a standard for judging what political society secures or costs."
+      },
+      {
+        label: "Justifying the state",
+        heading: "A claim to moral authority",
+        text: "Begin with an institution that legislates, taxes, punishes, and claims the right to direct everyone within its territory.",
+        result: "Result: a reason for obedience and an account of when legitimacy can fail."
+      }
+    ],
+    bottom: "A state may be necessary or beneficial without yet having a right to rule.",
+    notes: `State-of-nature reasoning evaluates the alternative to government. State justification evaluates the authority of government. Locke connects the questions but does not treat them as identical.\n\n${source("1–2, 9, 14")}`
+  },
+  {
+    type: "statement",
+    eyebrow: "The central distinction",
+    title: "Need and legitimacy answer different questions",
+    statement: "Life without a state may be intolerable. Political authority still needs a <em>moral title</em> to rule each person.",
+    sideLabel: "Locke’s problem",
+    sideText: "How can lawmaking power over naturally free and equal people arise without violating their freedom?",
+    notes: `The first question asks whether we need enforceable restraints. The second asks what authorizes a particular institution to impose them. For Locke, benefit alone cannot create the required authority.\n\n${source("1–2, 9")}`
+  },
+  {
+    type: "compare",
+    eyebrow: "The goal of justification",
+    title: "Negative and positive justification",
+    columns: [
+      {
+        label: "Negative",
+        heading: "No better alternative",
+        text: "The state appears justified because life without enforceable restraints seems worse and no workable substitute is available.",
+        result: "This explains why we may need a state."
+      },
+      {
+        label: "Positive",
+        heading: "A moral reason to obey",
+        text: "A successful argument explains why law can bind residents and when the state loses its claim to their obedience.",
+        result: "This aims to establish political obligation."
+      }
+    ],
+    notes: `Use the reading’s own distinction. Negative justification matters, but it does not finish the philosophical task because it does not yet show a moral duty to obey.\n\n${source("1")}`
+  },
+  {
+    type: "rows",
+    eyebrow: "The object of justification",
+    title: "The state claims coercive authority",
+    rows: [
+      ["State and nation", "A state is a political entity. A nation is a cultural community shaped by language, history, religion, traditions, or memory."],
+      ["Law and force", "The state claims the right to make laws and punish disobedience. Weber describes a monopoly of legitimate physical force within a territory."],
+      ["Protection", "The state offers protection from illegitimate force and asks residents to surrender much of their private enforcement power."],
+      ["Ideal type", "States may fail to monopolize force or protect everyone and still remain states. The features identify an aspiration, not a strict definition."]
+    ],
+    notes: `Emphasize the reciprocal picture: the state claims control over legitimate coercion and accepts responsibility for protection. The reading immediately qualifies both claims by considering armed self-defense, persecuted minorities, and state violence.\n\n${source("3–5")}`
+  },
+  {
+    type: "rows",
+    eyebrow: "The target",
+    title: "Political obligation",
+    lead: "Political obligation means obeying a law because it is law, not only because the required act is independently moral.",
+    rows: [
+      ["Murder", "Independent morality already supplies the reason. The law coincides with a duty that exists without legislation."],
+      ["Red light", "At a deserted intersection, the legal rule may supply the central reason to stop."],
+      ["Tax", "A citizen may oppose a funded policy and still believe the tax law has a claim on them."],
+      ["Universal", "The proposed duty reaches everyone within the territory. It remains defeasible when circumstances or serious injustice change the moral situation."]
+    ],
+    notes: `The reading narrows the inquiry to obedience. Universal obligation does not mean absolute obedience to every law in every circumstance. It means that everyone is, in principle, within the state’s moral jurisdiction.\n\n${source("5–7")}`
+  },
+  {
+    type: "compare",
+    eyebrow: "The wider chapter",
+    title: "Two routes to justification",
+    columns: [
+      {
+        label: "Locke",
+        heading: "Consent and autonomy",
+        text: "Political institutions must be justified through the will, choices, or decisions of the people over whom they claim authority.",
+        result: "The state is legitimate only if each person has consented."
+      },
+      {
+        label: "Bentham",
+        heading: "Utility and happiness",
+        text: "The state is justified if it produces more total happiness than any available alternative. Consent does not carry the argument.",
+        result: "The next substantive test begins with Locke’s consent route."
+      }
+    ],
+    notes: `This slide locates the social contract within the chapter’s broader plan. Do not develop utilitarianism here. The contrast shows that different values generate different kinds of justification.\n\n${source("2–3")}`
+  },
+  {
+    type: "section",
+    eyebrow: "The social contract",
+    title: "Consent as the source of authority",
+    lead: "The contract promises to turn natural freedom into political obligation without giving the state authority by default.",
+    notes: `Begin the substantive chapter. The contract is attractive because it appears to reconcile personal autonomy with a state that claims authority over everyone.\n\n${source("8–9")}`
+  },
+  {
+    type: "statement",
+    eyebrow: "Voluntarism",
+    title: "Political authority needs a voluntary act",
+    statement: "Another person can gain political power over me only through something I <em>voluntarily do</em>.",
+    sideLabel: "A crucial limit",
+    sideText: "Some moral duties exist without consent. The special problem concerns another person’s right to make laws for me and compel obedience.",
+    notes: `Reject the crude self-assumption principle. A duty not to attack innocent people does not depend on a promise. Voluntarism enters because political authority claims a special power over free persons.\n\n${source("8–9")}`
+  },
+  {
+    type: "image-copy",
+    eyebrow: "The contract’s promise",
+    title: "Consent must reach every person",
+    image: "assets/justifying-state-consent.png",
+    paragraphs: [
+      "Voluntarism requires each political obligation to arise through a person’s consent.",
+      "Universalism requires every person whom the state governs to be genuinely obligated."
+    ],
+    bottom: "The theory succeeds only if voluntary consent can extend to everyone.",
+    notes: `Treat the contract as an elegant solution in outline. It must preserve voluntary authorization while explaining universal authority. The rest of the argument tests possible forms of consent.\n\n${source("9", "Visual: original editorial illustration generated for this presentation.")}`
+  },
+  {
+    type: "sequence",
+    eyebrow: "Historical consent",
+    title: "An original contract cannot bind the present",
+    items: [
+      ["Evidence", "A founding contract should have left a historical trace, yet none can be identified."],
+      ["Capacity", "People imagined before developed political society may lack the concepts and coordination needed for a legal agreement."],
+      ["Descendants", "Even a real contract made by ancestors could not reasonably impose obligations on later generations."]
+    ],
+    bottom: "A voluntarist account needs the consent of people who are governed now.",
+    notes: `The intergenerational objection is decisive for the reading. Even if an original contract occurred, its participants could not contract on behalf of people born centuries later.\n\n${source("9–10")}`
+  },
+  {
+    type: "rows",
+    eyebrow: "Express consent",
+    title: "Almost no one explicitly agrees to be governed",
+    rows: [
+      ["Naturalization", "New citizens may formally consent, but they form a small portion of the population."],
+      ["Pledges", "Schoolchildren and scouts often lack meaningful choice and legal capacity."],
+      ["Voting", "A vote may support the system, oppose the government, or express dissent. Its meaning is not fixed."],
+      ["Abstention", "Refusing to vote cannot plausibly count as consent. Compulsory voting would also remove the required voluntariness."]
+    ],
+    notes: `The search for ongoing express consent does not reach most residents. Participatory democracy may strengthen the case, but it would also imply that ordinary contemporary democracies do not generate the required obligations.\n\n${source("10–11")}`
+  },
+  {
+    type: "statement",
+    eyebrow: "Tacit consent",
+    title: "Residence is treated as a quiet agreement",
+    statement: "By accepting protection, using public roads, or holding property, a resident appears to accept the state’s package of <em>benefits and burdens</em>.",
+    sideLabel: "The hidden condition",
+    sideText: "Staying can signal agreement only when leaving is a genuine and reasonable option.",
+    notes: `Keep tacit consent distinct from a fairness argument. Here, benefits matter because receiving them supposedly communicates consent. The binding force still comes from the alleged consent.\n\n${source("11–12")}`
+  },
+  {
+    type: "image-copy",
+    reverse: true,
+    eyebrow: "Hume’s objection",
+    title: "An impossible exit cannot make staying voluntary",
+    image: "assets/justifying-state-ship.png",
+    paragraphs: [
+      "Hume compares the resident to a person carried aboard a vessel while asleep. Remaining under the captain cannot show free consent when departure means leaping into the ocean.",
+      "Language, poverty, family, migration barriers, and the lack of a welcoming destination can make political exit equally unrealistic."
+    ],
+    bottom: "Residence alone cannot establish consent when dissent carries an intolerable cost.",
+    notes: `Use the ship as an argument, not as decoration. Hume’s point is that a sign of agreement must be distinguishable from conduct forced by necessity.\n\n${source("12–13", "Visual: original editorial illustration generated for this presentation.")}`
+  },
+  {
+    type: "rows",
+    eyebrow: "Hypothetical consent",
+    title: "The contract becomes a thought experiment",
+    lead: "Imagine the state’s absence. If rational people would freely recreate political authority, perhaps that imagined choice can justify the state.",
+    rows: [
+      ["Method", "Place rational agents in the state of nature and ask what form of order they would choose."],
+      ["Attraction", "A state that secures peace and protection may be the obvious rational choice."],
+      ["Problem", "A choice someone would make is still different from a voluntary act they have made."]
+    ],
+    notes: `Connect directly to the previous unit. The state of nature now acts as a device for hypothetical choice. The challenge is whether this can satisfy a theory that says obligations arise through actual voluntary acts.\n\n${source("14–15")}`
+  },
+  {
+    type: "compare",
+    eyebrow: "What the thought experiment shows",
+    title: "Worthiness and authorization",
+    columns: [
+      {
+        label: "Worthy of consent",
+        heading: "The state has desirable features",
+        text: "Peace, security, and reliable rules make a state preferable to the state of nature.",
+        result: "The features of the state supply the reason for justification."
+      },
+      {
+        label: "Actually authorized",
+        heading: "Each person has voluntarily agreed",
+        text: "Voluntarism requires an act that gives political authority to another person or institution.",
+        result: "An imagined choice cannot perform that act."
+      }
+    ],
+    bottom: "When desirable features do the work, consent drops out. The argument begins to resemble a defense based on well-being.",
+    notes: `This is the reading’s interpretive turning point. Hypothetical consent can identify a state worth choosing, but then justification rests on the state’s benefits rather than voluntary authorization.\n\n${source("15–16")}`
+  },
+  {
+    type: "sequence",
+    eyebrow: "A final rescue",
+    title: "Dispositional consent remains too weak",
+    items: [
+      ["Proposal", "Serious reflection would lead most people to consent, so the thought experiment reveals an attitude they already possess."],
+      ["Weakness", "Unexpressed and unacknowledged dispositions rarely create binding legal or moral obligations."],
+      ["Dissent", "Some anarchists reflect on the state and still reject centralized political authority."]
+    ],
+    bottom: "Calling dissenters irrational would not show that they consented.",
+    notes: `The argument compares latent consent with beliefs a person has never consciously formed. The analogy may explain an attitude, but it does not give that attitude the force of a voluntary undertaking.\n\n${source("16–17")}`
+  },
+  {
+    type: "sequence",
+    eyebrow: "The consent verdict",
+    title: "Consent cannot ground universal obligation",
+    items: [
+      ["Voluntary authority", "Contract theory allows political power to arise only through consent."],
+      ["Persistent dissent", "At least some competent adults do not consent in any historical, express, tacit, or dispositional sense."],
+      ["Limited reach", "Those dissenters cannot be assigned political obligations through a consent argument."],
+      ["Conclusion", "Voluntarism cannot deliver the universal authority that the state claims."]
+    ],
+    notes: `The reading calls contract theory voluntarism par excellence. Its respect for individual choice creates the very reason it cannot reach everyone. One genuine dissenter prevents a universal conclusion.\n\n${source("17")}`
+  },
+  {
+    type: "section",
+    eyebrow: "Anarchism revisited",
+    title: "Failed consent renews the challenge",
+    lead: "If no acceptable consent argument binds everyone, some people may stand outside the state’s moral authority.",
+    notes: `The failure of consent does not prove that every state action is wrong. It revives a narrower anarchist claim: the law’s status as law may add no independent reason to obey.\n\n${source("17–18")}`
+  },
+  {
+    type: "compare",
+    eyebrow: "Two kinds of reason",
+    title: "Law and independent morality",
+    columns: [
+      {
+        label: "Moral reason",
+        heading: "The act is independently right",
+        text: "Refraining from murder, protecting an innocent person, or stopping an immediate threat can be justified without political authority.",
+        result: "Police and citizens may share these reasons."
+      },
+      {
+        label: "Political reason",
+        heading: "The law itself creates a duty",
+        text: "Political obligation would give a person a reason to obey because a legitimate authority enacted the rule.",
+        result: "The philosophical anarchist denies that law alone adds this reason."
+      }
+    ],
+    notes: `Keep the distinction sharp. The anarchist can support particular laws and police actions for independent moral reasons while denying any general duty to obey the state as such.\n\n${source("17–18")}`
+  },
+  {
+    type: "image-copy",
+    eyebrow: "The practical pressure",
+    title: "Private judgment recreates the coordination problem",
+    image: "assets/justifying-state-shared-law.png",
+    paragraphs: [
+      "If citizens obey only the laws that perfectly match their own moral judgment, public questions become governed by competing private codes.",
+      "One person rejects redistributive taxation. Another rejects inherited property. Each claims authority to set aside the public rule."
+    ],
+    bottom: "Locke’s original reason for shared, public law returns.",
+    notes: `The reading describes unrestricted private judgment as a return to the problem that political society was meant to solve. The examples of taxation and inheritance show how sincere moral judgments can collide.\n\n${source("18–20", "Visual: original editorial illustration generated for this presentation.")}`
+  },
+  {
+    type: "compare",
+    eyebrow: "The unresolved tension",
+    title: "Moral criticism and shared law",
+    columns: [
+      {
+        label: "Critical judgment",
+        heading: "Law remains answerable to morality",
+        text: "Blind obedience would protect persecution and grave injustice. Legitimate authority must have moral limits.",
+        result: "Citizens need room to question and sometimes resist."
+      },
+      {
+        label: "Public coordination",
+        heading: "Shared rules structure common life",
+        text: "A society cannot coordinate property, taxation, safety, and public decisions if every rule changes with each person’s private verdict.",
+        result: "Public law must sometimes settle disagreement."
+      }
+    ],
+    bottom: "A satisfactory account of legitimacy must preserve moral criticism and explain the authority of shared rules.",
+    notes: `Do not resolve the chapter more strongly than the source does. Philosophical anarchism has considerable merit in theory, while conflicting moral judgment makes it unattractive in practice.\n\n${source("18–20")}`
+  },
+  {
+    type: "synthesis",
+    eyebrow: "Argument map",
+    title: "The chapter’s movement",
+    steps: [
+      ["State of nature", "A counterfactual baseline shows why order, protection, or impartial judgment may be needed."],
+      ["Justification", "The next question asks why an institution has moral authority over each resident."],
+      ["Social contract", "Consent promises authorization, but historical, express, tacit, and hypothetical versions fail to reach everyone."],
+      ["Anarchist pressure", "The failure limits any duty to obey law as law, while the need for shared rules remains."]
+    ],
+    bottom: "The need for political order and the legitimacy of political authority remain distinct questions.",
+    notes: `Use this slide to review the complete path. The state of nature supports the case for order. It does not, by itself, show who may rule, how, or with what limits.\n\n${source("1–20")}`
+  },
+  {
+    type: "refs",
+    eyebrow: "Sources",
+    title: "References",
+    items: [
+      ["Primary reading", "“01a Justifying the State - Intro,” source PDF, 20 pages."],
+      ["John Locke", "Second Treatise of Civil Government, sections 15 and 119, as quoted and discussed in the source reading."],
+      ["David Hume", "“Of the Original Contract,” as quoted and discussed in the source reading."],
+      ["Jean-Jacques Rousseau", "The Social Contract, book IV, chapter 2, as discussed in the source reading."],
+      ["J. S. Mill and Max Weber", "On Liberty and the account of the state’s monopoly of legitimate force, as quoted or discussed in the source reading."],
+      ["Course context", "State of Nature Wrapup, course presentation used to frame the transition between units."]
+    ],
+    notes: `The deck paraphrases the source reading. Direct quotations and bibliographic details remain in the assigned PDF. Generated editorial illustrations contain no external factual claims.\n\n${source("1–20")}`
+  }
+];
+
+const esc = value => String(value ?? "").replace(/[&<>"']/g, character => ({
+  "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;"
+}[character]));
+
+const deck = document.getElementById("deck");
+const overview = document.getElementById("overview");
+const notes = document.getElementById("notes");
+const overviewGrid = document.getElementById("overview-grid");
+const notesBody = document.getElementById("notes-body");
+const counter = document.getElementById("counter");
+const progress = document.getElementById("progress");
+
+const header = slide => `
+  <p class="kicker">${esc(slide.eyebrow)}</p>
+  <h2 class="title">${esc(slide.title)}</h2>
+  <div class="title-rule"></div>`;
+
+function renderSlide(slide, index) {
+  const node = document.createElement("section");
+  node.className = `slide ${slide.type}${slide.reverse ? " reverse" : ""}`;
+  node.dataset.index = String(index);
+  node.dataset.slideNumber = String(index + 1).padStart(2, "0");
+  node.setAttribute("aria-label", slide.title || "Untitled slide");
+  let html = `<div class="slide-inner">`;
+
+  if (slide.type === "cover") {
+    html += `<img class="cover-image" src="${esc(slide.image)}" alt="Editorial illustration of a citizen approaching a monumental civic building">
+      <div class="cover-copy">
+        <p class="eyebrow">${esc(slide.eyebrow)}</p>
+        <h1 class="title">${esc(slide.title)}</h1>
+        <p class="work">${esc(slide.work)}</p>
+        <p class="course">${esc(slide.course)}</p>
+      </div>`;
+  }
+
+  if (slide.type === "section") {
+    html += `<p class="eyebrow">${esc(slide.eyebrow)}</p><h2 class="title">${esc(slide.title)}</h2><p class="section-lead">${esc(slide.lead)}</p>`;
+  }
+
+  if (slide.type === "compare") {
+    html += header(slide);
+    html += `<div class="compare-grid">
+      <article class="compare-col"><span class="label">${esc(slide.columns[0].label)}</span><h3>${esc(slide.columns[0].heading)}</h3><p>${esc(slide.columns[0].text)}</p><p class="result">${esc(slide.columns[0].result)}</p></article>
+      <div class="compare-divider"></div>
+      <article class="compare-col"><span class="label">${esc(slide.columns[1].label)}</span><h3>${esc(slide.columns[1].heading)}</h3><p>${esc(slide.columns[1].text)}</p><p class="result">${esc(slide.columns[1].result)}</p></article>
+    </div>`;
+    if (slide.bottom) html += `<p class="bottom-line">${esc(slide.bottom)}</p>`;
+  }
+
+  if (slide.type === "statement") {
+    html += `<div class="statement-layout"><div>${header(slide)}<p class="statement">${slide.statement}</p></div><aside class="side-note"><span class="label">${esc(slide.sideLabel)}</span><p>${esc(slide.sideText)}</p></aside></div>`;
+  }
+
+  if (slide.type === "rows") {
+    html += header(slide);
+    if (slide.lead) html += `<p class="lead">${esc(slide.lead)}</p>`;
+    html += `<div class="row-list">${slide.rows.map((row, i) => `<div class="row"><span class="num">${String(i + 1).padStart(2, "0")}</span><h3>${esc(row[0])}</h3><p>${esc(row[1])}</p></div>`).join("")}</div>`;
+  }
+
+  if (slide.type === "image-copy") {
+    html += `<div class="image-copy-grid">`;
+    if (!slide.reverse) html += `<div class="copy">${header(slide)}${slide.paragraphs.map(text => `<p>${esc(text)}</p>`).join("")}<p class="bottom-line">${esc(slide.bottom)}</p></div><figure class="image-frame"><img src="${esc(slide.image)}" alt="Editorial illustration supporting ${esc(slide.title)}"></figure>`;
+    else html += `<figure class="image-frame"><img src="${esc(slide.image)}" alt="Editorial illustration supporting ${esc(slide.title)}"></figure><div class="copy">${header(slide)}${slide.paragraphs.map(text => `<p>${esc(text)}</p>`).join("")}<p class="bottom-line">${esc(slide.bottom)}</p></div>`;
+    html += `</div>`;
+  }
+
+  if (slide.type === "sequence") {
+    html += header(slide);
+    html += `<div class="sequence-list">${slide.items.map((item, i) => `<div class="sequence-item"><span class="num">${String(i + 1).padStart(2, "0")}</span><h3>${esc(item[0])}</h3><p>${esc(item[1])}</p></div>`).join("")}</div>`;
+    if (slide.bottom) html += `<p class="bottom-line">${esc(slide.bottom)}</p>`;
+  }
+
+  if (slide.type === "synthesis") {
+    html += header(slide);
+    html += `<div class="synthesis-band">${slide.steps.map((step, i) => `<article class="synthesis-step"><span class="num">${String(i + 1).padStart(2, "0")}</span><h3>${esc(step[0])}</h3><p>${esc(step[1])}</p></article>`).join("")}</div><p class="bottom-line">${esc(slide.bottom)}</p>`;
+  }
+
+  if (slide.type === "refs") {
+    html += header(slide);
+    html += `<div class="refs-list">${slide.items.map(item => `<div class="ref"><strong>${esc(item[0])}</strong><span>${esc(item[1])}</span></div>`).join("")}</div>`;
+  }
+
+  html += `</div>`;
+  node.innerHTML = html;
+  deck.appendChild(node);
+  return node;
+}
+
+const nodes = slides.map(renderSlide);
+let current = 0;
+
+function labelFor(slide) { return slide.title || slide.work || slide.eyebrow || "Slide"; }
+
+slides.forEach((slide, index) => {
+  const button = document.createElement("button");
+  button.className = "overview-card";
+  button.type = "button";
+  button.innerHTML = `<span class="num">${String(index + 1).padStart(2, "0")} / ${slides.length}</span><span class="label">${esc(labelFor(slide))}</span>`;
+  button.addEventListener("click", () => { closePanels(); show(index); });
+  overviewGrid.appendChild(button);
+});
+
+const overviewCards = [...overviewGrid.children];
+
+function show(index) {
+  current = Math.max(0, Math.min(slides.length - 1, index));
+  nodes.forEach((node, i) => node.classList.toggle("active", i === current));
+  overviewCards.forEach((card, i) => card.classList.toggle("current", i === current));
+  counter.textContent = `${current + 1} / ${slides.length}`;
+  progress.style.width = `${((current + 1) / slides.length) * 100}%`;
+  notesBody.textContent = slides[current].notes || "No notes for this slide.";
+  document.title = `${current + 1}/${slides.length} · Justifying the State`;
+}
+
+window.go = show;
+function closePanels() { overview.classList.remove("open"); notes.classList.remove("open"); }
+function togglePanel(panel) { const open = !panel.classList.contains("open"); closePanels(); if (open) panel.classList.add("open"); }
+document.querySelectorAll(".close").forEach(button => button.addEventListener("click", closePanels));
+document.getElementById("fullscreen").addEventListener("click", () => {
+  if (document.fullscreenElement) document.exitFullscreen();
+  else document.documentElement.requestFullscreen?.().catch(() => {});
+});
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") { closePanels(); return; }
+  if (overview.classList.contains("open") || notes.classList.contains("open")) return;
+  if (["ArrowRight", "ArrowDown", " ", "PageDown"].includes(event.key)) { event.preventDefault(); show(current + 1); }
+  else if (["ArrowLeft", "ArrowUp", "PageUp"].includes(event.key)) { event.preventDefault(); show(current - 1); }
+  else if (event.key.toLowerCase() === "o") togglePanel(overview);
+  else if (event.key.toLowerCase() === "n") togglePanel(notes);
+  else if (event.key.toLowerCase() === "f") document.getElementById("fullscreen").click();
+});
+
+let touchX = 0;
+document.addEventListener("touchstart", event => { touchX = event.changedTouches[0].screenX; }, { passive: true });
+document.addEventListener("touchend", event => {
+  const dx = event.changedTouches[0].screenX - touchX;
+  if (Math.abs(dx) > 60) show(current + (dx < 0 ? 1 : -1));
+}, { passive: true });
+
+function fits(node) {
+  const inner = node.querySelector(".slide-inner");
+  return inner && inner.scrollHeight <= node.clientHeight * 0.84 && inner.scrollWidth <= node.clientWidth * 0.94;
+}
+function fitNode(node) {
+  let fit = 1;
+  node.classList.add("measuring");
+  node.style.setProperty("--fit", fit);
+  while (fit > 0.74 && !fits(node)) {
+    fit -= 0.01;
+    node.style.setProperty("--fit", fit.toFixed(3));
+  }
+  node.classList.remove("measuring");
+}
+function fitAll() { nodes.forEach(node => { node.style.setProperty("--fit", 1); fitNode(node); }); show(current); }
+let resizeTimer;
+window.addEventListener("resize", () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(fitAll, 150); });
+if (document.fonts?.ready) document.fonts.ready.then(fitAll); else fitAll();
+show(0);
+</script>
+</body>
+</html>
