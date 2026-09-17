@@ -60,7 +60,9 @@
   }
   .slide.active, .slide.measuring { display: flex; }
   .slide.measuring { visibility: hidden; pointer-events: none; }
-  .build.is-hidden { display: none !important; }
+  /* Builds retain their final footprint. A reveal fills a prepared space
+     instead of reflowing the ideas that are already on the screen. */
+  .build.is-hidden { visibility: hidden; }
   .build-indicator {
     position: fixed;
     right: 11.5vw;
@@ -382,13 +384,9 @@
   .overview-card .label { font: 400 1.45rem/1.1 "DM Serif Display", Georgia, serif; text-transform: none; letter-spacing: 0; }
   #notes-body { max-width: 980px; padding: 2rem 2.4rem; white-space: pre-wrap; font-size: 1.1rem; line-height: 1.62; }
 
-  /* Preflight thumbnails should show the complete composition, even though the
-     live presentation begins each slide at its first teaching stage. */
-  .preflight-slide .build.is-hidden { display: block !important; }
-  .preflight-slide .row.build.is-hidden,
-  .preflight-slide .sequence-item.build.is-hidden { display: grid !important; }
-  .preflight-slide .synthesis-step.build.is-hidden { display: block !important; }
-  .preflight-slide .side-note.build.is-hidden { display: block !important; }
+  /* Preflight thumbnails show the complete composition, even though the live
+     presentation begins each slide at its first teaching stage. */
+  .preflight-slide .build.is-hidden { visibility: visible !important; }
 
   @media (max-width: 820px) {
     .slide { padding: 8vh 8vw 10vh !important; }
@@ -439,7 +437,7 @@ const slides = [
     work: "Political obligation and the social contract",
     course: "From a reason to want order to a reason to obey",
     image: "assets/justifying-state-cover.png",
-    notes: `Introduce the unit’s change in focus. Earlier state-of-nature arguments asked what political society solves. This reading asks what could give a state the moral right to rule.\n\n${source("1–20", "Cover visual: original editorial illustration generated for this presentation.")}`
+    notes: `Introduce the unit’s change in focus. Earlier state-of-nature arguments asked what political society solves. The central question now concerns what could give a state the moral right to rule.\n\n${source("1–20", "Cover visual: original editorial illustration generated for this presentation.")}`
   },
   {
     type: "section",
@@ -496,7 +494,7 @@ const slides = [
         result: "This aims to establish political obligation."
       }
     ],
-    notes: `Use the reading’s own distinction. Negative justification matters, but it does not finish the philosophical task because it does not yet show a moral duty to obey.\n\n${source("1")}`
+    notes: `Keep the distinction sharp. Negative justification matters, but it does not finish the philosophical task because it does not yet show a moral duty to obey.\n\n${source("1")}`
   },
   {
     type: "rows",
@@ -508,7 +506,7 @@ const slides = [
       ["Protection", "The state offers protection from illegitimate force and asks residents to surrender much of their private enforcement power."],
       ["Ideal type", "States may fail to monopolize force or protect everyone and still remain states. The features identify an aspiration, not a strict definition."]
     ],
-    notes: `Emphasize the reciprocal picture: the state claims control over legitimate coercion and accepts responsibility for protection. The reading immediately qualifies both claims by considering armed self-defense, persecuted minorities, and state violence.\n\n${source("3–5")}`
+    notes: `Emphasize the reciprocal picture: the state claims control over legitimate coercion and accepts responsibility for protection. Qualify both claims by considering armed self-defense, persecuted minorities, and state violence.\n\n${source("3–5")}`
   },
   {
     type: "rows",
@@ -521,11 +519,11 @@ const slides = [
       ["Tax", "A citizen may oppose a funded policy and still believe the tax law has a claim on them."],
       ["Universal", "The proposed duty reaches everyone within the territory. It remains defeasible when circumstances or serious injustice change the moral situation."]
     ],
-    notes: `The reading narrows the inquiry to obedience. Universal obligation does not mean absolute obedience to every law in every circumstance. It means that everyone is, in principle, within the state’s moral jurisdiction.\n\n${source("5–7")}`
+    notes: `The inquiry now narrows to obedience. Universal obligation does not mean absolute obedience to every law in every circumstance. It means that everyone is, in principle, within the state’s moral jurisdiction.\n\n${source("5–7")}`
   },
   {
     type: "compare",
-    eyebrow: "The wider chapter",
+    eyebrow: "Two approaches",
     title: "Two routes to justification",
     columns: [
       {
@@ -541,14 +539,14 @@ const slides = [
         result: "The next substantive test begins with Locke’s consent route."
       }
     ],
-    notes: `This slide locates the social contract within the chapter’s broader plan. Do not develop utilitarianism here. The contrast shows that different values generate different kinds of justification.\n\n${source("2–3")}`
+    notes: `This slide locates the social contract alongside a rival approach. Do not develop utilitarianism here. The contrast shows that different values generate different kinds of justification.\n\n${source("2–3")}`
   },
   {
     type: "section",
     eyebrow: "The social contract",
     title: "Consent as the source of authority",
     lead: "The contract promises to turn natural freedom into political obligation without giving the state authority by default.",
-    notes: `Begin the substantive chapter. The contract is attractive because it appears to reconcile personal autonomy with a state that claims authority over everyone.\n\n${source("8–9")}`
+    notes: `Begin the social-contract argument. The contract is attractive because it appears to reconcile personal autonomy with a state that claims authority over everyone.\n\n${source("8–9")}`
   },
   {
     type: "statement",
@@ -760,7 +758,7 @@ const slides = [
       ["Limited reach", "Those dissenters cannot be assigned political obligations through a consent argument."],
       ["Conclusion", "Voluntarism cannot deliver the universal authority that the state claims."]
     ],
-    notes: `The reading calls contract theory voluntarism par excellence. Its respect for individual choice creates the very reason it cannot reach everyone. One genuine dissenter prevents a universal conclusion.\n\n${source("17")}`
+    notes: `Contract theory makes voluntarism central. Its respect for individual choice creates the very reason it cannot reach everyone. One genuine dissenter prevents a universal conclusion.\n\n${source("17")}`
   },
   {
     type: "section",
@@ -799,7 +797,7 @@ const slides = [
       "One person rejects redistributive taxation. Another rejects inherited property. Each claims authority to set aside the public rule."
     ],
     bottom: "Locke’s original reason for shared, public law returns.",
-    notes: `The reading describes unrestricted private judgment as a return to the problem that political society was meant to solve. The examples of taxation and inheritance show how sincere moral judgments can collide.\n\n${source("18–20", "Visual: original editorial illustration generated for this presentation.")}`
+    notes: `Unrestricted private judgment returns us to the problem that political society was meant to solve. The examples of taxation and inheritance show how sincere moral judgments can collide.\n\n${source("18–20", "Visual: original editorial illustration generated for this presentation.")}`
   },
   {
     type: "compare",
@@ -820,12 +818,12 @@ const slides = [
       }
     ],
     bottom: "A satisfactory account of legitimacy must preserve moral criticism and explain the authority of shared rules.",
-    notes: `Do not resolve the chapter more strongly than the source does. Philosophical anarchism has considerable merit in theory, while conflicting moral judgment makes it unattractive in practice.\n\n${source("18–20")}`
+    notes: `Do not resolve the tension too strongly. Philosophical anarchism has considerable merit in theory, while conflicting moral judgment makes it unattractive in practice.\n\n${source("18–20")}`
   },
   {
     type: "synthesis",
     eyebrow: "Argument map",
-    title: "The chapter’s movement",
+    title: "Argument map",
     steps: [
       ["State of nature", "A counterfactual baseline shows why order, protection, or impartial judgment may be needed."],
       ["Justification", "The next question asks why an institution has moral authority over each resident."],
@@ -840,14 +838,14 @@ const slides = [
     eyebrow: "Sources",
     title: "References",
     items: [
-      ["Primary reading", "“01a Justifying the State - Intro,” source PDF, 20 pages."],
-      ["John Locke", "Second Treatise of Civil Government, sections 15 and 119, as quoted and discussed in the source reading."],
-      ["David Hume", "“Of the Original Contract,” as quoted and discussed in the source reading."],
-      ["Jean-Jacques Rousseau", "The Social Contract, book IV, chapter 2, as discussed in the source reading."],
-      ["J. S. Mill and Max Weber", "On Liberty and the account of the state’s monopoly of legitimate force, as quoted or discussed in the source reading."],
+      ["Assigned text", "“01a Justifying the State - Intro,” 20 pages."],
+      ["John Locke", "Second Treatise of Civil Government, sections 15 and 119."],
+      ["David Hume", "“Of the Original Contract.”"],
+      ["Jean-Jacques Rousseau", "The Social Contract, book IV, chapter 2."],
+      ["J. S. Mill and Max Weber", "On Liberty and the account of the state’s monopoly of legitimate force."],
       ["Course context", "State of Nature Wrapup, course presentation used to frame the transition between units."]
     ],
-    notes: `The deck paraphrases the source reading. Direct quotations and bibliographic details remain in the assigned PDF. Generated editorial illustrations contain no external factual claims.\n\n${source("1–20")}`
+    notes: `The deck paraphrases the assigned material. Direct quotations and bibliographic details remain in the assigned PDF. Generated editorial illustrations contain no external factual claims.\n\n${source("1–20")}`
   }
 ];
 
@@ -975,7 +973,6 @@ function advanceBuild() {
   if (buildStages[current] >= total) return false;
   buildStages[current] += 1;
   updateBuildState(current);
-  fitNode(nodes[current]);
   updatePresentationChrome();
   return true;
 }
@@ -984,7 +981,6 @@ function retreatBuild() {
   if (buildStages[current] <= 0) return false;
   buildStages[current] -= 1;
   updateBuildState(current);
-  fitNode(nodes[current]);
   updatePresentationChrome();
   return true;
 }
