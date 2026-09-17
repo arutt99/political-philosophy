@@ -1,0 +1,583 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="An ethics presentation on utilitarianism, John Stuart Mill, and the moral limits of consequence-based reasoning.">
+  <title>Utilitarianism: Happiness, Rules, and Moral Limits</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="presentation-polish.css">
+  <script src="presentation-polish.js" defer></script>
+  <style>
+    :root {
+      --night: #17131b;
+      --night-soft: #211a25;
+      --paper: #f5eddf;
+      --ink: #211923;
+      --muted: #c9bfb2;
+      --plum: #7e526f;
+      --plum-light: #bf91ac;
+      --gold: #e0ae5b;
+      --gold-deep: #a86e2c;
+      --line: rgba(245, 237, 223, .22);
+      --fit: 1;
+      --text: var(--paper);
+      --preflight-bg: var(--night);
+      --preflight-text: var(--paper);
+      --preflight-muted: var(--muted);
+      --preflight-accent: var(--gold);
+      --preflight-bright: var(--plum-light);
+      --preflight-line: var(--line);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: var(--night);
+    }
+
+    body { font-family: "DM Sans", Arial, sans-serif; }
+    button { font: inherit; }
+
+    #deck {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 88% 6%, rgba(126, 82, 111, .3), transparent 30vw),
+        linear-gradient(135deg, #17131b 0%, #1c1520 58%, #211824 100%);
+      color: var(--paper);
+    }
+
+    #deck::before {
+      position: absolute;
+      inset: 0;
+      content: "";
+      opacity: .25;
+      pointer-events: none;
+      background-image: linear-gradient(90deg, rgba(245, 237, 223, .045) 1px, transparent 1px), linear-gradient(rgba(245, 237, 223, .035) 1px, transparent 1px);
+      background-size: 6vw 6vw;
+      mask-image: linear-gradient(120deg, black, transparent 68%);
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: none;
+      align-items: center;
+      padding: 7vh 8vw 10vh !important;
+      overflow: hidden;
+    }
+
+    .slide.active, .slide.measuring { display: flex; }
+    .slide.measuring { visibility: hidden; pointer-events: none; }
+    .slide.top { align-items: flex-start; padding-top: 7vh !important; }
+
+    .slide-inner {
+      position: relative;
+      z-index: 1;
+      width: min(1360px, 84vw);
+      max-height: 79vh;
+      margin: auto;
+      transform-origin: top left;
+    }
+
+    .eyebrow, .slide-number, #counter, #nav-hint, #presentation-controls button, .panel-head button,
+    .term, .measure-label, .comparison-label, .overview-card .num {
+      font-family: "DM Mono", Consolas, monospace;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow {
+      margin: 0 0 1.25rem;
+      color: var(--gold);
+      font-size: calc(clamp(11px, .85vw, 15px) * var(--fit));
+      font-weight: 500;
+      line-height: 1.25;
+    }
+
+    .title {
+      max-width: 14ch;
+      margin: 0;
+      color: var(--paper);
+      font-family: "Source Serif 4", Georgia, serif;
+      font-size: calc(clamp(46px, 5.25vw, 84px) * var(--fit));
+      font-weight: 600;
+      letter-spacing: -.045em;
+      line-height: .98;
+    }
+
+    .lead {
+      max-width: 58ch;
+      margin: calc(1.65rem * var(--fit)) 0 0;
+      color: #e2d8cb;
+      font-size: calc(clamp(20px, 1.7vw, 29px) * var(--fit));
+      line-height: 1.38;
+    }
+
+    .supporting {
+      max-width: 64ch;
+      margin: calc(1.05rem * var(--fit)) 0 0;
+      color: var(--muted);
+      font-size: calc(clamp(16px, 1.18vw, 20px) * var(--fit));
+      line-height: 1.45;
+    }
+
+    .cover {
+      padding: 0 !important;
+      background: #151118;
+    }
+
+    .cover .slide-inner {
+      display: flex;
+      align-items: stretch;
+      width: 100vw !important;
+      max-width: none !important;
+      height: 100vh;
+      max-height: none;
+      margin: 0;
+    }
+
+    .cover-copy {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      width: 54%;
+      min-width: 0;
+      flex-direction: column;
+      justify-content: center;
+      padding: 12vh 5vw 10vh 11vw;
+      background: linear-gradient(90deg, rgba(19, 15, 22, .98), rgba(19, 15, 22, .92) 67%, rgba(19, 15, 22, .28));
+    }
+
+    .cover .eyebrow { color: var(--gold); }
+
+    .cover .title {
+      max-width: 8ch;
+      font-size: calc(clamp(68px, 9.2vw, 136px) * var(--fit));
+      line-height: .86;
+    }
+
+    .cover .work {
+      max-width: 24ch;
+      margin: calc(1.8rem * var(--fit)) 0 0;
+      color: #dfd1c2;
+      font-family: "Source Serif 4", Georgia, serif;
+      font-size: calc(clamp(22px, 2.15vw, 34px) * var(--fit));
+      line-height: 1.22;
+    }
+
+    .course {
+      margin-top: calc(2.7rem * var(--fit));
+      color: var(--plum-light);
+      font: 500 calc(clamp(10px, .85vw, 15px) * var(--fit))/1.25 "DM Mono", Consolas, monospace;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .cover-hero {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .cover::after {
+      position: absolute;
+      z-index: 1;
+      inset: 0;
+      content: "";
+      pointer-events: none;
+      background: linear-gradient(90deg, rgba(19, 15, 22, .78) 0%, rgba(19, 15, 22, .25) 55%, transparent 72%);
+    }
+
+    .section .slide-inner { border-left: 2px solid var(--gold); padding-left: clamp(1.4rem, 3vw, 4rem); }
+    .section .title { max-width: 10ch; font-size: calc(clamp(62px, 7.2vw, 108px) * var(--fit)); }
+    .section .rule { width: min(430px, 70vw); height: 1px; margin-top: calc(2.5rem * var(--fit)); background: linear-gradient(90deg, var(--gold), transparent); }
+
+    .principle .maxim { display: grid; grid-template-columns: auto 1fr; gap: 1.25rem 2rem; align-items: baseline; margin-top: calc(2.3rem * var(--fit)); }
+    .principle .maxim-mark { color: var(--gold); font: 500 calc(clamp(36px, 4vw, 62px) * var(--fit))/1 "Source Serif 4", Georgia, serif; }
+    .principle .maxim-copy { max-width: 39ch; color: #f2e8d9; font: 600 calc(clamp(24px, 2.35vw, 36px) * var(--fit))/1.22 "Source Serif 4", Georgia, serif; }
+
+    .scope-lines, .measure-list { width: min(1100px, 100%); margin-top: calc(2.25rem * var(--fit)); border-top: 1px solid var(--line); }
+    .scope-line, .measure-row { display: grid; grid-template-columns: minmax(160px, .45fr) minmax(0, 1.55fr); gap: 2rem; align-items: baseline; padding: calc(1.1rem * var(--fit)) 0; border-bottom: 1px solid var(--line); }
+    .term, .measure-label { color: var(--gold); font-size: calc(clamp(11px, .9vw, 15px) * var(--fit)); font-weight: 500; line-height: 1.3; }
+    .scope-line p, .measure-row p { margin: 0; color: #eee4d7; font-size: calc(clamp(18px, 1.5vw, 25px) * var(--fit)); line-height: 1.3; }
+    .measure-row p { color: var(--muted); }
+    .measure-row p strong { color: var(--paper); font-weight: 600; }
+
+    .contrast-grid, .comparison-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(2rem, 7vw, 9rem); margin-top: calc(2.4rem * var(--fit)); }
+    .contrast, .comparison { min-width: 0; padding-top: calc(1rem * var(--fit)); border-top: 2px solid var(--plum-light); }
+    .contrast:last-child, .comparison:last-child { border-color: var(--gold); }
+    .comparison-label { margin: 0 0 .9rem; color: var(--plum-light); font-size: calc(clamp(10px, .82vw, 14px) * var(--fit)); font-weight: 500; }
+    .comparison:last-child .comparison-label { color: var(--gold); }
+    .contrast h3, .comparison h3 { max-width: 15ch; margin: 0; color: var(--paper); font: 600 calc(clamp(30px, 3vw, 47px) * var(--fit))/1.02 "Source Serif 4", Georgia, serif; letter-spacing: -.025em; }
+    .contrast p, .comparison p { margin: calc(1rem * var(--fit)) 0 0; color: var(--muted); font-size: calc(clamp(16px, 1.28vw, 21px) * var(--fit)); line-height: 1.4; }
+    .contrast .takeaway, .comparison .takeaway { color: #ece0d1; font-size: calc(clamp(17px, 1.4vw, 23px) * var(--fit)); }
+
+    .policy-balance { display: grid; grid-template-columns: minmax(0, .86fr) minmax(300px, 1.14fr); gap: clamp(2rem, 7vw, 8rem); align-items: end; margin-top: calc(2.5rem * var(--fit)); }
+    .cost-copy { max-width: 15ch; margin: 0; color: var(--plum-light); font: 600 calc(clamp(35px, 4.1vw, 66px) * var(--fit))/1 "Source Serif 4", Georgia, serif; letter-spacing: -.04em; }
+    .benefit-copy { max-width: 19ch; margin: 0; color: var(--paper); font: 600 calc(clamp(35px, 4.1vw, 66px) * var(--fit))/1 "Source Serif 4", Georgia, serif; letter-spacing: -.04em; }
+    .policy-balance span { display: block; margin-bottom: .8rem; color: var(--gold); font: 500 calc(clamp(10px, .82vw, 14px) * var(--fit))/1.2 "DM Mono", monospace; letter-spacing: .12em; text-transform: uppercase; }
+
+    .scenario-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.2rem; margin-top: calc(2.3rem * var(--fit)); }
+    .scenario { min-height: 255px; padding: clamp(1.2rem, 2.3vw, 2.8rem); background: rgba(245, 237, 223, .055); border: 1px solid var(--line); }
+    .scenario:last-child { border-color: rgba(224, 174, 91, .55); }
+    .scenario h3 { margin: 0; color: var(--gold); font: 500 calc(clamp(11px, .85vw, 14px) * var(--fit))/1.2 "DM Mono", monospace; letter-spacing: .12em; text-transform: uppercase; }
+    .scenario p { max-width: 29ch; margin: calc(1.05rem * var(--fit)) 0 0; color: var(--paper); font: 500 calc(clamp(20px, 1.7vw, 28px) * var(--fit))/1.28 "Source Serif 4", Georgia, serif; }
+    .scenario .outcome { color: var(--muted); font-family: "DM Sans", Arial, sans-serif; font-size: calc(clamp(14px, 1.08vw, 18px) * var(--fit)); }
+
+    .point-grid { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(2rem, 7vw, 8rem); margin-top: calc(2.4rem * var(--fit)); }
+    .point-label { margin: 0; color: var(--gold); font: 500 calc(clamp(10px, .8vw, 14px) * var(--fit))/1.2 "DM Mono", monospace; letter-spacing: .12em; text-transform: uppercase; }
+    .point-statement { margin: .9rem 0 0; color: var(--paper); font: 600 calc(clamp(29px, 2.8vw, 45px) * var(--fit))/1.08 "Source Serif 4", Georgia, serif; letter-spacing: -.028em; }
+    .point-copy { max-width: 35ch; margin: 0; color: var(--muted); font-size: calc(clamp(18px, 1.48vw, 24px) * var(--fit)); line-height: 1.4; }
+
+    .pressure-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(2rem, 7vw, 8rem); margin-top: calc(2.45rem * var(--fit)); }
+    .pressure { padding: 0 0 calc(1.5rem * var(--fit)); border-bottom: 1px solid var(--line); }
+    .pressure h3 { margin: 0; color: var(--gold); font: 500 calc(clamp(11px, .87vw, 14px) * var(--fit))/1.2 "DM Mono", monospace; letter-spacing: .12em; text-transform: uppercase; }
+    .pressure p { margin: calc(.85rem * var(--fit)) 0 0; color: var(--paper); font: 600 calc(clamp(24px, 2.2vw, 35px) * var(--fit))/1.16 "Source Serif 4", Georgia, serif; letter-spacing: -.02em; }
+
+    .proof .title { max-width: 13ch; }
+    .proof-chain { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(2rem, 7vw, 8rem); margin-top: calc(2.4rem * var(--fit)); }
+    .proof-step { padding-top: calc(1rem * var(--fit)); border-top: 1px solid var(--line); }
+    .proof-step h3 { margin: 0; color: var(--gold); font: 500 calc(clamp(11px, .85vw, 14px) * var(--fit))/1.2 "DM Mono", monospace; letter-spacing: .12em; text-transform: uppercase; }
+    .proof-step p { max-width: 31ch; margin: .85rem 0 0; color: var(--paper); font: 600 calc(clamp(22px, 2.1vw, 34px) * var(--fit))/1.2 "Source Serif 4", Georgia, serif; letter-spacing: -.02em; }
+
+    .assessment-table { width: min(1180px, 100%); margin-top: calc(2.25rem * var(--fit)); border-collapse: collapse; }
+    .assessment-table th, .assessment-table td { padding: calc(1.05rem * var(--fit)) 0; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+    .assessment-table th { width: 31%; padding-right: 2rem; color: var(--gold); font: 500 calc(clamp(10px, .82vw, 14px) * var(--fit))/1.2 "DM Mono", monospace; letter-spacing: .1em; text-transform: uppercase; }
+    .assessment-table td { color: var(--paper); font: 500 calc(clamp(18px, 1.5vw, 24px) * var(--fit))/1.33 "Source Serif 4", Georgia, serif; }
+
+    .references .title { max-width: 10ch; }
+    .reference-list { width: min(1050px, 100%); margin-top: calc(2.2rem * var(--fit)); border-top: 1px solid var(--line); }
+    .reference { padding: calc(1.2rem * var(--fit)) 0; border-bottom: 1px solid var(--line); color: #e5d9ca; font-size: calc(clamp(16px, 1.3vw, 22px) * var(--fit)); line-height: 1.42; }
+    .reference strong { color: var(--gold); font-weight: 600; }
+
+    #progress { position: fixed; z-index: 20; bottom: 0; left: 0; width: 0; height: 4px; background: linear-gradient(90deg, var(--plum-light), var(--gold)); transition: width .25s ease; }
+    #counter { position: fixed; z-index: 20; right: 2rem; bottom: 1.5rem; color: #dfd1c2; font-size: .72rem; }
+    #nav-hint { position: fixed; z-index: 20; bottom: 1.5rem; left: 2rem; color: #bbaea2; font-size: .65rem; }
+    #presentation-controls { position: fixed; z-index: 21; right: 1.35rem; top: 1.35rem; display: flex; gap: .35rem; }
+    #presentation-controls button, .panel-head button { border: 1px solid rgba(245, 237, 223, .24); border-radius: 0; padding: .6rem .72rem; color: var(--paper); background: rgba(23, 19, 27, .76); cursor: pointer; font-size: .62rem; }
+    #presentation-controls button:hover, #presentation-controls button:focus-visible, .panel-head button:hover, .panel-head button:focus-visible { border-color: var(--gold); color: var(--gold); outline: none; }
+
+    .panel { position: fixed; z-index: 40; top: 0; right: 0; display: none; width: min(520px, 100vw); height: 100vh; padding: 1.4rem; overflow: auto; color: var(--paper); background: #1c1620; box-shadow: -24px 0 60px rgba(0, 0, 0, .33); }
+    .panel.open { display: block; }
+    .panel-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--line); }
+    .panel-head h2 { margin: 0; font: 600 1.8rem/1 "Source Serif 4", Georgia, serif; }
+    #notes-body { margin-top: 1.25rem; color: #ded4c9; white-space: pre-wrap; font-size: .97rem; line-height: 1.55; }
+    #overview-grid { display: grid; grid-template-columns: 1fr; gap: .65rem; margin-top: 1.25rem; }
+    .overview-card { display: grid; grid-template-columns: 4.4rem minmax(0, 1fr); gap: .8rem; width: 100%; padding: .85rem; border: 1px solid var(--line); color: var(--paper); background: transparent; cursor: pointer; text-align: left; }
+    .overview-card:hover, .overview-card:focus-visible, .overview-card.current { border-color: var(--gold); outline: none; }
+    .overview-card .num { color: var(--gold); font-size: .63rem; }
+    .overview-card .label { font: 500 1rem/1.18 "Source Serif 4", Georgia, serif; }
+
+    @media (max-width: 760px) {
+      .slide { padding: 6vh 8vw 11vh !important; }
+      .slide-inner { width: 84vw; }
+      .cover-copy { width: 78%; padding-left: 10vw; }
+      .contrast-grid, .comparison-grid, .scenario-grid, .pressure-grid, .proof-chain { grid-template-columns: 1fr; gap: 1.2rem; }
+      .policy-balance, .point-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+      .scope-line, .measure-row { grid-template-columns: 1fr; gap: .45rem; }
+      .scenario { min-height: 0; }
+      #nav-hint { display: none; }
+      #counter { right: 1rem; bottom: .95rem; }
+      #presentation-controls { right: .8rem; top: .8rem; }
+      #presentation-controls button { padding: .5rem; font-size: .56rem; }
+    }
+  </style>
+</head>
+<body data-library-view="ethics">
+  <main id="deck" aria-live="polite"></main>
+  <div id="progress" aria-hidden="true"></div>
+  <div id="counter" aria-live="polite"></div>
+  <div id="nav-hint" aria-hidden="true">Arrow keys · O overview · N notes</div>
+  <nav id="presentation-controls" aria-label="Presentation controls">
+    <button id="previous" type="button" aria-label="Previous slide">Prev</button>
+    <button id="next" type="button" aria-label="Next slide">Next</button>
+    <button id="overview-button" type="button" aria-label="Open slide overview">Overview</button>
+    <button id="notes-button" type="button" aria-label="Open speaker notes">Notes</button>
+    <button id="fullscreen" type="button" aria-label="Toggle fullscreen">Fullscreen</button>
+  </nav>
+
+  <section id="overview" class="panel" aria-label="Slide overview">
+    <div class="panel-head"><h2>Overview</h2><button class="close" type="button">Close</button></div>
+    <div id="overview-grid"></div>
+  </section>
+
+  <aside id="notes" class="panel" aria-label="Speaker notes">
+    <div class="panel-head"><h2>Speaker notes</h2><button class="close" type="button">Close</button></div>
+    <div id="notes-body"></div>
+  </aside>
+
+  <script>
+    const reference = (pages, note) => `${note}\n\nReference: Barbara MacKinnon and Andrew Fiala, Ethics: Theory and Contemporary Issues, 9th ed. (2018), pp. ${pages}.`;
+    const slides = [
+      {
+        type: 'cover',
+        eyebrow: 'Ethics · Moral theory',
+        title: 'Utilitarianism',
+        work: 'Happiness, rules, and moral limits',
+        course: 'Ethics · Standard presentation',
+        notes: reference('93-105', 'Frame utilitarianism as a powerful public standard for moral judgment. The lesson follows its central appeal and the problems that emerge when we try to apply it.')
+      },
+      {
+        type: 'section',
+        eyebrow: 'I. The moral standard',
+        title: 'Consequences and the common good',
+        notes: reference('94-96', 'Begin with the basic claim before taking up happiness, measurement, and the question of who counts.')
+      },
+      {
+        type: 'principle',
+        title: 'The principle of utility',
+        lead: 'Classical utilitarianism judges an action or practice by its tendency to promote happiness or to produce the reverse.',
+        maxim: 'The moral test concerns the likely consequences for everyone affected.',
+        supporting: 'Motive can explain why someone acted. For the utilitarian, the result determines whether the action was right.',
+        notes: reference('95-97', 'Make the contrast with theories that judge acts by their motive or by the kind of act they are. Consequences carry the moral weight here.')
+      },
+      {
+        type: 'scope',
+        title: 'Each person’s welfare enters the comparison',
+        lead: 'Utilitarianism rejects the idea that my interests deserve extra weight simply because they are mine.',
+        rows: [
+          ['My own welfare', 'My happiness and suffering matter, but they count as one person’s interests among others.'],
+          ['Other people', 'The theory asks how an action affects everyone who bears its benefits or costs.'],
+          ['Nonhuman animals', 'Bentham’s broad concern for suffering extends moral consideration beyond human beings.']
+        ],
+        notes: reference('95-96, 98', 'Emphasize impartiality. Equal consideration does not mean identical outcomes for each person. It means that no one begins with an automatic moral advantage.')
+      },
+      {
+        type: 'measure',
+        title: 'Calculating utility requires judgment',
+        lead: 'The comparison does not rest on a machine that measures happiness. It asks which outcomes are likely to create more well-being and less suffering overall.',
+        rows: [
+          ['Net balance', '<strong>Subtract pain from pleasure.</strong> The relevant result is the happiness that remains after harms are counted.'],
+          ['Intensity', '<strong>Ask how deeply people will be affected.</strong> Some pleasures and pains carry more weight than others.'],
+          ['Duration and fruitfulness', '<strong>Look beyond the moment.</strong> A choice can shape later pleasures, harms, and opportunities.'],
+          ['Likelihood', '<strong>Estimate what will happen.</strong> A large possible benefit counts differently when success is unlikely.']
+        ],
+        notes: reference('98-100', 'The reading treats these as elements of a practical calculus. Acknowledge the objection directly: interpersonal comparison and prediction make exact calculation difficult.')
+      },
+      {
+        type: 'contrast',
+        title: 'Mill adds quality to Bentham’s calculation',
+        left: {
+          label: 'Jeremy Bentham',
+          title: 'Quantity of pleasure',
+          body: 'Compare pleasures by amount: how many people receive them, how intense they are, how long they last, and how likely they are to occur.',
+          takeaway: 'Pleasures can be weighed by their quantity.'
+        },
+        right: {
+          label: 'John Stuart Mill',
+          title: 'Quality of pleasure',
+          body: 'Intellectual, aesthetic, and other complex pleasures may be more valuable in kind than merely sensory ones. People familiar with both types can judge the difference.',
+          takeaway: 'The kind of pleasure matters as well as its amount.'
+        },
+        notes: reference('100-101', 'Present Mill as revising, not abandoning, the aim of greatest happiness. His distinction answers the worry that utilitarianism values poetry and a simple game in exactly the same way when the quantities match.')
+      },
+      {
+        type: 'section',
+        eyebrow: 'II. Applying the standard',
+        title: 'Public policy and hard cases',
+        notes: reference('94-95, 102-104', 'The next movement puts the moral standard to work in familiar policy arguments and cases where ordinary moral intuitions resist the conclusion.')
+      },
+      {
+        type: 'policy',
+        title: 'Speed limits illustrate a utilitarian case for restraint',
+        lead: 'A policy can reduce one person’s freedom while improving the overall result for people who share the road.',
+        costLabel: 'The cost',
+        cost: 'Drivers surrender some speed and convenience.',
+        benefitLabel: 'The expected benefit',
+        benefit: 'Fewer accidents can reduce death, injury, delay, and fear for many people.',
+        supporting: 'The judgment compares the restriction’s cost with safety for everyone affected.',
+        notes: reference('94', 'Use this example to show why utilitarianism feels attractive in public policy. It offers a reason to accept a limited burden when the burden helps avoid wider harm.')
+      },
+      {
+        type: 'trolley',
+        title: 'The trolley problem makes the means morally visible',
+        lead: 'Both cases offer the same numerical outcome: five people live and one person dies. The route to that outcome changes.',
+        cases: [
+          ['Switch', 'Pull a lever to divert a trolley from five workers onto a track with one worker.', 'A straightforward calculation favors the action that saves five lives.'],
+          ['Bridge', 'Push one person from a bridge to stop a trolley before it reaches five workers.', 'Many people judge this differently, even though five lives are still saved.']
+        ],
+        notes: reference('102-103', 'Let students sit with the contrast. The cases put pressure on the view that consequences alone settle the moral question.')
+      },
+      {
+        type: 'point',
+        title: 'The arithmetic leaves an ethical remainder',
+        label: 'What the comparison reveals',
+        statement: 'A shared result can still feel morally different when one person becomes the tool for saving others.',
+        copy: 'The disagreement draws attention to intention, personal force, and the distinction between redirecting harm and using a person as a means. A utilitarian can reply that a fuller account of consequences includes trust, fear, and social practices. The dispute concerns what those added consequences can explain.',
+        notes: reference('102-103', 'Do not state that the trolley problem refutes utilitarianism. It exposes a disagreement about whether our moral judgments can be reduced to outcomes, even after long-term effects are included.')
+      },
+      {
+        type: 'comparison',
+        title: 'Act and rule utilitarianism choose different units of evaluation',
+        left: {
+          label: 'Act utilitarianism',
+          title: 'This particular choice',
+          body: 'Ask whether keeping or breaking a promise has the better consequences in the specific circumstances.',
+          takeaway: 'The immediate act supplies the comparison.'
+        },
+        right: {
+          label: 'Rule utilitarianism',
+          title: 'A practice people can rely on',
+          body: 'Ask what would happen if people generally followed a rule about keeping promises in similar situations.',
+          takeaway: 'Trust in the practice enters the comparison.'
+        },
+        notes: reference('103-104', 'Use promise-keeping as the concrete example. Rule utilitarianism tries to retain the importance of consequences while explaining why dependable rules can usually improve life for everyone.')
+      },
+      {
+        type: 'pressure',
+        title: 'The theory faces pressure where calculation meets commitment',
+        items: [
+          ['Measurement', 'Can anyone compare the intensity, duration, and quality of different people’s experiences well enough to justify a decision?'],
+          ['Personal integrity', 'May a moral theory require someone to set aside a deeply held project or the special claims of family when a larger sum of happiness points elsewhere?']
+        ],
+        notes: reference('101-102', 'Keep these criticisms distinct. The first doubts whether the calculation can be done. The second questions whether an impartial moral demand leaves enough room for personal moral commitments.')
+      },
+      {
+        type: 'proof',
+        title: 'Mill’s proof begins with what people desire',
+        lead: 'Mill argues that happiness deserves pursuit because people desire it for its own sake. Other goods matter because they contribute to happiness.',
+        steps: [
+          ['The claim', 'What people desire provides evidence that it is desirable or good.'],
+          ['The objection', 'Desiring something can show that people want it without showing that they ought to want it.']
+        ],
+        notes: reference('105', 'Name the worry as an apparent move from a fact about desire to a conclusion about value. The reading presents this as a central challenge to Mill’s attempted proof.')
+      },
+      {
+        type: 'assessment',
+        title: 'A fair assessment keeps the attraction and the cost in view',
+        rows: [
+          ['Its attraction', 'It asks us to take everyone’s suffering seriously and to evaluate policies by their effects on human and animal welfare.'],
+          ['Its difficulty', 'It can ask for predictions and comparisons that exceed what people can know, especially in urgent or personal cases.'],
+          ['Its lasting question', 'When greater overall happiness conflicts with rights, trust, or personal commitments, what may a moral agent require of another person?']
+        ],
+        notes: reference('94-105', 'Close by returning to the theory’s enduring strength and its most serious limits. Invite students to use the criteria on this slide when evaluating a later case.')
+      },
+      {
+        type: 'references',
+        title: 'References',
+        items: [
+          ['Primary text', 'Barbara MacKinnon and Andrew Fiala, “Utilitarianism and John Stuart Mill,” in Ethics: Theory and Contemporary Issues, 9th ed. Cengage Learning, 2018, pp. 93-105.'],
+          ['Thinkers discussed', 'Jeremy Bentham, John Stuart Mill, Peter Singer, Epicurus, and Immanuel Kant, as introduced or discussed in the primary text.'],
+          ['Cover image', 'Original editorial illustration generated for this presentation. It depicts a moral scale as a conceptual image, not a historical object or event.']
+        ],
+        notes: reference('93-105', 'All visible claims in this deck come from the primary text. The cover image is an original conceptual illustration created for this deck.')
+      }
+    ];
+
+    const deck = document.getElementById('deck');
+    const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[char]));
+    const format = value => esc(value).replace(/&lt;strong&gt;(.*?)&lt;\/strong&gt;/g, '<strong>$1</strong>');
+
+    function renderSlide(slide, index) {
+      const article = document.createElement('article');
+      article.className = `slide ${slide.type}${['scope', 'measure', 'contrast', 'policy', 'trolley', 'point', 'comparison', 'pressure', 'proof', 'assessment', 'references'].includes(slide.type) ? ' top' : ''}`;
+      article.dataset.index = String(index);
+      let html = '<div class="slide-inner">';
+
+      if (slide.type === 'cover') {
+        html += `<img class="cover-hero" src="assets/utilitarianism-moral-scale.png" alt="An original conceptual illustration of an unbalanced brass scale holding lights and a book.">`;
+        html += `<div class="cover-copy"><p class="eyebrow">${esc(slide.eyebrow)}</p><h1 class="title">${esc(slide.title)}</h1><p class="work">${esc(slide.work)}</p><p class="course">${esc(slide.course)}</p></div>`;
+      }
+      if (slide.type === 'section') html += `<p class="eyebrow">${esc(slide.eyebrow)}</p><h2 class="title">${esc(slide.title)}</h2><div class="rule"></div>`;
+      if (slide.type === 'principle') html += `<h2 class="title">${esc(slide.title)}</h2><p class="lead">${esc(slide.lead)}</p><div class="maxim"><span class="maxim-mark">§</span><p class="maxim-copy">${esc(slide.maxim)}</p></div><p class="supporting">${esc(slide.supporting)}</p>`;
+      if (slide.type === 'scope') html += `<h2 class="title">${esc(slide.title)}</h2><p class="lead">${esc(slide.lead)}</p><div class="scope-lines">${slide.rows.map(row => `<div class="scope-line"><span class="term">${esc(row[0])}</span><p>${esc(row[1])}</p></div>`).join('')}</div>`;
+      if (slide.type === 'measure') html += `<h2 class="title">${esc(slide.title)}</h2><p class="lead">${esc(slide.lead)}</p><div class="measure-list">${slide.rows.map(row => `<div class="measure-row"><span class="measure-label">${esc(row[0])}</span><p>${format(row[1])}</p></div>`).join('')}</div>`;
+      if (slide.type === 'contrast' || slide.type === 'comparison') {
+        const gridClass = slide.type === 'contrast' ? 'contrast-grid' : 'comparison-grid';
+        const itemClass = slide.type === 'contrast' ? 'contrast' : 'comparison';
+        html += `<h2 class="title">${esc(slide.title)}</h2><div class="${gridClass}">${[slide.left, slide.right].map(item => `<section class="${itemClass}"><p class="comparison-label">${esc(item.label)}</p><h3>${esc(item.title)}</h3><p>${esc(item.body)}</p><p class="takeaway">${esc(item.takeaway)}</p></section>`).join('')}</div>`;
+      }
+      if (slide.type === 'policy') html += `<h2 class="title">${esc(slide.title)}</h2><p class="lead">${esc(slide.lead)}</p><div class="policy-balance"><p class="cost-copy"><span>${esc(slide.costLabel)}</span>${esc(slide.cost)}</p><p class="benefit-copy"><span>${esc(slide.benefitLabel)}</span>${esc(slide.benefit)}</p></div><p class="supporting">${esc(slide.supporting)}</p>`;
+      if (slide.type === 'trolley') html += `<h2 class="title">${esc(slide.title)}</h2><p class="lead">${esc(slide.lead)}</p><div class="scenario-grid">${slide.cases.map(item => `<section class="scenario"><h3>${esc(item[0])}</h3><p>${esc(item[1])}</p><p class="outcome">${esc(item[2])}</p></section>`).join('')}</div>`;
+      if (slide.type === 'point') html += `<h2 class="title">${esc(slide.title)}</h2><div class="point-grid"><div><p class="point-label">${esc(slide.label)}</p><p class="point-statement">${esc(slide.statement)}</p></div><p class="point-copy">${esc(slide.copy)}</p></div>`;
+      if (slide.type === 'pressure') html += `<h2 class="title">${esc(slide.title)}</h2><div class="pressure-grid">${slide.items.map(item => `<section class="pressure"><h3>${esc(item[0])}</h3><p>${esc(item[1])}</p></section>`).join('')}</div>`;
+      if (slide.type === 'proof') html += `<h2 class="title">${esc(slide.title)}</h2><p class="lead">${esc(slide.lead)}</p><div class="proof-chain">${slide.steps.map(item => `<section class="proof-step"><h3>${esc(item[0])}</h3><p>${esc(item[1])}</p></section>`).join('')}</div>`;
+      if (slide.type === 'assessment') html += `<h2 class="title">${esc(slide.title)}</h2><table class="assessment-table"><tbody>${slide.rows.map(row => `<tr><th scope="row">${esc(row[0])}</th><td>${esc(row[1])}</td></tr>`).join('')}</tbody></table>`;
+      if (slide.type === 'references') html += `<h2 class="title">${esc(slide.title)}</h2><div class="reference-list">${slide.items.map(item => `<div class="reference"><strong>${esc(item[0])}.</strong> ${esc(item[1])}</div>`).join('')}</div>`;
+
+      article.innerHTML = html + '</div>';
+      deck.appendChild(article);
+      return article;
+    }
+
+    const nodes = slides.map(renderSlide);
+    const counter = document.getElementById('counter');
+    const progress = document.getElementById('progress');
+    const notes = document.getElementById('notes');
+    const notesBody = document.getElementById('notes-body');
+    const overview = document.getElementById('overview');
+    const overviewGrid = document.getElementById('overview-grid');
+    let current = 0;
+
+    const labelFor = slide => slide.title || slide.work || 'Slide';
+    slides.forEach((slide, index) => {
+      const button = document.createElement('button');
+      button.className = 'overview-card';
+      button.innerHTML = `<span class="num">${String(index + 1).padStart(2, '0')} / ${slides.length}</span><span class="label">${esc(labelFor(slide))}</span>`;
+      button.addEventListener('click', () => { closePanels(); show(index); });
+      overviewGrid.appendChild(button);
+    });
+    const overviewCards = [...overviewGrid.children];
+
+    function show(index) {
+      current = Math.max(0, Math.min(slides.length - 1, index));
+      nodes.forEach((node, slideIndex) => node.classList.toggle('active', slideIndex === current));
+      overviewCards.forEach((card, slideIndex) => card.classList.toggle('current', slideIndex === current));
+      counter.textContent = `${current + 1} / ${slides.length}`;
+      progress.style.width = `${((current + 1) / slides.length) * 100}%`;
+      notesBody.textContent = slides[current].notes || 'No speaker notes for this slide.';
+      document.title = `${current + 1}/${slides.length} · Utilitarianism`;
+    }
+
+    window.show = show;
+    window.go = show;
+
+    function closePanels() { overview.classList.remove('open'); notes.classList.remove('open'); }
+    function togglePanel(panel) { panel.classList.contains('open') ? closePanels() : (closePanels(), panel.classList.add('open')); }
+    function toggleFullscreen() { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen().catch(() => {}); }
+
+    document.getElementById('previous').addEventListener('click', () => show(current - 1));
+    document.getElementById('next').addEventListener('click', () => show(current + 1));
+    document.getElementById('overview-button').addEventListener('click', () => togglePanel(overview));
+    document.getElementById('notes-button').addEventListener('click', () => togglePanel(notes));
+    document.getElementById('fullscreen').addEventListener('click', toggleFullscreen);
+    document.querySelectorAll('.close').forEach(button => button.addEventListener('click', closePanels));
+
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') { closePanels(); return; }
+      if (overview.classList.contains('open') || notes.classList.contains('open')) return;
+      if (['ArrowRight', 'ArrowDown', ' ', 'PageDown'].includes(event.key)) { event.preventDefault(); show(current + 1); }
+      if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(event.key)) { event.preventDefault(); show(current - 1); }
+      if (event.key.toLowerCase() === 'o') togglePanel(overview);
+      if (event.key.toLowerCase() === 'n') togglePanel(notes);
+      if (event.key.toLowerCase() === 'f') toggleFullscreen();
+    });
+
+    let touchStart = null;
+    document.addEventListener('touchstart', event => { touchStart = event.changedTouches[0]; }, { passive: true });
+    document.addEventListener('touchend', event => {
+      if (!touchStart || overview.classList.contains('open') || notes.classList.contains('open')) return;
+      const touch = event.changedTouches[0];
+      const deltaX = touch.screenX - touchStart.screenX;
+      const deltaY = touch.screenY - touchStart.screenY;
+      touchStart = null;
+      if (Math.abs(deltaX) > 55 && Math.abs(deltaX) > Math.abs(deltaY)) show(current + (deltaX < 0 ? 1 : -1));
+    }, { passive: true });
+
+    show(0);
+  </script>
+</body>
+</html>
