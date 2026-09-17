@@ -60,6 +60,17 @@
   }
   .slide.active, .slide.measuring { display: flex; }
   .slide.measuring { visibility: hidden; pointer-events: none; }
+  .build.is-hidden { display: none !important; }
+  .build-indicator {
+    position: fixed;
+    right: 11.5vw;
+    bottom: 17px;
+    z-index: 40;
+    color: var(--red);
+    font: 600 10px/1 "JetBrains Mono", monospace;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
   .slide-inner {
     position: relative;
     z-index: 2;
@@ -371,6 +382,14 @@
   .overview-card .label { font: 400 1.45rem/1.1 "DM Serif Display", Georgia, serif; text-transform: none; letter-spacing: 0; }
   #notes-body { max-width: 980px; padding: 2rem 2.4rem; white-space: pre-wrap; font-size: 1.1rem; line-height: 1.62; }
 
+  /* Preflight thumbnails should show the complete composition, even though the
+     live presentation begins each slide at its first teaching stage. */
+  .preflight-slide .build.is-hidden { display: block !important; }
+  .preflight-slide .row.build.is-hidden,
+  .preflight-slide .sequence-item.build.is-hidden { display: grid !important; }
+  .preflight-slide .synthesis-step.build.is-hidden { display: block !important; }
+  .preflight-slide .side-note.build.is-hidden { display: block !important; }
+
   @media (max-width: 820px) {
     .slide { padding: 8vh 8vw 10vh !important; }
     .slide-inner { width: 84vw; }
@@ -394,6 +413,7 @@
 <div id="deck" aria-live="polite"></div>
 <div id="progress"></div>
 <div id="nav-hint">ARROWS / SPACE · O OVERVIEW · N NOTES · F FULLSCREEN</div>
+<div id="build-indicator" class="build-indicator" aria-live="polite"></div>
 <div id="counter">1 / 1</div>
 <button id="fullscreen" type="button" aria-label="Toggle fullscreen">Fullscreen</button>
 
@@ -553,72 +573,152 @@ const slides = [
   },
   {
     type: "sequence",
+    eyebrow: "The test ahead",
+    title: "Five routes from consent to authority",
+    items: [
+      ["Historical consent", "A founding agreement supposedly gives present institutions their authority."],
+      ["Express consent", "Residents explicitly agree through a present act."],
+      ["Tacit consent", "A resident’s conduct supposedly communicates agreement."],
+      ["Hypothetical consent", "A choice in a thought experiment supposedly justifies authority."],
+      ["Dispositional consent", "Reflection would reveal an unexpressed willingness to agree."]
+    ],
+    bottom: "Each route must show voluntary consent from every person the state governs.",
+    notes: `Preview the full inquiry before taking each route slowly. The class should retain these names as categories, not merely as small labels attached to later claims.\n\n${source("9–17")}`
+  },
+  {
+    type: "statement",
+    eyebrow: "Consent strategy 01",
+    title: "Historical consent",
+    statement: "A founding agreement could give political institutions a <em>history of authorization</em>.",
+    sideLabel: "What it must show",
+    sideText: "A past voluntary act can bind people who are governed now.",
+    notes: `Name the first strategy before criticizing it. A historical contract looks attractive only if an earlier agreement can pass authority to later generations.\n\n${source("9–10")}`
+  },
+  {
+    type: "sequence",
     eyebrow: "Historical consent",
-    title: "An original contract cannot bind the present",
+    title: "Historical consent cannot bind the present",
     items: [
       ["Evidence", "A founding contract should have left a historical trace, yet none can be identified."],
       ["Capacity", "People imagined before developed political society may lack the concepts and coordination needed for a legal agreement."],
       ["Descendants", "Even a real contract made by ancestors could not reasonably impose obligations on later generations."]
     ],
     bottom: "A voluntarist account needs the consent of people who are governed now.",
-    notes: `The intergenerational objection is decisive for the reading. Even if an original contract occurred, its participants could not contract on behalf of people born centuries later.\n\n${source("9–10")}`
+    notes: `Reveal these objections one at a time. The intergenerational objection is decisive: even an actual founding contract could not authorize rule over later people.\n\n${source("9–10")}`
+  },
+  {
+    type: "statement",
+    eyebrow: "Consent strategy 02",
+    title: "Express consent",
+    statement: "Political authority might rest on a resident’s <em>explicit agreement</em> to be governed.",
+    sideLabel: "What it must show",
+    sideText: "A current, voluntary act reaches nearly everyone the state governs.",
+    notes: `Keep express consent distinct from participation in general. The relevant question is whether a person clearly and voluntarily agrees to political authority.\n\n${source("10–11")}`
   },
   {
     type: "rows",
     eyebrow: "Express consent",
-    title: "Almost no one explicitly agrees to be governed",
+    title: "Express consent has limited reach",
+    lead: "A few present practices look like agreement, but neither reaches most residents.",
     rows: [
       ["Naturalization", "New citizens may formally consent, but they form a small portion of the population."],
-      ["Pledges", "Schoolchildren and scouts often lack meaningful choice and legal capacity."],
-      ["Voting", "A vote may support the system, oppose the government, or express dissent. Its meaning is not fixed."],
-      ["Abstention", "Refusing to vote cannot plausibly count as consent. Compulsory voting would also remove the required voluntariness."]
+      ["Pledges", "Schoolchildren and scouts often lack meaningful choice and legal capacity."]
     ],
-    notes: `The search for ongoing express consent does not reach most residents. Participatory democracy may strengthen the case, but it would also imply that ordinary contemporary democracies do not generate the required obligations.\n\n${source("10–11")}`
+    notes: `Introduce the strongest plausible candidates before turning to voting. Neither naturalization nor a pledge can explain universal political obligation.\n\n${source("10–11")}`
+  },
+  {
+    type: "compare",
+    eyebrow: "Express consent",
+    title: "Express consent: voting does not settle it",
+    columns: [
+      {
+        label: "Voting",
+        heading: "Its meaning is not fixed",
+        text: "A vote may support the system, oppose the government, or express dissent.",
+        result: "Casting a ballot cannot automatically mean agreement to be governed."
+      },
+      {
+        label: "Abstention",
+        heading: "Silence is not agreement",
+        text: "Refusing to vote cannot plausibly count as consent.",
+        result: "Compulsory voting would also remove the required voluntariness."
+      }
+    ],
+    notes: `Pause after the voting column before revealing abstention. Participatory democracy may strengthen the case, but ordinary participation does not establish universal express consent.\n\n${source("10–11")}`
+  },
+  {
+    type: "statement",
+    eyebrow: "Consent strategy 03",
+    title: "Tacit consent",
+    statement: "A resident’s <em>conduct</em>, rather than spoken agreement, supposedly communicates consent to political authority.",
+    sideLabel: "What it must show",
+    sideText: "The conduct is voluntary enough to count as an act of agreement.",
+    notes: `Make the category unmistakable before giving examples. Tacit consent is not yet a fairness argument: benefits matter because they supposedly signal consent.\n\n${source("11–12")}`
+  },
+  {
+    type: "rows",
+    eyebrow: "Tacit consent",
+    title: "Tacit consent treats conduct as agreement",
+    lead: "The argument points to actions that seem to accept the state’s benefits and burdens.",
+    rows: [
+      ["Accepting protection", "Receiving the state’s protection appears to accept its authority."],
+      ["Using public roads", "Using public goods appears to accept the terms under which they are provided."],
+      ["Holding property", "Keeping property under the legal order appears to accept that order."]
+    ],
+    notes: `Reveal each example separately, then ask whether its meaning is really agreement. Do not let the examples blur the distinction between consent and a claim of fairness.\n\n${source("11–12")}`
   },
   {
     type: "statement",
     eyebrow: "Tacit consent",
-    title: "Residence is treated as a quiet agreement",
-    statement: "By accepting protection, using public roads, or holding property, a resident appears to accept the state’s package of <em>benefits and burdens</em>.",
-    sideLabel: "The hidden condition",
-    sideText: "Staying can signal agreement only when leaving is a genuine and reasonable option.",
-    notes: `Keep tacit consent distinct from a fairness argument. Here, benefits matter because receiving them supposedly communicates consent. The binding force still comes from the alleged consent.\n\n${source("11–12")}`
+    title: "Tacit consent needs a real choice",
+    statement: "Staying can signal agreement only when leaving is a <em>genuine and reasonable option</em>.",
+    sideLabel: "Why this matters",
+    sideText: "Consent requires conduct a person could reasonably withhold.",
+    notes: `State the hidden condition plainly before Hume’s example. The issue is not whether people technically can leave; it is whether departure is a realistic alternative.\n\n${source("11–12")}`
   },
   {
     type: "image-copy",
     reverse: true,
     eyebrow: "Hume’s objection",
-    title: "An impossible exit cannot make staying voluntary",
+    title: "Tacit consent fails when exit is impossible",
     image: "assets/justifying-state-ship.png",
     paragraphs: [
       "Hume compares the resident to a person carried aboard a vessel while asleep. Remaining under the captain cannot show free consent when departure means leaping into the ocean.",
       "Language, poverty, family, migration barriers, and the lack of a welcoming destination can make political exit equally unrealistic."
     ],
     bottom: "Residence alone cannot establish consent when dissent carries an intolerable cost.",
-    notes: `Use the ship as an argument, not as decoration. Hume’s point is that a sign of agreement must be distinguishable from conduct forced by necessity.\n\n${source("12–13", "Visual: original editorial illustration generated for this presentation.")}`
+    notes: `Use the ship as an argument, not as decoration. Reveal Hume’s analogy first, then connect it to the real barriers that make political exit unrealistic.\n\n${source("12–13", "Visual: original editorial illustration generated for this presentation.")}`
+  },
+  {
+    type: "statement",
+    eyebrow: "Consent strategy 04",
+    title: "Hypothetical consent",
+    statement: "If rational people <em>would choose</em> political authority, perhaps that imagined choice can justify the state.",
+    sideLabel: "The shift",
+    sideText: "The contract becomes a thought experiment rather than an actual agreement.",
+    notes: `Mark the move away from actual consent. The state of nature now supplies a device for asking what rational people would choose.\n\n${source("14–15")}`
   },
   {
     type: "rows",
     eyebrow: "Hypothetical consent",
-    title: "The contract becomes a thought experiment",
-    lead: "Imagine the state’s absence. If rational people would freely recreate political authority, perhaps that imagined choice can justify the state.",
+    title: "Hypothetical consent asks what people would choose",
+    lead: "Imagine the state’s absence, then ask whether rational agents would recreate political authority.",
     rows: [
       ["Method", "Place rational agents in the state of nature and ask what form of order they would choose."],
-      ["Attraction", "A state that secures peace and protection may be the obvious rational choice."],
-      ["Problem", "A choice someone would make is still different from a voluntary act they have made."]
+      ["Attraction", "A state that secures peace and protection may be the obvious rational choice."]
     ],
-    notes: `Connect directly to the previous unit. The state of nature now acts as a device for hypothetical choice. The challenge is whether this can satisfy a theory that says obligations arise through actual voluntary acts.\n\n${source("14–15")}`
+    notes: `Let the class first see why the thought experiment has force. Its attraction comes from the possibility that a state offers peace and protection.\n\n${source("14–15")}`
   },
   {
     type: "compare",
-    eyebrow: "What the thought experiment shows",
-    title: "Worthiness and authorization",
+    eyebrow: "Hypothetical consent",
+    title: "Hypothetical consent does not authorize",
     columns: [
       {
         label: "Worthy of consent",
         heading: "The state has desirable features",
         text: "Peace, security, and reliable rules make a state preferable to the state of nature.",
-        result: "The features of the state supply the reason for justification."
+        result: "Those features supply a reason for justification."
       },
       {
         label: "Actually authorized",
@@ -627,20 +727,28 @@ const slides = [
         result: "An imagined choice cannot perform that act."
       }
     ],
-    bottom: "When desirable features do the work, consent drops out. The argument begins to resemble a defense based on well-being.",
-    notes: `This is the reading’s interpretive turning point. Hypothetical consent can identify a state worth choosing, but then justification rests on the state’s benefits rather than voluntary authorization.\n\n${source("15–16")}`
+    bottom: "When desirable features do the work, consent drops out of the argument.",
+    notes: `This is the interpretive turning point. First establish what hypothetical consent can show, then contrast it with the voluntary act that authorization requires.\n\n${source("15–16")}`
+  },
+  {
+    type: "statement",
+    eyebrow: "Consent strategy 05",
+    title: "Dispositional consent",
+    statement: "Serious reflection might reveal that people are already <em>disposed to consent</em>.",
+    sideLabel: "The rescue attempt",
+    sideText: "The thought experiment supposedly uncovers an attitude a person already has.",
+    notes: `Present dispositional consent as a final attempt to save the hypothetical account, not as another form of actual agreement.\n\n${source("16–17")}`
   },
   {
     type: "sequence",
-    eyebrow: "A final rescue",
+    eyebrow: "Dispositional consent",
     title: "Dispositional consent remains too weak",
     items: [
-      ["Proposal", "Serious reflection would lead most people to consent, so the thought experiment reveals an attitude they already possess."],
       ["Weakness", "Unexpressed and unacknowledged dispositions rarely create binding legal or moral obligations."],
       ["Dissent", "Some anarchists reflect on the state and still reject centralized political authority."]
     ],
     bottom: "Calling dissenters irrational would not show that they consented.",
-    notes: `The argument compares latent consent with beliefs a person has never consciously formed. The analogy may explain an attitude, but it does not give that attitude the force of a voluntary undertaking.\n\n${source("16–17")}`
+    notes: `The proposal is already on the prior slide. Now reveal the objection and then the significance of genuine dissent.\n\n${source("16–17")}`
   },
   {
     type: "sequence",
@@ -721,7 +829,7 @@ const slides = [
     steps: [
       ["State of nature", "A counterfactual baseline shows why order, protection, or impartial judgment may be needed."],
       ["Justification", "The next question asks why an institution has moral authority over each resident."],
-      ["Social contract", "Consent promises authorization, but historical, express, tacit, and hypothetical versions fail to reach everyone."],
+      ["Social contract", "Historical, express, tacit, hypothetical, and dispositional consent all fail to reach everyone."],
       ["Anarchist pressure", "The failure limits any duty to obey law as law, while the need for shared rules remains."]
     ],
     bottom: "The need for political order and the legitimacy of political authority remain distinct questions.",
@@ -754,6 +862,8 @@ const overviewGrid = document.getElementById("overview-grid");
 const notesBody = document.getElementById("notes-body");
 const counter = document.getElementById("counter");
 const progress = document.getElementById("progress");
+const navHint = document.getElementById("nav-hint");
+const buildIndicator = document.getElementById("build-indicator");
 
 const header = slide => `
   <p class="kicker">${esc(slide.eyebrow)}</p>
@@ -761,6 +871,8 @@ const header = slide => `
   <div class="title-rule"></div>`;
 
 function renderSlide(slide, index) {
+  const progressive = slide.progressive ?? ["compare", "statement", "rows", "image-copy", "sequence", "synthesis"].includes(slide.type);
+  const buildAttrs = step => progressive && step > 0 ? ` build is-hidden" data-build="${step}" aria-hidden="true` : `"`;
   const node = document.createElement("section");
   node.className = `slide ${slide.type}${slide.reverse ? " reverse" : ""}`;
   node.dataset.index = String(index);
@@ -785,39 +897,39 @@ function renderSlide(slide, index) {
   if (slide.type === "compare") {
     html += header(slide);
     html += `<div class="compare-grid">
-      <article class="compare-col"><span class="label">${esc(slide.columns[0].label)}</span><h3>${esc(slide.columns[0].heading)}</h3><p>${esc(slide.columns[0].text)}</p><p class="result">${esc(slide.columns[0].result)}</p></article>
+      <article class="compare-col${buildAttrs(0)}"><span class="label">${esc(slide.columns[0].label)}</span><h3>${esc(slide.columns[0].heading)}</h3><p>${esc(slide.columns[0].text)}</p><p class="result">${esc(slide.columns[0].result)}</p></article>
       <div class="compare-divider"></div>
-      <article class="compare-col"><span class="label">${esc(slide.columns[1].label)}</span><h3>${esc(slide.columns[1].heading)}</h3><p>${esc(slide.columns[1].text)}</p><p class="result">${esc(slide.columns[1].result)}</p></article>
+      <article class="compare-col${buildAttrs(1)}"><span class="label">${esc(slide.columns[1].label)}</span><h3>${esc(slide.columns[1].heading)}</h3><p>${esc(slide.columns[1].text)}</p><p class="result">${esc(slide.columns[1].result)}</p></article>
     </div>`;
-    if (slide.bottom) html += `<p class="bottom-line">${esc(slide.bottom)}</p>`;
+    if (slide.bottom) html += `<p class="bottom-line${buildAttrs(2)}">${esc(slide.bottom)}</p>`;
   }
 
   if (slide.type === "statement") {
-    html += `<div class="statement-layout"><div>${header(slide)}<p class="statement">${slide.statement}</p></div><aside class="side-note"><span class="label">${esc(slide.sideLabel)}</span><p>${esc(slide.sideText)}</p></aside></div>`;
+    html += `<div class="statement-layout"><div>${header(slide)}<p class="statement">${slide.statement}</p></div><aside class="side-note${buildAttrs(1)}"><span class="label">${esc(slide.sideLabel)}</span><p>${esc(slide.sideText)}</p></aside></div>`;
   }
 
   if (slide.type === "rows") {
     html += header(slide);
     if (slide.lead) html += `<p class="lead">${esc(slide.lead)}</p>`;
-    html += `<div class="row-list">${slide.rows.map((row, i) => `<div class="row"><span class="num">${String(i + 1).padStart(2, "0")}</span><h3>${esc(row[0])}</h3><p>${esc(row[1])}</p></div>`).join("")}</div>`;
+    html += `<div class="row-list">${slide.rows.map((row, i) => `<div class="row${buildAttrs(i)}"><span class="num">${String(i + 1).padStart(2, "0")}</span><h3>${esc(row[0])}</h3><p>${esc(row[1])}</p></div>`).join("")}</div>`;
   }
 
   if (slide.type === "image-copy") {
     html += `<div class="image-copy-grid">`;
-    if (!slide.reverse) html += `<div class="copy">${header(slide)}${slide.paragraphs.map(text => `<p>${esc(text)}</p>`).join("")}<p class="bottom-line">${esc(slide.bottom)}</p></div><figure class="image-frame"><img src="${esc(slide.image)}" alt="Editorial illustration supporting ${esc(slide.title)}"></figure>`;
-    else html += `<figure class="image-frame"><img src="${esc(slide.image)}" alt="Editorial illustration supporting ${esc(slide.title)}"></figure><div class="copy">${header(slide)}${slide.paragraphs.map(text => `<p>${esc(text)}</p>`).join("")}<p class="bottom-line">${esc(slide.bottom)}</p></div>`;
+    if (!slide.reverse) html += `<div class="copy">${header(slide)}${slide.paragraphs.map((text, i) => `<p class="copy-point${buildAttrs(i)}">${esc(text)}</p>`).join("")}<p class="bottom-line${buildAttrs(slide.paragraphs.length)}">${esc(slide.bottom)}</p></div><figure class="image-frame"><img src="${esc(slide.image)}" alt="Editorial illustration supporting ${esc(slide.title)}"></figure>`;
+    else html += `<figure class="image-frame"><img src="${esc(slide.image)}" alt="Editorial illustration supporting ${esc(slide.title)}"></figure><div class="copy">${header(slide)}${slide.paragraphs.map((text, i) => `<p class="copy-point${buildAttrs(i)}">${esc(text)}</p>`).join("")}<p class="bottom-line${buildAttrs(slide.paragraphs.length)}">${esc(slide.bottom)}</p></div>`;
     html += `</div>`;
   }
 
   if (slide.type === "sequence") {
     html += header(slide);
-    html += `<div class="sequence-list">${slide.items.map((item, i) => `<div class="sequence-item"><span class="num">${String(i + 1).padStart(2, "0")}</span><h3>${esc(item[0])}</h3><p>${esc(item[1])}</p></div>`).join("")}</div>`;
-    if (slide.bottom) html += `<p class="bottom-line">${esc(slide.bottom)}</p>`;
+    html += `<div class="sequence-list">${slide.items.map((item, i) => `<div class="sequence-item${buildAttrs(i)}"><span class="num">${String(i + 1).padStart(2, "0")}</span><h3>${esc(item[0])}</h3><p>${esc(item[1])}</p></div>`).join("")}</div>`;
+    if (slide.bottom) html += `<p class="bottom-line${buildAttrs(slide.items.length)}">${esc(slide.bottom)}</p>`;
   }
 
   if (slide.type === "synthesis") {
     html += header(slide);
-    html += `<div class="synthesis-band">${slide.steps.map((step, i) => `<article class="synthesis-step"><span class="num">${String(i + 1).padStart(2, "0")}</span><h3>${esc(step[0])}</h3><p>${esc(step[1])}</p></article>`).join("")}</div><p class="bottom-line">${esc(slide.bottom)}</p>`;
+    html += `<div class="synthesis-band">${slide.steps.map((step, i) => `<article class="synthesis-step${buildAttrs(i)}"><span class="num">${String(i + 1).padStart(2, "0")}</span><h3>${esc(step[0])}</h3><p>${esc(step[1])}</p></article>`).join("")}</div><p class="bottom-line${buildAttrs(slide.steps.length)}">${esc(slide.bottom)}</p>`;
   }
 
   if (slide.type === "refs") {
@@ -833,6 +945,49 @@ function renderSlide(slide, index) {
 
 const nodes = slides.map(renderSlide);
 let current = 0;
+const buildStages = slides.map(() => 0);
+
+function buildTotal(index) {
+  return Math.max(0, ...[...nodes[index].querySelectorAll("[data-build]")].map(node => Number(node.dataset.build) || 0));
+}
+
+function updateBuildState(index) {
+  const stage = buildStages[index];
+  nodes[index].querySelectorAll("[data-build]").forEach(node => {
+    const visible = Number(node.dataset.build) <= stage;
+    node.classList.toggle("is-hidden", !visible);
+    node.setAttribute("aria-hidden", String(!visible));
+  });
+}
+
+function updatePresentationChrome() {
+  const total = buildTotal(current);
+  const stage = buildStages[current];
+  counter.textContent = `${current + 1} / ${slides.length}`;
+  buildIndicator.textContent = total ? `Build ${stage + 1} / ${total + 1}` : "";
+  navHint.textContent = total && stage < total
+    ? "NEXT: REVEAL · O OVERVIEW · N NOTES · F FULLSCREEN"
+    : "ARROWS / SPACE · O OVERVIEW · N NOTES · F FULLSCREEN";
+}
+
+function advanceBuild() {
+  const total = buildTotal(current);
+  if (buildStages[current] >= total) return false;
+  buildStages[current] += 1;
+  updateBuildState(current);
+  fitNode(nodes[current]);
+  updatePresentationChrome();
+  return true;
+}
+
+function retreatBuild() {
+  if (buildStages[current] <= 0) return false;
+  buildStages[current] -= 1;
+  updateBuildState(current);
+  fitNode(nodes[current]);
+  updatePresentationChrome();
+  return true;
+}
 
 function labelFor(slide) { return slide.title || slide.work || slide.eyebrow || "Slide"; }
 
@@ -847,14 +1002,17 @@ slides.forEach((slide, index) => {
 
 const overviewCards = [...overviewGrid.children];
 
-function show(index) {
+function show(index, { resetBuild = true, refit = true } = {}) {
   current = Math.max(0, Math.min(slides.length - 1, index));
+  if (resetBuild) buildStages[current] = 0;
+  updateBuildState(current);
   nodes.forEach((node, i) => node.classList.toggle("active", i === current));
   overviewCards.forEach((card, i) => card.classList.toggle("current", i === current));
-  counter.textContent = `${current + 1} / ${slides.length}`;
   progress.style.width = `${((current + 1) / slides.length) * 100}%`;
   notesBody.textContent = slides[current].notes || "No notes for this slide.";
   document.title = `${current + 1}/${slides.length} · Justifying the State`;
+  if (refit) fitNode(nodes[current]);
+  updatePresentationChrome();
 }
 
 window.go = show;
@@ -865,11 +1023,28 @@ document.getElementById("fullscreen").addEventListener("click", () => {
   if (document.fullscreenElement) document.exitFullscreen();
   else document.documentElement.requestFullscreen?.().catch(() => {});
 });
+const forwardKeys = ["ArrowRight", "ArrowDown", " ", "PageDown"];
+const backwardKeys = ["ArrowLeft", "ArrowUp", "PageUp"];
+
+/* This deck registers before the shared preflight navigator. It consumes an
+   arrow only when that arrow has a teaching stage to reveal or hide. */
+document.addEventListener("keydown", event => {
+  if (!window.__presentationPreflight?.started) return;
+  if (overview.classList.contains("open") || notes.classList.contains("open")) return;
+  if (forwardKeys.includes(event.key) && advanceBuild()) {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+  } else if (backwardKeys.includes(event.key) && retreatBuild()) {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+  }
+}, true);
+
 document.addEventListener("keydown", event => {
   if (event.key === "Escape") { closePanels(); return; }
   if (overview.classList.contains("open") || notes.classList.contains("open")) return;
-  if (["ArrowRight", "ArrowDown", " ", "PageDown"].includes(event.key)) { event.preventDefault(); show(current + 1); }
-  else if (["ArrowLeft", "ArrowUp", "PageUp"].includes(event.key)) { event.preventDefault(); show(current - 1); }
+  if (forwardKeys.includes(event.key)) { event.preventDefault(); if (!advanceBuild()) show(current + 1); }
+  else if (backwardKeys.includes(event.key)) { event.preventDefault(); if (!retreatBuild()) show(current - 1); }
   else if (event.key.toLowerCase() === "o") togglePanel(overview);
   else if (event.key.toLowerCase() === "n") togglePanel(notes);
   else if (event.key.toLowerCase() === "f") document.getElementById("fullscreen").click();
@@ -879,8 +1054,13 @@ let touchX = 0;
 document.addEventListener("touchstart", event => { touchX = event.changedTouches[0].screenX; }, { passive: true });
 document.addEventListener("touchend", event => {
   const dx = event.changedTouches[0].screenX - touchX;
-  if (Math.abs(dx) > 60) show(current + (dx < 0 ? 1 : -1));
-}, { passive: true });
+  if (Math.abs(dx) <= 60 || !window.__presentationPreflight?.started) return;
+  const consumed = dx < 0 ? advanceBuild() : retreatBuild();
+  if (consumed) {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+  }
+}, { capture: true, passive: false });
 
 function fits(node) {
   const inner = node.querySelector(".slide-inner");
@@ -896,7 +1076,10 @@ function fitNode(node) {
   }
   node.classList.remove("measuring");
 }
-function fitAll() { nodes.forEach(node => { node.style.setProperty("--fit", 1); fitNode(node); }); show(current); }
+function fitAll() {
+  nodes.forEach(node => { node.style.setProperty("--fit", 1); fitNode(node); });
+  show(current, { resetBuild: false, refit: false });
+}
 let resizeTimer;
 window.addEventListener("resize", () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(fitAll, 150); });
 if (document.fonts?.ready) document.fonts.ready.then(fitAll); else fitAll();
