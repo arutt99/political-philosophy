@@ -572,6 +572,71 @@
       font-weight: 600;
     }
 
+    .arc .slide-inner {
+      width: min(1140px, 88vw);
+      padding: .9rem 0 1.2rem;
+    }
+
+    .arc .title {
+      max-width: 18ch;
+      padding-bottom: .75rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .slide[data-build-group="comparison"] .title { max-width: 26ch; }
+
+    .arc-list {
+      display: grid;
+      gap: 0;
+      max-width: 1050px;
+      margin-top: 1.4rem;
+    }
+
+    .arc-row {
+      display: grid;
+      grid-template-columns: 7.5rem minmax(0, 1fr);
+      gap: 1.35rem;
+      align-items: start;
+      min-height: 6.2rem;
+      padding: .9rem 0 1rem;
+      border-top: 1px solid var(--line);
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .arc-row:last-child { border-bottom: 1px solid var(--line); }
+
+    .arc-row.is-visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .arc-label {
+      color: var(--lime);
+      font: 600 calc(clamp(11px, .8vw, 14px) * var(--fit))/1.25 "IBM Plex Mono", monospace;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .arc-row:nth-child(4n) .arc-label { color: var(--ember); }
+
+    .arc-row h3 {
+      margin: 0;
+      color: var(--paper);
+      font-family: "DM Serif Display", Georgia, serif;
+      font-size: calc(clamp(25px, 2.15vw, 34px) * var(--fit));
+      font-weight: 400;
+      line-height: 1.08;
+    }
+
+    .arc-row p {
+      max-width: 68ch;
+      margin: .35rem 0 0;
+      color: var(--muted);
+      font-size: calc(clamp(16px, 1.25vw, 20px) * var(--fit));
+      line-height: 1.38;
+    }
+
     #progress {
       position: fixed;
       top: 0;
@@ -715,6 +780,7 @@
     @media (max-width: 760px) {
       .slide { padding: 9vh 8vw 10vh; }
       .slide.top { padding-top: 8.8vh; }
+      .slide.arc { padding-top: 5.6vh; padding-bottom: 7vh; }
       .slide-inner { width: 84vw; }
       .cover .slide-inner { padding: 13vh 8vw 10vh; }
       .cover .slide-inner::before { left: 8vw; }
@@ -726,6 +792,15 @@
       .timeline { grid-template-columns: 1fr; gap: 1.35rem; }
       .chain-step { min-height: auto; }
       .timeline-item { min-height: auto; padding-top: .85rem; }
+      .arc .slide-inner { width: 84vw; padding: .2rem 0 .5rem; }
+      .arc .eyebrow { margin-bottom: .45rem; }
+      .arc .title { max-width: 15ch; padding-bottom: .45rem; font-size: calc(clamp(30px, 8vw, 44px) * var(--fit)); line-height: .98; }
+      .slide[data-build-group="comparison"] .title { max-width: 15ch; }
+      .arc-list { margin-top: .65rem; }
+      .arc-row { grid-template-columns: 1fr; gap: .25rem; min-height: 3.25rem; padding: .48rem 0 .55rem; }
+      .arc-label { font-size: calc(clamp(9px, 2.4vw, 11px) * var(--fit)); }
+      .arc-row h3 { font-size: calc(clamp(20px, 5.5vw, 25px) * var(--fit)); line-height: 1.05; }
+      .arc-row p { margin-top: .18rem; font-size: calc(clamp(13px, 3.75vw, 16px) * var(--fit)); line-height: 1.24; }
       .chain-step:not(:last-child)::after { display: none; }
       .split-col p { max-width: 55ch; }
       #nav-hint { display: none; }
@@ -760,225 +835,204 @@
 
   <script>
     const slides = [];
-    const sourceNote = (pages, extra = '') => `[Sources]\n"Justifying the State - Utilitarianism," pp. ${pages}.${extra ? `\n${extra}` : ''}\n[/Sources]`;
+    const sourceNote = (pages, extra = '') => '[Sources]\n"Justifying the State - Utilitarianism," pp. ' + pages + (extra ? '\n' + extra : '') + '\n[/Sources]';
+    const note = (text, pages, extra = '') => text + '\n\n' + sourceNote(pages, extra);
     const add = slide => slides.push(slide);
 
     const cover = (title, work, course, notes) => add({ type: 'cover', title, work, course, notes });
     const section = (index, title, notes) => add({ type: 'section', index, title, notes });
-    const statement = (title, lead, support, notes, band = null) => add({ type: 'statement', title, lead, support, band, notes });
-    const split = (title, left, right, notes) => add({ type: 'split', title, left, right, notes });
-    const list = (title, items, notes) => add({ type: 'list', title, items, notes });
-    const argument = (title, items, notes) => add({ type: 'argument', title, items, notes });
-    const chain = (title, items, notes) => add({ type: 'chain', title, items, notes });
-    const timeline = (title, items, notes) => add({ type: 'timeline', title, items, notes });
-    const closing = (title, lines, notes) => add({ type: 'closing', title, lines, notes });
+    const arc = (group, index, title, rows, teachingNote, pages, extra = '') => {
+      rows.forEach((row, visible) => {
+        add({
+          type: 'arc',
+          buildGroup: group,
+          index,
+          title,
+          rows,
+          visible: visible + 1,
+          notes: note(
+            teachingNote + '\n\nStage ' + (visible + 1) + ' of ' + rows.length + ': ' + row.label + '. Reveal only this next row, then pause.',
+            pages,
+            extra
+          )
+        });
+      });
+    };
     const refs = (items, notes) => add({ type: 'refs', title: 'References', items, notes });
 
     cover(
       'Justifying the State: Utilitarianism',
       'Happiness, rules, and the limits of political obligation',
       'Political Philosophy · Module 2',
-      `Frame the lecture around a conditional test: political authority is justified only when obedience produces better consequences than the available alternatives. Bentham supplies the opening formulation, but the lecture ends by asking whether happiness can explain why some forms of treatment are wrong.\n\n${sourceNote('1')}`
+      note(
+        'Open with the conditional test for political authority. The state is justified only when obedience produces better consequences than the available alternatives.',
+        '1'
+      )
     );
 
-    section('I / THE STANDARD', 'Political obligation becomes a question of consequences', `Introduce utilitarianism after the contract arguments and the difficulties of anarchism. The first task is to identify the standard that will judge laws and political arrangements.\n\n${sourceNote('1')}`);
-
-    statement(
-      'Utility chooses the available action with the best total outcome',
-      'Moral correctness tracks the highest possible total sum of utility.',
-      'Utility can mean happiness, pleasure, or the satisfaction of desires and preferences. Here, happiness provides a convenient shorthand.',
-      `Define the basic maximization rule before applying it to government. The standard evaluates what an action produces, not the label attached to the action.\n\n${sourceNote('1')}`,
-      ['Moral test', 'Choose the action that creates more happiness, or less unhappiness, than any other action available at the time.']
+    section(
+      'I / THE STANDARD',
+      'Utility and political obligation',
+      note(
+        'This section establishes the standard before applying it to laws and institutions.',
+        '1'
+      )
     );
 
-    split(
-      'The utilitarian test applies to political authority',
-      {
-        label: 'BENTHAM',
-        title: 'Obedience is conditional',
-        body: 'Subjects should obey Kings ... so long as the probable mischiefs of obedience are less than the probable mischiefs of resistance.',
-        quote: true
-      },
-      {
-        label: 'POLITICAL TEST',
-        title: 'Compare obedience with resistance',
-        body: 'A state can demand obedience only when obeying it produces more happiness than resisting, disobeying, or living without it.'
-      },
-      `Use Bentham's conditional language to establish the political question. Obedience is not treated as automatically owed; its justification depends on consequences.\n\n${sourceNote('1', 'Primary work quoted: Jeremy Bentham, A Fragment on Government (1776).')}`
-    );
-
-    statement(
-      'Maximization depends on comparing happiness across people',
-      'The theory must compare several possible outcomes, not merely identify which person feels better.',
-      'It seems to require judgments such as whether Fred is twice as happy as Charlie today, and how that comparison changes tomorrow.',
-      `Name the problem before setting it aside. The difficulty is interpersonal comparison: utilitarian reasoning needs a way to compare different people's happiness and the size of the difference.\n\n${sourceNote('1')}`,
-      ['Interpersonal comparison', 'No universally accepted solution settles the scale, but ordinary observation still gives us reasons to distinguish misery from a wonderfully enjoyable life.']
-    );
-
-    split(
-      'The comparison problem is serious but not fatal',
-      {
-        label: 'THE OBJECTION',
-        title: 'No agreed scale',
-        body: 'Without units of happiness, it is difficult to determine which of several actions creates the most total utility.'
-      },
-      {
-        label: 'WORKING ASSUMPTION',
-        title: 'Rough comparisons remain possible',
-        body: 'Observation and conversation let us recognize large differences in how people live, even if the measurement is not exact.'
-      },
-      `Acknowledge that the theory owes an account of comparison. Then make the lecture's temporary assumption explicit: comparisons can be made well enough to examine the political argument.\n\n${sourceNote('1-2')}`
-    );
-
-    section('II / THE INSTITUTION', 'Direct calculation makes law a temporary suggestion', `Move from the moral standard to ordinary law-breaking. This is where the same rule that looks impartial begins to threaten the stability that happiness depends on.\n\n${sourceNote('2-3')}`);
-
-    statement(
-      'A harmless-looking theft exposes the problem',
-      'If stealing a book makes one person happier and produces no noticeable loss or harm, direct calculation appears to require the theft.',
-      'The case isolates the immediate balance. It does not yet include the wider effects of making possession insecure.',
-      `Keep the example narrow. The point is not that theft is harmless in general; it is that direct calculation can authorize a violation when the immediate effects look favorable.\n\n${sourceNote('2')}`,
-      ['Direct utilitarianism', 'Obey a law only when obedience creates more social happiness than disobedience.']
-    );
-
-    split(
-      'Local gains can destroy general security',
-      {
-        label: 'INDIVIDUAL CALCULATION',
-        title: 'Take when the gain looks larger',
-        body: "Each person treats the immediate balance as decisive. A possession becomes available whenever another person's happiness seems to outweigh the owner's loss."
-      },
-      {
-        label: 'COLLECTIVE OUTCOME',
-        title: 'Possession becomes insecure',
-        body: 'If everyone reasons this way, people have less reason to produce, trust, or invest. Individual gains can combine into general misery.'
-      },
-      `Make the two levels visible. The lecture compares this collective result to the insecurity of the state of nature and calls it another prisoner's dilemma.\n\n${sourceNote('2-3')}`
-    );
-
-    statement(
-      'Indirect utilitarianism protects the conditions of happiness',
-      'The theory can maximize happiness indirectly by asking people to follow stable rules instead of recalculating every act.',
-      'Rule utilitarianism evaluates a system of rules by the consequences that follow when people generally follow it. The target remains happiness, but the everyday reasoning changes.',
-      `Emphasize the reversal: a rule can be justified by utility while individual agents follow the rule without making a fresh utility calculation at every moment.\n\n${sourceNote('3')}`,
-      ['Indirect reasoning', 'Follow non-utilitarian rules at the level of ordinary conduct because direct calculation would undermine the security happiness requires.']
-    );
-
-    list(
-      'A utilitarian legal order has three instructions',
+    arc(
+      'utility',
+      'I / THE STANDARD',
+      'Utility is a rule for choosing among outcomes',
       [
-        ['01', 'Pass laws', 'Choose a law only when it contributes more happiness than competing laws or the absence of law.'],
-        ['02', 'Obey laws', 'Treat laws as binding and disobey only to avoid disaster, because ordinary obedience supports a stable system.'],
-        ['03', 'Replace laws', 'Repeal and replace laws that fail to serve their proper utilitarian function.']
+        { label: 'WHAT IT IS', title: 'Maximize total utility', body: 'The morally correct action creates the highest possible total sum of utility.' },
+        { label: 'WHAT IT ESTABLISHES', title: 'Consequences do the judging', body: 'Compare what each available action would produce. Motive and inherited labels do not settle the moral question.' },
+        { label: 'STRONGEST RATIONALE', title: 'Happiness supplies a common target', body: 'Utility can mean happiness, pleasure, or desire satisfaction. Happiness provides a clear shorthand for comparing outcomes.' },
+        { label: 'OBJECTION', title: 'The test needs a scale', body: 'Maximization requires comparisons across outcomes, people, and the size of their differences.' }
       ],
-      `These instructions separate the evaluation of a legal system from ordinary compliance with its rules. The state is justified through the effects of the system it provides and enforces.\n\n${sourceNote('4')}`
+      'Establish the basic moral standard, then leave the measurement problem visible. The next arc explains why comparison is difficult without treating that difficulty as a reason to skip the theory.',
+      '1'
     );
 
-    chain(
-      'The state wins when it outperforms feasible alternatives',
+    arc(
+      'comparison',
+      'I / THE STANDARD',
+      'Interpersonal comparison is the theory\'s measurement problem',
       [
-        ['01', 'A body of law', 'The state provides and enforces rules that organize social life.'],
-        ['02', 'More happiness', 'The arrangement contributes more to human happiness than any feasible competitor.'],
-        ['03', 'Political justification', 'The state is justified if and only if it wins that comparison.']
+        { label: 'WHAT IT IS', title: 'Compare people and differences', body: 'The theory must compare one person\'s happiness with another\'s and judge how much more or less happiness each has.' },
+        { label: 'WHAT IT ESTABLISHES', title: 'A ranking needs more than preference', body: 'To choose the best action, a utilitarian needs more than the fact that someone prefers one outcome. The size of the difference matters.' },
+        { label: 'STRONGEST RATIONALE', title: 'Everyday comparisons still guide us', body: 'Observation and conversation let us recognize that some people live in misery while others lead wonderfully enjoyable lives.' },
+        { label: 'OBJECTION', title: 'No accepted scale closes the gap', body: 'No universally accepted scale settles the problem. The utilitarian still owes an account of how total outcomes can be ranked.' },
+        { label: 'CONSEQUENCE', title: 'The verdict becomes method-dependent', body: 'Until comparison is defended, the ranking of outcomes rests on a contested measurement practice rather than a settled moral test.' }
       ],
-      `State the central utilitarian conclusion before testing its assumptions. The basic contrast is between a state and a state of nature, with the state appearing to offer more security and cooperation.\n\n${sourceNote('4')}`
+      'Keep the objection precise. The problem is not that comparison is impossible in every ordinary judgment; it is that utilitarianism needs a defensible method for ranking total outcomes.',
+      '1-2'
     );
 
-    section('III / THE ARGUMENT', 'The state is justified if its premises hold', `Separate the structure of the argument from the moral controversy that follows. A valid inference can still depend on a premise that critics reject.\n\n${sourceNote('4-5')}`);
+    section(
+      'II / THE INSTITUTION',
+      'Direct and rule utilitarianism',
+      note(
+        'The political test becomes difficult when direct calculation threatens the legal stability that happiness depends on.',
+        '2-3'
+      )
+    );
 
-    argument(
-      'The formal case for the state',
+    arc(
+      'political',
+      'II / THE INSTITUTION',
+      'Political obligation is a comparison of consequences',
       [
-        ['P1', 'The morally best society maximizes happiness.', 'Utility supplies the standard for ranking societies.'],
-        ['P2', 'The state promotes happiness better than the state of nature.', 'The state secures possession, cooperation, and predictable rules.'],
-        ['P3', 'The state and the state of nature are the only alternatives.', 'The comparison is limited to the two arrangements.'],
-        ['C', 'The morally best society has a state.', 'If people must bring about the best society, they have a duty to support the state.']
+        { label: 'WHAT IT IS', title: 'Obedience is conditional', body: 'Bentham says subjects should obey while the probable mischiefs of obedience are less than the probable mischiefs of resistance.' },
+        { label: 'WHAT IT ESTABLISHES', title: 'The state must beat resistance', body: 'A state can demand obedience only when obeying it produces more happiness than resisting, disobeying, or living without it.' },
+        { label: 'STRONGEST EXAMPLE', title: 'A book theft makes the problem concrete', body: 'If stealing a book makes one person happier and creates no noticeable loss or harm, direct calculation appears to require the theft.' },
+        { label: 'OBJECTION', title: 'Direct calculation can authorize law-breaking', body: 'A law becomes a temporary suggestion whenever a local happiness gain seems larger than the immediate cost of obeying it.' },
+        { label: 'CONSEQUENCE', title: 'Individual gains can damage the legal order', body: 'If everyone reasons this way, possession becomes insecure and people lose reasons to produce, trust, and cooperate.' }
       ],
-      `Walk through the premises in order. The lecture grants premises two and three for the purpose of the discussion, then identifies the principle of utility as the vulnerable premise.\n\n${sourceNote('4-5')}`
+      'Use the bookshop case to move from Bentham\'s conditional test to the problem of direct calculation. The point is not that theft is harmless in general; the point is that the immediate balance can make a violation look required.',
+      '1-3',
+      'Primary work quoted: Jeremy Bentham, A Fragment on Government (1776).'
     );
 
-    statement(
-      'Validity leaves one premise exposed',
-      'If the premises are true, the conclusion follows. The dispute therefore moves to the moral standard that defines the best society.',
-      'Critics can accept the formal shape of the inference while rejecting the idea that maximizing happiness is sufficient for moral correctness.',
-      `Distinguish validity from soundness. The lecture does not need to deny that the conclusion follows; it needs to show why the central moral premise may have unacceptable consequences.\n\n${sourceNote('4-5')}`,
-      ['Pressure point', 'The principle of utility may permit or require grave injustice when injustice raises the total balance of happiness.']
-    );
-
-    section('IV / THE MORAL RISK', 'A happiness-maximizing rule can excuse grave injustice', `Introduce the scapegoat objection as a test of the principle of utility, not merely as an objection to one particular legal system.\n\n${sourceNote('5')}`);
-
-    split(
-      'The scapegoat objection turns public reassurance into a moral hazard',
-      {
-        label: 'PUBLIC BALANCE',
-        title: 'Vengeance and reassurance',
-        body: 'After a horrific bombing, the public wants perpetrators found, demands vengeance, and seeks confidence that another attack will not happen.'
-      },
-      {
-        label: 'INDIVIDUAL COST',
-        title: 'An innocent suspect suffers',
-        body: 'If plausible but innocent suspects were punished, public fear and anger might fall. If the total balance looked positive, utilitarianism would appear to require the injustice.'
-      },
-      `Make the objection as strong as possible. The claim is not that punishing the innocent is better than punishing the guilty; it is that a total calculation may defend a miscarriage of justice when every consequence is counted.\n\n${sourceNote('5-6')}`
-    );
-
-    timeline(
-      'The Birmingham Six made the objection concrete',
+    arc(
+      'rules',
+      'II / THE INSTITUTION',
+      'Rule utilitarianism makes stability part of the calculation',
       [
-        ['1975', 'Convictions', 'Six men were found guilty of murder after an IRA pub bombing.'],
-        ['1980', 'The appalling vista', 'Lord Denning argued that a civil action should not proceed because it could expose police violence, perjury, and erroneous convictions.'],
-        ['1991', 'Convictions quashed', 'The convictions were eventually set aside, making the case a lasting challenge to the logic of protecting public confidence at individual cost.']
+        { label: 'WHAT IT IS', title: 'Evaluate rules as systems', body: 'Indirect utilitarianism asks which system of rules would create the greatest happiness if people generally followed it.' },
+        { label: 'WHAT IT ESTABLISHES', title: 'Ordinary obedience can maximize happiness', body: 'People follow non-utilitarian rules in everyday cases because stable rules protect the security that happiness requires.' },
+        { label: 'STRONGEST RATIONALE', title: 'Security solves the prisoner\'s dilemma', body: 'A shared rule against taking whenever the local gain looks larger protects possession, production, and trust.' },
+        { label: 'STRONGEST EXAMPLE', title: 'A direct chase for happiness can defeat itself', body: 'A person may find happiness as a side effect of an ambition, hobby, or friendship rather than by trying to feel happy at every moment.' },
+        { label: 'POLITICAL CONSEQUENCE', title: 'Pass, obey, and replace laws', body: 'Pass laws that increase happiness, obey them except to avoid disaster, and repeal laws that fail to serve that function.' }
       ],
-      `Keep the historical sequence and the philosophical lesson distinct. The case illustrates the utilitarian temptation to leave innocent people in prison rather than admit that the legal system has produced a frightening truth.\n\n${sourceNote('6-7', 'Judgment discussed: Lord Denning, Court of Appeal judgment (1980).')}`
+      'Keep the levels distinct. Utility still justifies the system, but individual conduct follows the system instead of recalculating every act from scratch.',
+      '3-4'
     );
 
-    split(
-      'Rule utilitarianism can defend rights as long-term security',
-      {
-        label: 'THE RULE',
-        title: 'Do not punish the innocent',
-        body: 'A society in which people can be victimized and kept in prison gives everyone reason to fear becoming the next scapegoat.'
-      },
-      {
-        label: 'THE PAYOFF',
-        title: 'Security raises happiness',
-        body: 'If insecurity depresses general happiness, a utilitarian can support a right against victimization and can defend releasing the Birmingham Six.'
-      },
-      `Present indirect utilitarianism as the strongest defense. A rule against scapegoating may produce better confession procedures, greater trust, and long-term security for everyone.\n\n${sourceNote('7')}`
+    section(
+      'III / THE ARGUMENT',
+      'The utilitarian case for the state',
+      note(
+        'Now state the justification of the state as a formal argument, then identify where its moral vulnerability lies.',
+        '4-5'
+      )
     );
 
-    statement(
-      'Secrecy exposes the limit of the rescue',
-      'If victimization stays secret, public insecurity may never appear. The utilitarian balance could then favor the injustice.',
-      'The possibility is troubling because the rule-based defense relies on people knowing that they could be the next victim.',
-      `Do not resolve the problem by assuming that secrecy is impossible. The lecture uses it to show why a utilitarian theory of rights may fail to secure an unconditional moral limit.\n\n${sourceNote('7-8')}`,
-      ['The pressure point', 'A secret injustice can leave public happiness apparently unchanged while an innocent person bears the entire cost.']
-    );
-
-    section('V / THE LIMIT', 'Some protections should hold whatever the consequences', `The deepest objection is about what makes an action wrong. It remains even if a utilitarian calculation could be made accurately and even if the public never learns about the injustice.\n\n${sourceNote('8')}`);
-
-    split(
-      'The deeper objection is about the reason, not the arithmetic',
-      {
-        label: 'UTILITARIAN DEFENSE',
-        title: 'Release when release pays off',
-        body: 'Protect the innocent because trust, security, and better procedures will eventually maximize happiness.'
-      },
-      {
-        label: 'MORAL OBJECTION',
-        title: 'Release because victimization is wrong',
-        body: 'No one should be victimized, whatever the benefits. The Birmingham Six should be released even if the consequences were uncertain.'
-      },
-      `The disagreement is not merely about arithmetic. Opponents argue that the correct result can be reached for the wrong reason when a person's protection depends on whether their suffering pays off for others.\n\n${sourceNote('8')}`
-    );
-
-    closing(
-      'The state defense is strong; the moral foundation remains suspect',
+    arc(
+      'state',
+      'III / THE ARGUMENT',
+      'The state is justified when it beats feasible alternatives',
       [
-        ['Political effect', 'Stable laws and reliable enforcement can produce more happiness than a state of nature.'],
-        ['Rule-based discipline', 'Ordinary obedience can be required even when breaking one law would look beneficial in isolation.'],
-        ['Unresolved limit', 'Utility may still fail to explain why some injustices are wrong even when they improve the total balance.']
+        { label: 'WHAT IT IS', title: 'A comparative political claim', body: 'The state is justified if and only if it contributes more to human happiness than any feasible competing arrangement.' },
+        { label: 'WHAT IT ESTABLISHES', title: 'Law becomes the state\'s political function', body: 'The state provides and enforces the body of rules that makes stable cooperation possible.' },
+        { label: 'STRONGEST RATIONALE', title: 'Security and cooperation beat the state of nature', body: 'If a state greatly outperforms the state of nature in security and cooperation, it wins the happiness comparison.' },
+        { label: 'FORMAL CONSEQUENCE', title: 'The best society has a state', body: 'If happiness is the standard and the state is the better arrangement, the morally best society is one with a state.' },
+        { label: 'OBJECTION', title: 'The conclusion depends on utility', body: 'The inference can be valid while the principle that defines the best society still permits grave injustice.' }
       ],
-      `Close with the lecture's provisional verdict. The state may be justified by its effects, while utilitarianism remains vulnerable as a complete account of political morality.\n\n${sourceNote('8')}`
+      'Separate the state comparison from the moral premise. The argument grants the state\'s practical advantage for now and turns the next section toward the consequences of maximizing happiness.',
+      '4-5'
+    );
+
+    section(
+      'IV / THE MORAL RISK',
+      'The scapegoat objection',
+      note(
+        'Test the principle of utility with a case where public reassurance may be purchased by punishing an innocent person.',
+        '5-6'
+      )
+    );
+
+    arc(
+      'scapegoat',
+      'IV / THE MORAL RISK',
+      'The scapegoat objection tests the principle of utility',
+      [
+        { label: 'WHAT IT IS', title: 'A total balance can excuse grave injustice', body: 'Critics argue that utilitarian morality permits or requires injustice when the injustice increases general happiness.' },
+        { label: 'WHAT IT ESTABLISHES', title: 'Public reassurance can outweigh one person\'s suffering', body: 'After a bombing, vengeance, confidence, and relief may count as benefits even when an innocent suspect bears the cost.' },
+        { label: 'STRONGEST EXAMPLE', title: 'An innocent suspect can satisfy the demand for vengeance', body: 'If plausible suspects were arrested and sentenced, the public might feel safer even though the suspects were innocent.' },
+        { label: 'CONCRETE CASE', title: 'The Birmingham Six exposed the pressure', body: 'A 1975 conviction, Lord Denning\'s 1980 warning about an appalling vista, and the 1991 quashing of the convictions make the institutional temptation concrete.' },
+        { label: 'CONSEQUENCE', title: 'A calculation can treat a person as a means', body: 'The innocent person\'s suffering becomes a cost that can be traded against the comfort, confidence, or security of everyone else.' }
+      ],
+      'Let the objection develop one stage at a time. The historical case illustrates the pressure described by the objection; it does not by itself settle every fact about the episode.',
+      '5-7',
+      'Judgment discussed: Lord Denning, Court of Appeal judgment (1980).'
+    );
+
+    arc(
+      'rights',
+      'IV / THE MORAL RISK',
+      'Rule utilitarianism can defend a right against victimization',
+      [
+        { label: 'WHAT IT IS', title: 'Protect the innocent through a rule', body: 'A society in which innocent people can be victimized and kept in prison gives everyone reason to fear becoming the next scapegoat.' },
+        { label: 'WHAT IT ESTABLISHES', title: 'Public knowledge can make injustice costly', body: 'If people know that the system permits scapegoating, insecurity can depress general happiness even when each individual case appears useful.' },
+        { label: 'STRONGEST RATIONALE', title: 'Release can improve long-term security', body: 'Releasing the Birmingham Six may discredit the legal system immediately while producing better confession procedures and greater security over time.' },
+        { label: 'OBJECTION', title: 'Secrecy removes the insecurity', body: 'If victimization remains efficient and secret, the public may never experience the fear that makes the rule useful.' },
+        { label: 'CONSEQUENCE', title: 'The right still depends on the balance', body: 'A utilitarian right against victimization may disappear whenever violating it appears to maximize happiness.' }
+      ],
+      'Present the rule-based defense in full before pressing it. The rescue is strongest when rights protect everyone over time, and weakest when secrecy prevents the expected social cost.',
+      '7-8'
+    );
+
+    section(
+      'V / THE LIMIT',
+      'Utility, rights, and moral limits',
+      note(
+        'The final issue is not whether utilitarianism can improve its arithmetic. It is whether a consequence-based theory can explain an unconditional moral protection.',
+        '8'
+      )
+    );
+
+    arc(
+      'limit',
+      'V / THE LIMIT',
+      'Utility-based rights may not be rights',
+      [
+        { label: 'WHAT IT IS', title: 'Some protections should hold regardless', body: 'Opponents argue that no one should be victimized, whatever the benefits in general happiness.' },
+        { label: 'WHAT IT ESTABLISHES', title: 'Release can be required because victimization is wrong', body: 'The Birmingham Six should be released even if release did not maximize happiness, because innocent punishment violates a moral limit.' },
+        { label: 'OBJECTION TO THE RESCUE', title: 'A utility-based right can disappear', body: 'If a secret injustice produces the best total balance, the theory has no independent reason to reject it.' },
+        { label: 'CONSEQUENCE', title: 'The state defense remains strong, utility remains suspect', body: 'Stable law may justify the state against a state of nature, while utility still fails to explain why some ways of treating people are wrong even when they pay.' }
+      ],
+      'Close by separating two conclusions. The state may be justified by its effects, but utilitarianism may not provide the moral limit that protects people from being used for those effects.',
+      '8'
     );
 
     refs([
@@ -986,7 +1040,11 @@
       ['Primary work quoted', 'Jeremy Bentham, A Fragment on Government (1776), quotation reproduced on p. 1.'],
       ['Judgment discussed', 'Lord Denning, Court of Appeal judgment (1980), quotation reproduced on p. 6.'],
       ['Further work mentioned', 'John Stuart Mill, On Liberty, identified on p. 8 as a later discussion of a utilitarian theory of rights.']
-    ], `All claims, cases, and quotations in this deck are grounded in the supplied lecture PDF.\n\n${sourceNote('1-8')}`);
+    ], note(
+      'Use the references slide to identify the supplied lecture PDF and the two primary works named in it.',
+      '1-8'
+    ));
+
 
     const deck = document.getElementById('deck');
     const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({
@@ -1000,8 +1058,9 @@
     function renderSlide(slide, index) {
       const article = document.createElement('article');
       const slideClass = slide.type === 'chain' ? 'chain-slide' : slide.type === 'timeline' ? 'timeline-slide' : slide.type;
-      article.className = `slide ${slideClass}${['statement', 'split', 'list', 'argument', 'chain', 'timeline', 'closing', 'refs'].includes(slide.type) ? ' top' : ''}`;
+      article.className = `slide ${slideClass}${['statement', 'split', 'list', 'argument', 'chain', 'timeline', 'arc', 'closing', 'refs'].includes(slide.type) ? ' top' : ''}`;
       article.dataset.index = String(index);
+      if (slide.buildGroup) article.dataset.buildGroup = slide.buildGroup;
 
       let html = '<div class="slide-inner">';
       if (slide.type === 'cover') {
@@ -1009,6 +1068,9 @@
       }
       if (slide.type === 'section') {
         html += `<p class="section-index">${esc(slide.index)}</p><h2 class="title">${esc(slide.title)}</h2><div class="section-rule"></div>`;
+      }
+      if (slide.type === 'arc') {
+        html += `<p class="eyebrow">${esc(slide.index)}</p><h2 class="title">${esc(slide.title)}</h2><div class="arc-list">${slide.rows.map((row, rowIndex) => `<section class="arc-row ${rowIndex < slide.visible ? 'is-visible' : ''}"${rowIndex >= slide.visible ? ' aria-hidden="true"' : ''}><span class="arc-label">${esc(row.label)}</span><div><h3>${esc(row.title)}</h3><p>${esc(row.body)}</p></div></section>`).join('')}</div>`;
       }
       if (slide.type === 'statement') {
         html += `<p class="eyebrow">Core claim</p><h2 class="title">${esc(slide.title)}</h2><p class="lead">${esc(slide.lead)}</p><p class="support">${esc(slide.support)}</p>`;
@@ -1047,7 +1109,7 @@
     const overviewCards = [];
     let current = 0;
 
-    const labelFor = slide => slide.title || slide.lead || 'Slide';
+    const labelFor = slide => slide.type === 'arc' ? `${slide.title} · ${slide.visible}/${slide.rows.length}` : (slide.title || slide.lead || 'Slide');
     slides.forEach((slide, index) => {
       const card = document.createElement('button');
       card.type = 'button';
@@ -1132,18 +1194,29 @@
     function fitAll() {
       nodes.forEach(node => {
         node.style.setProperty('--fit', 1);
-        fitNode(node);
       });
+      const groups = {};
+      nodes.forEach(node => {
+        if (node.dataset.buildGroup) (groups[node.dataset.buildGroup] ??= []).push(node);
+      });
+      const grouped = new Set(Object.values(groups).flat());
+      Object.values(groups).forEach(group => {
+        const final = group[group.length - 1];
+        fitNode(final);
+        const fit = final.style.getPropertyValue('--fit') || '1';
+        group.forEach(node => node.style.setProperty('--fit', fit));
+      });
+      nodes.filter(node => !grouped.has(node)).forEach(fitNode);
       show(current);
     }
 
     let resizeTimer;
     window.addEventListener('resize', () => {
       clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(fitAll, 150);
+      resizeTimer = setTimeout(fitAll, 360);
     });
 
-    if (document.fonts?.ready) document.fonts.ready.then(fitAll);
+    if (document.fonts?.ready) document.fonts.ready.then(() => setTimeout(fitAll, 360));
     else fitAll();
     show(0);
   </script>
