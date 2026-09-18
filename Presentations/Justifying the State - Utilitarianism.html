@@ -1,0 +1,1151 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A lecture presentation on utilitarianism as a justification of the state, including indirect utilitarianism, the scapegoat objection, and the problem of rights.">
+  <link rel="icon" href="data:,">
+  <title>Justifying the State: Utilitarianism</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="presentation-polish.css">
+  <script src="presentation-polish.js" defer></script>
+  <style>
+    :root {
+      --bg: #151918;
+      --bg-deep: #0e1211;
+      --surface: #202624;
+      --paper: #f0eadc;
+      --ink: #18201e;
+      --muted: #aeb8ad;
+      --muted-dark: #6f7c73;
+      --lime: #d8ef79;
+      --ember: #ce7756;
+      --line: rgba(240, 234, 220, .17);
+      --line-strong: rgba(216, 239, 121, .55);
+      --fit: 1;
+      --text: var(--paper);
+      --preflight-bg: var(--bg);
+      --preflight-text: var(--paper);
+      --preflight-muted: var(--muted);
+      --preflight-accent: var(--lime);
+      --preflight-bright: var(--paper);
+      --preflight-line: var(--line);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--paper);
+    }
+
+    body {
+      font-family: "Space Grotesk", Inter, system-ui, sans-serif;
+    }
+
+    button { font: inherit; }
+
+    #deck {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 92% 4%, rgba(216, 239, 121, .09), transparent 25%),
+        radial-gradient(circle at 5% 96%, rgba(206, 119, 86, .10), transparent 28%),
+        var(--bg);
+    }
+
+    #deck::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: .38;
+      background:
+        linear-gradient(90deg, rgba(240, 234, 220, .05) 1px, transparent 1px),
+        linear-gradient(rgba(240, 234, 220, .035) 1px, transparent 1px);
+      background-size: 8vw 8vw;
+      mask-image: linear-gradient(135deg, black, transparent 70%);
+    }
+
+    #deck::after {
+      content: "";
+      position: absolute;
+      right: -13vw;
+      bottom: -19vw;
+      width: 45vw;
+      height: 45vw;
+      border: 1px solid rgba(216, 239, 121, .22);
+      border-radius: 50%;
+      box-shadow: 0 0 0 5vw rgba(216, 239, 121, .035), 0 0 0 10vw rgba(206, 119, 86, .025);
+      pointer-events: none;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 7.2vh 7.4vw 8.8vh;
+      overflow: hidden;
+      text-align: left;
+    }
+
+    .slide.active,
+    .slide.measuring { display: flex; }
+
+    .slide.measuring {
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .slide.top {
+      align-items: flex-start;
+      padding-top: 7.8vh;
+    }
+
+    .slide-inner {
+      position: relative;
+      z-index: 1;
+      width: min(1180px, 88vw);
+      max-height: 82vh;
+      margin: auto;
+      transform-origin: top center;
+    }
+
+    .eyebrow,
+    .course,
+    .slide-meta,
+    .section-index,
+    .column-label,
+    .list-number,
+    .timeline-year,
+    #nav-hint,
+    #counter,
+    #presentation-controls button,
+    .panel-head button {
+      font-family: "IBM Plex Mono", Consolas, monospace;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow {
+      margin: 0 0 calc(1rem * var(--fit));
+      color: var(--lime);
+      font-size: calc(clamp(12px, .9vw, 16px) * var(--fit));
+      font-weight: 600;
+      line-height: 1.25;
+    }
+
+    .title {
+      margin: 0;
+      color: var(--paper);
+      font-family: "DM Serif Display", Georgia, serif;
+      font-size: calc(clamp(42px, 4.5vw, 72px) * var(--fit));
+      font-weight: 400;
+      letter-spacing: -.035em;
+      line-height: 1.03;
+    }
+
+    .cover {
+      align-items: stretch;
+      justify-content: stretch;
+      padding: 0;
+      background:
+        linear-gradient(90deg, rgba(14, 18, 17, .98) 0 53%, rgba(14, 18, 17, .67) 74%, rgba(14, 18, 17, .2)),
+        radial-gradient(circle at 82% 42%, rgba(216, 239, 121, .18), transparent 18%),
+        var(--bg-deep);
+    }
+
+    .cover .slide-inner {
+      width: 100vw;
+      max-width: none;
+      height: 80vh;
+      max-height: 80vh;
+      margin: 0;
+      padding: 13vh 11vw 10vh 12vw;
+    }
+
+    .cover .slide-inner::before {
+      content: "02 / JUSTIFYING THE STATE";
+      position: absolute;
+      top: 6.5vh;
+      left: 12vw;
+      color: var(--lime);
+      font: 600 clamp(11px, .8vw, 15px)/1.2 "IBM Plex Mono", monospace;
+      letter-spacing: .14em;
+    }
+
+    .cover-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(260px, .95fr);
+      gap: 5vw;
+      align-items: center;
+      height: 100%;
+    }
+
+    .cover-copy { max-width: 760px; }
+
+    .cover .eyebrow { color: var(--ember); }
+
+    .cover .title {
+      max-width: 9.5ch;
+      font-size: calc(clamp(60px, 8.1vw, 124px) * var(--fit));
+      line-height: .91;
+    }
+
+    .cover .work {
+      max-width: 27ch;
+      margin: calc(1.5rem * var(--fit)) 0 0;
+      color: var(--muted);
+      font-size: calc(clamp(20px, 1.9vw, 30px) * var(--fit));
+      line-height: 1.24;
+    }
+
+    .cover .course {
+      display: inline-block;
+      margin-top: calc(2.5rem * var(--fit));
+      padding: .6rem .75rem;
+      border: 1px solid rgba(216, 239, 121, .45);
+      color: var(--lime);
+      font-size: calc(clamp(11px, .78vw, 14px) * var(--fit));
+      line-height: 1.25;
+    }
+
+    .cover-mark {
+      display: grid;
+      min-height: 46vh;
+      place-items: center;
+      border-left: 1px solid rgba(216, 239, 121, .4);
+      color: var(--lime);
+      font-family: "DM Serif Display", Georgia, serif;
+      font-size: calc(clamp(170px, 27vw, 420px) * var(--fit));
+      line-height: .7;
+      opacity: .92;
+    }
+
+    .cover-mark span {
+      display: block;
+      margin-top: .25em;
+      color: var(--muted);
+      font: 600 calc(clamp(11px, .85vw, 15px) * var(--fit))/1.4 "IBM Plex Mono", monospace;
+      letter-spacing: .14em;
+      text-align: center;
+    }
+
+    .section .slide-inner {
+      width: min(1020px, 88vw);
+      padding: 1.2rem 0 1.4rem 2.3rem;
+      border-left: 4px solid var(--lime);
+    }
+
+    .section-index {
+      margin: 0 0 1.2rem;
+      color: var(--ember);
+      font-size: calc(clamp(14px, 1vw, 17px) * var(--fit));
+      line-height: 1.2;
+    }
+
+    .section .title {
+      max-width: 13ch;
+      font-size: calc(clamp(54px, 6.4vw, 94px) * var(--fit));
+      line-height: .96;
+    }
+
+    .section-rule {
+      width: 8rem;
+      height: 3px;
+      margin-top: 1.9rem;
+      background: linear-gradient(90deg, var(--lime), transparent);
+    }
+
+    .content .slide-inner,
+    .statement .slide-inner,
+    .split .slide-inner,
+    .list .slide-inner,
+    .argument .slide-inner,
+    .timeline-slide .slide-inner,
+    .closing .slide-inner,
+    .refs .slide-inner {
+      width: min(1140px, 88vw);
+      padding: .9rem 0 1.2rem;
+    }
+
+    .content .title,
+    .statement .title,
+    .split .title,
+    .list .title,
+    .argument .title,
+    .timeline-slide .title,
+    .closing .title,
+    .refs .title {
+      max-width: 19ch;
+      padding-bottom: .75rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .lead {
+      max-width: 36ch;
+      margin: 1.4rem 0 0;
+      color: var(--paper);
+      font-family: "DM Serif Display", Georgia, serif;
+      font-size: calc(clamp(28px, 2.75vw, 42px) * var(--fit));
+      line-height: 1.18;
+    }
+
+    .support {
+      max-width: 62ch;
+      margin: 1.25rem 0 0;
+      color: var(--muted);
+      font-size: calc(clamp(16px, 1.35vw, 21px) * var(--fit));
+      line-height: 1.48;
+    }
+
+    .source-line {
+      margin: 1.5rem 0 0;
+      color: var(--muted-dark);
+      font: 500 calc(clamp(11px, .78vw, 14px) * var(--fit))/1.4 "IBM Plex Mono", monospace;
+      letter-spacing: .04em;
+    }
+
+    .statement .statement-band {
+      max-width: 900px;
+      margin-top: 2rem;
+      padding: 1.35rem 1.5rem 1.45rem;
+      border-left: 3px solid var(--lime);
+      background: linear-gradient(90deg, rgba(216, 239, 121, .11), transparent 80%);
+    }
+
+    .statement-band p {
+      margin: 0;
+      color: var(--paper);
+      font-size: calc(clamp(20px, 1.75vw, 28px) * var(--fit));
+      line-height: 1.36;
+    }
+
+    .statement-band p + p {
+      margin-top: .75rem;
+      color: var(--muted);
+      font-size: calc(clamp(15px, 1.15vw, 18px) * var(--fit));
+    }
+
+    .split-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4.2rem;
+      margin-top: 2rem;
+    }
+
+    .split-col {
+      min-width: 0;
+      padding-top: 1rem;
+      border-top: 3px solid var(--lime);
+    }
+
+    .split-col:nth-child(2) { border-top-color: var(--ember); }
+
+    .column-label {
+      display: block;
+      margin-bottom: .8rem;
+      color: var(--lime);
+      font-size: calc(clamp(12px, .82vw, 15px) * var(--fit));
+      line-height: 1.2;
+    }
+
+    .split-col:nth-child(2) .column-label { color: var(--ember); }
+
+    .split-col h3 {
+      margin: 0;
+      color: var(--paper);
+      font-family: "DM Serif Display", Georgia, serif;
+      font-size: calc(clamp(28px, 2.7vw, 42px) * var(--fit));
+      font-weight: 400;
+      line-height: 1.06;
+    }
+
+    .split-col p {
+      margin: 1rem 0 0;
+      color: var(--muted);
+      font-size: calc(clamp(17px, 1.45vw, 22px) * var(--fit));
+      line-height: 1.42;
+    }
+
+    .split-col .quote {
+      color: var(--paper);
+      font-family: "DM Serif Display", Georgia, serif;
+      font-size: calc(clamp(23px, 2.1vw, 32px) * var(--fit));
+      line-height: 1.25;
+    }
+
+    .plain-list {
+      display: grid;
+      gap: 0;
+      max-width: 1020px;
+      margin: 1.65rem 0 0;
+    }
+
+    .plain-list li {
+      display: grid;
+      grid-template-columns: 3.1rem minmax(0, 1fr);
+      gap: 1rem;
+      align-items: start;
+      padding: 1rem 0;
+      border-top: 1px solid var(--line);
+      list-style: none;
+    }
+
+    .plain-list li:last-child { border-bottom: 1px solid var(--line); }
+
+    .list-number {
+      color: var(--lime);
+      font-size: calc(clamp(13px, .85vw, 16px) * var(--fit));
+      line-height: 1.35;
+    }
+
+    .list-copy strong {
+      display: block;
+      color: var(--paper);
+      font-family: "DM Serif Display", Georgia, serif;
+      font-size: calc(clamp(25px, 2.1vw, 33px) * var(--fit));
+      font-weight: 400;
+      line-height: 1.12;
+    }
+
+    .list-copy span {
+      display: block;
+      margin-top: .35rem;
+      color: var(--muted);
+      font-size: calc(clamp(16px, 1.3vw, 20px) * var(--fit));
+      line-height: 1.42;
+    }
+
+    .argument .plain-list li {
+      grid-template-columns: 3.6rem minmax(0, 1fr);
+      padding: .9rem 0;
+    }
+
+    .argument .plain-list li:last-child {
+      border-top: 2px solid var(--lime);
+      border-bottom: 0;
+    }
+
+    .argument .plain-list li:last-child .list-number { color: var(--ember); }
+
+    .argument .plain-list li:last-child .list-copy strong { color: var(--lime); }
+
+    .chain {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.6rem;
+      margin-top: 2.4rem;
+    }
+
+    .chain-step {
+      position: relative;
+      min-height: 9.5rem;
+      padding: 1.1rem 1.1rem 1.2rem;
+      border: 1px solid var(--line);
+      border-top: 3px solid var(--lime);
+      background: rgba(32, 38, 36, .72);
+    }
+
+    .chain-step:not(:last-child)::after {
+      content: "+";
+      position: absolute;
+      top: 2.3rem;
+      right: -1.4rem;
+      color: var(--ember);
+      font: 400 1.5rem/1 "IBM Plex Mono", monospace;
+    }
+
+    .chain-step .step-number {
+      color: var(--ember);
+      font: 600 calc(clamp(12px, .75vw, 14px) * var(--fit))/1.2 "IBM Plex Mono", monospace;
+      letter-spacing: .12em;
+    }
+
+    .chain-step h3 {
+      margin: .8rem 0 0;
+      color: var(--paper);
+      font-family: "DM Serif Display", Georgia, serif;
+      font-size: calc(clamp(23px, 2vw, 31px) * var(--fit));
+      font-weight: 400;
+      line-height: 1.1;
+    }
+
+    .chain-step p {
+      margin: .55rem 0 0;
+      color: var(--muted);
+      font-size: calc(clamp(15px, 1.15vw, 18px) * var(--fit));
+      line-height: 1.4;
+    }
+
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.3rem;
+      margin-top: 2rem;
+      border-top: 1px solid var(--line);
+    }
+
+    .timeline-item {
+      min-height: 10rem;
+      padding: 1.1rem 1rem 0 0;
+      border-top: 3px solid var(--ember);
+      margin-top: -1px;
+    }
+
+    .timeline-year {
+      color: var(--lime);
+      font-size: calc(clamp(13px, .9vw, 16px) * var(--fit));
+      line-height: 1.2;
+    }
+
+    .timeline-item h3 {
+      margin: .75rem 0 0;
+      color: var(--paper);
+      font-family: "DM Serif Display", Georgia, serif;
+      font-size: calc(clamp(26px, 2.3vw, 35px) * var(--fit));
+      font-weight: 400;
+      line-height: 1.05;
+    }
+
+    .timeline-item p {
+      margin: .55rem 0 0;
+      color: var(--muted);
+      font-size: calc(clamp(15px, 1.18vw, 19px) * var(--fit));
+      line-height: 1.4;
+    }
+
+    .closing .slide-inner {
+      padding: 1.6rem 2.2rem 1.9rem;
+      border-left: 4px solid var(--lime);
+      background: linear-gradient(90deg, rgba(216, 239, 121, .12), transparent 76%);
+    }
+
+    .closing .title { max-width: 15ch; }
+
+    .closing .closing-lines {
+      display: grid;
+      gap: .75rem;
+      max-width: 820px;
+      margin-top: 1.7rem;
+    }
+
+    .closing-lines p {
+      margin: 0;
+      padding: .75rem 0 .8rem 1rem;
+      border-left: 1px solid var(--line-strong);
+      color: var(--muted);
+      font-size: calc(clamp(18px, 1.55vw, 24px) * var(--fit));
+      line-height: 1.38;
+    }
+
+    .closing-lines p strong { color: var(--paper); }
+
+    .refs-list {
+      display: grid;
+      gap: 0;
+      max-width: 1000px;
+      margin-top: 1.6rem;
+    }
+
+    .reference {
+      padding: .9rem 0;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: calc(clamp(15px, 1.15vw, 18px) * var(--fit));
+      line-height: 1.4;
+    }
+
+    .reference strong {
+      color: var(--paper);
+      font-weight: 600;
+    }
+
+    #progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 30;
+      width: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--lime), var(--ember));
+    }
+
+    #nav-hint,
+    #counter {
+      position: fixed;
+      bottom: 18px;
+      z-index: 30;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.3;
+    }
+
+    #nav-hint { left: 24px; }
+    #counter { right: 24px; }
+
+    #presentation-controls {
+      position: fixed;
+      top: 18px;
+      right: 22px;
+      z-index: 30;
+      display: flex;
+      gap: .45rem;
+    }
+
+    #presentation-controls button {
+      padding: 8px 10px;
+      border: 1px solid rgba(240, 234, 220, .24);
+      border-radius: 2px;
+      color: var(--paper);
+      background: rgba(21, 25, 24, .7);
+      cursor: pointer;
+      font-size: 10px;
+      line-height: 1;
+    }
+
+    #presentation-controls button:hover,
+    #presentation-controls button:focus-visible {
+      border-color: var(--lime);
+      color: var(--lime);
+      outline: none;
+    }
+
+    .panel {
+      position: fixed;
+      inset: 4vh 4vw;
+      z-index: 60;
+      display: none;
+      overflow: auto;
+      border: 1px solid rgba(240, 234, 220, .2);
+      background: rgba(21, 25, 24, .985);
+    }
+
+    .panel.open { display: block; }
+
+    .panel-head {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 17px 22px;
+      border-bottom: 1px solid var(--line);
+      background: #202624;
+    }
+
+    .panel-head h2 {
+      margin: 0;
+      color: var(--lime);
+      font: 600 13px/1 "IBM Plex Mono", monospace;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .panel-head button {
+      padding: 7px 10px;
+      border: 1px solid rgba(240, 234, 220, .2);
+      color: var(--paper);
+      background: transparent;
+      cursor: pointer;
+      font-size: 10px;
+    }
+
+    .panel-head button:hover,
+    .panel-head button:focus-visible {
+      border-color: var(--lime);
+      color: var(--lime);
+      outline: none;
+    }
+
+    #overview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 11px;
+      padding: 20px;
+    }
+
+    .overview-card {
+      min-height: 118px;
+      padding: 15px;
+      border: 1px solid var(--line);
+      color: var(--paper);
+      background: rgba(32, 38, 36, .8);
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .overview-card:hover,
+    .overview-card.current {
+      border-color: var(--lime);
+      box-shadow: 4px 4px 0 rgba(206, 119, 86, .16);
+    }
+
+    .overview-card .num {
+      display: block;
+      margin-bottom: 11px;
+      color: var(--lime);
+      font: 500 10px/1.3 "IBM Plex Mono", monospace;
+    }
+
+    .overview-card .label {
+      font: 400 20px/1.1 "DM Serif Display", Georgia, serif;
+    }
+
+    #notes-body {
+      max-width: 900px;
+      padding: 28px 34px;
+      white-space: pre-wrap;
+      color: var(--paper);
+      font: 400 17px/1.62 "Space Grotesk", Inter, sans-serif;
+    }
+
+    @media (max-width: 760px) {
+      .slide { padding: 9vh 8vw 10vh; }
+      .slide.top { padding-top: 8.8vh; }
+      .slide-inner { width: 84vw; }
+      .cover .slide-inner { padding: 13vh 8vw 10vh; }
+      .cover .slide-inner::before { left: 8vw; }
+      .cover-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .cover .title { max-width: 11ch; }
+      .cover-mark { display: none; }
+      .split-grid,
+      .chain,
+      .timeline { grid-template-columns: 1fr; gap: 1.35rem; }
+      .chain-step { min-height: auto; }
+      .timeline-item { min-height: auto; padding-top: .85rem; }
+      .chain-step:not(:last-child)::after { display: none; }
+      .split-col p { max-width: 55ch; }
+      #nav-hint { display: none; }
+      #presentation-controls { top: 12px; right: 12px; }
+      #presentation-controls button { padding: 7px 8px; }
+      .section .slide-inner,
+      .closing .slide-inner { padding-left: 1.35rem; }
+    }
+  </style>
+</head>
+<body data-library-view="political-philosophy">
+  <div id="deck" aria-live="polite"></div>
+  <div id="progress"></div>
+  <div id="nav-hint">Arrows / Space · O overview · N notes · F fullscreen</div>
+  <div id="counter">1 / 1</div>
+
+  <div id="presentation-controls" aria-label="Presentation controls">
+    <button id="overview-button" type="button">Overview</button>
+    <button id="notes-button" type="button">Notes</button>
+    <button id="fullscreen-button" type="button">Fullscreen</button>
+  </div>
+
+  <section id="overview" class="panel" aria-label="Slide overview">
+    <div class="panel-head"><h2>Overview</h2><button class="close" type="button">Close</button></div>
+    <div id="overview-grid"></div>
+  </section>
+
+  <aside id="notes" class="panel" aria-label="Speaker notes">
+    <div class="panel-head"><h2>Speaker notes</h2><button class="close" type="button">Close</button></div>
+    <div id="notes-body"></div>
+  </aside>
+
+  <script>
+    const slides = [];
+    const sourceNote = (pages, extra = '') => `[Sources]\n"Justifying the State - Utilitarianism," pp. ${pages}.${extra ? `\n${extra}` : ''}\n[/Sources]`;
+    const add = slide => slides.push(slide);
+
+    const cover = (title, work, course, notes) => add({ type: 'cover', title, work, course, notes });
+    const section = (index, title, notes) => add({ type: 'section', index, title, notes });
+    const statement = (title, lead, support, notes, band = null) => add({ type: 'statement', title, lead, support, band, notes });
+    const split = (title, left, right, notes) => add({ type: 'split', title, left, right, notes });
+    const list = (title, items, notes) => add({ type: 'list', title, items, notes });
+    const argument = (title, items, notes) => add({ type: 'argument', title, items, notes });
+    const chain = (title, items, notes) => add({ type: 'chain', title, items, notes });
+    const timeline = (title, items, notes) => add({ type: 'timeline', title, items, notes });
+    const closing = (title, lines, notes) => add({ type: 'closing', title, lines, notes });
+    const refs = (items, notes) => add({ type: 'refs', title: 'References', items, notes });
+
+    cover(
+      'Justifying the State: Utilitarianism',
+      'Happiness, rules, and the limits of political obligation',
+      'Political Philosophy · Module 2',
+      `Frame the lecture around a conditional test: political authority is justified only when obedience produces better consequences than the available alternatives. Bentham supplies the opening formulation, but the lecture ends by asking whether happiness can explain why some forms of treatment are wrong.\n\n${sourceNote('1')}`
+    );
+
+    section('I / THE STANDARD', 'Political obligation becomes a question of consequences', `Introduce utilitarianism after the contract arguments and the difficulties of anarchism. The first task is to identify the standard that will judge laws and political arrangements.\n\n${sourceNote('1')}`);
+
+    statement(
+      'Utility chooses the available action with the best total outcome',
+      'Moral correctness tracks the highest possible total sum of utility.',
+      'Utility can mean happiness, pleasure, or the satisfaction of desires and preferences. Here, happiness provides a convenient shorthand.',
+      `Define the basic maximization rule before applying it to government. The standard evaluates what an action produces, not the label attached to the action.\n\n${sourceNote('1')}`,
+      ['Moral test', 'Choose the action that creates more happiness, or less unhappiness, than any other action available at the time.']
+    );
+
+    split(
+      'The utilitarian test applies to political authority',
+      {
+        label: 'BENTHAM',
+        title: 'Obedience is conditional',
+        body: 'Subjects should obey Kings ... so long as the probable mischiefs of obedience are less than the probable mischiefs of resistance.',
+        quote: true
+      },
+      {
+        label: 'POLITICAL TEST',
+        title: 'Compare obedience with resistance',
+        body: 'A state can demand obedience only when obeying it produces more happiness than resisting, disobeying, or living without it.'
+      },
+      `Use Bentham's conditional language to establish the political question. Obedience is not treated as automatically owed; its justification depends on consequences.\n\n${sourceNote('1', 'Primary work quoted: Jeremy Bentham, A Fragment on Government (1776).')}`
+    );
+
+    statement(
+      'Maximization depends on comparing happiness across people',
+      'The theory must compare several possible outcomes, not merely identify which person feels better.',
+      'It seems to require judgments such as whether Fred is twice as happy as Charlie today, and how that comparison changes tomorrow.',
+      `Name the problem before setting it aside. The difficulty is interpersonal comparison: utilitarian reasoning needs a way to compare different people's happiness and the size of the difference.\n\n${sourceNote('1')}`,
+      ['Interpersonal comparison', 'No universally accepted solution settles the scale, but ordinary observation still gives us reasons to distinguish misery from a wonderfully enjoyable life.']
+    );
+
+    split(
+      'The comparison problem is serious but not fatal',
+      {
+        label: 'THE OBJECTION',
+        title: 'No agreed scale',
+        body: 'Without units of happiness, it is difficult to determine which of several actions creates the most total utility.'
+      },
+      {
+        label: 'WORKING ASSUMPTION',
+        title: 'Rough comparisons remain possible',
+        body: 'Observation and conversation let us recognize large differences in how people live, even if the measurement is not exact.'
+      },
+      `Acknowledge that the theory owes an account of comparison. Then make the lecture's temporary assumption explicit: comparisons can be made well enough to examine the political argument.\n\n${sourceNote('1-2')}`
+    );
+
+    section('II / THE INSTITUTION', 'Direct calculation makes law a temporary suggestion', `Move from the moral standard to ordinary law-breaking. This is where the same rule that looks impartial begins to threaten the stability that happiness depends on.\n\n${sourceNote('2-3')}`);
+
+    statement(
+      'A harmless-looking theft exposes the problem',
+      'If stealing a book makes one person happier and produces no noticeable loss or harm, direct calculation appears to require the theft.',
+      'The case isolates the immediate balance. It does not yet include the wider effects of making possession insecure.',
+      `Keep the example narrow. The point is not that theft is harmless in general; it is that direct calculation can authorize a violation when the immediate effects look favorable.\n\n${sourceNote('2')}`,
+      ['Direct utilitarianism', 'Obey a law only when obedience creates more social happiness than disobedience.']
+    );
+
+    split(
+      'Local gains can destroy general security',
+      {
+        label: 'INDIVIDUAL CALCULATION',
+        title: 'Take when the gain looks larger',
+        body: "Each person treats the immediate balance as decisive. A possession becomes available whenever another person's happiness seems to outweigh the owner's loss."
+      },
+      {
+        label: 'COLLECTIVE OUTCOME',
+        title: 'Possession becomes insecure',
+        body: 'If everyone reasons this way, people have less reason to produce, trust, or invest. Individual gains can combine into general misery.'
+      },
+      `Make the two levels visible. The lecture compares this collective result to the insecurity of the state of nature and calls it another prisoner's dilemma.\n\n${sourceNote('2-3')}`
+    );
+
+    statement(
+      'Indirect utilitarianism protects the conditions of happiness',
+      'The theory can maximize happiness indirectly by asking people to follow stable rules instead of recalculating every act.',
+      'Rule utilitarianism evaluates a system of rules by the consequences that follow when people generally follow it. The target remains happiness, but the everyday reasoning changes.',
+      `Emphasize the reversal: a rule can be justified by utility while individual agents follow the rule without making a fresh utility calculation at every moment.\n\n${sourceNote('3')}`,
+      ['Indirect reasoning', 'Follow non-utilitarian rules at the level of ordinary conduct because direct calculation would undermine the security happiness requires.']
+    );
+
+    list(
+      'A utilitarian legal order has three instructions',
+      [
+        ['01', 'Pass laws', 'Choose a law only when it contributes more happiness than competing laws or the absence of law.'],
+        ['02', 'Obey laws', 'Treat laws as binding and disobey only to avoid disaster, because ordinary obedience supports a stable system.'],
+        ['03', 'Replace laws', 'Repeal and replace laws that fail to serve their proper utilitarian function.']
+      ],
+      `These instructions separate the evaluation of a legal system from ordinary compliance with its rules. The state is justified through the effects of the system it provides and enforces.\n\n${sourceNote('4')}`
+    );
+
+    chain(
+      'The state wins when it outperforms feasible alternatives',
+      [
+        ['01', 'A body of law', 'The state provides and enforces rules that organize social life.'],
+        ['02', 'More happiness', 'The arrangement contributes more to human happiness than any feasible competitor.'],
+        ['03', 'Political justification', 'The state is justified if and only if it wins that comparison.']
+      ],
+      `State the central utilitarian conclusion before testing its assumptions. The basic contrast is between a state and a state of nature, with the state appearing to offer more security and cooperation.\n\n${sourceNote('4')}`
+    );
+
+    section('III / THE ARGUMENT', 'The state is justified if its premises hold', `Separate the structure of the argument from the moral controversy that follows. A valid inference can still depend on a premise that critics reject.\n\n${sourceNote('4-5')}`);
+
+    argument(
+      'The formal case for the state',
+      [
+        ['P1', 'The morally best society maximizes happiness.', 'Utility supplies the standard for ranking societies.'],
+        ['P2', 'The state promotes happiness better than the state of nature.', 'The state secures possession, cooperation, and predictable rules.'],
+        ['P3', 'The state and the state of nature are the only alternatives.', 'The comparison is limited to the two arrangements.'],
+        ['C', 'The morally best society has a state.', 'If people must bring about the best society, they have a duty to support the state.']
+      ],
+      `Walk through the premises in order. The lecture grants premises two and three for the purpose of the discussion, then identifies the principle of utility as the vulnerable premise.\n\n${sourceNote('4-5')}`
+    );
+
+    statement(
+      'Validity leaves one premise exposed',
+      'If the premises are true, the conclusion follows. The dispute therefore moves to the moral standard that defines the best society.',
+      'Critics can accept the formal shape of the inference while rejecting the idea that maximizing happiness is sufficient for moral correctness.',
+      `Distinguish validity from soundness. The lecture does not need to deny that the conclusion follows; it needs to show why the central moral premise may have unacceptable consequences.\n\n${sourceNote('4-5')}`,
+      ['Pressure point', 'The principle of utility may permit or require grave injustice when injustice raises the total balance of happiness.']
+    );
+
+    section('IV / THE MORAL RISK', 'A happiness-maximizing rule can excuse grave injustice', `Introduce the scapegoat objection as a test of the principle of utility, not merely as an objection to one particular legal system.\n\n${sourceNote('5')}`);
+
+    split(
+      'The scapegoat objection turns public reassurance into a moral hazard',
+      {
+        label: 'PUBLIC BALANCE',
+        title: 'Vengeance and reassurance',
+        body: 'After a horrific bombing, the public wants perpetrators found, demands vengeance, and seeks confidence that another attack will not happen.'
+      },
+      {
+        label: 'INDIVIDUAL COST',
+        title: 'An innocent suspect suffers',
+        body: 'If plausible but innocent suspects were punished, public fear and anger might fall. If the total balance looked positive, utilitarianism would appear to require the injustice.'
+      },
+      `Make the objection as strong as possible. The claim is not that punishing the innocent is better than punishing the guilty; it is that a total calculation may defend a miscarriage of justice when every consequence is counted.\n\n${sourceNote('5-6')}`
+    );
+
+    timeline(
+      'The Birmingham Six made the objection concrete',
+      [
+        ['1975', 'Convictions', 'Six men were found guilty of murder after an IRA pub bombing.'],
+        ['1980', 'The appalling vista', 'Lord Denning argued that a civil action should not proceed because it could expose police violence, perjury, and erroneous convictions.'],
+        ['1991', 'Convictions quashed', 'The convictions were eventually set aside, making the case a lasting challenge to the logic of protecting public confidence at individual cost.']
+      ],
+      `Keep the historical sequence and the philosophical lesson distinct. The case illustrates the utilitarian temptation to leave innocent people in prison rather than admit that the legal system has produced a frightening truth.\n\n${sourceNote('6-7', 'Judgment discussed: Lord Denning, Court of Appeal judgment (1980).')}`
+    );
+
+    split(
+      'Rule utilitarianism can defend rights as long-term security',
+      {
+        label: 'THE RULE',
+        title: 'Do not punish the innocent',
+        body: 'A society in which people can be victimized and kept in prison gives everyone reason to fear becoming the next scapegoat.'
+      },
+      {
+        label: 'THE PAYOFF',
+        title: 'Security raises happiness',
+        body: 'If insecurity depresses general happiness, a utilitarian can support a right against victimization and can defend releasing the Birmingham Six.'
+      },
+      `Present indirect utilitarianism as the strongest defense. A rule against scapegoating may produce better confession procedures, greater trust, and long-term security for everyone.\n\n${sourceNote('7')}`
+    );
+
+    statement(
+      'Secrecy exposes the limit of the rescue',
+      'If victimization stays secret, public insecurity may never appear. The utilitarian balance could then favor the injustice.',
+      'The possibility is troubling because the rule-based defense relies on people knowing that they could be the next victim.',
+      `Do not resolve the problem by assuming that secrecy is impossible. The lecture uses it to show why a utilitarian theory of rights may fail to secure an unconditional moral limit.\n\n${sourceNote('7-8')}`,
+      ['The pressure point', 'A secret injustice can leave public happiness apparently unchanged while an innocent person bears the entire cost.']
+    );
+
+    section('V / THE LIMIT', 'Some protections should hold whatever the consequences', `The deepest objection is about what makes an action wrong. It remains even if a utilitarian calculation could be made accurately and even if the public never learns about the injustice.\n\n${sourceNote('8')}`);
+
+    split(
+      'The deeper objection is about the reason, not the arithmetic',
+      {
+        label: 'UTILITARIAN DEFENSE',
+        title: 'Release when release pays off',
+        body: 'Protect the innocent because trust, security, and better procedures will eventually maximize happiness.'
+      },
+      {
+        label: 'MORAL OBJECTION',
+        title: 'Release because victimization is wrong',
+        body: 'No one should be victimized, whatever the benefits. The Birmingham Six should be released even if the consequences were uncertain.'
+      },
+      `The disagreement is not merely about arithmetic. Opponents argue that the correct result can be reached for the wrong reason when a person's protection depends on whether their suffering pays off for others.\n\n${sourceNote('8')}`
+    );
+
+    closing(
+      'The state defense is strong; the moral foundation remains suspect',
+      [
+        ['Political effect', 'Stable laws and reliable enforcement can produce more happiness than a state of nature.'],
+        ['Rule-based discipline', 'Ordinary obedience can be required even when breaking one law would look beneficial in isolation.'],
+        ['Unresolved limit', 'Utility may still fail to explain why some injustices are wrong even when they improve the total balance.']
+      ],
+      `Close with the lecture's provisional verdict. The state may be justified by its effects, while utilitarianism remains vulnerable as a complete account of political morality.\n\n${sourceNote('8')}`
+    );
+
+    refs([
+      ['Lecture', '“Justifying the State - Utilitarianism,” source PDF, pp. 1-8.'],
+      ['Primary work quoted', 'Jeremy Bentham, A Fragment on Government (1776), quotation reproduced on p. 1.'],
+      ['Judgment discussed', 'Lord Denning, Court of Appeal judgment (1980), quotation reproduced on p. 6.'],
+      ['Further work mentioned', 'John Stuart Mill, On Liberty, identified on p. 8 as a later discussion of a utilitarian theory of rights.']
+    ], `All claims, cases, and quotations in this deck are grounded in the supplied lecture PDF.\n\n${sourceNote('1-8')}`);
+
+    const deck = document.getElementById('deck');
+    const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#039;'
+    }[character]));
+
+    function renderSlide(slide, index) {
+      const article = document.createElement('article');
+      const slideClass = slide.type === 'chain' ? 'chain-slide' : slide.type === 'timeline' ? 'timeline-slide' : slide.type;
+      article.className = `slide ${slideClass}${['statement', 'split', 'list', 'argument', 'chain', 'timeline', 'closing', 'refs'].includes(slide.type) ? ' top' : ''}`;
+      article.dataset.index = String(index);
+
+      let html = '<div class="slide-inner">';
+      if (slide.type === 'cover') {
+        html += `<div class="cover-grid"><div class="cover-copy"><p class="eyebrow">${esc(slide.course)}</p><h1 class="title">${esc(slide.title)}</h1><p class="work">${esc(slide.work)}</p><div class="course">Lecture presentation</div></div><div class="cover-mark" aria-hidden="true">&Sigma;<span>TOTAL<br>OUTCOME</span></div></div>`;
+      }
+      if (slide.type === 'section') {
+        html += `<p class="section-index">${esc(slide.index)}</p><h2 class="title">${esc(slide.title)}</h2><div class="section-rule"></div>`;
+      }
+      if (slide.type === 'statement') {
+        html += `<p class="eyebrow">Core claim</p><h2 class="title">${esc(slide.title)}</h2><p class="lead">${esc(slide.lead)}</p><p class="support">${esc(slide.support)}</p>`;
+        if (slide.band) html += `<div class="statement-band"><p><strong>${esc(slide.band[0])}</strong></p><p>${esc(slide.band[1])}</p></div>`;
+      }
+      if (slide.type === 'split') {
+        html += `<p class="eyebrow">Distinction</p><h2 class="title">${esc(slide.title)}</h2><div class="split-grid">${[slide.left, slide.right].map(column => `<section class="split-col"><span class="column-label">${esc(column.label)}</span><h3>${esc(column.title)}</h3><p class="${column.quote ? 'quote' : ''}">${esc(column.body)}</p></section>`).join('')}</div>`;
+      }
+      if (slide.type === 'list' || slide.type === 'argument') {
+        html += `<p class="eyebrow">${slide.type === 'argument' ? 'Formal structure' : 'Political instructions'}</p><h2 class="title">${esc(slide.title)}</h2><ol class="plain-list">${slide.items.map(item => `<li><span class="list-number">${esc(item[0])}</span><span class="list-copy"><strong>${esc(item[1])}</strong><span>${esc(item[2])}</span></span></li>`).join('')}</ol>`;
+      }
+      if (slide.type === 'chain') {
+        html += `<p class="eyebrow">Institutional comparison</p><h2 class="title">${esc(slide.title)}</h2><div class="chain">${slide.items.map(item => `<section class="chain-step"><span class="step-number">${esc(item[0])}</span><h3>${esc(item[1])}</h3><p>${esc(item[2])}</p></section>`).join('')}</div>`;
+      }
+      if (slide.type === 'timeline') {
+        html += `<p class="eyebrow">Case history</p><h2 class="title">${esc(slide.title)}</h2><div class="timeline">${slide.items.map(item => `<section class="timeline-item"><span class="timeline-year">${esc(item[0])}</span><h3>${esc(item[1])}</h3><p>${esc(item[2])}</p></section>`).join('')}</div>`;
+      }
+      if (slide.type === 'closing') {
+        html += `<p class="eyebrow">Provisional conclusion</p><h2 class="title">${esc(slide.title)}</h2><div class="closing-lines">${slide.lines.map(line => `<p><strong>${esc(line[0])}.</strong> ${esc(line[1])}</p>`).join('')}</div>`;
+      }
+      if (slide.type === 'refs') {
+        html += `<p class="eyebrow">Course materials</p><h2 class="title">${esc(slide.title)}</h2><div class="refs-list">${slide.items.map(item => `<div class="reference"><strong>${esc(item[0])}.</strong> ${esc(item[1])}</div>`).join('')}</div>`;
+      }
+      article.innerHTML = `${html}</div>`;
+      deck.appendChild(article);
+      return article;
+    }
+
+    const nodes = slides.map(renderSlide);
+    const overview = document.getElementById('overview');
+    const notes = document.getElementById('notes');
+    const overviewGrid = document.getElementById('overview-grid');
+    const notesBody = document.getElementById('notes-body');
+    const counter = document.getElementById('counter');
+    const progress = document.getElementById('progress');
+    const overviewCards = [];
+    let current = 0;
+
+    const labelFor = slide => slide.title || slide.lead || 'Slide';
+    slides.forEach((slide, index) => {
+      const card = document.createElement('button');
+      card.type = 'button';
+      card.className = 'overview-card';
+      card.innerHTML = `<span class="num">${String(index + 1).padStart(2, '0')} / ${slides.length}</span><span class="label">${esc(labelFor(slide))}</span>`;
+      card.addEventListener('click', () => { closePanels(); show(index); });
+      overviewGrid.appendChild(card);
+      overviewCards.push(card);
+    });
+
+    function show(index) {
+      current = Math.max(0, Math.min(slides.length - 1, index));
+      nodes.forEach((node, nodeIndex) => node.classList.toggle('active', nodeIndex === current));
+      overviewCards.forEach((card, cardIndex) => card.classList.toggle('current', cardIndex === current));
+      counter.textContent = `${current + 1} / ${slides.length}`;
+      progress.style.width = `${((current + 1) / slides.length) * 100}%`;
+      notesBody.textContent = slides[current].notes || 'No notes for this slide.';
+      document.title = `${current + 1}/${slides.length} · Justifying the State: Utilitarianism`;
+    }
+
+    window.show = show;
+
+    function openPanel(panel) {
+      closePanels();
+      panel.classList.add('open');
+    }
+
+    function closePanels() {
+      overview.classList.remove('open');
+      notes.classList.remove('open');
+    }
+
+    function toggleFullscreen() {
+      if (document.fullscreenElement) document.exitFullscreen();
+      else document.documentElement.requestFullscreen().catch(() => {});
+    }
+
+    document.getElementById('overview-button').addEventListener('click', () => openPanel(overview));
+    document.getElementById('notes-button').addEventListener('click', () => openPanel(notes));
+    document.getElementById('fullscreen-button').addEventListener('click', toggleFullscreen);
+    document.querySelectorAll('.close').forEach(button => button.addEventListener('click', closePanels));
+
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') { closePanels(); return; }
+      if (overview.classList.contains('open') || notes.classList.contains('open')) return;
+      if (['ArrowRight', 'ArrowDown', ' ', 'PageDown'].includes(event.key)) { event.preventDefault(); show(current + 1); }
+      else if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(event.key)) { event.preventDefault(); show(current - 1); }
+      else if (event.key.toLowerCase() === 'o') openPanel(overview);
+      else if (event.key.toLowerCase() === 'n') openPanel(notes);
+      else if (event.key.toLowerCase() === 'f') toggleFullscreen();
+    });
+
+    let touchX = 0;
+    let touchY = 0;
+    document.addEventListener('touchstart', event => {
+      touchX = event.changedTouches[0].screenX;
+      touchY = event.changedTouches[0].screenY;
+    }, { passive: true });
+    document.addEventListener('touchend', event => {
+      if (overview.classList.contains('open') || notes.classList.contains('open')) return;
+      const dx = event.changedTouches[0].screenX - touchX;
+      const dy = event.changedTouches[0].screenY - touchY;
+      if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)) show(current + (dx < 0 ? 1 : -1));
+    }, { passive: true });
+
+    function fits(node) {
+      const inner = node.querySelector('.slide-inner');
+      return inner.scrollHeight <= node.clientHeight * .82 && inner.scrollWidth <= node.clientWidth * .92;
+    }
+
+    function fitNode(node) {
+      let fit = 1;
+      node.classList.add('measuring');
+      node.style.setProperty('--fit', fit);
+      while (fit > .72 && !fits(node)) {
+        fit = Math.max(.72, fit - .01);
+        node.style.setProperty('--fit', fit.toFixed(3));
+      }
+      node.classList.remove('measuring');
+    }
+
+    function fitAll() {
+      nodes.forEach(node => {
+        node.style.setProperty('--fit', 1);
+        fitNode(node);
+      });
+      show(current);
+    }
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(fitAll, 150);
+    });
+
+    if (document.fonts?.ready) document.fonts.ready.then(fitAll);
+    else fitAll();
+    show(0);
+  </script>
+</body>
+</html>
