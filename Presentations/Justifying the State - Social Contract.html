@@ -243,10 +243,9 @@
     }
 
     .reveal {
-      /* Keep unrevealed material readable without competing with the current point. */
-      opacity: .46;
-      filter: grayscale(.35);
-      transition: opacity .24s ease, filter .24s ease;
+      /* All slide copy stays readable in the deck and in the review view. */
+      opacity: 1;
+      filter: none;
     }
 
     .reveal.visible {
@@ -972,7 +971,8 @@
       const notesToggle = document.getElementById('notes-toggle');
       let current = 0;
 
-      const reveals = index => [...slides[index].querySelectorAll('.reveal')];
+      // Keep navigation one step per slide now that every text block is visible.
+      const reveals = () => [];
 
       const updateNotes = () => {
         notesContent.textContent = slides[current].querySelector('.speaker-notes')?.textContent.trim() || 'No notes for this slide.';
