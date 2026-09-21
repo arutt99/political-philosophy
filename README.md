@@ -28,6 +28,7 @@ Only upload files you want to make public. GitHub Pages sites are publicly acces
 
 Apply these rules to every new or revised deck in `Presentations/`:
 
+- For every newly created presentation, add a linked card/button to the appropriate module or topic section in the root `index.html`. Use the presentation's exact path, URL-encode spaces when needed, include a clear title and useful `data-search` keywords, and verify that the button opens the correct deck.
 - Do not create standalone quotation or epigraph slides. Put a short quotation on an explanatory slide or in the speaker notes, with the surrounding claim doing the teaching.
 - Do not create standalone rhetorical-question or quasi-title transition slides. Move the transition into a concise section title or an explanatory content slide, then proceed directly to the argument.
 - Design for classroom projection, distance reading, and instructional pacing. Use `Presentations/Justifying the State - Introduction and Social Contract.html` as a baseline for large, readable type, but not as a density target. Use the available screen to make the one idea currently being taught unmistakable. Spaciousness is appropriate when it helps students identify and process that idea. Scale headings, body copy, rows, and explanatory elements until they are comfortably legible without clipping or overflow. Do not copy the reference deck’s theme, colors, typography, or layout unless explicitly requested.
