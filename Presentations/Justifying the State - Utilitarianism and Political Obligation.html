@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="A lecture presentation on utilitarianism as a justification of the state, including indirect utilitarianism, the scapegoat objection, and the problem of rights.">
+  <meta name="description" content="A chapter presentation on utilitarian political obligation, rule utilitarianism, the state, the scapegoat objection, and individual rights.">
   <link rel="icon" href="data:,">
-  <title>Justifying the State: Utilitarianism</title>
+  <title>Utilitarianism and Political Obligation</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -187,8 +187,8 @@
 
     .cover-grid {
       display: grid;
-      grid-template-columns: minmax(0, 1.05fr) minmax(260px, .95fr);
-      gap: 5vw;
+      grid-template-columns: minmax(0, .98fr) minmax(320px, 1.02fr);
+      gap: 4vw;
       align-items: center;
       height: 100%;
     }
@@ -221,25 +221,30 @@
       line-height: 1.25;
     }
 
-    .cover-mark {
-      display: grid;
-      min-height: 46vh;
-      place-items: center;
+    .cover-art {
+      position: relative;
+      min-height: 54vh;
+      margin: 0;
+      overflow: hidden;
       border-left: 1px solid rgba(216, 239, 121, .4);
-      color: var(--lime);
-      font-family: "DM Serif Display", Georgia, serif;
-      font-size: calc(clamp(170px, 27vw, 420px) * var(--fit));
-      line-height: .7;
-      opacity: .92;
+      background: var(--bg-deep);
     }
 
-    .cover-mark span {
+    .cover-art::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(14, 18, 17, .42), transparent 30%);
+      pointer-events: none;
+    }
+
+    .cover-art img {
       display: block;
-      margin-top: .25em;
-      color: var(--muted);
-      font: 600 calc(clamp(11px, .85vw, 15px) * var(--fit))/1.4 "IBM Plex Mono", monospace;
-      letter-spacing: .14em;
-      text-align: center;
+      width: 100%;
+      height: 54vh;
+      object-fit: cover;
+      object-position: 72% center;
+      filter: saturate(.82) contrast(1.05);
     }
 
     .section .slide-inner {
@@ -786,7 +791,7 @@
       .cover .slide-inner::before { left: 8vw; }
       .cover-grid { grid-template-columns: 1fr; gap: 2rem; }
       .cover .title { max-width: 11ch; }
-      .cover-mark { display: none; }
+      .cover-art { display: none; }
       .split-grid,
       .chain,
       .timeline { grid-template-columns: 1fr; gap: 1.35rem; }
@@ -861,12 +866,13 @@
     const refs = (items, notes) => add({ type: 'refs', title: 'References', items, notes });
 
     cover(
-      'Justifying the State: Utilitarianism',
-      'Happiness, rules, and the limits of political obligation',
+      'Utilitarianism and Political Obligation',
+      'The case for legal authority and the challenge from individual rights',
       'Political Philosophy · Module 2',
       note(
         'Open with the conditional test for political authority. The state is justified only when obedience produces better consequences than the available alternatives.',
-        '1'
+        '1',
+        'Cover image: original conceptual illustration of utilitarian calculation, 2026.'
       )
     );
 
@@ -963,12 +969,12 @@
       'The state is justified when it beats feasible alternatives',
       [
         { label: 'WHAT IT IS', title: 'A comparative political claim', body: 'The state is justified if and only if it contributes more to human happiness than any feasible competing arrangement.' },
-        { label: 'WHAT IT ESTABLISHES', title: 'Law becomes the state\'s political function', body: 'The state provides and enforces the body of rules that makes stable cooperation possible.' },
-        { label: 'STRONGEST RATIONALE', title: 'Security and cooperation beat the state of nature', body: 'If a state greatly outperforms the state of nature in security and cooperation, it wins the happiness comparison.' },
-        { label: 'FORMAL CONSEQUENCE', title: 'The best society has a state', body: 'If happiness is the standard and the state is the better arrangement, the morally best society is one with a state.' },
-        { label: 'OBJECTION', title: 'The conclusion depends on utility', body: 'The inference can be valid while the principle that defines the best society still permits grave injustice.' }
+        { label: 'PREMISE 1', title: 'The best society maximizes happiness', body: 'The principle of utility defines the morally best society by its total happiness.' },
+        { label: 'PREMISES 2 AND 3', title: 'The state wins an exhaustive comparison', body: 'The state promotes happiness better than the state of nature, and the argument assumes those are the only alternatives.' },
+        { label: 'CONCLUSION', title: 'The morally best society has a state', body: 'If the premises hold, the institutional conclusion follows even though anarchists dispute the comparison and the limited menu.' },
+        { label: 'DUTY CLAIM', title: 'Supporting the state needs one further premise', body: 'A duty to bring about the best society would turn the institutional conclusion into a duty to establish and support the state.' }
       ],
-      'Separate the state comparison from the moral premise. The argument grants the state\'s practical advantage for now and turns the next section toward the consequences of maximizing happiness.',
+      'Work through the formal structure without hiding its assumptions. The inference can be valid while premise 1 remains morally vulnerable and premises 2 and 3 remain open to anarchist objections.',
       '4-5'
     );
 
@@ -1036,7 +1042,7 @@
     );
 
     refs([
-      ['Lecture', '“Justifying the State - Utilitarianism,” source PDF, pp. 1-8.'],
+      ['Course text', '“Justifying the State - Utilitarianism,” pp. 1-8.'],
       ['Primary work quoted', 'Jeremy Bentham, A Fragment on Government (1776), quotation reproduced on p. 1.'],
       ['Judgment discussed', 'Lord Denning, Court of Appeal judgment (1980), quotation reproduced on p. 6.'],
       ['Further work mentioned', 'John Stuart Mill, On Liberty, identified on p. 8 as a later discussion of a utilitarian theory of rights.']
@@ -1064,7 +1070,7 @@
 
       let html = '<div class="slide-inner">';
       if (slide.type === 'cover') {
-        html += `<div class="cover-grid"><div class="cover-copy"><p class="eyebrow">${esc(slide.course)}</p><h1 class="title">${esc(slide.title)}</h1><p class="work">${esc(slide.work)}</p><div class="course">Lecture presentation</div></div><div class="cover-mark" aria-hidden="true">&Sigma;<span>TOTAL<br>OUTCOME</span></div></div>`;
+        html += `<div class="cover-grid"><div class="cover-copy"><p class="eyebrow">${esc(slide.course)}</p><h1 class="title">${esc(slide.title)}</h1><p class="work">${esc(slide.work)}</p><div class="course">Lecture presentation</div></div><figure class="cover-art"><img src="assets/justifying-state-utilitarianism-cover.png" alt="Conceptual image of an antique balance scale comparing many lights with one light beside a law book."></figure></div>`;
       }
       if (slide.type === 'section') {
         html += `<p class="section-index">${esc(slide.index)}</p><h2 class="title">${esc(slide.title)}</h2><div class="section-rule"></div>`;
@@ -1127,7 +1133,7 @@
       counter.textContent = `${current + 1} / ${slides.length}`;
       progress.style.width = `${((current + 1) / slides.length) * 100}%`;
       notesBody.textContent = slides[current].notes || 'No notes for this slide.';
-      document.title = `${current + 1}/${slides.length} · Justifying the State: Utilitarianism`;
+      document.title = `${current + 1}/${slides.length} · Utilitarianism and Political Obligation`;
     }
 
     window.show = show;
