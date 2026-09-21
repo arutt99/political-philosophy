@@ -379,6 +379,12 @@ body.preflight-open {
   pointer-events: none !important;
 }
 
+/* Review thumbnails show the complete composition, including staged content. */
+.preflight-slide .reveal {
+  opacity: 1 !important;
+  filter: none !important;
+}
+
 .preflight-skipped-mark {
   position: absolute;
   inset: 0;

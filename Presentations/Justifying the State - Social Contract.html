@@ -243,8 +243,9 @@
     }
 
     .reveal {
-      opacity: .06;
-      filter: grayscale(.7);
+      /* Keep unrevealed material readable without competing with the current point. */
+      opacity: .46;
+      filter: grayscale(.35);
       transition: opacity .24s ease, filter .24s ease;
     }
 
