@@ -1,0 +1,1580 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="An accessible full-screen presentation on the principle of fairness and political obligation.">
+  <title>The Principle of Fairness</title>
+  <style>
+    :root {
+      --paper: #f7f8fc;
+      --ink: #11131a;
+      --muted: #53596d;
+      --blue: #2f55ff;
+      --blue-deep: #1735c9;
+      --yellow: #ffdd3f;
+      --coral: #ef5a6f;
+      --violet: #7757e8;
+      --ice: #e8edff;
+      --rose: #ffe7eb;
+      --line: #11131a;
+      --control: #0d1020;
+      --body-size: clamp(1.2rem, 1.55vw, 1.85rem);
+      --small-size: clamp(.92rem, 1.02vw, 1.18rem);
+      --title-size: clamp(2.75rem, 5.2vw, 6.3rem);
+      --heading-size: clamp(2.15rem, 3.7vw, 4.55rem);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: var(--control);
+      color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body { min-height: 100dvh; }
+
+    button, select { font: inherit; }
+
+    .skip-link {
+      position: fixed;
+      top: .65rem;
+      left: .65rem;
+      z-index: 1000;
+      padding: .65rem .9rem;
+      color: #000;
+      background: var(--yellow);
+      border: 3px solid #000;
+      transform: translateY(-180%);
+    }
+
+    .skip-link:focus { transform: translateY(0); }
+
+    .deck,
+    .slides { width: 100%; height: 100%; }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      align-content: start;
+      gap: clamp(1.1rem, 2.25vh, 2rem);
+      width: 100%;
+      height: 100%;
+      padding: clamp(2.1rem, 5vh, 4.4rem) clamp(2.2rem, 5.5vw, 7rem) clamp(6.2rem, 11vh, 8rem);
+      overflow: hidden;
+      background: var(--paper);
+      isolation: isolate;
+    }
+
+    .slide[hidden] { display: none; }
+
+    .slide::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: clamp(.75rem, 1.15vw, 1.4rem);
+      background: var(--blue);
+      z-index: -1;
+    }
+
+    .slide::after {
+      content: attr(data-mark);
+      position: absolute;
+      right: clamp(1.2rem, 3.4vw, 4.2rem);
+      bottom: clamp(4.7rem, 8vh, 6.2rem);
+      color: rgba(17, 19, 26, .055);
+      font-size: clamp(7rem, 18vw, 21rem);
+      font-weight: 900;
+      line-height: .75;
+      letter-spacing: -.09em;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .slide[data-tone="blue"] {
+      color: #fff;
+      background: var(--blue);
+    }
+
+    .slide[data-tone="blue"]::before { background: var(--yellow); }
+    .slide[data-tone="blue"]::after { color: rgba(255, 255, 255, .11); }
+
+    .slide[data-tone="yellow"] { background: var(--yellow); }
+    .slide[data-tone="yellow"]::before { background: var(--ink); }
+
+    .slide[data-tone="rose"] { background: var(--rose); }
+    .slide[data-tone="rose"]::before { background: var(--coral); }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      min-height: 2rem;
+      padding: .32rem .62rem;
+      color: #fff;
+      background: var(--ink);
+      font-size: var(--small-size);
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    [data-tone="blue"] .eyebrow {
+      color: var(--ink);
+      background: var(--yellow);
+    }
+
+    h1, h2, h3, p { margin: 0; }
+
+    h1 {
+      max-width: 12ch;
+      font-size: var(--title-size);
+      line-height: .95;
+      letter-spacing: -.055em;
+    }
+
+    h2 {
+      max-width: 20ch;
+      font-size: var(--heading-size);
+      line-height: 1;
+      letter-spacing: -.045em;
+    }
+
+    h3 {
+      font-size: clamp(1.2rem, 1.65vw, 2rem);
+      line-height: 1.1;
+      letter-spacing: -.02em;
+    }
+
+    p, li, dd, dt {
+      font-size: var(--body-size);
+      line-height: 1.33;
+    }
+
+    strong { font-weight: 850; }
+
+    .subtitle {
+      max-width: 31ch;
+      font-size: clamp(1.45rem, 2.3vw, 2.8rem);
+      line-height: 1.25;
+    }
+
+    .lead {
+      max-width: 48ch;
+      font-size: clamp(1.45rem, 2.2vw, 2.75rem);
+      line-height: 1.25;
+      font-weight: 650;
+    }
+
+    .statement {
+      max-width: 44ch;
+      padding: clamp(1rem, 2vw, 1.8rem) 0 clamp(1rem, 2vw, 1.8rem) clamp(1.2rem, 2.2vw, 2.2rem);
+      border-left: clamp(.45rem, .65vw, .75rem) solid var(--blue);
+      font-size: clamp(1.45rem, 2.35vw, 2.9rem);
+      line-height: 1.22;
+      font-weight: 750;
+    }
+
+    [data-tone="blue"] .statement { border-color: var(--yellow); }
+    [data-tone="rose"] .statement { border-color: var(--coral); }
+
+    .quote-line {
+      max-width: 48ch;
+      padding: .95rem 0 .95rem 1.3rem;
+      border-left: .55rem solid var(--yellow);
+      color: var(--blue-deep);
+      font-size: clamp(1.35rem, 2vw, 2.45rem);
+      line-height: 1.3;
+      font-weight: 750;
+    }
+
+    .highlight {
+      padding: .06em .16em;
+      color: var(--ink);
+      background: var(--yellow);
+      box-decoration-break: clone;
+      -webkit-box-decoration-break: clone;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: clamp(1.5rem, 3vw, 4rem);
+      align-items: stretch;
+      width: min(100%, 88rem);
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: clamp(1rem, 2vw, 2.5rem);
+      width: min(100%, 92rem);
+    }
+
+    .column {
+      min-width: 0;
+      padding: .25rem clamp(1rem, 2vw, 2rem) .25rem 0;
+      border-right: 4px solid var(--line);
+    }
+
+    .column:last-child { border-right: 0; }
+    .column h3 { margin-bottom: .8rem; color: var(--blue-deep); }
+    [data-tone="blue"] .column h3 { color: var(--yellow); }
+
+    .label {
+      display: block;
+      margin-bottom: .55rem;
+      color: var(--blue-deep);
+      font-size: var(--small-size);
+      font-weight: 900;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+
+    [data-tone="blue"] .label { color: var(--yellow); }
+
+    .logic-stack {
+      display: grid;
+      gap: clamp(.65rem, 1.15vh, 1rem);
+      width: min(100%, 77rem);
+    }
+
+    .logic-row {
+      display: grid;
+      grid-template-columns: clamp(3rem, 5vw, 5.5rem) minmax(0, 1fr);
+      gap: clamp(.9rem, 1.8vw, 1.8rem);
+      align-items: center;
+      min-height: clamp(4.4rem, 8.7vh, 6.4rem);
+      padding: .55rem 0;
+      border-bottom: 3px solid var(--line);
+    }
+
+    .logic-row:last-child { border-bottom: 0; }
+
+    .logic-number {
+      display: grid;
+      place-items: center;
+      width: clamp(2.7rem, 4.4vw, 4.6rem);
+      aspect-ratio: 1;
+      color: #fff;
+      background: var(--blue);
+      font-size: clamp(1.25rem, 1.85vw, 2.25rem);
+      font-weight: 900;
+    }
+
+    .logic-row p { max-width: 50ch; }
+
+    .conclusion-band {
+      width: min(100%, 78rem);
+      padding: clamp(.85rem, 1.7vw, 1.45rem) clamp(1rem, 2vw, 1.8rem);
+      color: #fff;
+      background: var(--blue);
+      font-size: clamp(1.25rem, 1.8vw, 2.15rem);
+      line-height: 1.25;
+      font-weight: 800;
+    }
+
+    [data-tone="blue"] .conclusion-band {
+      color: var(--ink);
+      background: var(--yellow);
+    }
+
+    [data-tone="rose"] .conclusion-band { background: var(--coral); }
+
+    .fact-list {
+      display: grid;
+      gap: clamp(.75rem, 1.4vh, 1.2rem);
+      width: min(100%, 80rem);
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: facts;
+    }
+
+    .fact-list li {
+      display: grid;
+      grid-template-columns: clamp(2.7rem, 4vw, 4.4rem) minmax(0, 1fr);
+      gap: 1rem;
+      align-items: center;
+      min-height: clamp(3.7rem, 7vh, 5.3rem);
+      counter-increment: facts;
+    }
+
+    .fact-list li::before {
+      content: counter(facts, decimal-leading-zero);
+      color: var(--blue-deep);
+      font-size: clamp(1.2rem, 1.7vw, 1.9rem);
+      font-weight: 900;
+      letter-spacing: -.04em;
+    }
+
+    .decision {
+      width: min(100%, 80rem);
+      padding-top: clamp(.75rem, 1.5vh, 1.2rem);
+      border-top: 4px solid var(--line);
+      font-size: clamp(1.2rem, 1.85vw, 2.2rem);
+      line-height: 1.28;
+      font-weight: 750;
+    }
+
+    .comparison {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      width: min(100%, 88rem);
+      border-top: 5px solid var(--line);
+      border-bottom: 5px solid var(--line);
+    }
+
+    .comparison > div {
+      min-width: 0;
+      padding: clamp(1.2rem, 2.2vw, 2.2rem);
+    }
+
+    .comparison > div + div { border-left: 5px solid var(--line); }
+    .comparison h3 { margin-bottom: .8rem; color: var(--blue-deep); }
+
+    .comparison .verdict {
+      display: block;
+      margin-top: .8rem;
+      color: var(--blue-deep);
+      font-size: clamp(1.12rem, 1.55vw, 1.75rem);
+      line-height: 1.25;
+      font-weight: 850;
+    }
+
+    .time-pair {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: clamp(1.4rem, 3vw, 4rem);
+      width: min(100%, 86rem);
+      align-items: stretch;
+    }
+
+    .time-block {
+      padding: clamp(1.1rem, 2.2vw, 2.2rem);
+      border-top: clamp(.55rem, .8vw, .85rem) solid var(--blue);
+      background: var(--ice);
+    }
+
+    .time-block.near { border-color: var(--coral); background: var(--rose); }
+    .time-block .big-word {
+      display: block;
+      margin-bottom: .55rem;
+      color: var(--blue-deep);
+      font-size: clamp(2.3rem, 4.4vw, 5.3rem);
+      line-height: .95;
+      font-weight: 900;
+      letter-spacing: -.06em;
+    }
+
+    .time-block.near .big-word { color: #b31f3a; }
+
+    .process {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      width: min(100%, 94rem);
+      border-top: 5px solid var(--line);
+    }
+
+    .process > div {
+      min-width: 0;
+      min-height: clamp(8rem, 21vh, 14rem);
+      padding: clamp(1rem, 1.8vw, 1.8rem);
+      border-right: 3px solid var(--line);
+    }
+
+    .process > div:last-child { border-right: 0; }
+
+    .process b {
+      display: block;
+      margin-bottom: .65rem;
+      color: var(--blue-deep);
+      font-size: clamp(1.35rem, 2.2vw, 2.6rem);
+      line-height: 1;
+    }
+
+    .process p { font-size: clamp(1rem, 1.3vw, 1.55rem); }
+
+    .recap {
+      display: grid;
+      gap: clamp(1rem, 2vh, 1.6rem);
+      width: min(100%, 83rem);
+    }
+
+    .recap p {
+      padding-bottom: clamp(.8rem, 1.6vh, 1.25rem);
+      border-bottom: 3px solid var(--line);
+      font-size: clamp(1.35rem, 2vw, 2.4rem);
+      line-height: 1.25;
+      font-weight: 680;
+    }
+
+    .recap p:last-child { border-bottom: 0; }
+
+    .section-slide {
+      align-content: center;
+      padding-left: clamp(3.5rem, 8vw, 10rem);
+    }
+
+    .section-slide h2 { max-width: 14ch; font-size: clamp(3.4rem, 7vw, 8rem); }
+
+    .section-number {
+      display: block;
+      margin-bottom: .65rem;
+      color: var(--yellow);
+      font-size: clamp(1rem, 1.25vw, 1.5rem);
+      font-weight: 900;
+      letter-spacing: .12em;
+    }
+
+    .title-slide { align-content: center; }
+
+    .title-slide h1 { max-width: 10ch; }
+
+    .title-rule {
+      width: min(17rem, 34vw);
+      height: clamp(.65rem, 1.15vh, 1rem);
+      background: var(--yellow);
+    }
+
+    .references {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: clamp(1.2rem, 2.3vw, 2.4rem) clamp(2rem, 4vw, 5rem);
+      width: min(100%, 90rem);
+    }
+
+    .reference {
+      padding-top: .8rem;
+      border-top: 4px solid var(--line);
+    }
+
+    .reference p { font-size: clamp(1rem, 1.26vw, 1.48rem); line-height: 1.35; }
+    .reference strong { color: var(--blue-deep); }
+
+    .fragment {
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity .18s linear;
+    }
+
+    .fragment.revealed {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .speaker-notes { display: none; }
+
+    .controls {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 100;
+      display: grid;
+      grid-template-columns: auto auto minmax(9rem, 1fr) auto auto auto auto auto;
+      gap: .55rem;
+      align-items: center;
+      min-height: 4rem;
+      padding: .52rem max(.7rem, env(safe-area-inset-right)) max(.52rem, env(safe-area-inset-bottom)) max(.7rem, env(safe-area-inset-left));
+      color: #fff;
+      background: var(--control);
+      border-top: 2px solid rgba(255, 255, 255, .28);
+    }
+
+    .control-button {
+      min-width: 3rem;
+      min-height: 2.85rem;
+      padding: .4rem .72rem;
+      color: #fff;
+      background: transparent;
+      border: 2px solid rgba(255, 255, 255, .45);
+      border-radius: 0;
+      cursor: pointer;
+      font-weight: 800;
+    }
+
+    .control-button:hover { color: #000; background: var(--yellow); border-color: var(--yellow); }
+    .control-button:disabled { opacity: .35; cursor: not-allowed; }
+
+    .progress-track {
+      position: relative;
+      height: .7rem;
+      background: rgba(255, 255, 255, .22);
+      overflow: hidden;
+    }
+
+    .progress-fill { width: 0; height: 100%; background: var(--yellow); }
+
+    .counter {
+      min-width: 6.8rem;
+      text-align: center;
+      font-size: .95rem;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .live-status {
+      position: fixed;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      display: none;
+      padding: clamp(1.5rem, 4vw, 4rem);
+      overflow: auto;
+      color: var(--ink);
+      background: rgba(247, 248, 252, .98);
+    }
+
+    .overlay.open { display: block; }
+
+    .overlay-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 5px solid var(--line);
+    }
+
+    .overlay-header h2 { font-size: clamp(2rem, 4vw, 4rem); }
+
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+      gap: 1rem;
+    }
+
+    .overview-item {
+      min-height: 9rem;
+      padding: 1rem;
+      color: var(--ink);
+      background: #fff;
+      border: 3px solid var(--line);
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .overview-item:hover,
+    .overview-item[aria-current="true"] { background: var(--yellow); }
+
+    .overview-item b {
+      display: block;
+      margin-bottom: .55rem;
+      color: var(--blue-deep);
+      font-size: 1rem;
+    }
+
+    .overview-item span { font-size: 1.35rem; line-height: 1.15; font-weight: 800; }
+
+    .notes-content {
+      width: min(100%, 62rem);
+      font-size: 1.2rem;
+      line-height: 1.5;
+    }
+
+    .notes-content p { margin-bottom: 1rem; font-size: 1.2rem; }
+
+    :focus-visible { outline: 4px solid var(--yellow); outline-offset: 3px; }
+
+    body.contrast {
+      --paper: #000;
+      --ink: #fff;
+      --muted: #fff;
+      --blue: #ffea00;
+      --blue-deep: #ffea00;
+      --yellow: #00ffff;
+      --coral: #ff7aa8;
+      --violet: #d5b3ff;
+      --ice: #101010;
+      --rose: #18000a;
+      --line: #fff;
+      --control: #000;
+    }
+
+    body.contrast .slide::after { color: rgba(255, 255, 255, .08); }
+    body.contrast .conclusion-band { color: #000; }
+    body.contrast [data-tone="blue"] { color: #000; }
+    body.contrast [data-tone="blue"] .eyebrow { color: #000; }
+    body.contrast .overview { color: #fff; background: #000; }
+    body.contrast .overview-item { color: #fff; background: #000; border-color: #fff; }
+    body.contrast .overview-item:hover,
+    body.contrast .overview-item[aria-current="true"] { color: #000; background: #00ffff; }
+
+    @media (max-width: 860px) {
+      :root { --body-size: clamp(1.02rem, 2.35vw, 1.45rem); }
+      .slide { overflow-y: auto; padding-left: 2.2rem; padding-right: 1.5rem; }
+      .grid-2, .grid-3, .time-pair, .comparison, .references { grid-template-columns: 1fr; }
+      .column { padding-bottom: 1rem; border-right: 0; border-bottom: 3px solid var(--line); }
+      .column:last-child { border-bottom: 0; }
+      .comparison > div + div { border-left: 0; border-top: 5px solid var(--line); }
+      .process { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .process > div:nth-child(2) { border-right: 0; }
+      .process > div:nth-child(-n+2) { border-bottom: 3px solid var(--line); }
+      .controls { grid-template-columns: auto auto minmax(7rem, 1fr) auto auto auto; }
+      #overviewButton, #contrastButton { display: none; }
+    }
+
+    @media (max-height: 760px) and (min-width: 861px) {
+      :root {
+        --body-size: clamp(1.02rem, 1.3vw, 1.45rem);
+        --heading-size: clamp(1.85rem, 3.1vw, 3.35rem);
+        --title-size: clamp(2.65rem, 4.7vw, 5.1rem);
+      }
+      .slide { gap: .8rem; padding-top: 1.7rem; padding-bottom: 5.2rem; }
+      .logic-row { min-height: 3.65rem; }
+      .fact-list li { min-height: 3.2rem; }
+      .process > div { min-height: 7.4rem; }
+      .controls { min-height: 3.5rem; }
+      .control-button { min-height: 2.45rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+    }
+
+    @media print {
+      html, body { height: auto; overflow: visible; background: #fff; }
+      .deck, .slides { height: auto; }
+      .slide, .slide[hidden] {
+        position: relative;
+        display: grid;
+        min-height: 100vh;
+        break-after: page;
+        overflow: hidden;
+      }
+      .fragment { visibility: visible; opacity: 1; }
+      .controls, .overlay, .skip-link { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#controls">Skip to presentation controls</a>
+
+  <main class="deck" aria-label="The Principle of Fairness presentation">
+    <div class="slides" id="slides">
+
+      <section class="slide title-slide" id="slide-01" data-title="The Principle of Fairness" data-tone="blue" data-mark="01" aria-roledescription="slide" aria-label="Slide 1 of 36">
+        <span class="eyebrow">Political obligation</span>
+        <h1>The Principle of Fairness</h1>
+        <div class="title-rule" aria-hidden="true"></div>
+        <p class="subtitle">Can the benefits of social cooperation create a duty to obey?</p>
+        <aside class="speaker-notes">
+          <p>Central problem: whether fair reciprocity can ground political obligation when actual consent is absent.</p>
+        </aside>
+      </section>
+
+      <section class="slide section-slide" id="slide-02" data-title="From Consent to Fair Contribution" data-tone="blue" data-mark="I" aria-roledescription="slide" aria-label="Slide 2 of 36">
+        <span class="section-number">SECTION 01</span>
+        <h2>From consent to fair contribution</h2>
+        <aside class="speaker-notes">
+          <p>Hart’s principle shifts the basis of obligation from an unspoken promise to reciprocity within a cooperative practice.</p>
+        </aside>
+      </section>
+
+      <section class="slide" id="slide-03" data-title="Consent Fails as a Description" data-mark="03" aria-roledescription="slide" aria-label="Slide 3 of 36">
+        <span class="eyebrow">The starting problem</span>
+        <h2>Consent fails as a description</h2>
+        <p class="quote-line">Hume challenges the claim that political ties rest on “voluntary consent or a mutual promise.”</p>
+        <p class="lead fragment">Most people inherit political membership. They never make a free promise to obey.</p>
+        <p class="lead fragment">Fairness begins from a different fact: people can benefit from cooperation without promising anything.</p>
+        <aside class="speaker-notes">
+          <p>Citation: David Hume, “Of the Original Contract” (1748), p. 470.</p>
+        </aside>
+      </section>
+
+      <section class="slide" id="slide-04" data-title="The Core Fairness Claim" data-mark="04" aria-roledescription="slide" aria-label="Slide 4 of 36">
+        <span class="eyebrow">Fair reciprocity</span>
+        <h2>The core fairness claim</h2>
+        <div class="logic-stack">
+          <div class="logic-row">
+            <span class="logic-number">1</span>
+            <p>Other people accept restrictions that sustain a cooperative practice.</p>
+          </div>
+          <div class="logic-row fragment">
+            <span class="logic-number">2</span>
+            <p>Their compliance creates benefits that you enjoy.</p>
+          </div>
+          <div class="logic-row fragment">
+            <span class="logic-number">3</span>
+            <p>Fairness requires comparable submission when the rules call for your share.</p>
+          </div>
+        </div>
+        <div class="conclusion-band fragment">Taking the benefit while refusing the burden can exploit the people who cooperate.</div>
+        <aside class="speaker-notes">
+          <p>Citation: H. L. A. Hart, “Are There Any Natural Rights?” (1955), p. 85.</p>
+        </aside>
+      </section>
+
+      <section class="slide" id="slide-05" data-title="Hart’s Principle" data-mark="05" aria-roledescription="slide" aria-label="Slide 5 of 36">
+        <span class="eyebrow">H. L. A. Hart</span>
+        <h2>Hart’s principle</h2>
+        <div class="logic-stack">
+          <div class="logic-row">
+            <span class="logic-number">1</span>
+            <p>People conduct a <strong>joint enterprise</strong> according to rules.</p>
+          </div>
+          <div class="logic-row fragment">
+            <span class="logic-number">2</span>
+            <p>Following those rules restricts the liberty of the participants.</p>
+          </div>
+          <div class="logic-row fragment">
+            <span class="logic-number">3</span>
+            <p>Other people benefit from the participants’ submission.</p>
+          </div>
+          <div class="logic-row fragment">
+            <span class="logic-number">4</span>
+            <p>The participants may demand similar submission from those beneficiaries.</p>
+          </div>
+        </div>
+        <aside class="speaker-notes">
+          <p>Citation: Hart, “Are There Any Natural Rights?” p. 85.</p>
+        </aside>
+      </section>
+
+      <section class="slide" id="slide-06" data-title="The Rational Core of Tacit Consent" data-mark="06" aria-roledescription="slide" aria-label="Slide 6 of 36">
+        <span class="eyebrow">Two grounds of obligation</span>
+        <h2>The “rational core” of tacit consent</h2>
+        <div class="comparison">
+          <div>
+            <h3>Tacit consent</h3>
+            <p>Receiving benefits counts as an unspoken promise to obey.</p>
+          </div>
+          <div class="fragment">
+            <h3>Fairness</h3>
+            <p>Receiving benefits matters because taking them without sharing the costs can exploit other people.</p>
+          </div>
+        </div>
+        <div class="conclusion-band fragment">The alleged duty comes from reciprocity rather than a promise.</div>
+        <aside class="speaker-notes">
+          <p>Hart calls fairness the “rational core” of tacit consent. The phrase preserves the anti-exploitation idea without treating benefit as an act of agreement.</p>
+        </aside>
+      </section>
+
+      <section class="slide" id="slide-07" data-title="Benefits and Political Burdens" data-mark="07" aria-roledescription="slide" aria-label="Slide 7 of 36">
+        <span class="eyebrow">The political application</span>
+        <h2>Benefits and political burdens</h2>
+        <div class="grid-2">
+          <div class="column">
+            <span class="label">Benefit</span>
+            <h3>Security and stability</h3>
+            <p>Enforced laws protect people within a dependable social order.</p>
+          </div>
+          <div class="column fragment">
+            <span class="label">Burden</span>
+            <h3>Political obligations</h3>
+            <p>People obey laws and contribute taxes that keep the legal order working.</p>
+          </div>
+        </div>
+        <div class="conclusion-band fragment">A beneficiary should not claim the security while making everyone else carry its costs.</div>
+        <aside class="speaker-notes">
+          <p>The benefit-burden link supplies the anti-free-rider force of the principle.</p>
+        </aside>
+      </section>
+
+      <section class="slide" id="slide-08" data-title="The Round of Drinks" data-mark="08" aria-roledescription="slide" aria-label="Slide 8 of 36">
+        <span class="eyebrow">Case facts</span>
+        <h2>The round of drinks</h2>
+        <ol class="fact-list">
+          <li>Four friends follow a practice in which each person buys a round.</li>
+          <li class="fragment">Three friends each buy drinks for all four people.</li>
+          <li class="fragment">The fourth friend leaves after the third drink, just before buying a round.</li>
+        </ol>
+        <p class="decision fragment"><strong>Decision at issue:</strong> whether accepting the three drinks makes the fourth friend responsible for a comparable contribution.</p>
+        <aside class="speaker-notes">
+          <p>The example illustrates an accepted cooperative practice with recognizable benefits and costs.</p>
+        </aside>
+      </section>
+
+      <section class="slide" id="slide-09" data-title="Why Leaving Looks Unfair" data-mark="09" aria-roledescription="slide" aria-label="Slide 9 of 36">
+        <span class="eyebrow">Case assessment</span>
+        <h2>Why leaving looks unfair</h2>
+        <div class="logic-stack">
+          <div class="logic-row">
+            <span class="logic-number">1</span>
+            <p>The fourth friend participates in the round-buying practice.</p>
+          </div>
+          <div class="logic-row fragment">
+            <span class="logic-number">2</span>
+            <p>The friend accepts benefits produced by the others’ contributions.</p>
+          </div>
+          <div class="logic-row fragment">
+            <span class="logic-number">3</span>
+            <p>Leaving shifts the expected burden back onto those who already paid.</p>
+          </div>
+        </div>
+        <div class="conclusion-band fragment">The conduct looks like free riding because the friend accepted the practice and then avoided its cost.</div>
+        <aside class="speaker-notes">
+          <p>The example supports obligations within a scheme that the beneficiary appears to accept. Later cases test whether receipt alone can do the same work.</p>
+        </aside>
+      </section>
+
+      <section class="slide" id="slide-10" data-title="The Political Inference" data-mark="10" aria-roledescription="slide" aria-label="Slide 10 of 36">
+        <span class="eyebrow">Conditional argument</span>
+        <h2>The political inference</h2>
+        <div class="logic-stack">
+          <div class="logic-row">
+            <span class="logic-number">1</span>
+            <p>The legal order gives every person security and stability.</p>
+          </div>
+          <div class="logic-row fragment">
+            <span class="logic-number">2</span>
+            <p>Those benefits depend on widespread compliance and contribution.</p>
+          </div>
+          <div class="logic-row fragment">
+            <span class="logic-number">3</span>
+            <p>Fairness requires each beneficiary to carry a comparable share.</p>
+          </div>
+        </div>
+        <div class="conclusion-band fragment">If every person benefits, each person appears to acquire political obligations.</div>
+        <aside class="speaker-notes">
+          <p>The universal conclusion depends on the premise that every person receives a qualifying benefit.</p>
+        </aside>
+      </section>
+
+      <section class="slide" id="slide-11" data-title="The Universal-Benefit Premise" data-mark="11" aria-roledescription="slide" aria-label="Slide 11 of 36">
+        <span class="eyebrow">A necessary premise</span>
+        <h2>The universal-benefit premise</h2>
+        <p class="statement">Fairness can ground a universal duty only if the state provides the relevant benefit to every person it claims to bind.</p>
+        <div class="grid-2">
+          <div class="column fragment">
+            <h3>Hobbes</h3>
+            <p>The dangers outside common authority can support the claim that civil order benefits people.</p>
+          </div>
+          <div class="column fragment">
+            <h3>Hume</h3>
+            <p>Enforced justice serves each person’s interest by preserving a stable practice that voluntary restraint cannot sustain.</p>
+          </div>
+        </div>
+        <aside class="speaker-notes">
+          <p>Hume supplies the detailed benefit argument used in the next section. He is not himself committed to the fairness theory.</p>
+        </aside>
+      </section>
+
+      <section class="slide section-slide" id="slide-12" data-title="Why Government Benefits Us" data-tone="blue" data-mark="II" aria-roledescription="slide" aria-label="Slide 12 of 36">
+        <span class="section-number">SECTION 02</span>
+        <h2>Why government benefits us</h2>
+        <aside class="speaker-notes">
+          <p>Hume explains the advantages of enforced justice by connecting institutional design with a weakness in human motivation.</p>
+        </aside>
+      </section>
+
+      <section class="slide" id="slide-13" data-title="Justice as a Long-Term Good" data-mark="13" aria-roledescription="slide" aria-label="Slide 13 of 36">
+        <span class="eyebrow">Hume’s first step</span>
+        <h2>Justice serves each person’s long-term interest</h2>
+        <div class="logic-stack">
+          <div class="logic-row">
+            <span class="logic-number">1</span>
+            <p>Rules of justice protect private property and personal security.</p>
+          </div>
+          <div class="logic-row fragment">
+            <span class="logic-number">2</span>
+            <p>Compliance sometimes requires a person to surrender an immediate advantage.</p>
+          </div>
+          <div class="logic-row fragment">
+            <span class="logic-number">3</span>
+            <p>Stable protection over time benefits that same person more than a particular violation would.</p>
+          </div>
+        </div>
+        <div class="conclusion-band fragment">Justice pays in the long term, but only while people generally follow its rules.</div>
+        <aside class="speaker-notes">
+          <p>Hume’s argument targets each person’s interest, not only aggregate social welfare.</p>
+        </aside>
+      </section>
+
+      <section class="slide" id="slide-14" data-title="The Enforcement Puzzle" data-mark="14" aria-roledescription="slide" aria-label="Slide 14 of 36">
+        <span class="eyebrow">An apparent contradiction</span>
+        <h2>The enforcement puzzle</h2>
+        <div class="grid-2">
+          <div class="column">
+            <span class="label">Claim</span>
+            <p class="lead">Obedience serves each person’s interest.</p>
+          </div>
+          <div class="column fragment">
+            <span class="label">Observed practice</span>
+            <p class="lead">Government threatens punishment to secure obedience.</p>
+          </div>
+        </div>
+        <p class="statement fragment">If people already gain from obeying, the need for force demands an explanation.</p>
+        <aside class="speaker-notes">
+          <p>Hume resolves the puzzle by separating a person’s considered interest from the motive that governs a present choice.</p>
+        </aside>
+      </section>
+
+      <section class="slide" id="slide-15" data-title="Two Time Horizons" data-mark="15" aria-roledescription="slide" aria-label="Slide 15 of 36">
+        <span class="eyebrow">Human motivation</span>
+        <h2>Two time horizons</h2>
+        <div class="time-pair">
+          <div class="time-block near">
+            <span class="big-word">Near</span>
+            <p>A small gain from breaking a rule arrives now.</p>
+          </div>
+          <div class="time-block fragment">
+            <span class="big-word">Remote</span>
+            <p>A larger benefit from stable justice arrives over time.</p>
+          </div>
+        </div>
+        <div class="grid-2">
+          <p class="lead fragment"><span class="highlight">Judgment</span> ranks the remote benefit higher.</p>
+          <p class="lead fragment"><span class="highlight">Motivation</span> often chooses the near advantage.</p>
+        </div>
+        <aside class="speaker-notes">
+          <p>Citation: Hume, <em>A Treatise of Human Nature</em>, p. 535.</p>
+        </aside>
+      </section>
+
+      <section class="slide" id="slide-16" data-title="How Individual Temptation Becomes Collective Loss" data-mark="16" aria-roledescription="slide" aria-label="Slide 16 of 36">
+        <span class="eyebrow">The breakdown mechanism</span>
+        <h2>Individual temptation becomes collective loss</h2>
+        <div class="process">
+          <div>
+            <b>01</b>
+            <p>One person gains by breaking a rule.</p>
+          </div>
+          <div class="fragment">
+            <b>02</b>
+            <p>Other people pursue the same immediate advantage.</p>
+          </div>
+          <div class="fragment">
+            <b>03</b>
+            <p>General compliance erodes and justice stops protecting anyone reliably.</p>
+          </div>
+          <div class="fragment">
+            <b>04</b>
+            <p>Everyone loses the larger benefit of social order.</p>
+          </div>
+        </div>
+        <aside class="speaker-notes">
+          <p>Reason identifies the final loss, but the immediate gain can still dominate action.</p>
+        </aside>
+      </section>
+
+      <section class="slide" id="slide-17" data-title="Reason Does Not Control Motivation" data-mark="17" aria-roledescription="slide" aria-label="Slide 17 of 36">
+        <span class="eyebrow">Hume’s explanation</span>
+        <h2>Reason does not control motivation</h2>
+        <div class="grid-2">
+          <div class="column">
+            <span class="label">Reason</span>
+            <p>Reason shows that lawful order serves our greater long-term interest.</p>
+          </div>
+          <div class="column fragment">
+            <span class="label">Passion</span>
+            <p>Desire gives stronger motivational weight to what feels immediate and close.</p>
+          </div>
+        </div>
+        <div class="conclusion-band fragment">Knowledge of our interest cannot reliably sustain justice on its own.</div>
+        <aside class="speaker-notes">
+          <p>Citation: Hume, <em>Treatise of Human Nature</em>, p. 535. Hume describes reason as “the slave of the passions.”</p>
+        </aside>
+      </section>
+
+      <section class="slide" id="slide-18" data-title="Changing the Choice Situation" data-mark="18" aria-roledescription="slide" aria-label="Slide 18 of 36">
+        <span class="eyebrow">Institutional response</span>
+        <h2>Changing the choice situation</h2>
+        <p class="quote-line">Institutions must make observance of justice our “nearest interest.”</p>
+        <div class="comparison">
+          <div>
+            <h3>Without a sanction</h3>
+            <p>Disobedience can offer the strongest immediate payoff.</p>
+          </div>
+          <div class="fragment">
+            <h3>With a sanction</h3>
+            <p>Punishment attaches a near cost to disobedience, so compliance also serves immediate interest.</p>
+          </div>
+        </div>
+        <aside class="speaker-notes">
+          <p>Citation: Hume, <em>Treatise of Human Nature</em>, p. 537.</p>
+        </aside>
+      </section>
+
+      <section class="slide" id="slide-19" data-title="Civil Magistrates Align Interests" data-mark="19" aria-roledescription="slide" aria-label="Slide 19 of 36">
+        <span class="eyebrow">The role of government</span>
+        <h2>Civil magistrates align interests</h2>
+        <div class="grid-2">
+          <div class="column">
+            <span class="label">Long term</span>
+            <h3>Laws preserve order</h3>
+            <p>General compliance maintains the system of justice that benefits everyone over time.</p>
+          </div>
+          <div class="column fragment">
+            <span class="label">Short term</span>
+            <h3>Enforcement changes incentives</h3>
+            <p>Credible punishment gives each person an immediate reason to comply.</p>
+          </div>
+        </div>
+        <div class="conclusion-band fragment">Coercion helps people act in accordance with their own rational interest.</div>
+        <aside class="speaker-notes">
+          <p>Hume argues that people can reasonably welcome enforcement because it stabilizes a mutually beneficial practice.</p>
+        </aside>
+      </section>
+
+      <section class="slide" id="slide-20" data-title="Hume’s Limited Conclusion" data-mark="20" aria-roledescription="slide" aria-label="Slide 20 of 36">
+        <span class="eyebrow">A limit on the argument</span>
+        <h2>Hume’s conclusion stops at advantage</h2>
+        <p class="statement">Government can protect everyone’s interest even when political authority does not rest on consent.</p>
+        <div class="comparison">
+          <div class="fragment">
+            <h3>Established</h3>
+            <p>Government provides advantages and people have reason to accept its enforcement.</p>
+          </div>
+          <div class="fragment">
+            <h3>Still unproven</h3>
+            <p>Every person has a moral obligation to obey the state.</p>
+          </div>
+        </div>
+        <aside class="speaker-notes">
+          <p>Usefulness and moral authority remain separate claims. Hume does not supply the further moral premise.</p>
+        </aside>
+      </section>
+
+      <section class="slide" id="slide-21" data-title="Fairness Adds the Moral Bridge" data-mark="21" aria-roledescription="slide" aria-label="Slide 21 of 36">
+        <span class="eyebrow">The further step</span>
+        <h2>Fairness adds the moral bridge</h2>
+        <div class="logic-stack">
+          <div class="logic-row">
+            <span class="logic-number">1</span>
+            <p>Government supplies benefits through enforced justice.</p>
+          </div>
+          <div class="logic-row fragment">
+            <span class="logic-number">2</span>
+            <p>Other citizens bear restrictions and costs that help produce those benefits.</p>
+          </div>
+          <div class="logic-row fragment">
+            <span class="logic-number">3</span>
+            <p>A beneficiary who refuses comparable burdens treats those citizens unfairly.</p>
+          </div>
+        </div>
+        <div class="conclusion-band fragment">The fairness theorist converts governmental advantage into a claimed duty to obey.</div>
+        <aside class="speaker-notes">
+          <p>Hume supplies the benefit premise. Hart’s principle supplies the moral requirement of reciprocal contribution.</p>
+        </aside>
+      </section>
+
+      <section class="slide" id="slide-22" data-title="The Argument So Far" data-tone="yellow" data-mark="22" aria-roledescription="slide" aria-label="Slide 22 of 36">
+        <span class="eyebrow">Section recap</span>
+        <h2>The argument so far</h2>
+        <div class="recap">
+          <p>Enforced justice protects each person’s long-term interest.</p>
+          <p class="fragment">Government makes compliance attractive in the short term as well.</p>
+          <p class="fragment">Fairness then claims that beneficiaries owe the contributions that sustain those advantages.</p>
+        </div>
+        <aside class="speaker-notes">
+          <p>The next objection targets the move from receiving a benefit to owing a contribution.</p>
+        </aside>
+      </section>
+
+      <section class="slide section-slide" id="slide-23" data-title="Unsolicited Benefits" data-tone="blue" data-mark="III" aria-roledescription="slide" aria-label="Slide 23 of 36">
+        <span class="section-number">SECTION 03</span>
+        <h2>Unsolicited benefits</h2>
+        <aside class="speaker-notes">
+          <p>Nozick challenges the assumption that receipt of a benefit automatically creates a debt.</p>
+        </aside>
+      </section>
+
+      <section class="slide" id="slide-24" data-title="The Refused Round" data-tone="rose" data-mark="24" aria-roledescription="slide" aria-label="Slide 24 of 36">
+        <span class="eyebrow">A changed case</span>
+        <h2>The refused round</h2>
+        <ol class="fact-list">
+          <li>Before anyone buys drinks, one person says they will not buy a round.</li>
+          <li class="fragment">The others still supply that person with three drinks.</li>
+          <li class="fragment">They later demand a fourth round in return.</li>
+        </ol>
+        <p class="decision fragment"><strong>Decision at issue:</strong> whether benefits supplied after an explicit refusal can create a duty to repay.</p>
+        <aside class="speaker-notes">
+          <p>The altered facts remove the appearance that the beneficiary accepted the cooperative practice.</p>
+        </aside>
+      </section>
+
+      <section class="slide" id="slide-25" data-title="Nozick’s Principle" data-tone="rose" data-mark="25" aria-roledescription="slide" aria-label="Slide 25 of 36">
+        <span class="eyebrow">Robert Nozick</span>
+        <h2>Nozick’s principle</h2>
+        <p class="statement">Unsolicited benefits do not automatically create obligations to reciprocate.</p>
+        <p class="lead fragment">A provider cannot create another person’s debt merely by supplying something that person never requested.</p>
+        <p class="lead fragment">Enjoyment may show that the benefit had value. It does not show authorization of the scheme or its price.</p>
+        <aside class="speaker-notes">
+          <p>Citation: Robert Nozick, <em>Anarchy, State, and Utopia</em> (1974), p. 93.</p>
+        </aside>
+      </section>
+
+      <section class="slide" id="slide-26" data-title="The Public-Address-System Case" data-tone="rose" data-mark="26" aria-roledescription="slide" aria-label="Slide 26 of 36">
+        <span class="eyebrow">Case facts</span>
+        <h2>The public-address-system case</h2>
+        <ol class="fact-list">
+          <li>Neighbors create a shared entertainment system.</li>
+          <li class="fragment">Each resident receives an assigned day to broadcast music or jokes.</li>
+          <li class="fragment">You hear and enjoy 137 days of other people’s broadcasts.</li>
+          <li class="fragment">Day 138 demands that you give up a day to entertain everyone else.</li>
+        </ol>
+        <p class="decision fragment"><strong>Decision at issue:</strong> whether enjoyment alone makes the assigned labor morally obligatory.</p>
+        <aside class="speaker-notes">
+          <p>Citation: Nozick, <em>Anarchy, State, and Utopia</em>, p. 93.</p>
+        </aside>
+      </section>
+
+      <section class="slide" id="slide-27" data-title="Nozick’s Assessment" data-tone="rose" data-mark="27" aria-roledescription="slide" aria-label="Slide 27 of 36">
+        <span class="eyebrow">Case assessment</span>
+        <h2>Enjoyment alone creates no duty</h2>
+        <div class="logic-stack">
+          <div class="logic-row">
+            <span class="logic-number">1</span>
+            <p>You never asked the neighbors to organize the broadcasts.</p>
+          </div>
+          <div class="logic-row fragment">
+            <span class="logic-number">2</span>
+            <p>The benefit reached you whether you wanted the scheme or not.</p>
+          </div>
+          <div class="logic-row fragment">
+            <span class="logic-number">3</span>
+            <p>Hearing or enjoying a broadcast does not commit you to its assigned cost.</p>
+          </div>
+        </div>
+        <div class="conclusion-band fragment">Hart’s receipt-based principle appears to demand a contribution that Nozick regards as unjustified.</div>
+        <aside class="speaker-notes">
+          <p>The case separates benefit, enjoyment, and acceptance. They do not necessarily occur together.</p>
+        </aside>
+      </section>
+
+      <section class="slide" id="slide-28" data-title="The Danger of Receipt-Based Duties" data-tone="rose" data-mark="28" aria-roledescription="slide" aria-label="Slide 28 of 36">
+        <span class="eyebrow">The general objection</span>
+        <h2>Receipt-based duties give providers too much power</h2>
+        <div class="process">
+          <div>
+            <b>01</b>
+            <p>A provider chooses what counts as a benefit.</p>
+          </div>
+          <div class="fragment">
+            <b>02</b>
+            <p>The provider supplies it without permission.</p>
+          </div>
+          <div class="fragment">
+            <b>03</b>
+            <p>The provider sets the required repayment.</p>
+          </div>
+          <div class="fragment">
+            <b>04</b>
+            <p>The provider calls refusal unfair.</p>
+          </div>
+        </div>
+        <div class="conclusion-band fragment">A theory of fairness cannot let one side create another person’s debt unilaterally.</div>
+        <aside class="speaker-notes">
+          <p>Nozick’s objection does not deny every obligation of reciprocity. It denies that mere receipt can generate one.</p>
+        </aside>
+      </section>
+
+      <section class="slide section-slide" id="slide-29" data-title="The Acceptance Revision" data-tone="blue" data-mark="IV" aria-roledescription="slide" aria-label="Slide 29 of 36">
+        <span class="section-number">SECTION 04</span>
+        <h2>The acceptance revision</h2>
+        <aside class="speaker-notes">
+          <p>The proposed revision replaces receipt with informed acceptance. That repair improves the principle but narrows its reach.</p>
+        </aside>
+      </section>
+
+      <section class="slide" id="slide-30" data-title="Acceptance Rather Than Receipt" data-mark="30" aria-roledescription="slide" aria-label="Slide 30 of 36">
+        <span class="eyebrow">The proposed revision</span>
+        <h2>Acceptance rather than receipt</h2>
+        <div class="comparison">
+          <div>
+            <h3>Mere receipt</h3>
+            <p>A benefit reaches you regardless of your choice.</p>
+            <span class="verdict">No obligation follows automatically.</span>
+          </div>
+          <div class="fragment">
+            <h3>Acceptance</h3>
+            <p>You take the benefit as part of a cooperative scheme while understanding its costs.</p>
+            <span class="verdict">Reciprocal contribution can become obligatory.</span>
+          </div>
+        </div>
+        <div class="conclusion-band fragment">The revision targets a genuine free rider rather than a passive recipient.</div>
+        <aside class="speaker-notes">
+          <p>The distinction preserves the anti-exploitation intuition while blocking duties created solely by imposed goods.</p>
+        </aside>
+      </section>
+
+      <section class="slide" id="slide-31" data-title="The Revised Public-Address Case" data-mark="31" aria-roledescription="slide" aria-label="Slide 31 of 36">
+        <span class="eyebrow">The revision applied</span>
+        <h2>The public-address case after the repair</h2>
+        <div class="logic-stack">
+          <div class="logic-row">
+            <span class="logic-number">1</span>
+            <p>Merely hearing the broadcasts creates no duty.</p>
+          </div>
+          <div class="logic-row fragment">
+            <span class="logic-number">2</span>
+            <p>Accepting the scheme as a whole includes accepting an assigned day of contribution.</p>
+          </div>
+          <div class="logic-row fragment">
+            <span class="logic-number">3</span>
+            <p>Taking the scheme’s benefits and then evading its understood cost constitutes free riding.</p>
+          </div>
+        </div>
+        <div class="conclusion-band fragment">Enforcement can answer exploitation when acceptance is genuine and the costs were understood.</div>
+        <aside class="speaker-notes">
+          <p>The revision creates plausible obligations inside accepted cooperative schemes.</p>
+        </aside>
+      </section>
+
+      <section class="slide" id="slide-32" data-title="The State-Acceptance Problem" data-mark="32" aria-roledescription="slide" aria-label="Slide 32 of 36">
+        <span class="eyebrow">A new difficulty</span>
+        <h2>State benefits are difficult to accept voluntarily</h2>
+        <p class="statement">Legal protection and public order reach people whether they request them or not.</p>
+        <div class="grid-2">
+          <div class="column fragment">
+            <h3>Practical problem</h3>
+            <p>Most people cannot reject the central benefits while remaining within the state’s territory.</p>
+          </div>
+          <div class="column fragment">
+            <h3>Conceptual problem</h3>
+            <p>If unavoidable residence or use counts as acceptance, the theory makes acceptance automatic.</p>
+          </div>
+        </div>
+        <div class="conclusion-band fragment">Automatic acceptance recreates the weakness of tacit consent.</div>
+        <aside class="speaker-notes">
+          <p>The revision needs a meaningful distinction between accepted benefits and benefits that merely arrive.</p>
+        </aside>
+      </section>
+
+      <section class="slide" id="slide-33" data-title="Genuine Refusal Limits the Principle" data-mark="33" aria-roledescription="slide" aria-label="Slide 33 of 36">
+        <span class="eyebrow">The cost of genuine acceptance</span>
+        <h2>Genuine refusal limits the principle</h2>
+        <div class="logic-stack">
+          <div class="logic-row">
+            <span class="logic-number">1</span>
+            <p>Anarchists may understand the advantages of government.</p>
+          </div>
+          <div class="logic-row fragment">
+            <span class="logic-number">2</span>
+            <p>They may still reject the state’s scheme because they judge its other costs unacceptable.</p>
+          </div>
+          <div class="logic-row fragment">
+            <span class="logic-number">3</span>
+            <p>If acceptance grounds the duty, a genuine refuser acquires no fairness obligation.</p>
+          </div>
+        </div>
+        <div class="conclusion-band fragment">A plausible acceptance requirement prevents the principle from binding everyone.</div>
+        <aside class="speaker-notes">
+          <p>Acknowledging that government offers benefits does not amount to accepting the full cooperative arrangement.</p>
+        </aside>
+      </section>
+
+      <section class="slide" id="slide-34" data-title="The Final Dilemma" data-tone="yellow" data-mark="34" aria-roledescription="slide" aria-label="Slide 34 of 36">
+        <span class="eyebrow">Two versions</span>
+        <h2>The final dilemma</h2>
+        <div class="comparison">
+          <div>
+            <h3>Receipt-based fairness</h3>
+            <p>It can reach every recipient, including people who never requested the benefits.</p>
+            <span class="verdict">Broad enough for universality, but vulnerable to Nozick’s objection.</span>
+          </div>
+          <div class="fragment">
+            <h3>Acceptance-based fairness</h3>
+            <p>It binds people who knowingly join the scheme and understand its costs.</p>
+            <span class="verdict">Morally stronger, but unable to bind genuine refusers.</span>
+          </div>
+        </div>
+        <div class="conclusion-band fragment">The principle cannot secure both a plausible basis of obligation and a universal duty to obey.</div>
+        <aside class="speaker-notes">
+          <p>The dilemma identifies the tradeoff between moral plausibility and universal reach.</p>
+        </aside>
+      </section>
+
+      <section class="slide" id="slide-35" data-title="What the Principle Establishes" data-tone="blue" data-mark="35" aria-roledescription="slide" aria-label="Slide 35 of 36">
+        <span class="eyebrow">Conclusion</span>
+        <h2>What the principle establishes</h2>
+        <div class="recap">
+          <p>Fairness identifies a real wrong: exploiting a cooperative practice that one genuinely accepts.</p>
+          <p class="fragment">Mere receipt reaches more people, but imposed benefits cannot create debts by themselves.</p>
+          <p class="fragment">Requiring acceptance protects recipients, but some people can refuse the political scheme.</p>
+        </div>
+        <div class="conclusion-band fragment">The principle improves on consent theory but does not establish a universal political obligation.</div>
+        <aside class="speaker-notes">
+          <p>The limited success is important. The theory explains duties inside accepted schemes even though it cannot justify a duty for every person under a state.</p>
+        </aside>
+      </section>
+
+      <section class="slide" id="slide-36" data-title="References" data-mark="36" aria-roledescription="slide" aria-label="Slide 36 of 36">
+        <span class="eyebrow">Works cited</span>
+        <h2>References</h2>
+        <div class="references">
+          <div class="reference">
+            <p><strong>H. L. A. Hart.</strong> “Are There Any Natural Rights?” (1955). Reprinted in Jeremy Waldron, ed., <em>Theories of Rights</em>. Oxford University Press, 1984, p. 85.</p>
+          </div>
+          <div class="reference">
+            <p><strong>David Hume.</strong> “Of the Original Contract” (1748), p. 470.</p>
+          </div>
+          <div class="reference">
+            <p><strong>David Hume.</strong> <em>A Treatise of Human Nature</em>. Edited by L. A. Selby-Bigge, 2nd ed. Oxford University Press, 1978, pp. 535, 537. First published 1739–1740.</p>
+          </div>
+          <div class="reference">
+            <p><strong>Robert Nozick.</strong> <em>Anarchy, State, and Utopia</em>. 1974, p. 93.</p>
+          </div>
+        </div>
+        <aside class="speaker-notes">
+          <p>These works provide the formulations and examples attributed throughout the presentation.</p>
+        </aside>
+      </section>
+
+    </div>
+  </main>
+
+  <nav class="controls" id="controls" aria-label="Presentation controls">
+    <button class="control-button" id="previousButton" type="button" aria-label="Previous step or slide">Back</button>
+    <button class="control-button" id="nextButton" type="button" aria-label="Next step or slide">Next</button>
+    <div class="progress-track" id="progressTrack" role="progressbar" aria-label="Presentation progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <span class="counter" id="counter" aria-live="polite">1 / 36</span>
+    <button class="control-button" id="overviewButton" type="button" aria-label="Open slide overview">Overview</button>
+    <button class="control-button" id="notesButton" type="button" aria-label="Show citations and context">Citations</button>
+    <button class="control-button" id="fullscreenButton" type="button" aria-label="Enter full screen">Full screen</button>
+    <button class="control-button" id="contrastButton" type="button" aria-label="Toggle high contrast">Contrast</button>
+  </nav>
+
+  <div class="live-status" id="liveStatus" aria-live="polite"></div>
+
+  <div class="overlay overview" id="overview" role="dialog" aria-modal="true" aria-labelledby="overviewTitle">
+    <div class="overlay-header">
+      <h2 id="overviewTitle">Slide overview</h2>
+      <button class="control-button" id="closeOverview" type="button">Close</button>
+    </div>
+    <div class="overview-grid" id="overviewGrid"></div>
+  </div>
+
+  <div class="overlay" id="notesOverlay" role="dialog" aria-modal="true" aria-labelledby="notesTitle">
+    <div class="overlay-header">
+      <h2 id="notesTitle">Citations and context</h2>
+      <button class="control-button" id="closeNotes" type="button">Close</button>
+    </div>
+    <div class="notes-content" id="notesContent"></div>
+  </div>
+
+  <script>
+    (() => {
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      const previousButton = document.getElementById('previousButton');
+      const nextButton = document.getElementById('nextButton');
+      const progressTrack = document.getElementById('progressTrack');
+      const progressFill = document.getElementById('progressFill');
+      const counter = document.getElementById('counter');
+      const liveStatus = document.getElementById('liveStatus');
+      const overview = document.getElementById('overview');
+      const overviewGrid = document.getElementById('overviewGrid');
+      const notesOverlay = document.getElementById('notesOverlay');
+      const notesContent = document.getElementById('notesContent');
+      const revealState = slides.map(() => 0);
+      let index = 0;
+      let lastFocused = null;
+
+      const indexFromHash = () => {
+        const match = window.location.hash.match(/^#slide-(\d{2})$/);
+        if (!match) return 0;
+        const parsed = Number(match[1]) - 1;
+        return Number.isInteger(parsed) && parsed >= 0 && parsed < slides.length ? parsed : 0;
+      };
+
+      const fragmentsFor = (slideIndex) => Array.from(slides[slideIndex].querySelectorAll('.fragment'));
+
+      const renderFragments = () => {
+        const fragments = fragmentsFor(index);
+        fragments.forEach((fragment, fragmentIndex) => {
+          const visible = fragmentIndex < revealState[index];
+          fragment.classList.toggle('revealed', visible);
+          fragment.setAttribute('aria-hidden', visible ? 'false' : 'true');
+        });
+      };
+
+      const updateProgress = () => {
+        const fragmentCount = fragmentsFor(index).length;
+        const localProgress = fragmentCount ? revealState[index] / (fragmentCount + 1) : 0;
+        const percent = ((index + localProgress + 1) / slides.length) * 100;
+        progressFill.style.width = `${Math.min(100, percent)}%`;
+        progressTrack.setAttribute('aria-valuenow', String(Math.round(percent)));
+        counter.textContent = `${index + 1} / ${slides.length}`;
+      };
+
+      const updateOverview = () => {
+        overviewGrid.querySelectorAll('.overview-item').forEach((item, itemIndex) => {
+          item.setAttribute('aria-current', itemIndex === index ? 'true' : 'false');
+        });
+      };
+
+      const showSlide = (nextIndex, announce = true) => {
+        index = Math.max(0, Math.min(slides.length - 1, nextIndex));
+        slides.forEach((slide, slideIndex) => {
+          slide.hidden = slideIndex !== index;
+          slide.setAttribute('aria-hidden', slideIndex === index ? 'false' : 'true');
+        });
+        renderFragments();
+        updateProgress();
+        updateOverview();
+        previousButton.disabled = index === 0 && revealState[index] === 0;
+        nextButton.disabled = index === slides.length - 1 && revealState[index] === fragmentsFor(index).length;
+        const id = slides[index].id;
+        history.replaceState(null, '', `#${id}`);
+        if (announce) {
+          liveStatus.textContent = `Slide ${index + 1} of ${slides.length}: ${slides[index].dataset.title}`;
+        }
+      };
+
+      const next = () => {
+        const count = fragmentsFor(index).length;
+        if (revealState[index] < count) {
+          revealState[index] += 1;
+          renderFragments();
+          updateProgress();
+          previousButton.disabled = false;
+          nextButton.disabled = index === slides.length - 1 && revealState[index] === count;
+          liveStatus.textContent = `Revealed point ${revealState[index]} of ${count} on slide ${index + 1}`;
+          return;
+        }
+        if (index < slides.length - 1) showSlide(index + 1);
+      };
+
+      const previous = () => {
+        if (revealState[index] > 0) {
+          revealState[index] -= 1;
+          renderFragments();
+          updateProgress();
+          nextButton.disabled = false;
+          previousButton.disabled = index === 0 && revealState[index] === 0;
+          liveStatus.textContent = `Returned to point ${revealState[index]} on slide ${index + 1}`;
+          return;
+        }
+        if (index > 0) {
+          const previousIndex = index - 1;
+          revealState[previousIndex] = fragmentsFor(previousIndex).length;
+          showSlide(previousIndex);
+        }
+      };
+
+      const openOverlay = (element, focusTarget) => {
+        lastFocused = document.activeElement;
+        element.classList.add('open');
+        element.setAttribute('aria-hidden', 'false');
+        focusTarget.focus();
+      };
+
+      const closeOverlay = (element) => {
+        element.classList.remove('open');
+        element.setAttribute('aria-hidden', 'true');
+        if (lastFocused) lastFocused.focus();
+      };
+
+      slides.forEach((slide, slideIndex) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'overview-item';
+        button.innerHTML = `<b>${String(slideIndex + 1).padStart(2, '0')}</b><span>${slide.dataset.title}</span>`;
+        button.addEventListener('click', () => {
+          revealState[slideIndex] = 0;
+          showSlide(slideIndex);
+          closeOverlay(overview);
+        });
+        overviewGrid.appendChild(button);
+      });
+
+      previousButton.addEventListener('click', previous);
+      nextButton.addEventListener('click', next);
+
+      document.getElementById('overviewButton').addEventListener('click', () => {
+        openOverlay(overview, document.getElementById('closeOverview'));
+      });
+
+      document.getElementById('closeOverview').addEventListener('click', () => closeOverlay(overview));
+
+      document.getElementById('notesButton').addEventListener('click', () => {
+        const notes = slides[index].querySelector('.speaker-notes');
+        notesContent.innerHTML = notes ? notes.innerHTML : '<p>No additional citations for this slide.</p>';
+        openOverlay(notesOverlay, document.getElementById('closeNotes'));
+      });
+
+      document.getElementById('closeNotes').addEventListener('click', () => closeOverlay(notesOverlay));
+
+      document.getElementById('fullscreenButton').addEventListener('click', async () => {
+        try {
+          if (!document.fullscreenElement) {
+            await document.documentElement.requestFullscreen();
+          } else {
+            await document.exitFullscreen();
+          }
+        } catch (error) {
+          liveStatus.textContent = 'Full-screen mode is unavailable in this browser.';
+        }
+      });
+
+      document.addEventListener('fullscreenchange', () => {
+        const button = document.getElementById('fullscreenButton');
+        const active = Boolean(document.fullscreenElement);
+        button.textContent = active ? 'Exit full screen' : 'Full screen';
+        button.setAttribute('aria-label', active ? 'Exit full screen' : 'Enter full screen');
+      });
+
+      document.getElementById('contrastButton').addEventListener('click', () => {
+        const active = document.body.classList.toggle('contrast');
+        document.getElementById('contrastButton').setAttribute('aria-pressed', String(active));
+      });
+
+      document.addEventListener('keydown', (event) => {
+        const target = event.target;
+        if (target instanceof HTMLButtonElement || target instanceof HTMLInputElement || target instanceof HTMLSelectElement || target instanceof HTMLTextAreaElement) return;
+
+        if (event.key === 'Escape') {
+          if (overview.classList.contains('open')) closeOverlay(overview);
+          if (notesOverlay.classList.contains('open')) closeOverlay(notesOverlay);
+          return;
+        }
+
+        if (overview.classList.contains('open') || notesOverlay.classList.contains('open')) return;
+
+        if (['ArrowRight', 'PageDown', ' '].includes(event.key)) {
+          event.preventDefault();
+          next();
+        } else if (['ArrowLeft', 'PageUp'].includes(event.key)) {
+          event.preventDefault();
+          previous();
+        } else if (event.key === 'Home') {
+          event.preventDefault();
+          revealState[0] = 0;
+          showSlide(0);
+        } else if (event.key === 'End') {
+          event.preventDefault();
+          revealState[slides.length - 1] = fragmentsFor(slides.length - 1).length;
+          showSlide(slides.length - 1);
+        } else if (event.key.toLowerCase() === 'o') {
+          event.preventDefault();
+          openOverlay(overview, document.getElementById('closeOverview'));
+        } else if (event.key.toLowerCase() === 'n') {
+          event.preventDefault();
+          document.getElementById('notesButton').click();
+        } else if (event.key.toLowerCase() === 'f') {
+          event.preventDefault();
+          document.getElementById('fullscreenButton').click();
+        }
+      });
+
+      index = indexFromHash();
+      slides.forEach((slide, slideIndex) => {
+        slide.hidden = slideIndex !== index;
+        fragmentsFor(slideIndex).forEach(fragment => fragment.setAttribute('aria-hidden', 'true'));
+      });
+      overview.setAttribute('aria-hidden', 'true');
+      notesOverlay.setAttribute('aria-hidden', 'true');
+      showSlide(index, false);
+    })();
+  </script>
+</body>
+</html>
