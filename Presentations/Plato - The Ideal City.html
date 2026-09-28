@@ -1,0 +1,1512 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A classroom presentation on the ideal city of Plato's Republic: its origin, the three classes, the myth of the metals, the guardians' way of life and education, the philosopher-kings, and justice in city and soul.">
+  <title>Plato's Ideal City</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Marcellus&amp;family=Albert+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="presentation-polish.css">
+  <style>
+    :root {
+      --marble: #f1efe9;
+      --marble-deep: #e4e1d8;
+      --lapis: #13213f;
+      --lapis-soft: #1f3160;
+      --gold: #b3862a;
+      --gold-ink: #85611a;
+      --gold-bright: #e2bd6a;
+      --silver: #6f7d8c;
+      --silver-bright: #c3ccd6;
+      --bronze: #9a5a2c;
+      --bronze-bright: #d99a66;
+      --ink: #13213f;
+      --ink-soft: #3a4560;
+      --line: rgba(19, 33, 63, .18);
+      --display: "Marcellus", "Trajan Pro", Georgia, serif;
+      --sans: "Albert Sans", "Segoe UI", Arial, sans-serif;
+      --mono: "JetBrains Mono", Consolas, monospace;
+      --preflight-bg: #13213f;
+      --preflight-text: #f1efe9;
+      --preflight-muted: #c3ccd6;
+      --preflight-accent: #b3862a;
+      --preflight-bright: #e2bd6a;
+      --preflight-line: rgba(241, 239, 233, .18);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      color: var(--ink);
+      background: var(--lapis);
+      font-family: var(--sans);
+    }
+
+    button { font: inherit; }
+
+    .deck {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: var(--marble);
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 9vh 6vw 10vh;
+      overflow: hidden;
+      isolation: isolate;
+      color: var(--ink);
+      background:
+        linear-gradient(115deg, transparent 62%, rgba(19, 33, 63, .035) 62.2%, transparent 74%),
+        radial-gradient(circle at 92% 8%, rgba(179, 134, 42, .10), transparent 30rem),
+        var(--marble);
+    }
+
+    .slide.active { display: flex; }
+
+    /* A band of the three metals runs across the top of every slide. */
+    .slide::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: clamp(8px, 1.1vh, 12px);
+      background: linear-gradient(90deg, var(--gold) 0 33.33%, var(--silver) 33.33% 66.66%, var(--bronze) 66.66% 100%);
+      pointer-events: none;
+    }
+
+    /* Column fluting along the left edge. */
+    .slide::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      z-index: -1;
+      width: clamp(22px, 2.4vw, 40px);
+      background: repeating-linear-gradient(90deg, rgba(19, 33, 63, .10) 0 2px, transparent 2px 9px);
+      pointer-events: none;
+    }
+
+    .slide-inner {
+      position: relative;
+      width: min(1560px, 88vw);
+      transform: scale(var(--fit, 1));
+      transform-origin: center;
+    }
+
+    .kicker {
+      margin: 0 0 1.1rem;
+      color: var(--gold-ink);
+      font: 700 clamp(.82rem, 1.05vw, 1.1rem)/1.2 var(--mono);
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .title {
+      margin: 0;
+      color: var(--ink);
+      font-family: var(--display);
+      font-size: clamp(2.7rem, 4.8vw, 5.4rem);
+      font-weight: 400;
+      letter-spacing: -.005em;
+      line-height: 1.05;
+    }
+
+    .lead {
+      max-width: 38ch;
+      margin: clamp(1.4rem, 3vh, 2.2rem) 0 0;
+      color: var(--ink-soft);
+      font-size: clamp(1.4rem, 2.25vw, 2.55rem);
+      line-height: 1.32;
+    }
+
+    .lead strong, .row strong, .col strong, .definition strong, .meaning strong, .tier strong { color: var(--ink); font-weight: 700; }
+
+    /* Numbered rows */
+    .rows { display: grid; margin-top: clamp(1.6rem, 4vh, 3.2rem); }
+
+    .row {
+      display: grid;
+      grid-template-columns: clamp(3.2rem, 5vw, 6rem) minmax(0, 1fr);
+      gap: clamp(1rem, 1.6vw, 1.8rem);
+      align-items: baseline;
+      padding: clamp(.7rem, 1.5vh, 1.1rem) 0;
+      border-top: 2px solid var(--line);
+      color: var(--ink-soft);
+      font-size: clamp(1.25rem, 1.95vw, 2.25rem);
+      line-height: 1.3;
+    }
+
+    .row:last-child { border-bottom: 2px solid var(--line); }
+
+    .row b {
+      color: var(--gold-ink);
+      font: 700 clamp(.95rem, 1.3vw, 1.4rem)/1 var(--mono);
+      letter-spacing: .06em;
+    }
+
+    /* Term and explanation */
+    .definition {
+      display: grid;
+      grid-template-columns: minmax(0, .8fr) minmax(0, 1.7fr);
+      gap: clamp(1.6rem, 4vw, 5rem);
+      align-items: start;
+      margin-top: clamp(1.8rem, 4.5vh, 3.6rem);
+      padding-top: clamp(1.2rem, 2.6vh, 1.9rem);
+      border-top: 3px solid var(--ink);
+    }
+
+    .term {
+      color: var(--gold-ink);
+      font-family: var(--display);
+      font-size: clamp(2rem, 3.4vw, 4rem);
+      line-height: 1.05;
+    }
+
+    .definition p {
+      max-width: 36ch;
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: clamp(1.3rem, 2vw, 2.3rem);
+      line-height: 1.36;
+    }
+
+    /* Conclusion bar */
+    .verdict {
+      margin: clamp(1.6rem, 3.6vh, 2.6rem) 0 0;
+      padding: clamp(1rem, 2.2vh, 1.5rem) clamp(1.2rem, 2vw, 2rem);
+      border-left: 12px solid var(--gold);
+      color: var(--marble);
+      background: var(--lapis);
+      font-size: clamp(1.3rem, 2.05vw, 2.35rem);
+      line-height: 1.32;
+    }
+
+    .verdict strong { color: var(--gold-bright); }
+    .verdict.critic { border-left-color: var(--bronze-bright); }
+
+    /* Two- or three-column contrast */
+    .contrast {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: clamp(2rem, 5vw, 6rem);
+      margin-top: clamp(1.8rem, 4.5vh, 3.6rem);
+    }
+
+    .col {
+      min-width: 0;
+      padding-top: clamp(1rem, 2vh, 1.5rem);
+      border-top: 10px solid var(--gold);
+    }
+
+    .col.silver { border-top-color: var(--silver); }
+    .col.bronze { border-top-color: var(--bronze); }
+    .col.ink { border-top-color: var(--ink); }
+
+    .col h3 {
+      margin: 0 0 1rem;
+      color: var(--ink);
+      font-family: var(--display);
+      font-size: clamp(1.9rem, 3vw, 3.4rem);
+      font-weight: 400;
+      line-height: 1.05;
+    }
+
+    .col p {
+      max-width: 32ch;
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: clamp(1.22rem, 1.85vw, 2.1rem);
+      line-height: 1.36;
+    }
+
+    .col p + p { margin-top: 1rem; }
+
+    /* Symbol-to-meaning map */
+    .decode { margin-top: clamp(1.6rem, 4vh, 3.2rem); }
+
+    .decode-row {
+      display: grid;
+      grid-template-columns: minmax(0, .75fr) clamp(2.4rem, 4vw, 4.5rem) minmax(0, 1.6fr);
+      gap: clamp(.8rem, 1.4vw, 1.6rem);
+      align-items: baseline;
+      padding: clamp(.75rem, 1.6vh, 1.2rem) 0;
+      border-top: 2px solid var(--line);
+    }
+
+    .decode-row:last-child { border-bottom: 2px solid var(--line); }
+
+    .symbol {
+      color: var(--ink);
+      font-family: var(--display);
+      font-size: clamp(1.65rem, 2.7vw, 3.1rem);
+      line-height: 1.05;
+    }
+
+    .arrow {
+      color: var(--gold);
+      font: 700 clamp(1.3rem, 2vw, 2.2rem)/1 var(--mono);
+    }
+
+    .meaning {
+      color: var(--ink-soft);
+      font-size: clamp(1.2rem, 1.85vw, 2.1rem);
+      line-height: 1.32;
+    }
+
+    /* Class pyramid */
+    .tiers {
+      display: grid;
+      gap: clamp(.5rem, 1vh, .8rem);
+      justify-items: center;
+      margin-top: clamp(1.6rem, 4vh, 3rem);
+    }
+
+    .tier {
+      display: grid;
+      grid-template-columns: minmax(0, .9fr) minmax(0, 1.6fr);
+      gap: clamp(1rem, 2vw, 2.4rem);
+      align-items: center;
+      padding: clamp(.9rem, 2vh, 1.4rem) clamp(1.2rem, 2.2vw, 2.4rem);
+      border-left: 14px solid var(--gold);
+      background: var(--marble-deep);
+    }
+
+    .tier:nth-child(1) { width: 70%; }
+    .tier:nth-child(2) { width: 85%; border-left-color: var(--silver); }
+    .tier:nth-child(3) { width: 100%; border-left-color: var(--bronze); }
+
+    .tier .name {
+      color: var(--ink);
+      font-family: var(--display);
+      font-size: clamp(1.7rem, 2.7vw, 3.1rem);
+      line-height: 1.05;
+    }
+
+    .tier .name small {
+      display: block;
+      margin-top: .4rem;
+      color: var(--gold-ink);
+      font: 700 clamp(.78rem, 1vw, 1.05rem)/1.2 var(--mono);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .tier:nth-child(2) .name small { color: var(--silver); }
+    .tier:nth-child(3) .name small { color: var(--bronze); }
+
+    .tier p {
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: clamp(1.15rem, 1.75vw, 2rem);
+      line-height: 1.32;
+    }
+
+    /* Metals */
+    .metals {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: clamp(1rem, 2.4vw, 3rem);
+      margin-top: clamp(1.6rem, 4vh, 3rem);
+    }
+
+    .metal {
+      min-width: 0;
+      padding: clamp(1rem, 2.2vh, 1.6rem) clamp(1rem, 1.6vw, 1.6rem);
+      border-top: 12px solid var(--gold);
+      background: var(--marble-deep);
+    }
+
+    .metal.silver { border-top-color: var(--silver); }
+    .metal.bronze { border-top-color: var(--bronze); }
+
+    .metal h3 {
+      margin: 0 0 .7rem;
+      font-family: var(--display);
+      font-size: clamp(1.8rem, 2.8vw, 3.2rem);
+      font-weight: 400;
+      line-height: 1.05;
+    }
+
+    .metal p {
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: clamp(1.15rem, 1.75vw, 2rem);
+      line-height: 1.34;
+    }
+
+    /* Education timeline */
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: clamp(.9rem, 1.6vw, 2rem);
+      margin-top: clamp(1.8rem, 4.5vh, 3.6rem);
+    }
+
+    .stage {
+      min-width: 0;
+      padding-top: clamp(.9rem, 2vh, 1.3rem);
+      border-top: 10px solid var(--silver);
+    }
+
+    .stage:last-child { border-top-color: var(--gold); }
+
+    .stage .age {
+      display: block;
+      margin-bottom: .8rem;
+      color: var(--gold-ink);
+      font: 700 clamp(.85rem, 1.15vw, 1.25rem)/1 var(--mono);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .stage h3 {
+      margin: 0 0 .7rem;
+      font-family: var(--display);
+      font-size: clamp(1.45rem, 2.2vw, 2.5rem);
+      font-weight: 400;
+      line-height: 1.08;
+    }
+
+    .stage p {
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: clamp(1.05rem, 1.5vw, 1.7rem);
+      line-height: 1.34;
+    }
+
+    /* Short quotation inside an explanatory slide */
+    .quote {
+      max-width: 34ch;
+      margin: clamp(1.6rem, 3.6vh, 2.6rem) 0 0;
+      padding-left: clamp(1rem, 1.6vw, 1.6rem);
+      border-left: 8px solid var(--gold);
+      color: var(--ink);
+      font-family: var(--display);
+      font-size: clamp(1.6rem, 2.6vw, 3rem);
+      line-height: 1.2;
+    }
+
+    .quote cite {
+      display: block;
+      margin-top: .9rem;
+      color: var(--gold-ink);
+      font: 700 clamp(.8rem, 1vw, 1.05rem)/1.3 var(--mono);
+      font-style: normal;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    /* Section slides: lapis field with gold type */
+    .slide.section {
+      color: var(--marble);
+      background:
+        radial-gradient(circle at 20% 18%, rgba(226, 189, 106, .14), transparent 30rem),
+        var(--lapis);
+    }
+
+    .slide.section::after {
+      background: repeating-linear-gradient(90deg, rgba(226, 189, 106, .22) 0 2px, transparent 2px 9px);
+    }
+
+    .section .kicker { color: var(--gold-bright); }
+    .section .title { max-width: 18ch; color: var(--marble); }
+    .section .lead { max-width: 36ch; color: var(--silver-bright); }
+
+    .section-num {
+      position: absolute;
+      right: -1vw;
+      bottom: -12vh;
+      z-index: -1;
+      color: rgba(226, 189, 106, .12);
+      font-family: var(--display);
+      font-size: clamp(14rem, 30vw, 34rem);
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    /* Cover */
+    .slide.cover {
+      color: var(--marble);
+      background:
+        radial-gradient(circle at 72% 50%, rgba(226, 189, 106, .16), transparent 36rem),
+        var(--lapis);
+    }
+
+    .slide.cover::after {
+      background: repeating-linear-gradient(90deg, rgba(226, 189, 106, .22) 0 2px, transparent 2px 9px);
+    }
+
+    .cover-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr);
+      gap: clamp(2rem, 4vw, 5rem);
+      align-items: center;
+    }
+
+    .cover .kicker { color: var(--gold-bright); }
+    .cover .title { color: var(--marble); line-height: .98; }
+
+    .cover .work {
+      max-width: 30ch;
+      margin: 1.8rem 0 0;
+      color: var(--silver-bright);
+      font-size: clamp(1.3rem, 2vw, 2.25rem);
+      line-height: 1.32;
+    }
+
+    .cover .course {
+      margin: 2.2rem 0 0;
+      color: var(--gold-bright);
+      font: 700 clamp(.8rem, 1vw, 1.05rem)/1.2 var(--mono);
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .cover svg { width: 100%; height: auto; }
+
+    .refs-list {
+      display: grid;
+      gap: 1rem;
+      max-width: 1200px;
+      margin: 2.2rem 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .refs-list li {
+      padding-top: .9rem;
+      border-top: 2px solid var(--line);
+      color: var(--ink-soft);
+      font-size: clamp(1rem, 1.4vw, 1.5rem);
+      line-height: 1.45;
+    }
+
+    .refs-list strong { color: var(--ink); }
+
+    /* Staged reveals: space is reserved, so nothing already visible moves. */
+    .fragment {
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .35s ease, visibility 0s linear .35s;
+    }
+
+    .fragment.revealed,
+    .preflight-slide .fragment {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity .35s ease;
+    }
+
+    .speaker-notes { display: none; }
+
+    /* Controls */
+    .nav {
+      position: fixed;
+      right: 1.1rem;
+      bottom: 1rem;
+      z-index: 40;
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+    }
+
+    .nav button,
+    .panel-close {
+      min-width: 44px;
+      padding: .6rem .75rem;
+      border: 1px solid rgba(241, 239, 233, .25);
+      border-radius: 2px;
+      color: var(--marble);
+      background: rgba(19, 33, 63, .88);
+      cursor: pointer;
+      font: 700 .7rem/1 var(--mono);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .nav button:hover,
+    .nav button:focus-visible,
+    .panel-close:hover,
+    .panel-close:focus-visible {
+      border-color: var(--gold-bright);
+      color: #fff;
+      outline: none;
+    }
+
+    .slide-count {
+      min-width: 70px;
+      padding: .6rem .5rem;
+      color: var(--marble);
+      background: rgba(19, 33, 63, .88);
+      font: 700 .7rem/1 var(--mono);
+      letter-spacing: .08em;
+      text-align: center;
+    }
+
+    .progress {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      z-index: 39;
+      width: 100%;
+      height: 5px;
+      background: rgba(19, 33, 63, .12);
+    }
+
+    .progress span {
+      display: block;
+      width: 0;
+      height: 100%;
+      background: var(--gold);
+      transition: width .2s ease;
+    }
+
+    .panel {
+      position: fixed;
+      right: 1rem;
+      bottom: 4rem;
+      z-index: 60;
+      display: none;
+      width: min(560px, calc(100vw - 2rem));
+      max-height: 62vh;
+      padding: 1.3rem;
+      overflow: auto;
+      border: 1px solid rgba(179, 134, 42, .7);
+      color: var(--marble);
+      background: rgba(19, 33, 63, .98);
+      box-shadow: 0 24px 70px rgba(0, 0, 0, .35);
+    }
+
+    .panel.open { display: block; }
+    .panel.overview { width: min(980px, calc(100vw - 2rem)); }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .panel h2 {
+      margin: 0;
+      font-family: var(--display);
+      font-size: 1.5rem;
+      font-weight: 400;
+    }
+
+    .panel p {
+      margin: 0 0 .8rem;
+      color: var(--silver-bright);
+      font-size: 1rem;
+      line-height: 1.55;
+    }
+
+    .panel .citation {
+      color: var(--gold-bright);
+      font: .82rem/1.45 var(--mono);
+    }
+
+    #overview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: .5rem;
+    }
+
+    .overview-card {
+      display: grid;
+      gap: .35rem;
+      padding: .7rem .75rem;
+      border: 1px solid rgba(241, 239, 233, .18);
+      color: var(--marble);
+      background: var(--lapis-soft);
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .overview-card span { color: var(--gold-bright); font: 700 .68rem/1 var(--mono); }
+    .overview-card strong { font-size: .88rem; font-weight: 600; line-height: 1.25; }
+    .overview-card:hover, .overview-card:focus-visible { border-color: var(--gold-bright); outline: none; }
+
+    @media (max-width: 820px) {
+      .slide { padding: 8vh 7vw 12vh; }
+      .contrast, .definition, .cover-grid, .metals { grid-template-columns: 1fr; }
+      .contrast { gap: 1.6rem; }
+      .timeline { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .tier { grid-template-columns: 1fr; width: 100% !important; }
+      .decode-row { grid-template-columns: 1fr; gap: .3rem; }
+      .decode-row .arrow { display: none; }
+      .cover svg { max-height: 30vh; }
+      .nav { right: .5rem; bottom: .6rem; }
+    }
+  </style>
+</head>
+<body data-library-view="political-philosophy">
+  <main class="deck" id="deck" aria-live="polite">
+
+    <!-- 01 -->
+    <section class="slide cover active" aria-hidden="false">
+      <div class="slide-inner">
+        <div class="cover-grid">
+          <div>
+            <p class="kicker">Who Should Rule?</p>
+            <h1 class="title">Plato’s Ideal City</h1>
+            <p class="work">The just society of the <em>Republic</em>: its three classes, its guardians, and the long education of those who rule.</p>
+            <p class="course">Political Philosophy</p>
+          </div>
+          <svg viewBox="0 0 600 440" role="img" aria-label="A Greek temple whose pediment and columns are banded in gold, silver, and bronze">
+            <path d="M300 40L560 150H40z" fill="#b3862a"/>
+            <path d="M300 78L486 140H114z" fill="#13213f" opacity=".55"/>
+            <rect x="40" y="156" width="520" height="22" fill="#c3ccd6"/>
+            <g fill="#c3ccd6">
+              <rect x="70" y="190" width="44" height="170"/>
+              <rect x="170" y="190" width="44" height="170"/>
+              <rect x="278" y="190" width="44" height="170"/>
+              <rect x="386" y="190" width="44" height="170"/>
+              <rect x="486" y="190" width="44" height="170"/>
+            </g>
+            <g stroke="#13213f" stroke-width="3" opacity=".35">
+              <path d="M84 192v166M100 192v166M184 192v166M200 192v166M292 192v166M308 192v166M400 192v166M416 192v166M500 192v166M516 192v166"/>
+            </g>
+            <rect x="30" y="366" width="540" height="20" fill="#9a5a2c"/>
+            <rect x="10" y="392" width="580" height="22" fill="#9a5a2c" opacity=".75"/>
+          </svg>
+        </div>
+      </div>
+      <aside class="speaker-notes">
+        <p>The session builds Plato’s ideal city step by step, in the order the <em>Republic</em> builds it: why a city is needed, who belongs to each class, how the guardians live and are educated, why philosophers must rule, and where justice is found.</p>
+        <p>Plato calls the finished city <em>Kallipolis</em>, “the beautiful city” (527c).</p>
+        <p class="citation">Citation: Plato, Republic, books II–VII.</p>
+      </aside>
+    </section>
+
+    <!-- 02 -->
+    <section class="slide content" aria-hidden="true">
+      <div class="slide-inner">
+        <p class="kicker">Why design a city at all?</p>
+        <h2 class="title">The ideal city is built to reveal justice</h2>
+        <div class="rows">
+          <div class="row"><b>01</b><span>The <em>Republic</em> asks <strong>what justice is</strong> and whether a just person lives better than an unjust one.</span></div>
+          <div class="row fragment"><b>02</b><span>Socrates suggests that justice is easier to see in a <strong>city</strong> than in one person, like large letters that are easier to read than small ones.</span></div>
+          <div class="row fragment"><b>03</b><span>So he builds a city “in words”: once justice is found there, it can be looked for in the individual soul.</span></div>
+        </div>
+      </div>
+      <aside class="speaker-notes">
+        <p>The ideal city is first a thought experiment about justice, and only second a political program. Keep both purposes in view. The challenge comes from Thrasymachus, who claims justice is the advantage of the stronger (338c), and Glaucon, whose ring of Gyges story suggests people are just only because they fear being caught (359c–360d).</p>
+        <p class="citation">Citation: Plato, Republic 338c, 359c–360d, 368c–369a.</p>
+      </aside>
+    </section>
+
+    <!-- 03 -->
+    <section class="slide section" aria-hidden="true">
+      <span class="section-num" aria-hidden="true">I</span>
+      <div class="slide-inner">
+        <p class="kicker">Part one</p>
+        <h2 class="title">How the city begins</h2>
+        <p class="lead">The city grows out of human need, and the division of labor shapes it from the start.</p>
+      </div>
+      <aside class="speaker-notes">
+        <p class="citation">Citation: Plato, Republic 369b–376c.</p>
+      </aside>
+    </section>
+
+    <!-- 04 -->
+    <section class="slide content" aria-hidden="true">
+      <div class="slide-inner">
+        <p class="kicker">The first city</p>
+        <h2 class="title">A city exists because no one is self-sufficient</h2>
+        <div class="rows">
+          <div class="row"><b>01</b><span>Every person needs <strong>food, shelter, and clothing</strong>, and no one can easily produce all of them alone.</span></div>
+          <div class="row fragment"><b>02</b><span>So people gather together: a <strong>farmer, a builder, a weaver, a shoemaker</strong>, and later merchants and traders.</span></div>
+          <div class="row fragment"><b>03</b><span>Each works for all and <strong>exchanges</strong> the surplus. The city is a partnership for meeting needs.</span></div>
+        </div>
+      </div>
+      <aside class="speaker-notes">
+        <p>Plato’s starting point is economic, not military or religious: the city exists because cooperation makes everyone better off.</p>
+        <p class="citation">Citation: Plato, Republic 369b–371e.</p>
+      </aside>
+    </section>
+
+    <!-- 05 -->
+    <section class="slide content" aria-hidden="true">
+      <div class="slide-inner">
+        <p class="kicker">The founding rule</p>
+        <h2 class="title">One person, one job</h2>
+        <div class="definition">
+          <div class="term">Principle of specialization</div>
+          <p>People are born with different natural aptitudes. Each person should do <strong>the one task his or her nature suits</strong>, because work done by a specialist is done better, more easily, and at the right time.</p>
+        </div>
+        <p class="verdict fragment">This principle is the foundation of the whole ideal city. Plato’s eventual definition of justice is this same rule applied to classes: <strong>each doing its own work</strong>.</p>
+      </div>
+      <aside class="speaker-notes">
+        <p>Flag this slide as the key to the whole deck. When students later meet the three classes and the definition of justice, they should recognize the principle of specialization at work.</p>
+        <p class="citation">Citation: Plato, Republic 370a–c; compare 433a–b.</p>
+      </aside>
+    </section>
+
+    <!-- 06 -->
+    <section class="slide content" aria-hidden="true">
+      <div class="slide-inner">
+        <p class="kicker">From need to war</p>
+        <h2 class="title">The healthy city becomes a luxurious city</h2>
+        <div class="contrast">
+          <div class="col silver">
+            <h3>The healthy city</h3>
+            <p>Citizens live simply on bread, wine, and vegetables. Glaucon mocks it as a <strong>“city of pigs.”</strong></p>
+          </div>
+          <div class="col bronze fragment">
+            <h3>The luxurious city</h3>
+            <p>People want couches, delicacies, perfumes, and art. Satisfying these desires requires <strong>more land</strong>, taken from neighbors.</p>
+          </div>
+        </div>
+        <p class="verdict fragment">Wanting more land leads to <strong>war</strong>. By the principle of specialization, war needs its own trained class: <strong>the guardians</strong>.</p>
+      </div>
+      <aside class="speaker-notes">
+        <p>Socrates calls the simple city the true and healthy one, and the luxurious one “feverish.” He agrees to examine the luxurious city because it will show how justice and injustice arise. The ideal city is then a purified version of it.</p>
+        <p class="citation">Citation: Plato, Republic 372a–374e.</p>
+      </aside>
+    </section>
+
+    <!-- 07 -->
+    <section class="slide content" aria-hidden="true">
+      <div class="slide-inner">
+        <p class="kicker">What a guardian must be</p>
+        <h2 class="title">Guardians must be like well-bred watchdogs</h2>
+        <div class="contrast">
+          <div class="col bronze">
+            <h3>Fierce to enemies</h3>
+            <p>A guardian needs <strong>spirit</strong>: courage, strength, and quickness to defend the city.</p>
+          </div>
+          <div class="col fragment">
+            <h3>Gentle to friends</h3>
+            <p>A guardian also needs a <strong>love of learning</strong>, so he or she can tell friend from enemy and treat citizens kindly.</p>
+          </div>
+        </div>
+        <p class="verdict fragment">A class with weapons and spirit could easily prey on the citizens it guards. Plato’s answer is that everything depends on <strong>education</strong>.</p>
+      </div>
+      <aside class="speaker-notes">
+        <p>Plato jokes that a good dog is “philosophical”: it welcomes the familiar and barks at the stranger, judging by knowledge rather than by treatment received.</p>
+        <p class="citation">Citation: Plato, Republic 375a–376c.</p>
+      </aside>
+    </section>
+
+    <!-- 08 -->
+    <section class="slide section" aria-hidden="true">
+      <span class="section-num" aria-hidden="true">II</span>
+      <div class="slide-inner">
+        <p class="kicker">Part two</p>
+        <h2 class="title">The three classes</h2>
+        <p class="lead">Each citizen belongs to the class that fits his or her nature.</p>
+      </div>
+      <aside class="speaker-notes">
+        <p class="citation">Citation: Plato, Republic 412b–417b.</p>
+      </aside>
+    </section>
+
+    <!-- 09 -->
+    <section class="slide content" aria-hidden="true">
+      <div class="slide-inner">
+        <p class="kicker">The structure of the city</p>
+        <h2 class="title">The ideal city has three classes</h2>
+        <div class="tiers">
+          <div class="tier"><div class="name">Rulers<small>Complete guardians</small></div><p>A small group of the wisest guardians. They <strong>make decisions</strong> for the whole city.</p></div>
+          <div class="tier fragment"><div class="name">Auxiliaries<small>Guardians as soldiers</small></div><p>Soldiers and officials. They <strong>defend</strong> the city and <strong>enforce</strong> the rulers’ decisions.</p></div>
+          <div class="tier fragment"><div class="name">Producers<small>The great majority</small></div><p>Farmers, craftspeople, and traders. They <strong>supply</strong> the city’s material needs.</p></div>
+        </div>
+      </div>
+      <aside class="speaker-notes">
+        <p>“Guardians” is used in two ways: broadly for the whole class of rulers plus auxiliaries, and strictly for the rulers alone, the “complete guardians.” The producers keep private property and families.</p>
+        <p class="citation">Citation: Plato, Republic 414b, 415a–c.</p>
+      </aside>
+    </section>
+
+    <!-- 10 -->
+    <section class="slide content" aria-hidden="true">
+      <div class="slide-inner">
+        <p class="kicker">Choosing the rulers</p>
+        <h2 class="title">Rulers are tested throughout their lives</h2>
+        <div class="rows">
+          <div class="row"><b>01</b><span>Rulers are chosen from among the guardians: the <strong>older and best</strong> of them.</span></div>
+          <div class="row fragment"><b>02</b><span>From childhood, guardians face tests of <strong>labor, pain, fear, and pleasure</strong>, to see whether anything makes them abandon the city’s good.</span></div>
+          <div class="row fragment"><b>03</b><span>Those who keep their conviction that they must always do <strong>what is best for the city</strong> become rulers. The rest serve as auxiliaries.</span></div>
+        </div>
+      </div>
+      <aside class="speaker-notes">
+        <p>Plato compares the tests to testing gold in fire. What qualifies a ruler here is not ambition but reliability: caring for the city as one cares for what one loves.</p>
+        <p class="citation">Citation: Plato, Republic 412c–414b.</p>
+      </aside>
+    </section>
+
+    <!-- 11 -->
+    <section class="slide content" aria-hidden="true">
+      <div class="slide-inner">
+        <p class="kicker">The myth of the metals · the story</p>
+        <h2 class="title">Every citizen is told a founding myth</h2>
+        <div class="metals">
+          <div class="metal"><h3>Gold</h3><p>The god mixed gold into those fit to <strong>rule</strong>.</p></div>
+          <div class="metal silver fragment"><h3>Silver</h3><p>Silver went into the <strong>auxiliaries</strong>.</p></div>
+          <div class="metal bronze fragment"><h3>Iron &amp; bronze</h3><p>Iron and bronze went into the <strong>farmers and craftspeople</strong>.</p></div>
+        </div>
+        <p class="verdict fragment">All citizens were born from the same earth, so they are <strong>brothers and sisters</strong>. Children usually share their parents’ metal, but not always, and each child is placed by his or her own metal.</p>
+      </div>
+      <aside class="speaker-notes">
+        <p>The myth also contains a warning: an oracle says the city will be destroyed if it is ever guarded by a person of iron or bronze. A gold child born to bronze parents must be raised up; a bronze child born to rulers must be moved down.</p>
+        <p class="citation">Citation: Plato, Republic 414b–415d.</p>
+      </aside>
+    </section>
+
+    <!-- 12 -->
+    <section class="slide content" aria-hidden="true">
+      <div class="slide-inner">
+        <p class="kicker">The myth of the metals · its purpose</p>
+        <h2 class="title">Why tell a “noble lie”?</h2>
+        <div class="contrast">
+          <div class="col">
+            <h3>To unite the city</h3>
+            <p>If everyone believes they share one mother, the earth, all classes will <strong>care for one another</strong> and for the city.</p>
+          </div>
+          <div class="col silver fragment">
+            <h3>To justify each place</h3>
+            <p>Citizens accept their class because it seems to reflect <strong>their nature</strong>, not the accident of birth or wealth.</p>
+          </div>
+        </div>
+        <p class="verdict critic fragment">Plato admits the story is false and hopes even the rulers will come to believe it. Critics see this as <strong>propaganda</strong>: the citizens’ agreement is produced by the rulers rather than freely given.</p>
+      </div>
+      <aside class="speaker-notes">
+        <p>The Greek phrase is often translated “noble lie” or “magnificent myth.” It connects to later objections about consent: can a political order be legitimate if its acceptance rests on a story the rulers know is untrue?</p>
+        <p class="citation">Citation: Plato, Republic 414b–c, 415c–d.</p>
+      </aside>
+    </section>
+
+    <!-- 13 -->
+    <section class="slide section" aria-hidden="true">
+      <span class="section-num" aria-hidden="true">III</span>
+      <div class="slide-inner">
+        <p class="kicker">Part three</p>
+        <h2 class="title">The guardians’ life and early education</h2>
+        <p class="lead">Education shapes the souls of those who will protect and rule the city, so it is the city’s most important task.</p>
+      </div>
+      <aside class="speaker-notes">
+        <p class="citation">Citation: Plato, Republic 376c–417b, 423e–424a.</p>
+      </aside>
+    </section>
+
+    <!-- 14 -->
+    <section class="slide content" aria-hidden="true">
+      <div class="slide-inner">
+        <p class="kicker">Two halves of early education</p>
+        <h2 class="title">Music trains the soul; gymnastics trains the body</h2>
+        <div class="contrast">
+          <div class="col">
+            <h3>Music</h3>
+            <p><em>Mousikē</em> covers stories, poetry, and music. It shapes a child’s <strong>character and love of learning</strong>.</p>
+          </div>
+          <div class="col bronze fragment">
+            <h3>Gymnastics</h3>
+            <p>Physical training and a plain diet build the <strong>strength and spirit</strong> a soldier needs.</p>
+          </div>
+        </div>
+        <p class="verdict fragment">Each alone goes wrong. Gymnastics alone makes people <strong>savage</strong>; music alone makes them <strong>soft</strong>. Balanced together, they produce the fierce-but-gentle guardian.</p>
+      </div>
+      <aside class="speaker-notes">
+        <p>Plato insists that even gymnastics is mainly for the soul: its purpose is to strengthen the spirited part, not just the muscles.</p>
+        <p class="citation">Citation: Plato, Republic 376e, 403c–404e, 410b–412a.</p>
+      </aside>
+    </section>
+
+    <!-- 15 -->
+    <section class="slide content" aria-hidden="true">
+      <div class="slide-inner">
+        <p class="kicker">Controlling the stories</p>
+        <h2 class="title">Poetry is censored for the guardians</h2>
+        <div class="rows">
+          <div class="row"><b>01</b><span>The gods must be shown as <strong>wholly good</strong>, causing only good things, and never changing shape or deceiving.</span></div>
+          <div class="row fragment"><b>02</b><span>Heroes must <strong>not fear death</strong> or weep over losses, or young soldiers will learn cowardice.</span></div>
+          <div class="row fragment"><b>03</b><span>Stories must show <strong>self-control</strong>, not heroes and gods overcome by greed, lust, or fits of laughter.</span></div>
+        </div>
+        <p class="verdict fragment">Children absorb whatever they hear before they can judge it. So the city supervises storytellers, and even much of <strong>Homer</strong> is struck out.</p>
+      </div>
+      <aside class="speaker-notes">
+        <p>Plato gives specific examples from Homer and Hesiod, such as Kronos punishing his father and Achilles’ lament. The guiding idea: the soul takes the shape of what it imitates and hears.</p>
+        <p class="citation">Citation: Plato, Republic 377b–392c.</p>
+      </aside>
+    </section>
+
+    <!-- 16 -->
+    <section class="slide content" aria-hidden="true">
+      <div class="slide-inner">
+        <p class="kicker">Music and imitation</p>
+        <h2 class="title">Art is judged by its effect on character</h2>
+        <div class="rows">
+          <div class="row"><b>01</b><span>Guardians should not act out or imitate <strong>base characters</strong>, because imitation practiced from youth becomes habit.</span></div>
+          <div class="row fragment"><b>02</b><span>Only musical modes that express <strong>courage and moderation</strong> are kept; mournful and soft modes are dropped.</span></div>
+          <div class="row fragment"><b>03</b><span>Surrounded by well-ordered art, the young learn to <strong>love what is fine</strong> before they can explain why it is fine.</span></div>
+        </div>
+      </div>
+      <aside class="speaker-notes">
+        <p>This is a claim about moral psychology as much as censorship: good taste is trained early, and reason later recognizes what the well-raised person already loves.</p>
+        <p class="citation">Citation: Plato, Republic 392c–402a.</p>
+      </aside>
+    </section>
+
+    <!-- 17 -->
+    <section class="slide content" aria-hidden="true">
+      <div class="slide-inner">
+        <p class="kicker">How the guardians live</p>
+        <h2 class="title">Guardians own no private property</h2>
+        <div class="rows">
+          <div class="row"><b>01</b><span>No guardian owns a house, land, or goods beyond <strong>basic necessities</strong>.</span></div>
+          <div class="row fragment"><b>02</b><span>They live together like soldiers in camp, eat at <strong>common meals</strong>, and receive a fixed allowance of food from the producers.</span></div>
+          <div class="row fragment"><b>03</b><span>They may not touch <strong>gold or silver</strong>. They are told they already have divine gold in their souls.</span></div>
+        </div>
+        <p class="verdict fragment">Plato’s reason: once guardians own land and money, they become <strong>masters and enemies</strong> of the citizens instead of their protectors.</p>
+      </div>
+      <aside class="speaker-notes">
+        <p>Communism of property applies only to the guardians. The producers keep private property, though extremes of wealth and poverty are also controlled because both corrupt workers (421d–422a).</p>
+        <p class="citation">Citation: Plato, Republic 415d–417b.</p>
+      </aside>
+    </section>
+
+    <!-- 18 -->
+    <section class="slide content" aria-hidden="true">
+      <div class="slide-inner">
+        <p class="kicker">An objection and a reply</p>
+        <h2 class="title">Are the guardians happy?</h2>
+        <div class="contrast">
+          <div class="col bronze">
+            <h3>The objection</h3>
+            <p>Adeimantus complains that the guardians control the city but enjoy <strong>none of its goods</strong>: no land, no fine houses, no money.</p>
+          </div>
+          <div class="col fragment">
+            <h3>The reply</h3>
+            <p>The aim is the happiness of <strong>the whole city</strong>, not of one class. A painter does not color a statue’s eyes purple just because purple is the finest color.</p>
+          </div>
+        </div>
+        <p class="verdict fragment">Each class gets the share of happiness that its <strong>nature and role</strong> allow. Making guardians rich would make them stop being guardians.</p>
+      </div>
+      <aside class="speaker-notes">
+        <p>The statue analogy: eyes painted purple would no longer look like eyes. Likewise, guardians given wealth would no longer function as guardians. Later, in Book V, Socrates adds that the guardians’ life is in fact the happier one.</p>
+        <p class="citation">Citation: Plato, Republic 419a–421c; 465d–466b.</p>
+      </aside>
+    </section>
+
+    <!-- 19 -->
+    <section class="slide section" aria-hidden="true">
+      <span class="section-num" aria-hidden="true">IV</span>
+      <div class="slide-inner">
+        <p class="kicker">Part four</p>
+        <h2 class="title">Three radical proposals</h2>
+        <p class="lead">Plato calls them three “waves” of objection that threaten to drown the argument in ridicule.</p>
+      </div>
+      <aside class="speaker-notes">
+        <p class="citation">Citation: Plato, Republic 449a–474c.</p>
+      </aside>
+    </section>
+
+    <!-- 20 -->
+    <section class="slide content" aria-hidden="true">
+      <div class="slide-inner">
+        <p class="kicker">First wave</p>
+        <h2 class="title">Women can be guardians and rulers</h2>
+        <div class="rows">
+          <div class="row"><b>01</b><span>Female watchdogs guard and hunt alongside male ones. We do not keep them home to raise pups.</span></div>
+          <div class="row fragment"><b>02</b><span>The only difference that matters is that women bear children. It is as irrelevant to guarding as <strong>long hair versus short hair</strong> is to shoemaking.</span></div>
+          <div class="row fragment"><b>03</b><span>Natural talents for every job are found in <strong>both sexes</strong>, so suitable women receive the same education, including gymnastics and war.</span></div>
+        </div>
+        <p class="verdict fragment">This was radical in Athens, where women had no political role. Plato still holds that women are, <strong>on average, weaker</strong> in every pursuit.</p>
+      </div>
+      <aside class="speaker-notes">
+        <p>The argument follows directly from the principle of specialization: jobs go by nature, and sex does not determine the relevant nature. Scholars debate whether the proposal reflects concern for women or simply efficient use of talent.</p>
+        <p class="citation">Citation: Plato, Republic 451c–457b.</p>
+      </aside>
+    </section>
+
+    <!-- 21 -->
+    <section class="slide content" aria-hidden="true">
+      <div class="slide-inner">
+        <p class="kicker">Second wave · the arrangement</p>
+        <h2 class="title">Guardians have no private families</h2>
+        <div class="rows">
+          <div class="row"><b>01</b><span>Among the guardians, there is no private marriage. <strong>Wives and children are held in common</strong>.</span></div>
+          <div class="row fragment"><b>02</b><span>Rulers arrange mating at festivals with <strong>rigged lotteries</strong>, so that the best are paired with the best.</span></div>
+          <div class="row fragment"><b>03</b><span>Children are raised in <strong>common nurseries</strong>. No parent knows his or her own child, and no child knows his or her parents.</span></div>
+          <div class="row fragment"><b>04</b><span>Everyone treats a whole age group as <strong>brothers, sisters, parents, or children</strong>.</span></div>
+        </div>
+      </div>
+      <aside class="speaker-notes">
+        <p>Present the facts first; the next slide explains why. The breeding program also means that those who lose the lottery blame chance, not the rulers. This is one of the most troubling parts of the city for modern readers.</p>
+        <p class="citation">Citation: Plato, Republic 457c–461e.</p>
+      </aside>
+    </section>
+
+    <!-- 22 -->
+    <section class="slide content" aria-hidden="true">
+      <div class="slide-inner">
+        <p class="kicker">Second wave · the reason</p>
+        <h2 class="title">The city should feel like one body</h2>
+        <div class="contrast">
+          <div class="col bronze">
+            <h3>The greatest evil</h3>
+            <p>Whatever <strong>divides</strong> a city: people saying “mine” and “not mine” about different things, and rejoicing or grieving separately.</p>
+          </div>
+          <div class="col fragment">
+            <h3>The greatest good</h3>
+            <p>Whatever <strong>unites</strong> it: when one finger is hurt, the whole body feels the pain. The guardians share every joy and sorrow.</p>
+          </div>
+        </div>
+        <p class="verdict fragment">Private families and private property create <strong>private loyalties</strong>. Removing them removes the strongest source of faction among those who hold power.</p>
+      </div>
+      <aside class="speaker-notes">
+        <p>Aristotle later objects (Politics II) that what belongs to everyone is cared for by no one: a thousand “sons” get less love than one.</p>
+        <p class="citation">Citation: Plato, Republic 462a–465b.</p>
+      </aside>
+    </section>
+
+    <!-- 23 -->
+    <section class="slide content" aria-hidden="true">
+      <div class="slide-inner">
+        <p class="kicker">Third wave</p>
+        <h2 class="title">Philosophers must rule</h2>
+        <p class="quote">Until philosophers rule as kings, or kings truly philosophize, cities will have no rest from evils.<cite>Republic 473c–d</cite></p>
+        <div class="definition fragment">
+          <div class="term">Philosopher</div>
+          <p>A lover of wisdom who seeks <strong>knowledge</strong> of what things truly are, not mere <strong>opinion</strong> about how they appear. Only such a person knows what is actually good for the city.</p>
+        </div>
+      </div>
+      <aside class="speaker-notes">
+        <p>Plato calls this the biggest wave of all. The distinction between knowledge and opinion (476a–480a) is what makes philosophers fit to rule: opinion grasps changing appearances; knowledge grasps the unchanging Forms.</p>
+        <p class="citation">Citation: Plato, Republic 473c–e, 474b–480a.</p>
+      </aside>
+    </section>
+
+    <!-- 24 -->
+    <section class="slide content" aria-hidden="true">
+      <div class="slide-inner">
+        <p class="kicker">What rulers must know</p>
+        <h2 class="title">The Good is like the sun</h2>
+        <div class="contrast">
+          <div class="col silver">
+            <h3>The sun</h3>
+            <p>Makes things <strong>visible</strong> to the eye and lets living things <strong>grow</strong>.</p>
+          </div>
+          <div class="col fragment">
+            <h3>The Form of the Good</h3>
+            <p>Makes things <strong>understandable</strong> to the mind and is the source of their being and value.</p>
+          </div>
+        </div>
+        <p class="verdict fragment">The Good is the highest object of knowledge. Someone who has not grasped it cannot reliably judge what is <strong>just, beneficial, or good</strong> for a city.</p>
+      </div>
+      <aside class="speaker-notes">
+        <p>Socrates declines to say directly what the Good is and offers the sun as its “offspring” or likeness. The divided line (509d–511e) follows and ranks the ways of knowing.</p>
+        <p class="citation">Citation: Plato, Republic 505a–509b.</p>
+      </aside>
+    </section>
+
+    <!-- 25 -->
+    <section class="slide content" aria-hidden="true">
+      <div class="slide-inner">
+        <p class="kicker">The allegory of the cave · the story</p>
+        <h2 class="title">Prisoners who mistake shadows for reality</h2>
+        <div class="rows">
+          <div class="row"><b>01</b><span>Prisoners are chained in a cave from birth, facing a wall. They see only <strong>shadows</strong> cast by objects carried before a fire.</span></div>
+          <div class="row fragment"><b>02</b><span>One prisoner is freed and dragged up into the daylight. Painfully, he learns to see real things, and finally <strong>the sun itself</strong>.</span></div>
+          <div class="row fragment"><b>03</b><span>When he returns, he stumbles in the dark. The prisoners <strong>mock him</strong>, and would kill anyone who tried to free them.</span></div>
+        </div>
+      </div>
+      <aside class="speaker-notes">
+        <p>Tell the story straight before interpreting it on the next slide. The prisoners even give prizes to whoever is best at predicting the shadows.</p>
+        <p class="citation">Citation: Plato, Republic 514a–517a.</p>
+      </aside>
+    </section>
+
+    <!-- 26 -->
+    <section class="slide content" aria-hidden="true">
+      <div class="slide-inner">
+        <p class="kicker">The allegory of the cave · its meaning</p>
+        <h2 class="title">The cave shows why the philosopher should rule</h2>
+        <div class="decode">
+          <div class="decode-row"><span class="symbol">Shadows</span><span class="arrow">→</span><span class="meaning"><strong>Ordinary opinion.</strong> Most people take appearances and popular beliefs for the truth.</span></div>
+          <div class="decode-row fragment"><span class="symbol">The sun</span><span class="arrow">→</span><span class="meaning"><strong>The Form of the Good.</strong> The source of all truth and value.</span></div>
+          <div class="decode-row fragment"><span class="symbol">The freed prisoner</span><span class="arrow">→</span><span class="meaning"><strong>The philosopher.</strong> Education turns the soul from appearances toward reality.</span></div>
+          <div class="decode-row fragment"><span class="symbol">The return</span><span class="arrow">→</span><span class="meaning"><strong>Ruling.</strong> The philosopher goes back to govern those who still see only shadows.</span></div>
+        </div>
+      </div>
+      <aside class="speaker-notes">
+        <p>Plato says education is not putting sight into blind eyes but turning the whole soul toward the light (518b–d). The mockery of the returning prisoner echoes the fate of Socrates.</p>
+        <p class="citation">Citation: Plato, Republic 517a–518d.</p>
+      </aside>
+    </section>
+
+    <!-- 27 -->
+    <section class="slide content" aria-hidden="true">
+      <div class="slide-inner">
+        <p class="kicker">The reluctant ruler</p>
+        <h2 class="title">Philosophers must be compelled to rule</h2>
+        <div class="rows">
+          <div class="row"><b>01</b><span>Having seen the Good, philosophers would rather keep contemplating it than return to the “cave” of politics.</span></div>
+          <div class="row fragment"><b>02</b><span>But the city <strong>educated them</strong> for this purpose, so they owe it their service, taking turns at rule.</span></div>
+          <div class="row fragment"><b>03</b><span>This reluctance is a strength: cities are best governed by those who are <strong>least eager to rule</strong>.</span></div>
+        </div>
+        <p class="verdict fragment">When people who crave power fight over office, they ruin the city. Philosophers have a better life than ruling, so they rule <strong>for the city’s sake, not their own</strong>.</p>
+      </div>
+      <aside class="speaker-notes">
+        <p>This is Plato’s answer to “who guards the guardians?”: choose rulers whose deepest desire lies elsewhere, so power offers them nothing they want.</p>
+        <p class="citation">Citation: Plato, Republic 519c–521b.</p>
+      </aside>
+    </section>
+
+    <!-- 28 -->
+    <section class="slide content" aria-hidden="true">
+      <div class="slide-inner">
+        <p class="kicker">The rulers’ higher education</p>
+        <h2 class="title">Mathematics turns the mind toward what is unchanging</h2>
+        <div class="rows">
+          <div class="row"><b>01</b><span><strong>Arithmetic and geometry</strong> force the mind to reason about numbers and shapes that no one can see or touch.</span></div>
+          <div class="row fragment"><b>02</b><span><strong>Solid geometry, astronomy, and harmonics</strong> study the perfect patterns behind motion and sound, not the imperfect things we perceive.</span></div>
+          <div class="row fragment"><b>03</b><span><strong>Dialectic</strong>, rigorous question-and-answer about what each thing is, is the capstone. It leads up to the Good.</span></div>
+        </div>
+      </div>
+      <aside class="speaker-notes">
+        <p>Plato values mathematics not for practical use, though it helps soldiers too, but because it draws the soul from “becoming” to “being.” Dialectic is withheld until age thirty because young people misuse argument for sport.</p>
+        <p class="citation">Citation: Plato, Republic 521c–535a, 537e–539d.</p>
+      </aside>
+    </section>
+
+    <!-- 29 -->
+    <section class="slide content" aria-hidden="true">
+      <div class="slide-inner">
+        <p class="kicker">The long road to rule</p>
+        <h2 class="title">Fifty years of education come before rule</h2>
+        <div class="timeline">
+          <div class="stage"><span class="age">Childhood</span><h3>Music and gymnastics</h3><p>Censored stories, music, and physical training for all guardians.</p></div>
+          <div class="stage fragment"><span class="age">About 18–20</span><h3>Military training</h3><p>Two or three years of compulsory physical and military service.</p></div>
+          <div class="stage fragment"><span class="age">20–30</span><h3>Mathematics</h3><p>The best are selected to study the sciences and see how they connect.</p></div>
+          <div class="stage fragment"><span class="age">30–35 · 35–50</span><h3>Dialectic, then service</h3><p>Five years of dialectic, then fifteen years commanding and holding office “in the cave.”</p></div>
+          <div class="stage fragment"><span class="age">50 +</span><h3>Vision and rule</h3><p>Those who excel see the Good, then alternate philosophy with turns at ruling.</p></div>
+        </div>
+        <p class="verdict fragment">At every stage, some are <strong>filtered out</strong>. Only those who pass every test, men and women alike, become rulers.</p>
+      </div>
+      <aside class="speaker-notes">
+        <p>Emphasize the scale: ruling is treated as the most demanding craft of all. Those who fail a stage return to auxiliary roles. Socrates adds that everything said applies to women with the right natures (540c).</p>
+        <p class="citation">Citation: Plato, Republic 536d–540c.</p>
+      </aside>
+    </section>
+
+    <!-- 30 -->
+    <section class="slide section" aria-hidden="true">
+      <span class="section-num" aria-hidden="true">V</span>
+      <div class="slide-inner">
+        <p class="kicker">Part five</p>
+        <h2 class="title">Justice in the ideal city</h2>
+        <p class="lead">With the city complete, Plato locates each of its virtues, and then finds the same pattern in the soul.</p>
+      </div>
+      <aside class="speaker-notes">
+        <p class="citation">Citation: Plato, Republic 427e–444a.</p>
+      </aside>
+    </section>
+
+    <!-- 31 -->
+    <section class="slide content" aria-hidden="true">
+      <div class="slide-inner">
+        <p class="kicker">The four virtues of the city</p>
+        <h2 class="title">Each virtue belongs to part of the city</h2>
+        <div class="decode">
+          <div class="decode-row"><span class="symbol">Wisdom</span><span class="arrow">→</span><span class="meaning">Found in the <strong>rulers</strong>, whose knowledge guides the whole city.</span></div>
+          <div class="decode-row fragment"><span class="symbol">Courage</span><span class="arrow">→</span><span class="meaning">Found in the <strong>auxiliaries</strong>, who hold firm to what is truly to be feared.</span></div>
+          <div class="decode-row fragment"><span class="symbol">Moderation</span><span class="arrow">→</span><span class="meaning">Shared by <strong>all classes</strong>: agreement that the wise should rule.</span></div>
+          <div class="decode-row fragment"><span class="symbol">Justice</span><span class="arrow">→</span><span class="meaning">Each class <strong>does its own work</strong> and does not interfere with the others.</span></div>
+        </div>
+      </div>
+      <aside class="speaker-notes">
+        <p>Justice turns out to be the principle of specialization from the city’s founding, now applied to classes. It is what makes the other three virtues possible.</p>
+        <p class="citation">Citation: Plato, Republic 428a–434c.</p>
+      </aside>
+    </section>
+
+    <!-- 32 -->
+    <section class="slide content" aria-hidden="true">
+      <div class="slide-inner">
+        <p class="kicker">Injustice in the city</p>
+        <h2 class="title">Injustice is meddling between classes</h2>
+        <div class="rows">
+          <div class="row"><b>01</b><span>A carpenter doing a shoemaker’s work does <strong>little harm</strong>.</span></div>
+          <div class="row fragment"><b>02</b><span>But when a producer, made bold by wealth or popularity, tries to <strong>become a soldier or a ruler</strong>, the city is ruined.</span></div>
+        </div>
+        <p class="verdict fragment">This is why Plato opposes democracy. A system in which <strong>anyone may rule</strong>, whatever their nature or training, makes this kind of meddling its normal practice.</p>
+      </div>
+      <aside class="speaker-notes">
+        <p>Link back to the craft analogy in the previous deck: the ideal city is Plato’s positive answer to the question “who should rule?”</p>
+        <p class="citation">Citation: Plato, Republic 434a–c; compare 557a–558c on democracy.</p>
+      </aside>
+    </section>
+
+    <!-- 33 -->
+    <section class="slide content" aria-hidden="true">
+      <div class="slide-inner">
+        <p class="kicker">City and soul</p>
+        <h2 class="title">The soul has the same three parts as the city</h2>
+        <div class="decode">
+          <div class="decode-row"><span class="symbol">Rulers</span><span class="arrow">→</span><span class="meaning"><strong>Reason</strong>, which thinks and should govern the whole person.</span></div>
+          <div class="decode-row fragment"><span class="symbol">Auxiliaries</span><span class="arrow">→</span><span class="meaning"><strong>Spirit</strong>, the source of anger, pride, and courage, which should support reason.</span></div>
+          <div class="decode-row fragment"><span class="symbol">Producers</span><span class="arrow">→</span><span class="meaning"><strong>Appetite</strong>, the desires for food, drink, sex, and money, which should obey.</span></div>
+        </div>
+        <p class="verdict fragment">A <strong>just person</strong> is one whose soul is ordered like the ideal city: reason rules, spirit supports it, and appetite is kept in its place.</p>
+      </div>
+      <aside class="speaker-notes">
+        <p>This answers the question from slide 2. Justice is inner harmony, and the unjust soul is one in civil war. Plato uses this to argue that the just person is happier. Scholars debate how tightly the city-soul analogy is meant to hold.</p>
+        <p class="citation">Citation: Plato, Republic 435b–444a.</p>
+      </aside>
+    </section>
+
+    <!-- 34 -->
+    <section class="slide content" aria-hidden="true">
+      <div class="slide-inner">
+        <p class="kicker">Could it exist?</p>
+        <h2 class="title">The ideal city is a pattern, not a blueprint</h2>
+        <div class="rows">
+          <div class="row"><b>01</b><span>Plato admits the city may never exist exactly as described. It is a <strong>model</strong> for judging real cities.</span></div>
+          <div class="row fragment"><b>02</b><span>A city comes closer to it the more closely it follows one condition: <strong>philosophers hold power</strong>.</span></div>
+          <div class="row fragment"><b>03</b><span>Even if no such city arises, a person can live by its pattern, ordering his or her <strong>own soul</strong> in the same way.</span></div>
+        </div>
+      </div>
+      <aside class="speaker-notes">
+        <p>At the end of Book IX, Socrates says the city is perhaps “a pattern laid up in heaven” for anyone who wishes to see it and found it within himself (592a–b). Interpreters disagree about how seriously Plato meant it as a political proposal.</p>
+        <p class="citation">Citation: Plato, Republic 472b–473b, 592a–b.</p>
+      </aside>
+    </section>
+
+    <!-- 35 -->
+    <section class="slide content" aria-hidden="true">
+      <div class="slide-inner">
+        <p class="kicker">Assessing the ideal city</p>
+        <h2 class="title">Critics see a city without freedom</h2>
+        <div class="rows">
+          <div class="row"><b>01</b><span><strong>Manipulation:</strong> the noble lie secures agreement through a story the rulers know is false.</span></div>
+          <div class="row fragment"><b>02</b><span><strong>Censorship:</strong> the rulers control poetry, music, and belief.</span></div>
+          <div class="row fragment"><b>03</b><span><strong>Control of private life:</strong> guardians lose their families, and rulers decide who has children.</span></div>
+          <div class="row fragment"><b>04</b><span><strong>No accountability:</strong> nothing but their education keeps the rulers from abusing power.</span></div>
+        </div>
+        <p class="verdict critic fragment">Karl Popper called the ideal city a blueprint for <strong>totalitarianism</strong>. Defenders reply that Plato aims at everyone’s good, not the rulers’ power.</p>
+      </div>
+      <aside class="speaker-notes">
+        <p>These objections set up the rest of the unit: expert rule versus democratic accountability. Popper’s critique is in <em>The Open Society and Its Enemies</em>, volume 1 (1945).</p>
+        <p class="citation">Citation: Karl Popper, The Open Society and Its Enemies, vol. 1, 1945.</p>
+      </aside>
+    </section>
+
+    <!-- 36 -->
+    <section class="slide content" aria-hidden="true">
+      <div class="slide-inner">
+        <p class="kicker">Recap</p>
+        <h2 class="title">The whole city rests on one principle</h2>
+        <div class="rows">
+          <div class="row"><b>01</b><span>The city begins from need, and the <strong>principle of specialization</strong> gives each person one job fitting his or her nature.</span></div>
+          <div class="row fragment"><b>02</b><span>Applied to the whole city, the principle yields <strong>three classes</strong>, which the myth of the metals presents as natural.</span></div>
+          <div class="row fragment"><b>03</b><span>Guardians are shaped by censored education and live without property or families, so that <strong>nothing divides them</strong> from the city’s good.</span></div>
+          <div class="row fragment"><b>04</b><span><strong>Philosophers rule</strong> because only they know the Good, and justice means each class, and each part of the soul, doing its own work.</span></div>
+        </div>
+      </div>
+      <aside class="speaker-notes">
+        <p>Ask students to trace each later feature of the city back to the principle of specialization.</p>
+        <p class="citation">Citation: Plato, Republic, books II–VII.</p>
+      </aside>
+    </section>
+
+    <!-- 37 -->
+    <section class="slide refs" aria-hidden="true">
+      <div class="slide-inner">
+        <p class="kicker">Works cited</p>
+        <h2 class="title">References</h2>
+        <ul class="refs-list">
+          <li><strong>Plato.</strong> <em>Republic</em>, trans. G. M. A. Grube, rev. C. D. C. Reeve. Indianapolis: Hackett, 1992. Books II–VII, IX (cited by Stephanus number).</li>
+          <li><strong>Plato.</strong> <em>The Republic</em>, trans. Desmond Lee. London: Penguin, 1955 (2nd ed. 1974).</li>
+          <li><strong>Eric Brown.</strong> “Plato’s Ethics and Politics in <em>The Republic</em>.” <em>Stanford Encyclopedia of Philosophy</em>.</li>
+          <li><strong>Aristotle.</strong> <em>Politics</em>, book II, chapters 1–5.</li>
+          <li><strong>Karl Popper.</strong> <em>The Open Society and Its Enemies</em>, vol. 1: <em>The Spell of Plato</em>. London: Routledge, 1945.</li>
+        </ul>
+      </div>
+      <aside class="speaker-notes">
+        <p>Stephanus numbers (e.g., 414b) are the same in every translation.</p>
+      </aside>
+    </section>
+  </main>
+
+  <div class="nav" aria-label="Presentation controls">
+    <button type="button" id="previous" aria-label="Previous">←</button>
+    <span class="slide-count" id="slide-count">01 / 37</span>
+    <button type="button" id="next" aria-label="Next">→</button>
+    <button type="button" id="overview-button">Slides</button>
+    <button type="button" id="notes-button">Notes</button>
+  </div>
+
+  <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+
+  <aside class="panel" id="notes-panel" aria-hidden="true" aria-label="Speaker notes">
+    <div class="panel-head">
+      <h2 id="notes-title">Speaker notes</h2>
+      <button class="panel-close" type="button" data-close>Close</button>
+    </div>
+    <div id="notes-content"></div>
+  </aside>
+
+  <aside class="panel overview" id="overview-panel" aria-hidden="true" aria-label="Slide overview">
+    <div class="panel-head">
+      <h2>All slides</h2>
+      <button class="panel-close" type="button" data-close>Close</button>
+    </div>
+    <div id="overview-grid"></div>
+  </aside>
+
+  <script>
+    (() => {
+      const slides = [...document.querySelectorAll('#deck > .slide')];
+      const count = document.getElementById('slide-count');
+      const progress = document.getElementById('progress-bar');
+      const notesPanel = document.getElementById('notes-panel');
+      const notesTitle = document.getElementById('notes-title');
+      const notesContent = document.getElementById('notes-content');
+      const overviewPanel = document.getElementById('overview-panel');
+      const overviewGrid = document.getElementById('overview-grid');
+      let current = 0;
+
+      const labelFor = slide => (slide.querySelector('.title')?.textContent || 'Untitled slide').replace(/\s+/g, ' ').trim();
+      const fragmentsFor = index => [...slides[index].querySelectorAll('.fragment')];
+      const pad = n => String(n).padStart(2, '0');
+
+      const updateNotes = () => {
+        notesTitle.textContent = `Notes · ${pad(current + 1)} · ${labelFor(slides[current])}`;
+        const notes = slides[current].querySelector('.speaker-notes');
+        notesContent.innerHTML = notes ? notes.innerHTML : '<p>No notes for this slide.</p>';
+      };
+
+      const sync = () => {
+        slides.forEach((slide, index) => {
+          const active = index === current;
+          slide.classList.toggle('active', active);
+          slide.setAttribute('aria-hidden', String(!active));
+        });
+        count.textContent = `${pad(current + 1)} / ${pad(slides.length)}`;
+        progress.style.width = `${((current + 1) / slides.length) * 100}%`;
+        updateNotes();
+      };
+
+      const revealNext = () => {
+        const hidden = fragmentsFor(current).find(fragment => !fragment.classList.contains('revealed'));
+        if (!hidden) return false;
+        hidden.classList.add('revealed');
+        return true;
+      };
+
+      const hidePrevious = () => {
+        const shown = fragmentsFor(current).filter(fragment => fragment.classList.contains('revealed'));
+        if (!shown.length) return false;
+        shown.at(-1).classList.remove('revealed');
+        return true;
+      };
+
+      const activate = index => {
+        current = Math.max(0, Math.min(slides.length - 1, index));
+        sync();
+      };
+
+      // Moving forward reveals the next staged point before leaving a slide;
+      // moving back hides the latest point. The shared review script calls this too.
+      const go = requested => {
+        const target = Math.max(0, Math.min(slides.length - 1, Number(requested)));
+        if (target > current && revealNext()) return;
+        if (target < current && hidePrevious()) return;
+        if (target < current) fragmentsFor(target).forEach(fragment => fragment.classList.add('revealed'));
+        activate(target);
+      };
+
+      const next = () => go(current + 1);
+      const previous = () => go(current - 1);
+
+      window.go = go;
+      window.show = go;
+
+      const closePanels = () => {
+        [notesPanel, overviewPanel].forEach(panel => {
+          panel.classList.remove('open');
+          panel.setAttribute('aria-hidden', 'true');
+        });
+      };
+
+      const openPanel = panel => {
+        const wasOpen = panel.classList.contains('open');
+        closePanels();
+        if (wasOpen) return;
+        panel.classList.add('open');
+        panel.setAttribute('aria-hidden', 'false');
+        panel.querySelector('button')?.focus();
+      };
+
+      slides.forEach((slide, index) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'overview-card';
+        button.innerHTML = `<span>${pad(index + 1)}</span><strong>${labelFor(slide)}</strong>`;
+        button.addEventListener('click', () => {
+          fragmentsFor(index).forEach(fragment => fragment.classList.remove('revealed'));
+          activate(index);
+          closePanels();
+        });
+        overviewGrid.appendChild(button);
+      });
+
+      document.getElementById('previous').addEventListener('click', previous);
+      document.getElementById('next').addEventListener('click', next);
+      document.getElementById('notes-button').addEventListener('click', () => openPanel(notesPanel));
+      document.getElementById('overview-button').addEventListener('click', () => openPanel(overviewPanel));
+      document.querySelectorAll('[data-close]').forEach(button => button.addEventListener('click', closePanels));
+
+      document.addEventListener('keydown', event => {
+        const preflight = document.getElementById('preflight');
+        if (preflight && !preflight.hidden) return;
+        if (document.querySelector('.panel.open')) {
+          if (event.key === 'Escape') closePanels();
+          return;
+        }
+        if (['ArrowRight', 'ArrowDown', 'PageDown', ' '].includes(event.key)) { event.preventDefault(); next(); }
+        if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(event.key)) { event.preventDefault(); previous(); }
+        if (event.key.toLowerCase() === 'n') openPanel(notesPanel);
+        if (event.key.toLowerCase() === 'o') openPanel(overviewPanel);
+        if (event.key.toLowerCase() === 'f') document.documentElement.requestFullscreen?.().catch(() => {});
+      });
+
+      document.getElementById('deck').addEventListener('click', event => {
+        if (event.target.closest('button, a')) return;
+        if (event.clientX < window.innerWidth * .35) previous();
+        else next();
+      });
+
+      window.__deckDebug = {
+        slideCount: slides.length,
+        stages: slides.map((slide, index) => ({ slide: index + 1, fragments: fragmentsFor(index).length, title: labelFor(slide) })),
+        getState: () => ({ slide: current + 1, revealed: fragmentsFor(current).filter(f => f.classList.contains('revealed')).length, fragments: fragmentsFor(current).length }),
+        jump: index => activate(index - 1),
+        revealAll: index => fragmentsFor(index - 1).forEach(fragment => fragment.classList.add('revealed')),
+        resetFragments: index => fragmentsFor(index - 1).forEach(fragment => fragment.classList.remove('revealed'))
+      };
+
+      sync();
+    })();
+  </script>
+  <script src="presentation-polish.js"></script>
+</body>
+</html>
