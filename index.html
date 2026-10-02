@@ -188,6 +188,8 @@
       flex-direction: column;
     }
 
+    .card-wrap[hidden] { display: none; }
+
     .card {
       display: flex;
       min-height: 142px;
@@ -506,6 +508,7 @@
         <a class="card" data-search="plato republic ideal city kallipolis ideal state three classes rulers auxiliaries producers guardians education noble lie myth of metals philosopher kings cave form of the good women guardians family property justice soul specialization" href="Presentations/Plato%20-%20The%20Ideal%20City.html"><span class="card-type has-new"><span class="card-new">NEW</span> Plato · The Republic</span><h3>Plato’s Ideal City</h3><span class="card-arrow">→</span></a>
         <a class="card" data-search="richard kraut plato democracy" href="Presentations/Richard%20Kraut%20-%20Plato%20against%20Democracy.html"><span class="card-type">Richard Kraut</span><h3>Plato Against Democracy</h3><span class="card-arrow">→</span></a>
         <a class="card" data-search="rousseau general will democracy rule" href="Presentations/Rousseau%20-%20The%20General%20Will.html"><span class="card-type">Jean-Jacques Rousseau</span><h3>The General Will</h3><span class="card-arrow">→</span></a>
+        <a class="card" data-search="participatory democracy deliberative democracy pateman barber habermas iris marion young nancy fraser archon fung erik olin wright fishkin ackerman public voice power dissent agenda participatory budgeting porto alegre deliberative polling teaching notes" data-notes="Presentations/Participatory%20Democracy%20-%20Teaching%20Notes.html" href="Presentations/Participatory%20Democracy.html"><span class="card-type has-new"><span class="card-new">NEW</span> Democracy · Modern thinkers</span><h3>Participatory Democracy</h3><span class="card-arrow">→</span></a>
         <a class="card" data-search="mill representative democracy" href="Presentations/John%20Stuart%20Mill%20-%20Representative%20Democracy.html"><span class="card-type">John Stuart Mill</span><h3>Representative Democracy</h3><span class="card-arrow">→</span></a>
       </div>
     </section>
@@ -650,6 +653,15 @@
           }
         });
         wrapper.appendChild(button);
+        if (card.dataset.notes) {
+          const notesLink = document.createElement('a');
+          notesLink.className = 'card-download';
+          notesLink.href = card.dataset.notes;
+          notesLink.textContent = 'Teaching notes';
+          notesLink.style.textDecoration = 'none';
+          notesLink.setAttribute('aria-label', `Teaching notes for ${card.querySelector('h3')?.textContent || 'presentation'}`);
+          wrapper.appendChild(notesLink);
+        }
       });
     }
 
